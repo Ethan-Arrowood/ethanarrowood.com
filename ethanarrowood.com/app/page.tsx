@@ -54,13 +54,54 @@ export default function Home() {
         <Image
           src={MountainTopImage}
           alt="Picture of me giving a talk at Node Conf EU"
-          className="block m-auto w-2/3 rounded-xl sm:m-0 sm:w-1/3 sm:inline"
+          className="block m-auto w-2/3 rounded-xl sm:m-0 sm:w-1/3 sm:inline object-cover"
           placeholder="blur"
         />
 
         {/* Highlights */}
         <div className="flex flex-col gap-2">
-          <div className="flex flex-row gap-2">
+          <ol className="relative border-s border-emerald-700">
+            <li className="mb-8 ms-4">
+              <div className="absolute w-3 h-3 bg-emerald-700 rounded-full mt-1.5 -start-1.5 border border-emerald-700"></div>
+              <time className="mb-1 text-sm font-normal leading-none text-gray-400">February 2022 - Present</time>
+              <h3 className="text-lg font-semibold text-gray-900">Vercel - Senior Software Engineer</h3>
+              <p className="mb-4 text-base font-normal text-gray-500">Description</p>
+            </li>
+            <li className="mb-8 ms-4">
+              <div className="absolute w-3 h-3 bg-emerald-700 rounded-full mt-1.5 -start-1.5 border border-emerald-700"></div>
+              <time className="mb-1 text-sm font-normal leading-none text-gray-400">November 2019 - January 2022</time>
+              <h3 className="text-lg font-semibold text-gray-900">Microsoft - Software Engineer II</h3>
+              <p className="text-base font-normal text-gray-500">Description</p>
+            </li>
+            <li className="mb-8 ms-4">
+              <div className="absolute w-3 h-3 bg-emerald-700 rounded-full mt-1.5 -start-1.5 border border-emerald-700"></div>
+              <time className="mb-1 text-sm font-normal leading-none text-gray-400">January 2020 - December 2022</time>
+              <h3 className="text-lg font-semibold text-gray-900">Digital Ready - Advisor</h3>
+              <p className="text-base font-normal text-gray-500">Description</p>
+            </li>
+
+          <li className="ms-4">
+              <div className="absolute w-3 h-3 bg-emerald-700 rounded-full mt-1.5 -start-1.5 border border-emerald-700"></div>
+              <time className="mb-1 text-sm font-normal leading-none text-gray-400">September 2016 - August 2019</time>
+              <h3 className="text-lg font-semibold text-gray-900">Wentworth Institute of Technology - B.S. Computer Science</h3>
+              <p className="text-base font-normal text-gray-500">Description</p>
+              <ol className="mt-4 border-s border-dashed border-emerald-700">
+                <li className="mb-8 ms-4">
+                  <div className="absolute w-3 h-3 bg-emerald-700 rounded-full mt-1.5 start-2.5 border border-emerald-700"></div>
+                  <time className="mb-1 text-sm font-normal leading-none text-gray-400">July 2018 - December 2018</time>
+                  <h3 className="text-lg font-semibold text-gray-900">Microsoft - Software Engineering Intern</h3>
+                  <p className="text-base font-normal text-gray-500">Description</p>
+                </li>
+                <li className="ms-4">
+                  <div className="absolute w-3 h-3 bg-emerald-700 rounded-full mt-1.5 start-2.5 border border-emerald-700"></div>
+                  <time className="mb-1 text-sm font-normal leading-none text-gray-400">February 2018 - June 2018</time>
+                  <h3 className="text-lg font-semibold text-gray-900">Griffith University - Study Abroad</h3>
+                  <p className="text-base font-normal text-gray-500">Description</p>
+                </li>
+              </ol>
+          </li>
+          </ol>
+          {/* <div className="flex flex-row gap-2">
             <p className="inline" role="img" aria-label="laptop">
               💻
             </p>
@@ -117,7 +158,7 @@ export default function Home() {
               <li>PSIA Alpine 1 & Freestyle 1 Certified</li>
               <li className="italic text-sm">Contact me for private lesson availability!</li>
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
 
