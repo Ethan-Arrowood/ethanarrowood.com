@@ -2,9 +2,11 @@ import { YouTubeEmbed } from "./components/YouTubeEmbed";
 import MountainTopImage from "@/images/mountain-top.jpg";
 import books from "./books/books.json";
 import talks from "./talks/talks.json";
+import work from "./work/work.json";
 import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Timeline } from "./components/Timeline";
 
 const getChessStats = async () => {
   const res = await fetch("https://api.chess.com/pub/player/ethanarrowood/stats", { next: { revalidate: 30 } });
@@ -60,48 +62,8 @@ export default function Home() {
 
         {/* Highlights */}
         <div className="flex flex-col gap-2">
-          <ol className="relative border-s border-emerald-700">
-            <li className="mb-8 ms-4">
-              <div className="absolute w-3 h-3 bg-emerald-700 rounded-full mt-1.5 -start-1.5 border border-emerald-700"></div>
-              <time className="mb-1 text-sm font-normal leading-none text-gray-400">February 2022 - Present</time>
-              <h3 className="text-lg font-semibold text-gray-900">Vercel - Senior Software Engineer</h3>
-              <p className="mb-4 text-base font-normal text-gray-500">Description</p>
-            </li>
-            <li className="mb-8 ms-4">
-              <div className="absolute w-3 h-3 bg-emerald-700 rounded-full mt-1.5 -start-1.5 border border-emerald-700"></div>
-              <time className="mb-1 text-sm font-normal leading-none text-gray-400">November 2019 - January 2022</time>
-              <h3 className="text-lg font-semibold text-gray-900">Microsoft - Software Engineer II</h3>
-              <p className="text-base font-normal text-gray-500">Description</p>
-            </li>
-            <li className="mb-8 ms-4">
-              <div className="absolute w-3 h-3 bg-emerald-700 rounded-full mt-1.5 -start-1.5 border border-emerald-700"></div>
-              <time className="mb-1 text-sm font-normal leading-none text-gray-400">January 2020 - December 2022</time>
-              <h3 className="text-lg font-semibold text-gray-900">Digital Ready - Advisor</h3>
-              <p className="text-base font-normal text-gray-500">Description</p>
-            </li>
 
-          <li className="ms-4">
-              <div className="absolute w-3 h-3 bg-emerald-700 rounded-full mt-1.5 -start-1.5 border border-emerald-700"></div>
-              <time className="mb-1 text-sm font-normal leading-none text-gray-400">September 2016 - August 2019</time>
-              <h3 className="text-lg font-semibold text-gray-900">Wentworth Institute of Technology - B.S. Computer Science</h3>
-              <p className="text-base font-normal text-gray-500">Description</p>
-              <ol className="mt-4 border-s border-dashed border-emerald-700">
-                <li className="mb-8 ms-4">
-                  <div className="absolute w-3 h-3 bg-emerald-700 rounded-full mt-1.5 start-2.5 border border-emerald-700"></div>
-                  <time className="mb-1 text-sm font-normal leading-none text-gray-400">July 2018 - December 2018</time>
-                  <h3 className="text-lg font-semibold text-gray-900">Microsoft - Software Engineering Intern</h3>
-                  <p className="text-base font-normal text-gray-500">Description</p>
-                </li>
-                <li className="ms-4">
-                  <div className="absolute w-3 h-3 bg-emerald-700 rounded-full mt-1.5 start-2.5 border border-emerald-700"></div>
-                  <time className="mb-1 text-sm font-normal leading-none text-gray-400">February 2018 - June 2018</time>
-                  <h3 className="text-lg font-semibold text-gray-900">Griffith University - Study Abroad</h3>
-                  <p className="text-base font-normal text-gray-500">Description</p>
-                </li>
-              </ol>
-          </li>
-          </ol>
-          {/* <div className="flex flex-row gap-2">
+          <div className="flex flex-row gap-2">
             <p className="inline" role="img" aria-label="laptop">
               💻
             </p>
@@ -158,7 +120,7 @@ export default function Home() {
               <li>PSIA Alpine 1 & Freestyle 1 Certified</li>
               <li className="italic text-sm">Contact me for private lesson availability!</li>
             </ul>
-          </div> */}
+          </div>
         </div>
       </div>
 
@@ -178,6 +140,16 @@ export default function Home() {
             <YouTubeEmbed key={talk.id} id={talk.id} />
           ))}
         </div>
+      </div>
+
+      <div className="flex flex-col gap-2 pb-4 border-b-2 border-emerald-700">
+        <p>
+          <span role="img" aria-label="Laptop">
+            💻
+          </span>{" "}
+          Work
+        </p>
+        <Timeline events={work}/>
       </div>
 
       {/* Hobbies */}

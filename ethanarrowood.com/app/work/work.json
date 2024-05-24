@@ -1,0 +1,64 @@
+[
+  {
+    "date": "February 2022 - Present",
+    "title": "Vercel - Senior Software Engineer",
+    "description": "Maintained Vercel's core build platform supporting numerous runtimes, package managers, and frameworks. Lead development of the configuration override feature enabling finer control of Vercel deployments. Created the Vercel Azure DevOps Extension enabling improved CI/CD for enterprise customers. Developed a comprehensive e2e testing suite for the zero config build pipeline. Represented company at multiple open source organizations including OpenJS Foundation, WinterCG, and TC39. Contributed multiple performance improvements to the Next.js framework, notably improving streaming throughput by 20%. Created the experimental Next.js Test Mode feature for built in e2e testing."
+  },
+  {
+    "date": "May 2021 - January 2024",
+    "title": "Codecademy - Subject Matter Expert",
+    "description": ""
+  },
+  {
+    "date": "January 2020 - December 2022",
+    "title": "Digital Ready - Advisor",
+    "description": ""
+  },
+  {
+    "date": "November 2019 - January 202",
+    "title": "Microsoft - Software Engineer II",
+    "description": ""
+  },
+  {
+    "date": "September 2016 - August 2019",
+    "title": "Wentworth Institute of Technology - B.S. Computer Science",
+    "description": "",
+    "events": [
+      {
+        "date": "July 2018 - December 2018",
+        "title": "Microsoft - Software Engineering Intern",
+        "description": ""
+      },
+      {
+        "date": "June 2018 - August 2019",
+        "title": "GitHub Campus Expert",
+        "description": ""
+      },
+      {
+        "date": "February 2018 - June 2018",
+        "title": "Griffith University - Study Abroad",
+        "description": ""
+      },
+      {
+        "date": "February 2018 - June 2018",
+        "title": "LeaderShape National Institute",
+        "description": ""
+      },
+      {
+        "date": "October 2016 - August 2019",
+        "title": "Accelerate Innovation and Entrepreneurship Center",
+        "description": ""
+      },
+      {
+        "date": "October 2016 - August 2019",
+        "title": "HackWITus",
+        "description": ""
+      }
+    ]
+  },
+  {
+    "date": "October 2015 - October 2016",
+    "title": "Creative Click Media - Web Developer",
+    "description": ""
+  }
+]
