@@ -144,10 +144,10 @@ export default function Home() {
 
       <div className="flex flex-col gap-2 pb-4 border-b-2 border-emerald-700">
         <p>
-          <span role="img" aria-label="Laptop">
-            💻
+          <span role="img" aria-label="Man behind laptop">
+            👨‍💻
           </span>{" "}
-          Work
+          Experience
         </p>
         <Timeline events={work}/>
       </div>
