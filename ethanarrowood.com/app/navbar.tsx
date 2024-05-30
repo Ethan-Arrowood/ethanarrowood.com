@@ -10,7 +10,7 @@ export default function Navbar() {
     {
       text: "home",
       href: "/",
-    }
+    },
   ];
   return (
     <header>

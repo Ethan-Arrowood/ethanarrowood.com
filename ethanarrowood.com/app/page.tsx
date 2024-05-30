@@ -1,12 +1,12 @@
 import { YouTubeEmbed } from "./components/YouTubeEmbed";
 import MountainTopImage from "@/images/mountain-top.jpg";
+import { Timeline } from "./components/Timeline";
 import books from "./books/books.json";
 import talks from "./talks/talks.json";
 import work from "./work/work.json";
 import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Timeline } from "./components/Timeline";
 
 const getChessStats = async () => {
   const res = await fetch("https://api.chess.com/pub/player/ethanarrowood/stats", { next: { revalidate: 30 } });
@@ -62,7 +62,6 @@ export default function Home() {
 
         {/* Highlights */}
         <div className="flex flex-col gap-2">
-
           <div className="flex flex-row gap-2">
             <p className="inline" role="img" aria-label="laptop">
               💻
@@ -149,7 +148,7 @@ export default function Home() {
           </span>{" "}
           Experience
         </p>
-        <Timeline events={work}/>
+        <Timeline events={work} />
       </div>
 
       {/* Hobbies */}
