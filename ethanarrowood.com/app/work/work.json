@@ -2,63 +2,111 @@
   {
     "date": "February 2022 - Present",
     "title": "Vercel - Senior Software Engineer",
-    "description": "Maintained Vercel's core build platform supporting numerous runtimes, package managers, and frameworks. Lead development of the configuration override feature enabling finer control of Vercel deployments. Created the Vercel Azure DevOps Extension enabling improved CI/CD for enterprise customers. Developed a comprehensive e2e testing suite for the zero config build pipeline. Represented company at multiple open source organizations including OpenJS Foundation, WinterCG, and TC39. Contributed multiple performance improvements to the Next.js framework, notably improving streaming throughput by 20%. Created the experimental Next.js Test Mode feature for built in e2e testing."
+    "description": [
+      "Maintained Vercel's core build platform supporting numerous runtimes, package managers, and frameworks",
+      "Lead development of the configuration override feature enabling finer control of Vercel deployments",
+      "Created the Vercel Azure DevOps Extension enabling improved CI/CD for enterprise customers",
+      "Developed a comprehensive e2e testing suite for the zero config build pipeline",
+      "Represented company at multiple open source organizations including OpenJS Foundation, WinterCG, and TC39",
+      "Contributed multiple performance improvements to the Next.js framework, notably improving streaming throughput by 20%",
+      "Created the experimental Next.js Test Mode feature for built in e2e testing"
+    ]
   },
   {
     "date": "May 2021 - January 2024",
     "title": "Codecademy - Subject Matter Expert",
-    "description": ""
+    "description": [
+      "Subject Matter Expert for multiple courses and curriculums",
+      "Courses: Node.js, WebSockets, and Build Tools",
+      "Curriculums (career paths): Full Stack, Front-End, and Back-End"
+    ]
   },
   {
     "date": "January 2020 - December 2022",
-    "title": "Digital Ready - Advisor",
-    "description": ""
+    "title": "Digital Ready - Computer Science Professional Advisor & Board Member",
+    "description": [
+      "Provided professional experience and feedback for the development of the AP CS and Year 13 curriculums",
+      "Conducted professional development workshops for the AP Computer Science Cohort (March 2021)"
+    ]
   },
   {
     "date": "November 2019 - January 202",
     "title": "Microsoft - Software Engineer II",
-    "description": ""
+    "description": [
+      "Worked alongside Microsoft’s largest partners, creating innovative solutions to solve real business challenges",
+      "Exercised strong engineering fundamentals such as agile development, CI/CD, testing, and pair programming",
+      "Built enterprise solutions utilizing many unique Azure services and modern cloud engineering toolsets"
+    ]
   },
   {
     "date": "September 2016 - August 2019",
     "title": "Wentworth Institute of Technology - B.S. Computer Science",
-    "description": "",
+    "description": [
+      "Achieved Dean's List in all full-time semesters demonstrating continuous academic excellence",
+      "Earned a Bachelor of Science in Computer Science and an Applied Mathematics Minor",
+      "Earned Presidential Award for Academic Excellence and Co-Curricular Involvement",
+      "Member of ΦΣΠ National Honors Fraternity",
+      "2x Wentworth Professional Development Grant Recipient",
+      "Participated in Wentworth Leadership Institute Phase 1 & 2",
+      "Vice President of Wentworth Computer Science Soceity"
+    ],
     "events": [
       {
         "date": "July 2018 - December 2018",
         "title": "Microsoft - Software Engineering Intern",
-        "description": ""
+        "description": [
+          "Software Engineering intern on the Commercial Software Engineering team",
+          "Worked with various technologies such as Docker, Kubernetes, JavaScript (Node.js & React), Python (Flask), and Azure Cloud Platform"
+        ]
       },
       {
         "date": "June 2018 - August 2019",
         "title": "GitHub Campus Expert",
-        "description": ""
+        "description": [
+          "Taught students how to use Git and the GitHub platform",
+          "Mentored individuals making their first open source contributions"
+        ]
       },
       {
         "date": "February 2018 - June 2018",
         "title": "Griffith University - Study Abroad",
-        "description": ""
+        "description": [
+          "Attended Griffith University in Gold Coast, Australia and studied computer science, international politics, and mathematics"
+        ]
       },
       {
         "date": "February 2018 - June 2018",
         "title": "LeaderShape National Institute",
-        "description": ""
+        "description": [
+          "Experienced and practiced leading with integrity and facilitating change",
+          "Embraced and ideated on challenges and solutions around diversity, inclusion, and accessibility"
+        ]
       },
       {
         "date": "October 2016 - August 2019",
         "title": "Accelerate Innovation and Entrepreneurship Center",
-        "description": ""
+        "description": [
+          "Practiced and demonstrated innovative problem-solving skills through a startup incubator-like program",
+          "Taught and lead young entrepreneurs to solve problems using sustainable and innovative methods",
+          "Co-developed programs facilitating solution-driven conversations solving Boston's most pressing issues"
+        ]
       },
       {
         "date": "October 2016 - August 2019",
         "title": "HackWITus",
-        "description": ""
+        "description": [
+          "Co-developed hackathon for students with a mission to promote diversity and accessibility in our tech community",
+          "Lead 10 + person coordinating team, recruited company sponsorships, and executed main event",
+          "Managed an annual budget of $15,000 and an average attendance rate of 175 students"
+        ]
       }
     ]
   },
   {
     "date": "October 2015 - October 2016",
     "title": "Creative Click Media - Web Developer",
-    "description": ""
+    "description": [
+      "Developed custom solutions for local business websites using web development fundamentals"
+    ]
   }
 ]
