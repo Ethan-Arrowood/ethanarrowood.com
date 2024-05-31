@@ -1,12 +1,12 @@
-import { YouTubeEmbed } from "./components/YouTubeEmbed";
 import MountainTopImage from "@/images/mountain-top.jpg";
-import { Timeline } from "./components/Timeline";
-import books from "./books/books.json";
-import talks from "./talks/talks.json";
-import work from "./work/work.json";
-import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
+import books from "./books/books.json";
+import { Timeline } from "./components/Timeline";
+import { YouTubeEmbed } from "./components/YouTubeEmbed";
+import talks from "./talks/talks.json";
+import work from "./work/work.json";
 
 const getChessStats = async () => {
   const res = await fetch("https://api.chess.com/pub/player/ethanarrowood/stats", { next: { revalidate: 30 } });
@@ -46,17 +46,17 @@ export default function Home() {
           </span>{" "}
           I&apos;m <h1 className="inline text-lg text-emerald-700">Ethan Arrowood</h1>, here are my highlights...
         </span>
-        <span aria-hidden className="block sm:inline text-center sm:float-right text-emerald-700">
+        <span aria-hidden className="block text-center text-emerald-700 sm:float-right sm:inline">
           ━━━━━━
         </span>
       </div>
 
-      <div className="flex flex-col gap-4 sm:flex-row pb-4 border-b-2 border-emerald-700">
+      <div className="flex flex-col gap-4 border-b-2 border-emerald-700 pb-4 sm:flex-row">
         {/* Headshot */}
         <Image
           src={MountainTopImage}
           alt="Picture of me giving a talk at Node Conf EU"
-          className="block m-auto w-2/3 rounded-xl sm:m-0 sm:w-1/3 sm:inline object-cover"
+          className="m-auto block w-2/3 rounded-xl object-cover sm:m-0 sm:inline sm:w-1/3"
           placeholder="blur"
         />
 
@@ -101,7 +101,7 @@ export default function Home() {
                 </Link>{" "}
                 Collaborator
               </li>
-              <li className="whitespace-nowrap text-ellipsis overflow-hidden">
+              <li className="overflow-hidden text-ellipsis whitespace-nowrap">
                 Developing{" "}
                 <Link className="underline" href="https://github.com/Ethan-Arrowood/mddl" target="_blank">
                   mddl
@@ -117,7 +117,7 @@ export default function Home() {
             <ul>
               <li>Breckenridge Ski Instructor</li>
               <li>PSIA Alpine 1 & Freestyle 1 Certified</li>
-              <li className="italic text-sm">Contact me for private lesson availability!</li>
+              <li className="text-sm italic">Contact me for private lesson availability!</li>
             </ul>
           </div>
         </div>
@@ -127,7 +127,7 @@ export default function Home() {
       {/* Coming soon! */}
 
       {/* Talks */}
-      <div className="flex flex-col gap-2 pb-4 border-b-2 border-emerald-700">
+      <div className="flex flex-col gap-2 border-b-2 border-emerald-700 pb-4">
         <p>
           <span role="img" aria-label="microphone">
             🎤
@@ -141,7 +141,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 pb-4 border-b-2 border-emerald-700">
+      <div className="flex flex-col gap-2 border-b-2 border-emerald-700 pb-4">
         <p>
           <span role="img" aria-label="Man behind laptop">
             👨‍💻
@@ -154,7 +154,7 @@ export default function Home() {
       {/* Hobbies */}
       <div className="flex flex-col justify-center gap-2">
         {/* Currently Reading */}
-        <div className="flex flex-row gap-2 m-auto">
+        <div className="m-auto flex flex-row gap-2">
           <p className="inline" role="img" aria-label="stack of books">
             📚
           </p>
@@ -163,11 +163,11 @@ export default function Home() {
             {books
               .filter((book) => book.shelf === "currently-reading")
               .map((book) => (
-                <li className="whitespace-nowrap text-ellipsis overflow-hidden" key={book.title}>
+                <li className="overflow-hidden text-ellipsis whitespace-nowrap" key={book.title}>
                   <Link className="underline" href={book.goodreads_link} target="_blank">
                     {book.title}
                   </Link>{" "}
-                  - <span className="italic text-sm">{book.author}</span>
+                  - <span className="text-sm italic">{book.author}</span>
                 </li>
               ))}
           </ul>

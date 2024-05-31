@@ -1,9 +1,9 @@
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import Footer from "./footer";
-import Navbar from "./navbar";
 import "./globals.css";
+import Navbar from "./navbar";
 
 export const metadata: Metadata = {
   title: "Ethan Arrowood",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="bg-gray-100">
-      <body className="mx-auto flex h-screen sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg flex-col gap-4 px-2">
+      <body className="mx-auto flex h-screen flex-col gap-4 px-2 sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg">
         <Navbar />
         {children}
         <Footer />

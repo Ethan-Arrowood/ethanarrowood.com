@@ -1,6 +1,6 @@
 import GitHubLogoDark from "@/images/logos/github/github-dark.png";
-import { HeartIcon } from "@heroicons/react/20/solid";
 import XLogoDark from "@/images/logos/x/x-dark.png";
+import { HeartIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import Link from "next/link";
 

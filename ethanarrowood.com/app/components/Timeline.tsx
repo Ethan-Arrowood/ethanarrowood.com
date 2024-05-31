@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 interface Event {
   date: string;
   title: string;
@@ -5,18 +7,18 @@ interface Event {
   events?: Event[];
 }
 
-function Event({ event, last }: { event: Event; last: boolean }) {
+function Event({ event }: { event: Event }) {
   return (
-    <li className={`ms-4 ${last ? "" : "mb-8"}`}>
-      <div className="absolute md:w-3.5 md:h-3.5 w-3 h-3 bg-emerald-700 rounded-full -start-1.5 border border-emerald-700"></div>
-      <p className="mb-1 md:leading-none md:text-sm text-xs font-normal leading-none text-gray-400">{event.date}</p>
-      <h3 className="md:text-base text-sm font-semibold text-gray-900">{event.title}</h3>
+    <li className="mb-8 ms-4 last:mb-0">
+      <div className="absolute -start-1.5 h-3 w-3 rounded-full border border-emerald-700 bg-emerald-700 md:h-3.5 md:w-3.5"></div>
+      <p className="mb-1 text-xs font-normal leading-none text-gray-400 md:text-sm md:leading-none">{event.date}</p>
+      <h3 className="text-sm font-semibold text-gray-900 md:text-base">{event.title}</h3>
       {event.description && event.description.length > 0 ? (
-        <ul className="min-w-0 list-inside list-disc md:text-sm text-xs font-normal text-gray-500">
+        <ol className="min-w-0 list-inside list-disc text-xs font-normal text-gray-500 md:text-sm">
           {event.description.map((line, i) => (
             <li key={`line-${i}`}>{line}</li>
           ))}
-        </ul>
+        </ol>
       ) : null}
       {event.events && event.events.length > 0 ? <Timeline events={event.events} subTimeline={true} /> : null}
     </li>
@@ -25,9 +27,9 @@ function Event({ event, last }: { event: Event; last: boolean }) {
 
 export function Timeline({ events, subTimeline = false }: { events: Event[]; subTimeline?: boolean }) {
   return (
-    <ol className={`ms-2 relative border-s border-emerald-700 ${subTimeline ? "border-dashed mt-4" : ""}`}>
-      {events.map((event, i) => (
-        <Event key={event.title} event={event} last={i === events.length - 1} />
+    <ol className={clsx("relative ms-2 border-s border-emerald-700", subTimeline && "mt-4 border-dashed")}>
+      {events.map((event) => (
+        <Event key={event.title} event={event} />
       ))}
     </ol>
   );
