@@ -68,8 +68,8 @@ export default function Home() {
             </p>
             <ul className="min-w-0">
               <li>
-                <Link className="underline" href="https://vercel.com" target="_blank">
-                  Vercel
+                <Link className="underline" href="https://harperdb.io" target="_blank">
+                  HarperDB
                 </Link>{" "}
                 Senior Software Engineer
               </li>
@@ -85,12 +85,12 @@ export default function Home() {
                 </Link>{" "}
                 Maintainer
               </li>
-              <li>
+              {/* <li>
                 <Link className="underline" href="https://tc39.es" target="_blank">
                   ECMA TC39
                 </Link>{" "}
                 Delegate
-              </li>
+              </li> */}
               <li>
                 <Link className="underline" href="https://openjsf.org" target="_blank">
                   OpenJS
