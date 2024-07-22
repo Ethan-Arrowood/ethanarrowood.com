@@ -15,7 +15,7 @@ const socials = [
   },
   {
     name: "x",
-    href: "https://x.com/Arrowood-Tech",
+    href: "https://x.com/ArrowoodTech",
     logo: {
       src: XLogoDark,
       alt: "X (Twitter) Logo",
