@@ -84,7 +84,7 @@ server.register(fastifyWebsocket);
 
 function fileWatcherDecorator(server, _, done) {
 	const IGNORE_LIST = ["styles.css"];
-	const fileWatcher = new Watcher(SITE_PATH, {
+	const fileWatcher = new Watcher([SITE_PATH, path.join(import.meta.dirname, "../src/input.css")], {
 		ignore: (targetPath) => {
 			return IGNORE_LIST.includes(path.basename(targetPath));
 		},

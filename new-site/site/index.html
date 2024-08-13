@@ -4,106 +4,63 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="author" content="Ethan Arrowood" />
-	<meta name="description"
-		content="Personal website for Ethan Arrowood. Avid adventurer. Open source maintainer. HarperDB Senior Software Engineer. Node.js Contributor. Breckenridge Ski Instructor." />
+	<meta name="description" content="Personal website for Ethan Arrowood. Avid adventurer. Open source maintainer. HarperDB Senior Software Engineer. Node.js Contributor. Breckenridge Ski Instructor." />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" href="styles.css" />
 	<title>Ethan Arrowood</title>
 </head>
 
-<body
-	class="mx-auto flex h-screen flex-col gap-4 bg-gray-100 px-2 sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg">
-	<header>
-		<nav class="flex items-center justify-between border-b-2 border-emerald-700 px-2 py-4 font-semibold text-gray-900"
-			aria-label="Global Navigation">
-			<div class="flex flex-1 gap-x-4">
-				<a href="/" class="text-emerald-700 underline">Home</a>
-			</div>
-			<div class="flex-end flex">
-				<span class="text-2xl">
-					<a href="https://github.com/ethan-arrowood/ethanarrowood.com" target="_blank">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-							stroke="currentColor" class="size-6">
-							<path stroke-linecap="round" stroke-linejoin="round"
-								d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
-						</svg>
-					</a>
-				</span>
-			</div>
+<body>
+	<!-- <header>
+		<nav aria-label="Global Navigation">
+			<ul class="nav-list">
+				<li class="selected"><a href="/">Home</a></li>
+				<li><a href="/posts">Posts</a></li> 
+			</ul> 
+			<span>
+				<a href="https://github.com/ethan-arrowood/ethanarrowood.com" target="_blank">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+					</svg>
+				</a>
+			</span>
 		</nav>
-	</header>
-	<main class="flex flex-grow flex-col gap-4">
-		<!-- Intro -->
-		<div>
-			<span class="block sm:inline">
-				<span role="img" aria-label="hand waving">👋</span> I&apos;m <h1
-					class="inline text-lg text-emerald-700">Ethan Arrowood</h1>, here are my highlights...
-			</span>
-			<span aria-hidden class="block text-center text-emerald-700 sm:float-right sm:inline">
-				━━━━━━
-			</span>
-		</div>
+	</header> -->
+	<main>
+		<section class="introduction">
+			<h1>Ethan Arrowood</h1>
+			<img src="./images/carrying_lincoln_cropped.jpeg"
+			alt="Photo of me standing with my dog, Lincoln, over my shoulders (in a fireman carry). The background is a scenic summer day with a dirt trail, mountain peaks, trees, and other rocks and shrubs too.">
+			<p>Optimizing Software, Overcoming Summits</p>
+		</section>
 
-		<!-- Headshot + Highlights -->
-		<div class="flex flex-col gap-4 border-b-2 border-emerald-700 pb-4 sm:flex-row">
-			<img src="./images/carrying_lincoln.jpeg"
-				class="m-auto block w-2/3 rounded-xl object-cover sm:m-0 sm:inline sm:w-1/3"
-				alt="Photo of me standing with my dog, Lincoln, over my shoulders (in a fireman carry). The background is a scenic summer day with a dirt trail, mountain peaks, trees, and other rocks and shrubs too.">
-			<div class="flex flex-col gap-2">
-				<div class="flex flex-row gap-2">
-					<p class="inline" role="img" aria-label="laptop">💻</p>
-					<ul class="min-w-0">
-						<li>
-							<a href="https://harperdb.io" target="_blank" rel="noopener noreferrer"
-								class="underline">HarperDB</a> Senior Software Engineer
-						</li>
-						<li>
-							<a href="https://nodejs.org" target="_blank" rel="noopener noreferrer"
-								class="underline">Node.js</a> Contributor
-						</li>
-						<li>
-							<a href="https://github.com/nodejs/undici/" target="_blank" rel="noopener noreferrer"
-								class="underline">Undici</a> Maintainer
-						</li>
-						<li>
-							<a href="https://openjsf.org" target="_blank" rel="noopener noreferrer"
-								class="underline">OpenJS</a> & <a href="https://wintercg.org" target="_blank"
-								rel="noopener noreferrer" class="underline">WinterCG</a> Collaborator
-						</li>
-						<li class="overflow-hidden text-ellipsis whitespace-nowrap">
-							Developing <a href="https://github.com/Ethan-Arrowood/mddl" target="_blank"
-								rel="noopener noreferrer" class="underline">mddl</a> <span className="text-sm">(markdown
-								documentation language)</span>
-						</li>
-					</ul>
-				</div>
-				<div class="flex flex-row gap-2">
-					<p class="inline" role="img" aria-label="skis and boots">🎿</p>
-					<ul>
-						<li>Breckenridge Ski Instructor</li>
-						<li>PSIA Alpine 1 & Freestyle 1 Certified</li>
-						<li class="text-sm italic">Contact me for private lesson availability!</li>
-					</ul>
-				</div>
-			</div>
-		</div>
+		<section class="highlights">
+			<h2>Key Professional Highlights:</h2>
+			<ul>
+				<li>Senior Software Engineer at <a href="https://harperdb.io" target="_blank" rel="noopener noreferrer" class="underline">HarperDB</a></li>
+				<li><a href="https://nodejs.org" target="_blank" rel="noopener noreferrer" class="underline">Node.js</a> Contributor & <a href="https://github.com/nodejs/undici/" target="_blank" rel="noopener noreferrer" class="underline">Undici</a> Maintainer</li>
+				<li><a href="https://openjsf.org" target="_blank" rel="noopener noreferrer" class="underline">OpenJS</a> & <a href="https://wintercg.org" target="_blank" rel="noopener noreferrer" class="underline">WinterCG</a> Collaborator</li>
+				<li class="overflow-hidden text-ellipsis whitespace-nowrap">Developing <a href="https://github.com/Ethan-Arrowood/mddl" target="_blank" rel="noopener noreferrer" class="underline">mddl</a> <span className="text-sm">(markdown documentation language)</span></li>
+				<li>PSIA Certified Ski Instructor (Alpine 1 & Freestyle 1)</li>
+			</ul>
+		</section>
 
 		<!-- Experience -->
-		 <div class="flex flex-col gap-2 border-b-2 border-emerald-700 pb-4">
-			<p><span role="img" aria-label="Man behind laptop">👨‍💻</span> Experience</p>
-			<ol class="relative ms-2 border-s border-emerald-700">
-				<li class="mb-8 ms-4 last:mb-0">
-					<div class="absolute -start-1.5 h-3 w-3 rounded-full border border-emerald-700 bg-emerald-700 md:h-3.5 md:w-3.5"></div>
-					<p class="mb-1 text-xs font-normal leading-none text-gray-400 md:text-sm md:leading-none">August 2024 - Present</p>
-					<h3 class="text-sm font-semibold text-gray-900 md:text-base">HarperDB - Senior Software Engineer</h3>
-					<ol class="min-w-0 list-inside list-disc text-xs font-normal text-gray-500 md:text-sm">
+		<div class="experience-container">
+			<p>Experience</p>
+			<ol class="experience-list">
+				<li class="experience-list-item">
+					<p>August 2024 - Present</p>
+					<h3>HarperDB - Senior Software Engineer</h3>
+					<ol>
 						<li>Developing a distributed systems platform that combines database, caching, application, and streaming functions into a single technology.</li>
 						<li>Contributing with Node.js and C++</li>
 					</ol>
 				</li>
 			</ol>
-		 </div>
+		</div>
 	</main>
+
 	<footer class="flex items-center border-t-2 border-emerald-700 px-2 py-4">
 		<div class="flex flex-1 gap-2">
 			<a href="https://github.com/Ethan-Arrowood" target="_blank" rel="noopener noreferrer">
