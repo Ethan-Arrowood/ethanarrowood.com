@@ -83,12 +83,7 @@ server.addHook("onSend", function onSendHook(_, reply, payload, done) {
 server.register(fastifyWebsocket);
 
 function fileWatcherDecorator(server, _, done) {
-	const IGNORE_LIST = ["styles.css"];
-	const fileWatcher = new Watcher([SITE_PATH, path.join(import.meta.dirname, "../src/input.css")], {
-		ignore: (targetPath) => {
-			return IGNORE_LIST.includes(path.basename(targetPath));
-		},
-	});
+	const fileWatcher = new Watcher([SITE_PATH]);
 	server.decorate("fileWatcher", fileWatcher);
 	done(null);
 }
@@ -100,9 +95,7 @@ function createSendLiveReloadMessageHandler(socket) {
 		server.log.info(
 			`📝 Change detected in ${path.relative(SITE_PATH, filepath)}`,
 		);
-		buildTailwindCSS().then(() => {
-			socket.send("reload");
-		});
+		socket.send("reload");
 	};
 }
 
@@ -116,9 +109,7 @@ server.register(async function (server) {
 	});
 });
 
-server.addHook("onListen", async function () {
-	await buildTailwindCSS();
-});
+server.addHook("onListen", async function () {});
 
 server.listen({
 	port: 3000,
