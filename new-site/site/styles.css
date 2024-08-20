@@ -22,7 +22,6 @@ body {
 	flex-direction: column;
 	background-color: #f3f4f6;
 	padding: 0 0.5rem;
-	line-height: 1;
 	font-size: 16px;
 }
 
@@ -162,17 +161,14 @@ main a:hover::after {
 }
 
 /* Experience Section */
-.experience {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-}
 
 /* Experience List */
 .experience > ol {
 	position: relative;
-	margin-inline-start: 0.5rem;
+	padding: 0;
+	margin: 0 0 0 0.5rem;
 	border-inline-start: var(--primary) 2px solid;
+	list-style-type: none;
 }
 
 /* Experience Item */
@@ -183,12 +179,26 @@ main a:hover::after {
 	grid-template-areas:
 		"date"
 		"title"
-		"description";
+		"description"
+		"events";
 	gap: 0.5rem;
+	position: relative;
 }
 
 .experience > ol > li:last-child {
 	margin-block-end: 0;
+}
+
+.experience > ol > li::before {
+	content: '';
+	position: absolute;
+	left: -0.5rem;
+	top: 0.rem;
+	height: 0.75rem;
+	width: 0.75rem;
+	border-radius: 50%;
+	border: 1px solid var(--primary);
+	background-color: var(--primary);
 }
 
 /* Experience Item Title */
@@ -196,6 +206,8 @@ main a:hover::after {
 	grid-area: title;
 	order: 2;
 	color: var(--text-primary);
+	margin: 0;
+	font-size: 1rem;
 }
 
 /* Experience Item Date */
@@ -204,6 +216,7 @@ main a:hover::after {
 	order: 1;
 	color: var(--text-secondary);
 	font-size: 0.8rem;
+	margin: 0;
 }
 
 /* Experience Item Description List */
@@ -211,50 +224,35 @@ main a:hover::after {
 	grid-area: description;
 	order: 3;
 	font-size: 0.8rem;
+	list-style-type: none;
+	padding: 0;
 }
 
 /* Experience Item Description Item */
 .experience > ol > li > ol > li {
 	padding-inline-start: 1rem;
 	margin-block-end: 0.5rem;
+	position: relative;
 }
 
-.experience-list-item::before {
-	content: '';
+.experience > ol > li > ol + ol {
+	grid-area: events;
+}
+
+.experience > ol > li > ol > li:last-child {
+	margin-block-end: 0;
+}
+
+.experience > ol > li > ol > li::before {
+	content: "•";
+	font-size: 1.2rem;
 	position: absolute;
-	left: -0.36rem;
-	/* Adjust this value to position the marker */
-	top: 0.25rem;
-	height: 0.75rem;
-	width: 0.75rem;
-	border-radius: 50%;
-	border: 1px solid var(--primary);
-	background-color: var(--primary);
-}
-
-.experience-list-item>p {
-	margin-bottom: 0.25rem;
-	font-size: 0.75rem;
-	font-weight: 400;
+	left: 0;
+	top: -2px;
 	line-height: 1;
-	color: #9ca3af;
 }
 
-.experience-list-item>h3 {
-	font-size: 0.875rem;
-	font-weight: 600;
-	color: #111827;
-}
-
-.experience-list-item>ol {
-	min-width: 0;
-	list-style-type: disc;
-	list-style-position: inside;
-	font-size: 0.75rem;
-	font-weight: 400;
-	color: #6b7280;
-}
-
+/* Footer Section */
 footer {
 	align-items: center;
 	display: flex;
