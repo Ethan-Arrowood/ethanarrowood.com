@@ -163,37 +163,33 @@ main a:hover::after {
 /* Experience Section */
 
 /* Experience List */
-.experience > ol {
+.experience-list {
 	position: relative;
 	padding: 0;
-	margin: 0 0 0 0.5rem;
+	margin-inline-start: 0.5rem;
 	border-inline-start: var(--primary) 2px solid;
 	list-style-type: none;
 }
 
 /* Experience Item */
-.experience > ol > li {
+.experience-list > li {
 	padding-inline-start: 1rem;
 	margin-block-end: 2rem;
 	display: grid;
-	grid-template-areas:
-		"date"
-		"title"
-		"description"
-		"events";
+	grid-template-columns: 1fr;
 	gap: 0.5rem;
 	position: relative;
 }
 
-.experience > ol > li:last-child {
+.experience-list > li:last-child {
 	margin-block-end: 0;
 }
 
-.experience > ol > li::before {
+.experience-list > li::before {
 	content: '';
 	position: absolute;
 	left: -0.5rem;
-	top: 0.rem;
+	top: 0rem;
 	height: 0.75rem;
 	width: 0.75rem;
 	border-radius: 50%;
@@ -202,52 +198,56 @@ main a:hover::after {
 }
 
 /* Experience Item Title */
-.experience > ol > li > h3 {
-	grid-area: title;
-	order: 2;
+.experience-list > li > h3 {
+	grid-row: 2;
 	color: var(--text-primary);
 	margin: 0;
 	font-size: 1rem;
 }
 
+.experience-list > li > h4 {
+	margin: 0;
+	font-size: 0.9rem;
+}
+
 /* Experience Item Date */
-.experience > ol > li > p {
-	grid-area: date;
-	order: 1;
+.experience-list > li > p {
+	grid-row: 1;
 	color: var(--text-secondary);
 	font-size: 0.8rem;
 	margin: 0;
 }
 
 /* Experience Item Description List */
-.experience > ol > li > ol {
-	grid-area: description;
-	order: 3;
+.experience-list > li > ol:first-of-type {
+	grid-row: 3;
 	font-size: 0.8rem;
 	list-style-type: none;
 	padding: 0;
 }
 
 /* Experience Item Description Item */
-.experience > ol > li > ol > li {
+.experience-list > li > ol:first-of-type > li {
 	padding-inline-start: 1rem;
 	margin-block-end: 0.5rem;
 	position: relative;
 }
 
-.experience > ol > li > ol + ol {
-	grid-area: events;
+.experience-list > li > ol + ol {
+	margin-inline-start: 0;
+	margin-block-start: 1rem;
+	grid-row: 4;
 }
 
-.experience > ol > li > ol > li:last-child {
+.experience-list > li > ol:first-of-type > li:last-child {
 	margin-block-end: 0;
 }
 
-.experience > ol > li > ol > li::before {
+.experience-list > li > ol:first-of-type > li::before {
 	content: "•";
 	font-size: 1.2rem;
 	position: absolute;
-	left: 0;
+	left: -1px;
 	top: -2px;
 	line-height: 1;
 }
