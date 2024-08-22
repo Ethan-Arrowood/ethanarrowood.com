@@ -1,0 +1,56 @@
+[
+  {
+    "title": "The Priory of the Orange Tree",
+    "author": "Samantha Shannon",
+    "goodreads_link": "https://www.goodreads.com/book/show/40275288-the-priory-of-the-orange-tree",
+    "shelf": "read"
+  },
+  {
+    "title": "A Day of Fallen Night",
+    "author": "Samantha Shannon",
+    "goodreads_link": "https://www.goodreads.com/book/show/60766189-a-day-of-fallen-night",
+    "shelf": "read"
+  },
+  {
+    "title": "The Woman Who Smashed Codes",
+    "author": "Jason Fagone",
+    "goodreads_link": "https://www.goodreads.com/book/show/32025298-the-woman-who-smashed-codes",
+    "shelf": "read"
+  },
+  {
+    "title": "How to Win at Chess",
+    "author": "Levy Rozman",
+    "goodreads_link": "https://www.goodreads.com/book/show/125107160-how-to-win-at-chess",
+    "shelf": "read"
+  },
+  {
+    "title": "The House Across the Lake",
+    "author": "Riley Sager",
+    "goodreads_link": "https://www.goodreads.com/book/show/58909880-the-house-across-the-lake",
+    "shelf": "read"
+  },
+  {
+    "title": "Throne of Glass",
+    "author": "Sarah J. Maas",
+    "goodreads_link": "https://www.goodreads.com/book/show/76703559-throne-of-glass",
+    "shelf": "read"
+  },
+  {
+    "title": "Crown of Midnight",
+    "author": "Sarah J. Maas",
+    "goodreads_link": "https://www.goodreads.com/book/show/76705490-crown-of-midnight",
+    "shelf": "read"
+  },
+  {
+    "title": "Heir of Fire",
+    "author": "Sarah J. Maas",
+    "goodreads_link": "https://www.goodreads.com/book/show/76706470-heir-of-fire",
+    "shelf": "currently-reading"
+  },
+  {
+    "title": "The Three-Body Problem",
+    "author": "Liu Cixin",
+    "goodreads_link": "https://www.goodreads.com/book/show/20518872-the-three-body-problem",
+    "shelf": "currently-reading"
+  }
+]

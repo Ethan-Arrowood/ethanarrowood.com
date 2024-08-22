@@ -1,0 +1,62 @@
+[
+  {
+    "id": "fih5Yt3UiNg",
+    "title": "Advancing Web Runtime Interoperability with WinterCG: Empowering the Future of the Web",
+    "event": "OpenJS World",
+    "year": 2023
+  },
+  {
+    "id": "Koy8XkDSf30",
+    "title": "Making Fetch Happen",
+    "event": "NodeConf EU",
+    "year": 2022
+  },
+  {
+    "id": "0hker18pjbM",
+    "title": "Making Fetch Happen",
+    "event": "OpenJS World",
+    "year": 2022
+  },
+  {
+    "id": "mQ0y3IUMjys",
+    "title": "Safely Handling Dynamic Data with TypeScript",
+    "event": "Node Congress",
+    "year": 2022
+  },
+  {
+    "id": "JDXphHBglQU",
+    "title": "Making Fetch Happen",
+    "event": "NodeTLV",
+    "year": 2021
+  },
+  {
+    "id": "y5W3Fm9dpZE",
+    "title": "Safely Handling Dynamic Data with TypeScript",
+    "event": "OpenJS World",
+    "year": 2021
+  },
+  {
+    "id": "JKIOMaL8Ets",
+    "title": "Applying Advanced TypeScript Definition Patterns",
+    "event": "TypeScript Berlin",
+    "year": 2021
+  },
+  {
+    "id": "WjJdJkkriyE",
+    "title": "Applying Advanced TypeScript Definition Patterns",
+    "event": "OpenJS World",
+    "year": 2020
+  },
+  {
+    "id": "mQUjrstuUgE",
+    "title": "Why You Should Maintain Type Definitions for Your JavaScript Project",
+    "event": "Node.js Interactive",
+    "year": 2019
+  },
+  {
+    "id": "iOTFnHJvTVw",
+    "title": "Contributing to Open Source",
+    "event": "React NYC",
+    "year": 2019
+  }
+]
