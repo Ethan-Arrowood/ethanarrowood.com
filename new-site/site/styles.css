@@ -160,6 +160,11 @@ main a:hover::after {
 	top: -2px;
 }
 
+.talks > iframe {
+	border-radius: 15px;
+	align-self: center;
+}
+
 /* Experience Section */
 
 /* Experience List */
