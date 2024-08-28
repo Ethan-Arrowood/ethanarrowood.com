@@ -5,11 +5,8 @@
 		"dev": "live-reload --path site"
 	},
 	"devDependencies": {
-		"@arrowood.dev/live-reload": "file://Users/ethanarrowood/Programming/arrowood.dev/live-reload/packages/live-reload"
-	},
-	"dependencies": {
+		"@arrowood.dev/live-reload": "file://Users/ethanarrowood/Programming/arrowood.dev/live-reload/packages/live-reload",
 		"@justinribeiro/lite-youtube": "1.5.0",
-		"lite-youtube-embed": "0.3.3",
 		"sharp": "0.33.5"
 	}
 }
