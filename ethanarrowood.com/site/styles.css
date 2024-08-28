@@ -160,10 +160,17 @@ main a:hover::after {
 	top: -2px;
 }
 
-.talks > lite-youtube {
-	border-radius: 15px;
-	align-self: center;
+
+/* Talks Section */
+
+#talks > div {
+	margin: auto;
+	width: 560px;
 	max-width: 90%;
+}
+
+#talks > div > lite-youtube {
+	border-radius: 15px;
 }
 
 /* Experience Section */
