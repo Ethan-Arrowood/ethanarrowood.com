@@ -6,19 +6,27 @@
 	<meta name="author" content="Ethan Arrowood" />
 	<meta name="description" content="Personal website for Ethan Arrowood. Avid adventurer. Open source maintainer. HarperDB Senior Software Engineer. Node.js Contributor. Breckenridge Ski Instructor." />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏔️</text></svg>">
 	<link rel="stylesheet" href="styles.css" />
+	<script src="lite-youtube/lite-youtube.js" type="module" defer></script>
 	<title>Ethan Arrowood</title>
 </head>
 
 <body>
 	<main>
-		<section class="introduction">
+		<section id="introduction">
 			<h1>Ethan Arrowood</h1>
-			<img src="./images/carrying_lincoln_cropped.jpeg" alt="Photo of me standing with my dog, Lincoln, over my shoulders (in a fireman carry). The background is a scenic summer day with a dirt trail, mountain peaks, trees, and other rocks and shrubs too.">
+			<img
+				height=256
+				width=256
+				src="images/carrying_lincoln/carrying_lincoln_512.webp"
+				srcset="images/carrying_lincoln/carrying_lincoln_256.webp 1x, images/carrying_lincoln/carrying_lincoln_512.webp 2x"
+				alt="Photo of me standing with my dog, Lincoln, over my shoulders (in a fireman carry). The background is a scenic summer day with a dirt trail, mountain peaks, trees, and other rocks and shrubs too."
+			>
 			<p>Optimizing Software, Overcoming Summits</p>
 		</section>
 
-		<section class="highlights">
+		<section id="highlights">
 			<h2>Highlights</h2>
 			<ul>
 				<li>Senior Software Engineer at <a href="https://harperdb.io" target="_blank" rel="noreferrer">HarperDB</a></li>
@@ -29,12 +37,16 @@
 			</ul>
 		</section>
 
-		<section class="talks">
+		<section id="talks">
 			<h2>Talks</h2>
-			<iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=K_OoPi6cs29tEAxx&amp;list=PL70YCHVvqVvxfJX9B81P-TjvbbKoXjegG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+			<div>
+				<lite-youtube videoid="Koy8XkDSf30" playlistid="PL70YCHVvqVvxfJX9B81P-TjvbbKoXjegG">
+					<a href="https://www.youtube.com/playlist?list=PL70YCHVvqVvxfJX9B81P-TjvbbKoXjegG" class="lite-youtube-fallback">Watch my talks directly on YouTube</a>
+				</lite-youtube>
+			</div>
 		</section>
 
-		<section class="experience">
+		<section id="experience">
 			<h2>Experience</h2>
 			<ol class="experience-list">
 				<li>
@@ -171,10 +183,10 @@
 
 	<footer>
 		<a href="https://github.com/Ethan-Arrowood" target="_blank" rel="noreferrer">
-			<img src="./images/logos/github/github-dark.png" alt="GitHub Logo (Dark)">
+			<img height="64" width="64" src="./images/logos/github/github-dark.webp" alt="GitHub Logo (Dark)">
 		</a>
 		<a href="https://x.com/ArrowoodTech" target="_blank" rel="noreferrer">
-			<img src="./images/logos/x/x-dark.png" alt="X (Twitter) Logo (Dark)">
+			<img height="64" width="64" src="./images/logos/x/x-dark.webp" alt="X (Twitter) Logo (Dark)">
 		</a>
 		<p>
 			Made with
