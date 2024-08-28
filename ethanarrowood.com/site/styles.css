@@ -1,7 +1,7 @@
 :root {
 	--primary: #047857;
 	--text-primary: #111827;
-	--text-secondary: #9ca3af;
+	--text-secondary: #4D4D4D;
 }
 
 * {
@@ -97,12 +97,12 @@ main a:hover::after {
 	transform-origin: bottom left;
 }
 
-.introduction {
+#introduction {
 	justify-content: center;
 	gap: 2rem;
 }
 
-.introduction > h1 {
+#introduction > h1 {
 	display: block;
 	margin: auto;
 	font-size: 2rem;
@@ -110,7 +110,7 @@ main a:hover::after {
 	color: var(--primary)
 }
 
-.introduction > img {
+#introduction > img {
 	margin: auto;
 	width: 66%;
 	border-radius: 50%;
@@ -121,11 +121,11 @@ main a:hover::after {
 	max-width: 16rem;
 }
 
-.introduction > img:hover {
+#introduction > img:hover {
 	box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
 
-.introduction > p {
+#introduction > p {
 	display: block;
 	margin: auto;
 	white-space: nowrap;
@@ -133,13 +133,13 @@ main a:hover::after {
 	font-size: clamp(0.5rem, 5vw, 1.5rem);
 }
 
-.highlights ul {
+#highlights ul {
 	list-style-type: none;
 	margin: 0 0 0 0.5rem;
 	padding: 0;
 }
 
-.highlights ul li {
+#highlights ul li {
 	position: relative;
 	margin-block-end: 1rem;
 	padding-left: 1rem;
@@ -148,11 +148,11 @@ main a:hover::after {
 	white-space: nowrap;
 }
 
-.highlights ul li:last-child {
+#highlights ul li:last-child {
 	margin-block-end: 0;
 }
 
-.highlights ul li::before {
+#highlights ul li::before {
 	content: "•";
 	font-size: 1.2rem;
 	position: absolute;
