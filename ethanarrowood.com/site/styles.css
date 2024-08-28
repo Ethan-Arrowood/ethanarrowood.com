@@ -160,7 +160,7 @@ main a:hover::after {
 	top: -2px;
 }
 
-.talks > iframe {
+.talks > lite-youtube {
 	border-radius: 15px;
 	align-self: center;
 	max-width: 90%;
