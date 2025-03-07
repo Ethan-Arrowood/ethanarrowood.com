@@ -1,0 +1,191 @@
+---
+import { Image } from "astro:assets";
+import githubLogo from "../images/logos/github-dark.png";
+---
+
+<style is:global>
+:root {
+  --background: #f5f5f1;
+  --accent: #2d8b72;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+</style>
+
+<style>
+body {
+  font-family: sans-serif;
+  min-height: 100vh;
+  background-color: var(--background);
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  margin: auto;
+  width: 100%;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 2rem;
+  border-block-end: var(--accent) solid 2px;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.title {
+  display: block;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.tagline {
+  font-size: 1rem;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+nav > a {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+nav > a:hover {
+  color: var(--accent);
+}
+
+main {
+  margin: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-inline: 1rem;
+}
+
+footer {
+  margin: auto;
+  width: 100%;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+footer > a > img {
+  width: 1.5rem;
+  height: 1.5rem;
+  aspect-ratio: 1/1;
+}
+
+footer p {
+  align-items: center;
+  display: inline-flex;
+}
+
+footer p svg {
+  margin-inline: 0.25rem;
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Small */
+@media (min-width: 640px) {
+  header,
+  main,
+  footer {
+    width: 640px;
+  }
+}
+
+/* Medium */
+@media (min-width: 768px) {
+  header,
+  main,
+  footer {
+    width: 768px;
+  }
+}
+
+/* Large */
+@media (min-width: 1024px) {
+  header,
+  main,
+  footer {
+    width: 1024px;
+  }
+}
+</style>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ethan Arrowood" />
+    <meta
+      name="description"
+      content="Personal website for Ethan Arrowood. Avid adventurer. Open source maintainer. Harper Senior Software Engineer. Node.js Contributor. Breckenridge Ski Instructor."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏔️</text></svg>"
+    />
+    <!-- <script
+      type="module"
+      src="../../node_modules/@justinribeiro/lite-youtube/lite-youtube.js"
+    ></script> -->
+    <title>Ethan Arrowood</title>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1 class="title">Ethan Arrowood</h1>
+        <h2 class="tagline">Optimizing Software, Overcoming Summits</h2>
+      </div>
+      <nav>
+        <a href="/">home</a>
+        <a href="/blog">blog</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>
+      <a
+        href="https://github.com/Ethan-Arrowood"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <Image src={githubLogo} alt="GitHub Logo (Dark)" loading="lazy" />
+      </a>
+      <p>
+        Made with
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z"
+          ></path>
+        </svg>
+        by Ethan
+      </p>
+    </footer>
+  </body>
+</html>
