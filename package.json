@@ -10,6 +10,8 @@
 	"devDependencies": {
 		"@justinribeiro/lite-youtube": "^1.6.0",
 		"astro": "^5.4.1",
+		"prettier": "^3.5.3",
+		"prettier-plugin-astro": "^0.14.1",
 		"sharp": "^0.33.5",
 		"typescript": "^5.8.2",
 		"vite": "^6.0.11"

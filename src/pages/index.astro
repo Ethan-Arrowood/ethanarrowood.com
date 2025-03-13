@@ -5,473 +5,498 @@ import Link from "../components/Link.astro";
 
 import { Image } from "astro:assets";
 import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
-
-// import '@justinribeiro/lite-youtube';
 ---
 
 <style>
-  section {
-    border-block-end: var(--accent) solid 2px;
-    padding-block: 3rem;
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-  }
+	section {
+		border-block-end: var(--accent) solid 2px;
+		padding: 3rem 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 3rem;
+	}
 
-  .sub-title {
-    font-size: 1.5rem;
-    font-weight: 500;
-  }
+	section:last-of-type {
+		border-block-end: none;
+	}
 
-  /* Intro */
+	.sub-title {
+		font-size: 1.5rem;
+		font-weight: 500;
+	}
 
-  .intro-container {
-    justify-content: center;
-  }
+	/* Intro */
 
-  .profile-image {
-    margin: auto;
-    border-radius: 50%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s ease;
-    object-fit: cover;
-    display: block;
-    width: 16rem;
-    height: 16rem;
-  }
+	.intro-container {
+		justify-content: center;
+	}
 
-  .profile-image:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
+	.profile-image {
+		margin: auto;
+		border-radius: 50%;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		transition: box-shadow 0.3s ease;
+		object-fit: cover;
+		display: block;
+		width: 16rem;
+		height: 16rem;
+	}
 
-  /* Highlights */
+	.profile-image:hover {
+		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+	}
 
-  .highlights-list {
-    list-style-type: none;
-  }
+	.highlights-container {
+		display: flex;
+		flex-direction: column;
+		gap: 3rem;
+	}
 
-  .highlights-list-item {
-    position: relative;
-    margin-block-end: 1.5rem;
-    padding-left: 1rem;
-  }
+	.highlights-list {
+		list-style-type: none;
+	}
 
-  .highlights-list-item:last-child {
-    margin-block-end: 0;
-  }
+	.highlights-list-item {
+		position: relative;
+		margin-block-end: 1.5rem;
+		padding-left: 1rem;
+	}
 
-  .highlights-container ul li::before {
-    content: "•";
-    font-size: 1.2rem;
-    position: absolute;
-    left: 0;
-    top: -2px;
-  }
+	.highlights-list-item:last-child {
+		margin-block-end: 0;
+	}
 
-  /* Talks */
+	.highlights-container ul li::before {
+		content: "•";
+		font-size: 1.2rem;
+		position: absolute;
+		left: 0;
+		top: -2px;
+	}
 
-  lite-youtube {
-    margin: auto;
-    max-width: 560px;
-    width: 100%;
-    border-radius: 15px;
-  }
+	/* Talks */
 
-  /* Experience */
+	lite-youtube {
+		margin: auto;
+		max-width: 560px;
+		width: 100%;
+		border-radius: 15px;
+	}
 
-  .experience-list {
-    position: relative;
-    padding: 0;
-    margin-inline-start: 0.5rem;
-    border-inline-start: var(--accent) 2px solid;
-    list-style-type: none;
-  }
+	/* Experience */
+	.experience-list {
+		position: relative;
+		padding: 0;
+		margin-inline-start: 0.5rem;
+		border-inline-start: var(--accent) 2px solid;
+		list-style-type: none;
+	}
 
-  .experience-list-item {
-    padding-inline-start: 1rem;
-    margin-block-end: 2rem;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    position: relative;
-  }
+	.experience-list-item {
+		padding-inline-start: 1rem;
+		margin-block-end: 2rem;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1rem;
+		position: relative;
+	}
 
-  .experience-list-item:last-child {
-    margin-block-end: 0;
-  }
+	.experience-list-item:last-child {
+		margin-block-end: 0;
+	}
 
-  /* Timeline Bubble */
-  .experience-list-item::before {
-    content: "";
-    position: absolute;
-    left: -0.6rem;
-    top: 0rem;
-    height: 1rem;
-    width: 1rem;
-    border-radius: 50%;
-    border: 1px solid var(--accent);
-    background-color: var(--accent);
-  }
+	/* Timeline Bubble */
+	.experience-list-item::before {
+		content: "";
+		position: absolute;
+		left: -0.6rem;
+		top: 0rem;
+		height: 1rem;
+		width: 1rem;
+		border-radius: 50%;
+		border: 1px solid var(--accent);
+		background-color: var(--accent);
+	}
 
-  .experience-list-item-title {
-    grid-row: 2;
-    color: var(--text-primary);
-    margin: 0;
-    font-size: 1.2rem;
-  }
+	.experience-list-item-title {
+		grid-row: 2;
+		color: var(--text-primary);
+		margin: 0;
+		font-size: 1.2rem;
+	}
 
-  .experience-list-item-date {
-    grid-row: 1;
-    color: var(--text-secondary);
-    font-size: 1rem;
-    margin: 0;
-  }
+	.experience-list-item-date {
+		grid-row: 1;
+		color: var(--text-secondary);
+		font-size: 1rem;
+		margin: 0;
+	}
 
-  .experience-list-item-description {
-    grid-row: 3;
-    font-size: 1rem;
-    line-height: 1.5;
-    list-style-type: disc;
-    list-style-position: outside;
-    padding: 0;
-  }
+	.experience-list-item-description {
+		grid-row: 3;
+		font-size: 1rem;
+		line-height: 1.5;
+		list-style-type: disc;
+		list-style-position: outside;
+		padding: 0;
+	}
 
-  .experience-list-item-description-item {
-    margin-inline-start: 1rem;
-    margin-block-end: 0.5rem;
-    position: relative;
-  }
+	.experience-list-item-description-item {
+		margin-inline-start: 1rem;
+		margin-block-end: 0.5rem;
+		position: relative;
+	}
 
-  .experience-list-item-description-item:last-child {
-    margin-block-end: 0;
-  }
+	.experience-list-item-description-item:last-child {
+		margin-block-end: 0;
+	}
+
+	/* Responsive */
+	/* Small */
+	@media (min-width: 640px) {
+		.intro-container {
+			display: flex;
+			flex-direction: row;
+		}
+	}
+
+	/* Medium */
+	@media (min-width: 768px) {
+	}
+
+	/* Large */
+	@media (min-width: 1024px) {
+	}
 </style>
 
-<script
-  type="module"
-  src="../../node_modules/@justinribeiro/lite-youtube/lite-youtube.js"></script>
+<script>
+	import("@justinribeiro/lite-youtube/lite-youtube.js");
+</script>
 
 <BaseLayout>
-  <section id="intro" class="intro-container">
-    <Image
-      src={carryingLincoln}
-      alt="Ethan standing with his dog, Lincoln, over his shoulders (in a fireman carry). The background is a scenic summer day with a dirt trail, mountain peaks, trees, and other rocks and shrubs too."
-      class="profile-image"
-    />
-  </section>
+	<section id="intro" class="intro-container">
+		<Image
+			src={carryingLincoln}
+			alt="Ethan standing with his dog, Lincoln, over his shoulders (in a fireman carry). The background is a scenic summer day with a dirt trail, mountain peaks, trees, and other rocks and shrubs too."
+			class="profile-image"
+			loading="eager"
+		/>
 
-  <section id="highlights" class="highlights-container">
-    <h2 class="sub-title">Highlights</h2>
-    <ul class="highlights-list">
-      <li class="highlights-list-item">
-        Senior Software Engineer at <Link href="https://harpersystems.dev"
-          >Harper</Link
-        >
-      </li>
-      <li class="highlights-list-item">
-        <Link href="https://nodejs.org">Node.js</Link> Contributor & <Link
-          href="https://github.com/nodejs/undici/">Undici</Link
-        > Maintainer
-      </li>
-      <li class="highlights-list-item">
-        <Link href="https://openjsf.org">OpenJS</Link> & <Link
-          href="https://wintertc.org">WinterTC</Link
-        > Collaborator
-      </li>
-      <li class="highlights-list-item">
-        Developing <Link href="https://github.com/Ethan-Arrowood/mddl"
-          >mddl</Link
-        >
-      </li>
-      <li class="highlights-list-item">
-        Managing <Link href="https://alpinemooseinnovations.com"
-          >Alpine Moose Innovations</Link
-        >
-      </li>
-      <li class="highlights-list-item">
-        PSIA Certified Ski Instructor (Alpine 1, Freestyle 1, Children
-        Specialist 1)
-      </li>
-    </ul>
-  </section>
+		<div class="highlights-container">
+			<h2 class="sub-title">Highlights</h2>
+			<ul class="highlights-list">
+				<li class="highlights-list-item">
+					Senior Software Engineer at <Link href="https://harpersystems.dev"
+						>Harper</Link
+					>
+				</li>
+				<li class="highlights-list-item">
+					<Link href="https://nodejs.org">Node.js</Link> Contributor & <Link
+						href="https://github.com/nodejs/undici/">Undici</Link
+					> Maintainer
+				</li>
+				<li class="highlights-list-item">
+					<Link href="https://openjsf.org">OpenJS</Link> & <Link
+						href="https://wintertc.org">WinterTC</Link
+					> Collaborator
+				</li>
+				<li class="highlights-list-item">
+					Developing <Link href="https://github.com/Ethan-Arrowood/mddl"
+						>mddl</Link
+					>
+				</li>
+				<li class="highlights-list-item">
+					Managing <Link href="https://alpinemooseinnovations.com"
+						>Alpine Moose Innovations</Link
+					>
+				</li>
+				<li class="highlights-list-item">
+					PSIA Certified Ski Instructor (Alpine 1, Freestyle 1, Children
+					Specialist 1)
+				</li>
+			</ul>
+		</div>
+	</section>
 
-  <section id="talks" class="talks-container">
-    <h2 class="sub-title">Talks</h2>
-    <lite-youtube
-      videoid="Koy8XkDSf30"
-      playlistid="PL70YCHVvqVvxfJX9B81P-TjvbbKoXjegG"
-    >
-      <a
-        href="https://www.youtube.com/playlist?list=PL70YCHVvqVvxfJX9B81P-TjvbbKoXjegG"
-        class="lite-youtube-fallback">Watch my talks directly on YouTube</a
-      >
-    </lite-youtube>
-  </section>
+	<section id="talks" class="talks-container">
+		<h2 class="sub-title">Talks</h2>
+		<lite-youtube
+			videoid="0OQXpdbLCTs"
+			playlistid="PL70YCHVvqVvxfJX9B81P-TjvbbKoXjegG"
+		>
+			<Link
+				href="https://www.youtube.com/playlist?list=PL70YCHVvqVvxfJX9B81P-TjvbbKoXjegG"
+				class="lite-youtube-fallback"
+			>
+				YouTube playlist of all my talks
+			</Link>
+		</lite-youtube>
+	</section>
 
-  <section id="experience" class="experience-container">
-    <h2 class="sub-title">Experience</h2>
-    <ol class="experience-list">
-      <li class="experience-list-item">
-        <h3 class="experience-list-item-title">
-          Harper - Senior Software Engineer
-        </h3>
-        <p class="experience-list-item-date">August 2024 - Present</p>
-        <ol class="experience-list-item-description">
-          <li class="experience-list-item-description-item">
-            Developing a distributed systems platform that combines database,
-            caching, application, and streaming functions into a single
-            technology
-          </li>
-          <li class="experience-list-item-description-item">
-            Leveraging high-performance Node.js and C++ to optimize the
-            performance of the core product
-          </li>
-        </ol>
-      </li>
-      <li class="experience-list-item">
-        <h3 class="experience-list-item-title">
-          Vercel - Senior Software Engineer
-        </h3>
-        <p class="experience-list-item-date">February 2022 - June 2024</p>
-        <ol class="experience-list-item-description">
-          <li class="experience-list-item-description-item">
-            Maintained Vercel's core build platform supporting numerous
-            runtimes, package managers, and frameworks
-          </li>
-          <li class="experience-list-item-description-item">
-            Lead development of the configuration override feature enabling
-            finer control of Vercel deployments
-          </li>
-          <li class="experience-list-item-description-item">
-            Created the Vercel Azure DevOps Extension enabling improved CI/CD
-            for enterprise customers
-          </li>
-          <li class="experience-list-item-description-item">
-            Developed a comprehensive e2e testing suite for the zero config
-            build pipeline
-          </li>
-          <li class="experience-list-item-description-item">
-            Represented company at multiple open source organizations including
-            OpenJS Foundation, WinterCG, and TC39
-          </li>
-          <li class="experience-list-item-description-item">
-            Contributed multiple performance improvements to the Next.js
-            framework, notably improving streaming throughput by 20%
-          </li>
-          <li class="experience-list-item-description-item">
-            Created the experimental Next.js Test Mode feature for built in e2e
-            testing
-          </li>
-        </ol>
-      </li>
+	<section id="experience" class="experience-container">
+		<h2 class="sub-title">Experience</h2>
+		<ol class="experience-list">
+			<li class="experience-list-item">
+				<h3 class="experience-list-item-title">
+					Harper - Senior Software Engineer
+				</h3>
+				<p class="experience-list-item-date">August 2024 - Present</p>
+				<ol class="experience-list-item-description">
+					<li class="experience-list-item-description-item">
+						Developing a distributed systems platform that combines database,
+						caching, application, and streaming functions into a single
+						technology
+					</li>
+					<li class="experience-list-item-description-item">
+						Leveraging high-performance Node.js and C++ to optimize the
+						performance of the core product
+					</li>
+				</ol>
+			</li>
+			<li class="experience-list-item">
+				<h3 class="experience-list-item-title">
+					Vercel - Senior Software Engineer
+				</h3>
+				<p class="experience-list-item-date">February 2022 - June 2024</p>
+				<ol class="experience-list-item-description">
+					<li class="experience-list-item-description-item">
+						Maintained Vercel's core build platform supporting numerous
+						runtimes, package managers, and frameworks
+					</li>
+					<li class="experience-list-item-description-item">
+						Lead development of the configuration override feature enabling
+						finer control of Vercel deployments
+					</li>
+					<li class="experience-list-item-description-item">
+						Created the Vercel Azure DevOps Extension enabling improved CI/CD
+						for enterprise customers
+					</li>
+					<li class="experience-list-item-description-item">
+						Developed a comprehensive e2e testing suite for the zero config
+						build pipeline
+					</li>
+					<li class="experience-list-item-description-item">
+						Represented company at multiple open source organizations including
+						OpenJS Foundation, WinterCG, and TC39
+					</li>
+					<li class="experience-list-item-description-item">
+						Contributed multiple performance improvements to the Next.js
+						framework, notably improving streaming throughput by 20%
+					</li>
+					<li class="experience-list-item-description-item">
+						Created the experimental Next.js Test Mode feature for built in e2e
+						testing
+					</li>
+				</ol>
+			</li>
 
-      <li class="experience-list-item">
-        <h3 class="experience-list-item-title">
-          Codecademy - Subject Matter Expert
-        </h3>
-        <p class="experience-list-item-date">May 2021 - January 2024</p>
-        <ol class="experience-list-item-description">
-          <li class="experience-list-item-description-item">
-            Subject Matter Expert for multiple courses and curriculums
-          </li>
-          <li class="experience-list-item-description-item">
-            Courses: Node.js, WebSockets, and Build Tools
-          </li>
-          <li class="experience-list-item-description-item">
-            Curriculums (career paths): Full Stack, Front-End, and Back-End
-          </li>
-        </ol>
-      </li>
+			<li class="experience-list-item">
+				<h3 class="experience-list-item-title">
+					Codecademy - Subject Matter Expert
+				</h3>
+				<p class="experience-list-item-date">May 2021 - January 2024</p>
+				<ol class="experience-list-item-description">
+					<li class="experience-list-item-description-item">
+						Subject Matter Expert for multiple courses and curriculums
+					</li>
+					<li class="experience-list-item-description-item">
+						Courses: Node.js, WebSockets, and Build Tools
+					</li>
+					<li class="experience-list-item-description-item">
+						Curriculums (career paths): Full Stack, Front-End, and Back-End
+					</li>
+				</ol>
+			</li>
 
-      <li class="experience-list-item">
-        <h3 class="experience-list-item-title">
-          Digital Ready - Computer Science Professional Advisor & Board Member
-        </h3>
-        <p class="experience-list-item-date">January 2020 - December 2022</p>
-        <ol class="experience-list-item-description">
-          <li class="experience-list-item-description-item">
-            Provided professional experience and feedback for the development of
-            the AP CS and Year 13 curriculums
-          </li>
-          <li class="experience-list-item-description-item">
-            Conducted professional development workshops for the AP Computer
-            Science Cohort (March 2021)
-          </li>
-        </ol>
-      </li>
+			<li class="experience-list-item">
+				<h3 class="experience-list-item-title">
+					Digital Ready - Computer Science Professional Advisor & Board Member
+				</h3>
+				<p class="experience-list-item-date">January 2020 - December 2022</p>
+				<ol class="experience-list-item-description">
+					<li class="experience-list-item-description-item">
+						Provided professional experience and feedback for the development of
+						the AP CS and Year 13 curriculums
+					</li>
+					<li class="experience-list-item-description-item">
+						Conducted professional development workshops for the AP Computer
+						Science Cohort (March 2021)
+					</li>
+				</ol>
+			</li>
 
-      <li class="experience-list-item">
-        <h3 class="experience-list-item-title">
-          Microsoft - Software Engineer II
-        </h3>
-        <p class="experience-list-item-date">November 2019 - January 2022</p>
-        <ol class="experience-list-item-description">
-          <li class="experience-list-item-description-item">
-            Worked alongside Microsoft's largest partners, creating innovative
-            solutions to solve real business challenges
-          </li>
-          <li class="experience-list-item-description-item">
-            Exercised strong engineering fundamentals such as agile development,
-            CI/CD, testing, and pair programming
-          </li>
-          <li class="experience-list-item-description-item">
-            Built enterprise solutions utilizing many unique Azure services and
-            modern cloud engineering toolsets
-          </li>
-        </ol>
-      </li>
+			<li class="experience-list-item">
+				<h3 class="experience-list-item-title">
+					Microsoft - Software Engineer II
+				</h3>
+				<p class="experience-list-item-date">November 2019 - January 2022</p>
+				<ol class="experience-list-item-description">
+					<li class="experience-list-item-description-item">
+						Worked alongside Microsoft's largest partners, creating innovative
+						solutions to solve real business challenges
+					</li>
+					<li class="experience-list-item-description-item">
+						Exercised strong engineering fundamentals such as agile development,
+						CI/CD, testing, and pair programming
+					</li>
+					<li class="experience-list-item-description-item">
+						Built enterprise solutions utilizing many unique Azure services and
+						modern cloud engineering toolsets
+					</li>
+				</ol>
+			</li>
 
-      <li class="experience-list-item">
-        <h3 class="experience-list-item-title">
-          Wentworth Institute of Technology - B.S. Computer Science
-        </h3>
-        <p class="experience-list-item-date">September 2016 - August 2019</p>
-        <ol class="experience-list-item-description">
-          <li class="experience-list-item-description-item">
-            Achieved Dean's List in all full-time semesters demonstrating
-            continuous academic excellence
-          </li>
-          <li class="experience-list-item-description-item">
-            Earned a Bachelor of Science in Computer Science and an Applied
-            Mathematics Minor
-          </li>
-          <li class="experience-list-item-description-item">
-            Earned Presidential Award for Academic Excellence and Co-Curricular
-            Involvement
-          </li>
-          <li class="experience-list-item-description-item">
-            Member of ΦΣΠ National Honors Fraternity
-          </li>
-          <li class="experience-list-item-description-item">
-            2x Wentworth Professional Development Grant Recipient
-          </li>
-          <li class="experience-list-item-description-item">
-            Participated in Wentworth Leadership Institute Phase 1 & 2
-          </li>
-          <li class="experience-list-item-description-item">
-            Vice President of Wentworth Computer Science Society
-          </li>
-        </ol>
-        <ol class="experience-list">
-          <li class="experience-list-item">
-            <h4 class="experience-list-item-title">
-              Microsoft - Software Engineering Intern
-            </h4>
-            <p class="experience-list-item-date">July 2018 - December 2018</p>
-            <ol class="experience-list-item-description">
-              <li class="experience-list-item-description-item">
-                Software Engineering intern on the Commercial Software
-                Engineering team
-              </li>
-              <li class="experience-list-item-description-item">
-                Worked with various technologies such as Docker, Kubernetes,
-                JavaScript (Node.js & React), Python (Flask), and Azure Cloud
-                Platform
-              </li>
-            </ol>
-          </li>
+			<li class="experience-list-item">
+				<h3 class="experience-list-item-title">
+					Wentworth Institute of Technology - B.S. Computer Science
+				</h3>
+				<p class="experience-list-item-date">September 2016 - August 2019</p>
+				<ol class="experience-list-item-description">
+					<li class="experience-list-item-description-item">
+						Achieved Dean's List in all full-time semesters demonstrating
+						continuous academic excellence
+					</li>
+					<li class="experience-list-item-description-item">
+						Earned a Bachelor of Science in Computer Science and an Applied
+						Mathematics Minor
+					</li>
+					<li class="experience-list-item-description-item">
+						Earned Presidential Award for Academic Excellence and Co-Curricular
+						Involvement
+					</li>
+					<li class="experience-list-item-description-item">
+						Member of ΦΣΠ National Honors Fraternity
+					</li>
+					<li class="experience-list-item-description-item">
+						2x Wentworth Professional Development Grant Recipient
+					</li>
+					<li class="experience-list-item-description-item">
+						Participated in Wentworth Leadership Institute Phase 1 & 2
+					</li>
+					<li class="experience-list-item-description-item">
+						Vice President of Wentworth Computer Science Society
+					</li>
+				</ol>
+				<ol class="experience-list">
+					<li class="experience-list-item">
+						<h4 class="experience-list-item-title">
+							Microsoft - Software Engineering Intern
+						</h4>
+						<p class="experience-list-item-date">July 2018 - December 2018</p>
+						<ol class="experience-list-item-description">
+							<li class="experience-list-item-description-item">
+								Software Engineering intern on the Commercial Software
+								Engineering team
+							</li>
+							<li class="experience-list-item-description-item">
+								Worked with various technologies such as Docker, Kubernetes,
+								JavaScript (Node.js & React), Python (Flask), and Azure Cloud
+								Platform
+							</li>
+						</ol>
+					</li>
 
-          <li class="experience-list-item">
-            <h4 class="experience-list-item-title">GitHub Campus Expert</h4>
-            <p class="experience-list-item-date">June 2018 - August 2019</p>
-            <ol class="experience-list-item-description">
-              <li class="experience-list-item-description-item">
-                Taught students how to use Git and the GitHub platform
-              </li>
-              <li class="experience-list-item-description-item">
-                Mentored individuals making their first open source
-                contributions
-              </li>
-            </ol>
-          </li>
+					<li class="experience-list-item">
+						<h4 class="experience-list-item-title">GitHub Campus Expert</h4>
+						<p class="experience-list-item-date">June 2018 - August 2019</p>
+						<ol class="experience-list-item-description">
+							<li class="experience-list-item-description-item">
+								Taught students how to use Git and the GitHub platform
+							</li>
+							<li class="experience-list-item-description-item">
+								Mentored individuals making their first open source
+								contributions
+							</li>
+						</ol>
+					</li>
 
-          <li class="experience-list-item">
-            <h4 class="experience-list-item-title">
-              Griffith University - Study Abroad
-            </h4>
-            <p class="experience-list-item-date">February 2018 - June 2018</p>
-            <ol class="experience-list-item-description">
-              <li class="experience-list-item-description-item">
-                Attended Griffith University in Gold Coast, Australia
-              </li>
-              <li class="experience-list-item-description-item">
-                Studied computer science, international politics, and
-                mathematics
-              </li>
-            </ol>
-          </li>
+					<li class="experience-list-item">
+						<h4 class="experience-list-item-title">
+							Griffith University - Study Abroad
+						</h4>
+						<p class="experience-list-item-date">February 2018 - June 2018</p>
+						<ol class="experience-list-item-description">
+							<li class="experience-list-item-description-item">
+								Attended Griffith University in Gold Coast, Australia
+							</li>
+							<li class="experience-list-item-description-item">
+								Studied computer science, international politics, and
+								mathematics
+							</li>
+						</ol>
+					</li>
 
-          <li class="experience-list-item">
-            <h4 class="experience-list-item-title">
-              LeaderShape National Institute
-            </h4>
-            <p class="experience-list-item-date">February 2018 - June 2018</p>
-            <ol class="experience-list-item-description">
-              <li class="experience-list-item-description-item">
-                Experienced and practiced leading with integrity and
-                facilitating change
-              </li>
-              <li class="experience-list-item-description-item">
-                Embraced and ideated on challenges and solutions around
-                diversity, inclusion, and accessibility
-              </li>
-            </ol>
-          </li>
+					<li class="experience-list-item">
+						<h4 class="experience-list-item-title">
+							LeaderShape National Institute
+						</h4>
+						<p class="experience-list-item-date">February 2018 - June 2018</p>
+						<ol class="experience-list-item-description">
+							<li class="experience-list-item-description-item">
+								Experienced and practiced leading with integrity and
+								facilitating change
+							</li>
+							<li class="experience-list-item-description-item">
+								Embraced and ideated on challenges and solutions around
+								diversity, inclusion, and accessibility
+							</li>
+						</ol>
+					</li>
 
-          <li class="experience-list-item">
-            <h4 class="experience-list-item-title">
-              Accelerate Innovation and Entrepreneurship Center
-            </h4>
-            <p class="experience-list-item-date">October 2016 - August 2019</p>
-            <ol class="experience-list-item-description">
-              <li class="experience-list-item-description-item">
-                Practiced and demonstrated innovative problem-solving skills
-                through a startup incubator-like program
-              </li>
-              <li class="experience-list-item-description-item">
-                Taught and lead young entrepreneurs to solve problems using
-                sustainable and innovative methods
-              </li>
-              <li class="experience-list-item-description-item">
-                Co-developed programs facilitating solution-driven conversations
-                solving Boston's most pressing issues
-              </li>
-            </ol>
-          </li>
+					<li class="experience-list-item">
+						<h4 class="experience-list-item-title">
+							Accelerate Innovation and Entrepreneurship Center
+						</h4>
+						<p class="experience-list-item-date">October 2016 - August 2019</p>
+						<ol class="experience-list-item-description">
+							<li class="experience-list-item-description-item">
+								Practiced and demonstrated innovative problem-solving skills
+								through a startup incubator-like program
+							</li>
+							<li class="experience-list-item-description-item">
+								Taught and lead young entrepreneurs to solve problems using
+								sustainable and innovative methods
+							</li>
+							<li class="experience-list-item-description-item">
+								Co-developed programs facilitating solution-driven conversations
+								solving Boston's most pressing issues
+							</li>
+						</ol>
+					</li>
 
-          <li class="experience-list-item">
-            <h4 class="experience-list-item-title">HackWITus</h4>
-            <p class="experience-list-item-date">October 2016 - August 2019</p>
-            <ol>
-              <li class="experience-list-item-description-item">
-                Co-developed hackathon for students with a mission to promote
-                diversity and accessibility in our tech community
-              </li>
-              <li class="experience-list-item-description-item">
-                Lead 10 + person coordinating team, recruited company
-                sponsorships, and executed main event
-              </li>
-              <li class="experience-list-item-description-item">
-                Managed an annual budget of $15,000 and an average attendance
-                rate of 175 students
-              </li>
-            </ol>
-          </li>
-        </ol>
-      </li>
+					<li class="experience-list-item">
+						<h4 class="experience-list-item-title">HackWITus</h4>
+						<p class="experience-list-item-date">October 2016 - August 2019</p>
+						<ol>
+							<li class="experience-list-item-description-item">
+								Co-developed hackathon for students with a mission to promote
+								diversity and accessibility in our tech community
+							</li>
+							<li class="experience-list-item-description-item">
+								Lead 10 + person coordinating team, recruited company
+								sponsorships, and executed main event
+							</li>
+							<li class="experience-list-item-description-item">
+								Managed an annual budget of $15,000 and an average attendance
+								rate of 175 students
+							</li>
+						</ol>
+					</li>
+				</ol>
+			</li>
 
-      <li class="experience-list-item">
-        <h3 class="experience-list-item-title">
-          Creative Click Media - Web Developer
-        </h3>
-        <p class="experience-list-item-date">October 2015 - October 2016</p>
-        <ol class="experience-list-item-description">
-          <li class="experience-list-item-description-item">
-            Developed custom solutions for local business websites using web
-            development fundamentals
-          </li>
-        </ol>
-      </li>
-    </ol>
-  </section>
+			<li class="experience-list-item">
+				<h3 class="experience-list-item-title">
+					Creative Click Media - Web Developer
+				</h3>
+				<p class="experience-list-item-date">October 2015 - October 2016</p>
+				<ol class="experience-list-item-description">
+					<li class="experience-list-item-description-item">
+						Developed custom solutions for local business websites using web
+						development fundamentals
+					</li>
+				</ol>
+			</li>
+		</ol>
+	</section>
 </BaseLayout>

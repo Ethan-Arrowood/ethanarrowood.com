@@ -1,35 +1,35 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
-type Props = HTMLAttributes<'a'> & { active?: boolean };
+import type { HTMLAttributes } from "astro/types";
+type Props = HTMLAttributes<"a"> & { active?: boolean };
 
-const { href, target="_blank", rel="noreferrer", ...attrs } = Astro.props;
+const { href, target = "_blank", rel = "noreferrer", ...attrs } = Astro.props;
 ---
 
 <style>
-a {
-	color: var(--accent);
-	position: relative;
-	text-decoration: none;
-	width: fit-content;
-}
-a::after {
-	content: '';
-	position: absolute;
-	width: 100%;
-	height: 2px;
-	bottom: 0;
-	left: 0;
-	background-color: var(--accent);
-	transform: scaleX(0);
-	transform-origin: bottom right;
-	transition: transform 0.3s ease-in;
-}
-a:hover::after {
-	transform: scaleX(1);
-	transform-origin: bottom left;
-}
+	a {
+		color: var(--accent);
+		position: relative;
+		text-decoration: none;
+		width: fit-content;
+	}
+	a::after {
+		content: "";
+		position: absolute;
+		width: 100%;
+		height: 2px;
+		bottom: 0;
+		left: 0;
+		background-color: var(--accent);
+		transform: scaleX(0);
+		transform-origin: bottom right;
+		transition: transform 0.3s ease-in;
+	}
+	a:hover::after {
+		transform: scaleX(1);
+		transform-origin: bottom left;
+	}
 </style>
 
 <a href={href} target={target} rel={rel} {...attrs}>
-	<slot/>
+	<slot />
 </a>
