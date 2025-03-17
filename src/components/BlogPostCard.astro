@@ -1,0 +1,40 @@
+---
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets"; 
+
+interface Props {
+  title: string;
+  imagePath: string;
+  altText: string;
+}
+
+const { title, imagePath, altText } = Astro.props;
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/images/*.{jpeg,jpg,png}', );
+if (!images[imagePath]) {
+  throw new Error(`"${imagePath}" does not exist in glob: "src/images/*.{jpeg,jpg,png}"`);
+}
+---
+
+<style>
+  .blog-post-card {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .blog-post-card h3 {
+    margin: 0.5rem 0;
+  }
+
+  .blog-post-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+</style>
+
+<div class="blog-post-card">
+  <h3>{title}</h3>
+  <Image src={images[imagePath]()} alt={altText} />
+</div>

@@ -1,0 +1,65 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import BlogPostCard from "../components/BlogPostCard.astro";
+const allPosts = Object.values(
+	import.meta.glob("./blog/*.md", { eager: true }),
+);
+---
+
+<style>
+	section {
+		border-block-end: var(--accent) solid 2px;
+		padding-block: 2rem;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	section:first-of-type {
+		padding-block-start: 0;
+	}
+
+	section:last-of-type {
+		border-block-end: none;
+		padding-block-end: 0;
+	}
+
+	.posts-container {
+		display: flex;
+		flex-direction: column;
+	}
+	.posts-list {
+		list-style-type: none;
+		padding: 0;
+	}
+	.posts-list-item {
+		box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+		padding: 1rem;
+	}
+	.posts-list-item:hover {
+		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+	}
+</style>
+
+<BaseLayout>
+	<section class="posts-container">
+		<h2>Posts</h2>
+		<ul class="posts-list">
+			{
+				allPosts.map((post: any) => (
+					<li class="posts-list-item">
+						<BlogPostCard
+							title={post.frontmatter.title}
+							imagePath={post.frontmatter.image.url}
+							altText={post.frontmatter.image.alt}
+						/>
+					</li>
+				))
+			}
+		</ul> 
+	</section>
+	<section>
+		<h2>Tags</h2>
+	</section>
+
+</BaseLayout>

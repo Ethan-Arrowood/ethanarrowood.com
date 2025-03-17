@@ -10,14 +10,19 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 <style>
 	section {
 		border-block-end: var(--accent) solid 2px;
-		padding: 3rem 1rem;
+		padding-block: 2rem;
 		display: flex;
 		flex-direction: column;
-		gap: 3rem;
+		gap: 2rem;
+	}
+
+	section:first-of-type {
+		padding-block-start: 0;
 	}
 
 	section:last-of-type {
 		border-block-end: none;
+		padding-block-end: 0;
 	}
 
 	.sub-title {
@@ -49,7 +54,7 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 	.highlights-container {
 		display: flex;
 		flex-direction: column;
-		gap: 3rem;
+		gap: 2rem;
 	}
 
 	.highlights-list {
