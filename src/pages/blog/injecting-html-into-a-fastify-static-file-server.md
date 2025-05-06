@@ -1,7 +1,8 @@
 ---
 layout: ../../layouts/PostLayout.astro
 title: "Injecting HTML into a Fastify Static File Server"
-pubDate: 2024-06-03
+pubDate: 2024-06-03T12:00:00-06:00
+editDate: 2025-05-06T12:00:00-06:00
 description: "Learn how to use a Node.js Buffers and Transform stream to automatically inject HTML content into a Fastify static file server responses."
 ---
 

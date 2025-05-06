@@ -8,11 +8,22 @@ const { frontmatter } = Astro.props;
 	h1 {
 		font-weight: 500;
 	}
+
+	.pub-date, .edit-date {
+		color: var(--text-secondary);
+		font-size: 1rem;
+	}
+
+	hr {
+		border-block-end: var(--accent) solid 1px;
+		margin: 1rem 0;
+	}
 </style>
 
 <BaseLayout>
-	<h1>{frontmatter.title}</h1>
-	<p>Published: {new Date(frontmatter.pubDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-	{frontmatter.editDate && <p>Updated: {new Date(frontmatter.editDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>}
+	<h1 class="title">{frontmatter.title}</h1>
+	<p class="pub-date">Published: {frontmatter.pubDate}</p>
+	{frontmatter.editDate && <p class="edit-date">Updated: {frontmatter.editDate}</p>}
+	<hr>
 	<slot />
 </BaseLayout>

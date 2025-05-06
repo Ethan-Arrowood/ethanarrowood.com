@@ -1,8 +1,10 @@
 ---
+import type { MarkdownInstance } from "astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogPostCard from "../components/BlogPostCard.astro";
+import type { Frontmatter } from "../utils/frontmatter";
 const allPosts = Object.values(
-	import.meta.glob("./blog/*.md", { eager: true }),
+	import.meta.glob<MarkdownInstance<Frontmatter>>("./blog/*.md", { eager: true }),
 );
 ---
 
@@ -24,6 +26,10 @@ const allPosts = Object.values(
 		padding-block-end: 0;
 	}
 
+	h2 {
+		font-weight: 500;
+	}
+
 	.posts-container {
 		display: flex;
 		flex-direction: column;
@@ -31,10 +37,9 @@ const allPosts = Object.values(
 	.posts-list {
 		list-style-type: none;
 		padding: 0;
-	}
-
-	.posts-list-item {
-		margin: 1rem 0;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 	}
 </style>
 
@@ -45,15 +50,10 @@ const allPosts = Object.values(
 			{
 				allPosts.map((post: any) => (
 					<li class="posts-list-item">
-						<BlogPostCard
-							title={post.frontmatter.title}
-							pubDate={post.frontmatter.pubDate}
-							description={post.frontmatter.description}
-							url={post.url}
-						/>
+						<BlogPostCard {post}/>
 					</li>
 				))
 			}
-		</ul> 
+		</ul>
 	</section>
 </BaseLayout>
