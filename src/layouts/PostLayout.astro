@@ -1,9 +1,18 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import "../styles/posts.css";
 const { frontmatter } = Astro.props;
 ---
 
+<style>
+	h1 {
+		font-weight: 500;
+	}
+</style>
+
 <BaseLayout>
 	<h1>{frontmatter.title}</h1>
+	<p>Published: {new Date(frontmatter.pubDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+	{frontmatter.editDate && <p>Updated: {new Date(frontmatter.editDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>}
 	<slot />
 </BaseLayout>

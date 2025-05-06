@@ -32,12 +32,9 @@ const allPosts = Object.values(
 		list-style-type: none;
 		padding: 0;
 	}
+
 	.posts-list-item {
-		box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-		padding: 1rem;
-	}
-	.posts-list-item:hover {
-		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+		margin: 1rem 0;
 	}
 </style>
 
@@ -50,16 +47,13 @@ const allPosts = Object.values(
 					<li class="posts-list-item">
 						<BlogPostCard
 							title={post.frontmatter.title}
-							imagePath={post.frontmatter.image.url}
-							altText={post.frontmatter.image.alt}
+							pubDate={post.frontmatter.pubDate}
+							description={post.frontmatter.description}
+							url={post.url}
 						/>
 					</li>
 				))
 			}
 		</ul> 
 	</section>
-	<section>
-		<h2>Tags</h2>
-	</section>
-
 </BaseLayout>
