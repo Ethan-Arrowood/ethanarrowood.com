@@ -4,7 +4,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogPostCard from "../components/BlogPostCard.astro";
 import type { Frontmatter } from "../utils/frontmatter";
 const allPosts = Object.values(
-	import.meta.glob<MarkdownInstance<Frontmatter>>("./blog/*.md", { eager: true }),
+	import.meta.glob<MarkdownInstance<Frontmatter>>("./blog/*.md", {
+		eager: true,
+	}),
 );
 ---
 
@@ -50,7 +52,7 @@ const allPosts = Object.values(
 			{
 				allPosts.map((post: any) => (
 					<li class="posts-list-item">
-						<BlogPostCard {post}/>
+						<BlogPostCard {post} />
 					</li>
 				))
 			}

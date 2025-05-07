@@ -22,16 +22,16 @@ import stream from "node:stream";
 const server = fastify({ logger: true });
 
 server.register(fastifyStatic, {
-  root: path.join(import.meta.dirname, "site"),
+	root: path.join(import.meta.dirname, "site"),
 });
 
 // Insert the remaining code here, before the `.listen()` call
 
 server.listen({
-  port: 3000,
-  listenTextResolver: function listenTextResolver(address) {
-    return `Server listening at ${address}`;
-  },
+	port: 3000,
+	listenTextResolver: function listenTextResolver(address) {
+		return `Server listening at ${address}`;
+	},
 });
 ```
 
@@ -39,18 +39,17 @@ Next, create some necessary constants.
 
 ```js
 const ENCODED_CLOSING_HTML_TAG = new Uint8Array([
-  60, 47, 104, 116, 109, 108, 62,
+	60, 47, 104, 116, 109, 108, 62,
 ]);
 
 const INJECT_CODE = fs.readFileSync(
-  path.join(import.meta.dirname, "inject.html"),
+	path.join(import.meta.dirname, "inject.html"),
 );
 ```
 
 The `ENCODED_CLOSING_HTML_TAG` is the encoded string `'</html>'`. You can generate this for yourself using: `new TextEncoder().encode('</html>')`. The `INJECT_CODE` variable is a Node.js Buffer since no encoding was passed to `fs.readFileSync()`.
 
-> [!TIP]
-> **What is a Node.js Buffer?**
+> [!TIP] > **What is a Node.js Buffer?**
 >
 > A `Buffer` represents a fixed-length sequence of bytes. It is one of the simplest data structures in a Node.js application. Uniquely, it is a subclass of the JavaScript primitive data type [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array).
 
@@ -58,7 +57,7 @@ Create `inject.html` with the content:
 
 ```html
 <script>
-  alert("Injected!");
+	alert("Injected!");
 </script>
 ```
 
@@ -66,7 +65,7 @@ Now, for the heart of the solution, create an [onSend hook](https://fastify.dev/
 
 ```js
 server.addHook("onSend", function onSendHook(request, reply, payload, done) {
-  return done(null, payload);
+	return done(null, payload);
 });
 ```
 
@@ -74,9 +73,9 @@ Next, add a filter for HTML replies. A reliable way to achieve this is by inspec
 
 ```js
 server.addHook("onSend", function onSendHook(request, reply, payload, done) {
-  if (reply.getHeader("content-type").startsWith("text/html")) {
-  }
-  return done(null, payload);
+	if (reply.getHeader("content-type").startsWith("text/html")) {
+	}
+	return done(null, payload);
 });
 ```
 
@@ -84,11 +83,11 @@ Before modifying the payload itself, set the appropriate [content-length](https:
 
 ```js
 server.addHook("onSend", function onSendHook(request, reply, payload, done) {
-  if (reply.getHeader("content-type").startsWith("text/html")) {
-    const contentLength = reply.getHeader("content-length");
-    reply.header("content-length", contentLength + INJECT_CODE.length);
-  }
-  return done(null, payload);
+	if (reply.getHeader("content-type").startsWith("text/html")) {
+		const contentLength = reply.getHeader("content-length");
+		reply.header("content-length", contentLength + INJECT_CODE.length);
+	}
+	return done(null, payload);
 });
 ```
 
@@ -96,26 +95,25 @@ Then, pipe the `payload` through a custom Transform stream. By default, the `tra
 
 ```js
 server.addHook("onSend", function onSendHook(request, reply, payload, done) {
-  if (reply.getHeader("content-type").startsWith("text/html")) {
-    const contentLength = reply.getHeader("content-length");
-    reply.header("content-length", contentLength + INJECT_CODE.length);
+	if (reply.getHeader("content-type").startsWith("text/html")) {
+		const contentLength = reply.getHeader("content-length");
+		reply.header("content-length", contentLength + INJECT_CODE.length);
 
-    const transformedPayload = payload.pipe(
-      new stream.Transform({
-        transform(chunk, encoding, callback) {
-          return callback(null, chunk);
-        },
-      }),
-    );
+		const transformedPayload = payload.pipe(
+			new stream.Transform({
+				transform(chunk, encoding, callback) {
+					return callback(null, chunk);
+				},
+			}),
+		);
 
-    return done(null, transformedPayload);
-  }
-  return done(null, payload);
+		return done(null, transformedPayload);
+	}
+	return done(null, payload);
 });
 ```
 
-> [!TIP]
-> **What is a Transform stream?**
+> [!TIP] > **What is a Transform stream?**
 >
 > If you're more familiar with Web Streams, a Node.js `Transform` is similar to a Web [TransformStream](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream). The implementations are quite different, but they serve a similar purpose. Essentially, it is a streaming data structure that can be both written to and read from, while simultaneously modifying the data passing through it.
 
@@ -123,35 +121,35 @@ Finally, add an `encoding` check and then the buffer injection logic.
 
 ```js
 server.addHook("onSend", function onSendHook(request, reply, payload, done) {
-  if (reply.getHeader("content-type").startsWith("text/html")) {
-    const contentLength = reply.getHeader("content-length");
-    reply.header("content-length", contentLength + INJECT_CODE.length);
+	if (reply.getHeader("content-type").startsWith("text/html")) {
+		const contentLength = reply.getHeader("content-length");
+		reply.header("content-length", contentLength + INJECT_CODE.length);
 
-    const transformedPayload = payload.pipe(
-      new stream.Transform({
-        transform(chunk, encoding, callback) {
-          if (encoding === "buffer") {
-            const i = chunk.lastIndexOf(ENCODED_CLOSING_HTML_TAG);
-            if (i > -1) {
-              const injected = Buffer.alloc(chunk.length + INJECT_CODE.length);
-              injected
-                .fill(chunk.slice(0, i))
-                .fill(INJECT_CODE, i)
-                .fill(chunk.slice(i), i + INJECT_CODE.length);
-              return callback(null, injected);
-            }
-          } else {
-            console.warn(`Unexpected encoding type ${encoding}`);
-          }
+		const transformedPayload = payload.pipe(
+			new stream.Transform({
+				transform(chunk, encoding, callback) {
+					if (encoding === "buffer") {
+						const i = chunk.lastIndexOf(ENCODED_CLOSING_HTML_TAG);
+						if (i > -1) {
+							const injected = Buffer.alloc(chunk.length + INJECT_CODE.length);
+							injected
+								.fill(chunk.slice(0, i))
+								.fill(INJECT_CODE, i)
+								.fill(chunk.slice(i), i + INJECT_CODE.length);
+							return callback(null, injected);
+						}
+					} else {
+						console.warn(`Unexpected encoding type ${encoding}`);
+					}
 
-          return callback(null, chunk);
-        },
-      }),
-    );
+					return callback(null, chunk);
+				},
+			}),
+		);
 
-    return done(null, transformedPayload);
-  }
-  return done(null, payload);
+		return done(null, transformedPayload);
+	}
+	return done(null, payload);
 });
 ```
 

@@ -2,7 +2,7 @@
 import type { MarkdownInstance } from "astro";
 import type { Frontmatter } from "../utils/frontmatter";
 interface Props {
-  post: MarkdownInstance<Frontmatter>;
+	post: MarkdownInstance<Frontmatter>;
 }
 
 const { title, pubDate, description } = Astro.props.post.frontmatter;
@@ -10,40 +10,40 @@ const { url } = Astro.props.post;
 ---
 
 <style>
-  .blog-post-card {
-    display: block;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    color: inherit;
-    text-decoration: none;
-    line-height: 1.5;
-  }
+	.blog-post-card {
+		display: block;
+		padding: 1rem;
+		border-radius: 0.5rem;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		color: inherit;
+		text-decoration: none;
+		line-height: 1.5;
+	}
 
-  .blog-post-card:hover {
+	.blog-post-card:hover {
 		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 	}
-  
-  .title {
-    margin: 0.5rem 0;
-    display: inline-block;
-    font-size: 1.5rem;
-    font-weight: 500;
-  }
-  .date {
-    margin: 0.5rem 0;
-    color: var(--text-secondary);
-    font-size: 1rem;
-  }
 
-  .description {
-    margin: 0.5rem 0;
-    font-size: 1rem;
-  }
+	.title {
+		margin: 0.5rem 0;
+		display: inline-block;
+		font-size: 1.5rem;
+		font-weight: 500;
+	}
+	.date {
+		margin: 0.5rem 0;
+		color: var(--text-secondary);
+		font-size: 1rem;
+	}
+
+	.description {
+		margin: 0.5rem 0;
+		font-size: 1rem;
+	}
 </style>
 
 <a href={url} class="blog-post-card">
-  <h3 class="title">{title}</h3>
-  <p class="date">{pubDate}</p>
-  <p class="description">{description}</p>
+	<h3 class="title">{title}</h3>
+	<p class="date">{pubDate}</p>
+	<p class="description">{description}</p>
 </a>
