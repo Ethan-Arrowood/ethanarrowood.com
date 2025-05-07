@@ -1,29 +1,50 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
-import "../styles/posts.css";
+import 'remark-github-blockquote-alert/alert.css'
+import "../styles/post.css";
 const { frontmatter } = Astro.props;
 ---
 
 <style>
-	h1 {
-		font-weight: 500;
+	.post-container {
+		gap: 2rem;
+		display: flex;
+		flex-direction: column;
 	}
 
-	.pub-date, .edit-date {
+	.post-header {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		border-bottom: 2px solid var(--accent);
+		padding-bottom: 2rem;
+	}
+	.post-title {
+		font-weight: 500;
+		font-size: 1.5rem;
+	}
+
+	.post-pub-date,
+	.post-edit-date {
 		color: var(--text-secondary);
 		font-size: 1rem;
-	}
-
-	hr {
-		border-block-end: var(--accent) solid 1px;
-		margin: 1rem 0;
 	}
 </style>
 
 <BaseLayout>
-	<h1 class="title">{frontmatter.title}</h1>
-	<p class="pub-date">Published: {frontmatter.pubDate}</p>
-	{frontmatter.editDate && <p class="edit-date">Updated: {frontmatter.editDate}</p>}
-	<hr>
-	<slot />
+	<section class="post-container">
+		<div class="post-header">
+			<h1 class="post-title">{frontmatter.title}</h1>
+			<p class="post-pub-date">Published: {frontmatter.pubDate}</p>
+			{
+				frontmatter.editDate &&
+					frontmatter.pubDate.valueOf() !== frontmatter.editDate.valueOf() && (
+						<p class="post-edit-date">Updated: {frontmatter.editDate}</p>
+					)
+			}
+		</div>
+		<div class="post-content">
+			<slot />
+		</div>
+	</section>
 </BaseLayout>

@@ -6,11 +6,10 @@ editDate: 2025-05-06T12:00:00-06:00
 description: "Learn how to use a Node.js Buffers and Transform stream to automatically inject HTML content into a Fastify static file server responses."
 ---
 
-Recently, I've been exploring how to build a live reload server from scratch (keep an eye out for a future post on this). During this exploration, I had to figure out how to inject HTML into the payload of a [fastify](https://fastify.dev) static file server ([`@fastify/static`](https://github.com/fastify/fastify-static)) response. My solution utilizes the Node.js [Buffer](https://nodejs.org/api/buffer.html) API and a custom Node.js [Transform](https://nodejs.org/api/stream.html#class-streamtransform) stream. Let's dive in!
+Recently, I've been exploring how to build a live reload server from scratch. During this exploration, I had to figure out how to inject HTML into the payload of a [fastify](https://fastify.dev) static file server ([@fastify/static](https://github.com/fastify/fastify-static)) response. My solution utilizes the Node.js [Buffer](https://nodejs.org/api/buffer.html) API and a custom Node.js [Transform](https://nodejs.org/api/stream.html#class-streamtransform) stream. Let's dive in!
 
 > [!NOTE]
->
-> The source code is available here: https://github.com/Ethan-Arrowood/fastify-inject-html-example
+> The source code is available [here](https://github.com/Ethan-Arrowood/fastify-inject-html-example).
 
 To get started, import the necessary dependencies and instantiate the fastify server.
 
@@ -51,10 +50,9 @@ const INJECT_CODE = fs.readFileSync(
 The `ENCODED_CLOSING_HTML_TAG` is the encoded string `'</html>'`. You can generate this for yourself using: `new TextEncoder().encode('</html>')`. The `INJECT_CODE` variable is a Node.js Buffer since no encoding was passed to `fs.readFileSync()`.
 
 > [!TIP]
->
 > **What is a Node.js Buffer?**
 >
-> A `Buffer` represents a fixed-length sequence of bytes. It is one of the simplest data structures in a Node.js application. Uniquely, it is a subclass of the JavaScript primitive data type [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array).
+> A `Buffer` represents a fixed-length sequence of bytes. It is one of the simplest data structures in a Node.js application. Uniquely, it is a subclass of the JavaScript primitive data type [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array).
 
 Create `inject.html` with the content:
 
@@ -64,7 +62,7 @@ Create `inject.html` with the content:
 </script>
 ```
 
-Now, for the heart of the solution, create an [`onSend` hook](https://fastify.dev/docs/latest/Reference/Hooks/#onsend). By default, the hook should pass through the `payload`.
+Now, for the heart of the solution, create an [onSend hook](https://fastify.dev/docs/latest/Reference/Hooks/#onsend). By default, the hook should pass through the `payload`.
 
 ```js
 server.addHook("onSend", function onSendHook(request, reply, payload, done) {
@@ -72,7 +70,7 @@ server.addHook("onSend", function onSendHook(request, reply, payload, done) {
 });
 ```
 
-Next, add a filter for HTML replies. A reliable way to achieve this is by inspecting the [`content-type`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type) header.
+Next, add a filter for HTML replies. A reliable way to achieve this is by inspecting the [content-type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type) header.
 
 ```js
 server.addHook("onSend", function onSendHook(request, reply, payload, done) {
@@ -117,10 +115,9 @@ server.addHook("onSend", function onSendHook(request, reply, payload, done) {
 ```
 
 > [!TIP]
+> **What is a Transform stream?**
 >
-> **What is a `Transform` stream?**
->
-> If you're more familiar with Web Streams, a Node.js `Transform` is similar to a Web [`TransformStream`](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream). The implementations are quite different, but they serve a similar purpose. Essentially, it is a streaming data structure that can be both written to and read from, while simultaneously modifying the data passing through it.
+> If you're more familiar with Web Streams, a Node.js `Transform` is similar to a Web [TransformStream](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream). The implementations are quite different, but they serve a similar purpose. Essentially, it is a streaming data structure that can be both written to and read from, while simultaneously modifying the data passing through it.
 
 Finally, add an `encoding` check and then the buffer injection logic.
 
@@ -161,7 +158,6 @@ server.addHook("onSend", function onSendHook(request, reply, payload, done) {
 The injection logic itself is nothing too special. It finds the last index of the closing HTML tag (`'</html>'`), and then injects `INJECT_CODE` immediately before it by creating a new `Buffer` instance and filling it with the appropriate slices.
 
 > [!TIP]
->
 > A better way to inject HTML is to use a HTML parsing library such as [node-html-parser](https://www.npmjs.com/package/node-html-parser). It enables you to more precisely manipulate the HTML through APIs such as `htmlElement.insertAdjacentHTML("beforeend", /* inject code */);`.
 
 Before wrapping up, it is important to highlight the potential security vulnerability of HTML injection. Do not inject non-sanitized input from users, and be extra careful when doing something like this in a production application. A small bug could lead to major headaches. This example was built as a simple, demonstration and a more robust solution should be considered before using it in production.
