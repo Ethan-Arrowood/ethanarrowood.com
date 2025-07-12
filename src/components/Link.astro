@@ -1,6 +1,6 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-type Props = HTMLAttributes<"a"> & { active?: boolean };
+type Props = HTMLAttributes<"a">;
 
 const { href, target = "_blank", rel = "noreferrer", ...attrs } = Astro.props;
 ---
