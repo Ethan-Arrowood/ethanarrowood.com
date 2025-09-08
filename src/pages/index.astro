@@ -79,6 +79,13 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 		top: -2px;
 	}
 
+	/* Professional Summary */
+
+	.professional-summary-text {
+		margin-inline: 1rem;
+		line-height: 1.5;
+	}
+
 	/* Talks */
 
 	lite-youtube {
@@ -206,7 +213,7 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 					> Collaborator
 				</li>
 				<li class="highlights-list-item">
-					Managing <Link href="https://alpinemooseinnovations.com"
+					Consulting via <Link href="https://alpinemooseinnovations.com"
 						>Alpine Moose Innovations</Link
 					>
 				</li>
@@ -216,6 +223,45 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 				</li>
 			</ul>
 		</div>
+	</section>
+
+	<section id="professional-summary" class="professional-summary-container">
+		<h2 class="sub-title">Summary</h2>
+		<p class="professional-summary-text">
+			I am a seasoned Senior Software Engineer with nearly a decade of
+			experience building scalable, high-performance systems and leading
+			innovative development initiatives. My expertise spans distributed
+			application platforms, cloud engineering, modern web technologies, and
+			AI-driven development workflows. I have a proven track record at
+			industry-leading companies including Harper, Vercel, and Microsoft.
+			Throughout my career, I have demonstrated exceptional technical leadership
+			by architecting enterprise solutions, contributing to open-source projects
+			such as Node.js and Next.js, and contributing to prestigious organizations
+			including OpenJS Foundation, WinterCG, and TC39.
+		</p>
+		<p class="professional-summary-text">
+			Currently at Harper, I serve as a key core engineer developing our
+			cutting-edge distributed application platform that unifies database,
+			caching, and networking technologies into a single, high performance
+			system. I lead development across multiple critical areas including the
+			application plugin system, major front-end framework integrations such as
+			Next.js and Astro, and our integrated GraphQL engine. Furthermore, I
+			helped lead the replatforming of the documentation infrastructure to
+			improve accessibility and development velocity. My work increasingly
+			leverages AI tooling to accelerate development processes and explore
+			innovative solutions to complex technical challenges.
+		</p>
+		<p class="professional-summary-text">
+			I offer strategic consulting services through Alpine Moose Innovations,
+			working with startups and established businesses across a range of
+			technical domains including AI integration and strategy, custom
+			application development, API and SDK engineering, and website development.
+			I specialize in helping organizations navigate the rapidly evolving AI
+			landscape and integrate intelligent solutions into their technology stack.
+			Contact me at <Link href="mailto:ethan@arrowood.dev"
+				>ethan@arrowood.dev</Link
+			> for inquiries about my consulting services.
+		</p>
 	</section>
 
 	<section id="talks" class="talks-container">
@@ -243,12 +289,54 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 				<p class="experience-list-item-date">August 2024 - Present</p>
 				<ol class="experience-list-item-description">
 					<li class="experience-list-item-description-item">
-						Developing a distributed, high performance application platform that integrates database,
-						caching, streaming, and more into one cohesive system
+						Developing a distributed, high performance application platform that
+						integrates database, caching, streaming, and more into one cohesive
+						system
 					</li>
 					<li class="experience-list-item-description-item">
 						Leveraging high-performance Node.js and C++ to optimize the
 						performance of the core product
+					</li>
+					<li class="experience-list-item-description-item">
+						Created a new application plugin system (<Link
+							href="https://docs.harperdb.io/docs/reference/components/plugins"
+							>Harper Plugin API</Link
+						>) that simultaneously simplifies the API while enhancing its
+						capabilities.
+					</li>
+					<li class="experience-list-item-description-item">
+						Lead the development of major front-end framework integrations
+						including Next.js and Astro, and an integrated GraphQL engine.
+					</li>
+					<li class="experience-list-item-description-item">
+						Replatformed the documentation site, improving the user experience
+						and accessibility of the documentation as well as increasing the
+						developer experience velocity.
+					</li>
+					<li class="experience-list-item-description-item">
+						Contributing to the OpenJS Foundation and WinterTC organizations on
+						behalf of the company focussing on improving the Node.js open source
+						community and JavaScript interoperability.
+					</li>
+					<!-- TODO: Add "leading open source" section -->
+				</ol>
+			</li>
+			<li class="experience-list-item">
+				<h3 class="experience-list-item-title">
+					<Link href="https://alpinemooseinnovations.com"
+						>Alpine Moose Innovations</Link
+					> - Founder & Consultant
+				</h3>
+				<p class="experience-list-item-date">June 2024 - Present</p>
+				<ol class="experience-list-item-description">
+					<li class="experience-list-item-description-item">
+						Founded a personal consulting company focused on delivering
+						high-quality software solutions and advising services.
+					</li>
+					<li class="experience-list-item-description-item">
+						Provided consulting services to various clients, including startups
+						and established businesses, to help them achieve their software
+						development goals.
 					</li>
 				</ol>
 			</li>
@@ -466,7 +554,7 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 					<li class="experience-list-item">
 						<h4 class="experience-list-item-title">HackWITus</h4>
 						<p class="experience-list-item-date">October 2016 - August 2019</p>
-						<ol>
+						<ol class="experience-list-item-description">
 							<li class="experience-list-item-description-item">
 								Co-developed hackathon for students with a mission to promote
 								diversity and accessibility in our tech community
