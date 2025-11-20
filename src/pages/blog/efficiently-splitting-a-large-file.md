@@ -379,14 +379,6 @@ export class NumberWriter extends Writable {
 		const buffer = Buffer.from(line, 'utf8');
 		const byteSize = buffer.length;
 
-		if (byteSize > this.#maxFileSize) {
-			return callback(
-				new Error(
-					`Single chunk size (${byteSize}) exceeds maxFileSize (${this.#maxFileSize})`,
-				),
-			);
-		}
-
 		if (this.#currentStream.bytesWritten + byteSize > this.#maxFileSize) {
 			this.#currentStream.end(() => {
 				this.#currentStream.removeAllListeners();
@@ -413,3 +405,27 @@ export class NumberWriter extends Writable {
 }
 ```
 
+The `_write()` method starts with validation of the `number` argument. The instance does have `objectMode` enabled, but that doesn't prevent the input from being any object type. Furthermore, in `objectMode`, the `_encoding` argument is unnecessary hence the `_` prefix. The `Number.isFinite()` check is only relevant since this is currently for prime numbers, but that can be removed to make the implementation more versatile for different inputs. The valid `number` value is then converted to the string to be written to the output file stream. The string is encoded as an utf8 `Buffer` and then the resulting `byteSize` is validated. Since this implementation currently uses JavaScript `number` type, the maximum size of a single line is 17 bytes (``Buffer.from(`${Number.MAX_SAFE_INTEGER}\n`, 'utf8').length``). If this was updated to support `BigInt` type, then a check to ensure the line is not greater than the maximum file size would likely be necessary. The `byteSize` is checked against the size of the current file output stream. If it exceeds the maximum file size, then the current stream is closed and a new file output stream is opened. Finally, the `buffer` is written to the file stream using the `#writeToCurrentStream()` method. This method handles backpressure of the underlying write steam by ensuring if `this.#currentStream.write(buffer)` returns `false`, the callback isn't called until after the `'drain'` event is emitted.
+
+Lastly, the `_final()` method is important to ensure everything is properly finished and cleaned up.
+
+```ts
+export class NumberWriter extends Writable {
+	// ...
+
+	_final(callback: Callback): void {
+		if (this.#currentStream) {
+			this.#currentStream.end(() => {
+				this.#currentStream.removeAllListeners();
+				callback(null);
+			});
+		} else {
+			callback(null);
+		}
+	}
+
+	// ...
+}
+```
+
+This implementation is very similar to the `_destroy()` method, except that there are no errors to handle. The `'error'` event listener for the `this.#currentStream` is not removed until after `end()` completes, so if an error does occur, it will be passed through to `_destroy()` still. Once this method is called the `NumberWriter` instance itself is complete. All output files should be written and there should be no orphaned file descriptors or event listeners.
