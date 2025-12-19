@@ -69,7 +69,7 @@ for (const prime of primeGenerator()) {
 }
 ```
 
-But also, I could use this generator along with some Node.js [Stream]() and [File System]() APIs to generate a `primes.txt` file:
+But also, I could use this generator along with some Node.js [Stream](https://nodejs.org/docs/latest/api/stream.html) and [File System](https://nodejs.org/docs/latest/api/file-system.html) APIs to generate a `primes.txt` file:
 
 ```typescript
 await pipeline(
@@ -120,7 +120,7 @@ primeSet.has(123) // equivalent `isPrime(123)` check
 
 ### From the 100,000th Prime to all Primes less than 2,000,000
 
-Throughout most of the early problems, 100,000 prime numbers was plenty. When I eventually got to problem 10, [Summation of Primes](), it wanted the sum of all prime numbers below two million. Now the 100,000th prime number is only 1,299,709 so my pre-computed set was clearly not large enough. So lets generate a new set with `limit: 2_000_000` instead of `count: 100_000`:
+Throughout most of the early problems, 100,000 prime numbers was plenty. When I eventually got to problem 10, [Summation of Primes](https://projecteuler.net/problem=10), it wanted the sum of all prime numbers below two million. Now the 100,000th prime number is only 1,299,709 so the pre-computed set was clearly not large enough. So lets generate a new set with `limit: 2_000_000` instead of `count: 100_000`:
 
 ```typescript
 primeGenerator({ limit: 2_000_000 });
@@ -149,7 +149,7 @@ So in order to solve problem 10, I only had to generate roughly 50,000 more prim
 
 ### Primes less than 1,000,000,000
 
-Fast-forward to problem 41, [Pandigital Prime]():
+Fast-forward to problem 41, [Pandigital Prime](https://projecteuler.net/problem=41):
 
 > We shall say that an $n$-digit number is pandigital if it makes use of all the
 digits $1$ to $n$ exactly once. For example, $2143$ is a $4$-digit pandigital
@@ -157,7 +157,9 @@ and is also prime.
 >
 > What is the largest $n$-digit pandigital prime that exists?
 
-As I mentioned at the beginning of the post, in the spirit of Project Euler, I will **not** discuss the solution too much, but hopefully the extremely-inefficient, naive solution is obvious enough. In order to find the _largest_, we have to check all prime numbers up to 9-digits long.
+As I mentioned at the beginning of the post, in the spirit of Project Euler, I will **not** discuss the solution too much, but hopefully the extremely-inefficient, naive solution is obvious enough. 
+
+In order to find the _largest_, check _all_ prime numbers up to 9-digits long.
 
 > This problem is actually a really fun one to consider shortcuts and optimizations for. In the spirit of Project Euler I'll leave those as exercises to the reader. Good luck!
 
@@ -180,7 +182,7 @@ And using `wc` and `tail` again, it turns out 999,999,937 is the 50,847,534th pr
 
 ### The 100,000,000th Prime Number
 
-So now I'm just curious, what is the 100,000,000th prime number?
+So now I'm just curious, what is the 100,000,000th prime number? Double the amount of prime numbers generated in the previous section.
 
 After updating my generator back to using `count`:
 
@@ -224,7 +226,7 @@ Now before this becomes a database internals textbook, this is where balancing a
 
 ## The `NumberWriter` implementation
 
-Given a stream or stream-like (generator/iterator) input, the solution should be a custom stream implementation so that it is compatible with the `pipeline()` and `stream.pipe()` utility methods. These methods are particularly useful as they automatically handle [backpressure](https://nodejs.org/en/learn/modules/backpressuring-in-streams) as long as all of the parts are properly implemented as well. A custom [`Writable`]() should be sufficient as it will be the destination for the input data. This solution will be an intermediary between the input stream and the multiple file output streams ensuring the input data is valid and within the configured size limit, backpressure is respected during the actual file write operations, and that any errors are properly propagated. The Node.js File System API [`WriteStream`]() will be very useful for this solution.
+Given a stream or stream-like (generator/iterator) input, the solution should be a custom stream implementation so that it is compatible with the `pipeline()` and `stream.pipe()` utility methods. These methods are particularly useful as they automatically handle [backpressure](https://nodejs.org/en/learn/modules/backpressuring-in-streams) as long as all of the parts are properly implemented as well. A custom [`Writable`](https://nodejs.org/docs/latest/api/stream.html#class-streamwritable) should be sufficient as it will be the destination for the input data. This solution will be an intermediary between the input stream and the multiple file output streams ensuring the input data is valid and within the configured size limit, backpressure is respected during the actual file write operations, and that any errors are properly propagated. The Node.js File System API [`WriteStream`](https://nodejs.org/api/fs.html#class-fswritestream) will be very useful for this solution.
 
 At a high-level, this solution should:
 
@@ -266,6 +268,10 @@ For simplicity, the `_writev()` method is omitted. Furthermore, the `Callback` t
 As part of the original design, the output destination and file size limit should be configurable. These should be constructor options, and the `maxFileSize` should have some reasonable default, like 100MB. Furthermore, since this expects input values to be JavaScript `number` type, the Writable `objectMode` option should be enabled.
 
 ```ts
+import { Writable } from 'node:stream';
+
+type Callback = (error?: Error | null) => void;
+
 interface NumberWriterOptions {
 	outputDir?: string;
 	maxFileSize?: number;
@@ -385,19 +391,11 @@ export class NumberWriter extends Writable {
 				this.#openNextFile((error) => {
 					if (error) return callback(error);
 
-					this.#writeToCurrentStream(buffer, callback);
+					this.#currentStream.write(buffer, callback);
 				});
 			});
 		} else {
-			this.#writeToCurrentStream(buffer, callback);
-		}
-	}
-
-	#writeToCurrentStream(buffer: Buffer, callback: Callback): void {
-		if (this.#currentStream.write(buffer)) {
-			callback(null);
-		} else {
-			this.#currentStream.once('drain', callback);
+			this.#currentStream.write(buffer, callback);
 		}
 	}
 
@@ -405,7 +403,9 @@ export class NumberWriter extends Writable {
 }
 ```
 
-The `_write()` method starts with validation of the `number` argument. The instance does have `objectMode` enabled, but that doesn't prevent the input from being any object type. Furthermore, in `objectMode`, the `_encoding` argument is unnecessary hence the `_` prefix. The `Number.isFinite()` check is only relevant since this is currently for prime numbers, but that can be removed to make the implementation more versatile for different inputs. The valid `number` value is then converted to the string to be written to the output file stream. The string is encoded as an utf8 `Buffer` and then the resulting `byteSize` is validated. Since this implementation currently uses JavaScript `number` type, the maximum size of a single line is 17 bytes (``Buffer.from(`${Number.MAX_SAFE_INTEGER}\n`, 'utf8').length``). If this was updated to support `BigInt` type, then a check to ensure the line is not greater than the maximum file size would likely be necessary. The `byteSize` is checked against the size of the current file output stream. If it exceeds the maximum file size, then the current stream is closed and a new file output stream is opened. Finally, the `buffer` is written to the file stream using the `#writeToCurrentStream()` method. This method handles backpressure of the underlying write steam by ensuring if `this.#currentStream.write(buffer)` returns `false`, the callback isn't called until after the `'drain'` event is emitted.
+The `_write()` method starts with validation of the `number` argument. The instance does have `objectMode` enabled, but that doesn't prevent the input from being any object type. Furthermore, in `objectMode`, the `_encoding` argument is unnecessary hence the `_` prefix. The `Number.isFinite()` check is only relevant since this is currently for prime numbers, but that can be removed to make the implementation more versatile for different inputs. The valid `number` value is then converted to the string to be written to the output file stream. The string is encoded as an utf8 `Buffer` and then the resulting `byteSize` is validated. Since this implementation currently uses JavaScript `number` type, the maximum size of a single line is 17 bytes (``Buffer.from(`${Number.MAX_SAFE_INTEGER}\n`, 'utf8').length``). If this was updated to support `BigInt` type, then a check to ensure the line is not greater than the maximum file size would likely be necessary. The `byteSize` is checked against the number of bytes written to the current output stream.
+
+If it exceeds the maximum file size, then the current stream is closed and a new file output stream is opened. Finally, the `buffer` is written to the file stream using the `this.#currentStream.write(buffer, callback)` method. Backpressure is properly handled by passing through the `callback` to the underlying output stream. The underlying stream will only execute the `callback` after it has flushed the `buffer`, and since this is the same `callback` for the `NumberWriter._write()` method, that will bubble up to whatever is writing to the `NumberWriter`.
 
 Lastly, the `_final()` method is important to ensure everything is properly finished and cleaned up.
 
@@ -423,9 +423,194 @@ export class NumberWriter extends Writable {
 			callback(null);
 		}
 	}
-
-	// ...
 }
 ```
 
 This implementation is very similar to the `_destroy()` method, except that there are no errors to handle. The `'error'` event listener for the `this.#currentStream` is not removed until after `end()` completes, so if an error does occur, it will be passed through to `_destroy()` still. Once this method is called the `NumberWriter` instance itself is complete. All output files should be written and there should be no orphaned file descriptors or event listeners.
+
+The complete implementation for `NumberWriter` is:
+
+```ts
+import { createWriteStream, mkdir, type WriteStream } from 'node:fs';
+import { join } from 'node:path';
+import { Writable } from 'node:stream';
+
+type Callback = (error?: Error | null) => void;
+
+export interface NumberWriterOptions {
+	outputDir?: string;
+	maxFileSize?: number;
+}
+
+export class NumberWriter extends Writable {
+	#currentFileIndex = 0;
+	#currentStream: WriteStream;
+	#outputDir: string;
+	#maxFileSize: number;
+
+	constructor(options: NumberWriterOptions = {}) {
+		super({ objectMode: true });
+		this.#outputDir = options.outputDir || '';
+		this.#maxFileSize = options.maxFileSize || 100 * 1024 * 1024; // Default: 100MB
+	}
+
+	_construct(callback: Callback): void {
+		if (this.#outputDir) {
+			mkdir(this.#outputDir, { recursive: true }, (err) => {
+				if (err) return callback(err);
+
+				this.#openNextFile(callback);
+			});
+		} else {
+			this.#openNextFile(callback);
+		}
+	}
+
+	#openNextFile(callback: Callback): void {
+		try {
+			const filename = `${this.#currentFileIndex++}.txt`.padStart(10, '0');
+			this.#currentStream = createWriteStream(join(this.#outputDir, filename));
+
+			this.#currentStream.on('error', (err) => {
+				this.destroy(err);
+			});
+
+			this.#currentStream.once('ready', callback);
+		} catch (error) {
+			callback(error);
+		}
+	}
+
+	_write(number: unknown, _encoding: any, callback: Callback): void {
+		if (typeof number !== 'number' || !Number.isFinite(number)) {
+			return callback(
+				new Error(
+					`Unexpected chunk type ${typeof number}. Only pass literal JavaScript numbers, \`stream.write(123456);\``,
+				),
+			);
+		}
+
+		const line = number.toString() + '\n';
+		const buffer = Buffer.from(line, 'utf8');
+		const byteSize = buffer.length;
+
+		if (this.#currentStream.bytesWritten + byteSize > this.#maxFileSize) {
+			this.#currentStream.end(() => {
+				this.#currentStream.removeAllListeners();
+				this.#openNextFile((error) => {
+					if (error) return callback(error);
+
+					this.#currentStream.write(buffer, callback);
+				});
+			});
+		} else {
+			this.#currentStream.write(buffer, callback);
+		}
+	}
+
+	_destroy(error: Error | null, callback: Callback): void {
+		if (this.#currentStream) {
+			this.#currentStream.end(() => {
+				this.#currentStream.removeAllListeners();
+				callback(error);
+			});
+		} else {
+			callback(error);
+		}
+	}
+
+	_final(callback: Callback): void {
+		if (this.#currentStream) {
+			this.#currentStream.end(() => {
+				this.#currentStream.removeAllListeners();
+				callback(null);
+			});
+		} else {
+			callback(null);
+		}
+	}
+}
+
+```
+
+## Using `NumberWriter`
+
+Now for the fun part; lets integrate the `NumberWriter` with `primeGenerator()` and see it in action.
+
+Previously, `pipeline()` was used to write all of values from `primeGenerator()` to a `primes.txt` output file. For a reasonably sized example, lets use `{ limit: 1_000_000 }` for the generator and lets create a reference point to verify the new solution against.
+
+```typescript
+await pipeline(
+  primeGenerator({ limit: 1_000_000 }),
+  new Transform({
+    objectMode: true,
+    transform(chunk, encoding, callback) {
+      callback(null, chunk ? `${chunk}\n` : chunk);
+    },
+  }),
+  createWriteStream('primes-limit-1-000-000.txt'),
+);
+```
+
+This results in a file size of 528KB and 78,498 prime numbers.
+
+And now lets try the same prime generator configuration with `NumberWriter`. The `Transform` stream was required in order to convert the `number` type values from `primeGenerator()` into strings for writing to the file. Since that logic is now encapsulated into `NumberWriter` itself, the output of `primeGenerator()` can be piped directly into `NumberWriter`. Given the expected output size, lets set the `maxFileSize` to 100KB. If our implementation is correct, this should generate 6 files, 5 of which are 100KB and the 6th is 28KB.
+
+```typescript
+await pipeline(
+	primeGenerator({ limit: 1_000_000 }),
+	new NumberWriter({
+		maxFileSize: 100 * 1024,
+		outputDir: join(import.meta.dirname, 'primes-limit-1-000-000')
+	})
+);
+```
+
+Executing this script results in these 6 files being generated:
+
+```
+primes-limit-1-000-000/
+├── 000000.txt
+├── 000001.txt
+├── 000002.txt
+├── 000003.txt
+├── 000004.txt
+└── 000005.txt
+```
+
+And to verify the size:
+
+```
+❯ du -h primes/primes-limit-1-000-000/*         
+100K    primes/primes-limit-1-000-000/000000.txt
+100K    primes/primes-limit-1-000-000/000001.txt
+100K    primes/primes-limit-1-000-000/000002.txt
+100K    primes/primes-limit-1-000-000/000003.txt
+100K    primes/primes-limit-1-000-000/000004.txt
+ 28K    primes/primes-limit-1-000-000/000005.txt
+❯ du -h primes/primes-limit-1-000-000/
+528K    primes/primes-limit-1-000-000/
+```
+
+That looks good to me!
+
+And line count:
+
+```
+❯ wc -l primes/primes-limit-1-000-000/*  
+   16202 primes/primes-limit-1-000-000/000000.txt
+   14628 primes/primes-limit-1-000-000/000001.txt
+   14628 primes/primes-limit-1-000-000/000002.txt
+   14628 primes/primes-limit-1-000-000/000003.txt
+   14628 primes/primes-limit-1-000-000/000004.txt
+    3784 primes/primes-limit-1-000-000/000005.txt
+   78498 total
+```
+
+Its working! Fantastic, next, lets break up the extra large files.
+
+Starting with the smaller of the two, `primes-limit-1-000-000-000.txt`, 479MB large and 50,847,534 lines long.
+
+```typescript
+await pipeline();
+```
