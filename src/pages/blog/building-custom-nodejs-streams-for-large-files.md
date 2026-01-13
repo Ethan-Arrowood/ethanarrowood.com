@@ -8,7 +8,7 @@ description: "What started as generating prime numbers for Project Euler problem
 
 ## Prime Number Curiosity
 
-Math has always fascinated me, especially when it intersects with programming. Relatively recently, I started working through the [Project Euler](https://projecteuler.net/) problem set to sharpen both my computational mathematics skills. As an added challenge, I avoid using any third-party libraries when solving these problems limiting myself to the standard JavaScript `Math` API and whatever I can build from scratch. My overall goal is not just to solve the problems, but also to deeply understand them, the underlying concepts, and even work through potential optimizations both mathematically and algorithmically.
+Math has always fascinated me, especially when it intersects with programming. Recently, I started working through the [Project Euler](https://projecteuler.net/) problem set to sharpen my computational mathematics skills. As an added challenge, I avoid using any third-party libraries when solving these problems limiting myself to the standard JavaScript `Math` API and whatever I can build from scratch. My overall goal is not just to solve the problems, but also to deeply understand them, the underlying concepts, and even work through potential optimizations both mathematically and algorithmically.
 
 > This post does not contain any Project Euler solutions, but it is not technically 100% spoiler-free.
 > 
@@ -20,9 +20,9 @@ Math has always fascinated me, especially when it intersects with programming. R
 
 ### Prime Number Utilities
 
-As of writing this post, I've solved only about 40 problems from the set of over 900. Throughout these early problems, the concept of prime numbers has appeared frequently. For example, the 3rd problem, [Largest prime factor](https://projecteuler.net/problem=3), asks for the largest prime factor of a large number, and the 7th problem, [10001st Prime](https://projecteuler.net/problem=7), simply asks what is the $10001$st prime number? The thing with prime numbers is because they are fundamental to so much of mathematics they start popping up even when not directly mentioned by the problem. For example, the 5th problem, [Smallest Multiple](https://projecteuler.net/problem=5), asks to determine the smallest positive number that is evenly divisible by all the numbers from 1 to 20. Without giving too much away, there is a really useful trick to solving this problem when you consider how divisibility and prime factorization are related. Clearly, primes are important for mathematical and computational problem solving.
+As of writing this post, I've solved only about 40 problems from the set of over 900. Throughout these early problems, the concept of prime numbers has appeared frequently. For example, the 3rd problem, [Largest prime factor](https://projecteuler.net/problem=3), asks for the largest prime factor of a large number, and the 7th problem, [10001st Prime](https://projecteuler.net/problem=7), simply asks what is the 10001st prime number? Prime numbers are fundamental to so much of mathematics that they start popping up even when not directly mentioned by the problem. For example, the 5th problem, [Smallest Multiple](https://projecteuler.net/problem=5), asks to determine the smallest positive number that is evenly divisible by all the numbers from 1 to 20. Without giving too much away, there is a really useful trick to solving this problem when you consider how divisibility and prime factorization are related. Clearly, primes are important for mathematical and computational problem solving.
 
-As I worked through various problems requiring prime numbers, I started creating my own set of prime number utilities. Starting with relatively the most important function, `isPrime(n)`, for determining if a number `n` is a prime or not:
+As I worked through various problems requiring prime numbers, I started creating my own set of prime number utilities. Starting with the most important function, `isPrime(n)`, for determining if a number `n` is a prime or not:
 
 ```typescript
 function isPrime(n: number): boolean {
@@ -37,11 +37,11 @@ function isPrime(n: number): boolean {
 
 > I acknowledge this is **not** the most efficient way to validate a prime number, but once again, my main goal is simply to refine my computational mathematics skills. If I ever needed the _most efficient_ solution I would absolutely consider additional resources.
 
-Initially, this method was simple enough to solve the early problems. During runtime, I could iterate over a range, check if a given number is prime, and then do whatever additional logic necessary for solving the problem at hand. I knew this was inefficient, and so I quickly turned to my favorite dynamic programming concept, memoization, to improve my utility methods.
+Initially, this method was simple enough to solve the early problems. During runtime, I could iterate over a range, check if a given number is prime, and then do whatever additional logic necessary for solving the problem at hand. I knew this was inefficient, and so I quickly turned to my favorite dynamic programming concept, [memoization](https://en.wikipedia.org/wiki/Memoization), to improve my utility methods.
 
 Instead of computing primes during the runtime of any given problem solution, I decided to generate a set of prime numbers ahead of time, save that to a file, and then have my solutions use the set directly.
 
-Equipped with my naive `isPrime()` function, and the power of JavaScript generators, I came up with this solution:
+Equipped with my naive `isPrime()` function, and the power of [JavaScript generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator), I came up with this solution:
 
 ```typescript
 function* primeGenerator({
@@ -69,7 +69,7 @@ for (const prime of primeGenerator()) {
 }
 ```
 
-But also, I could use this generator along with Node.js [Stream](https://nodejs.org/docs/latest/api/stream.html) and [File System](https://nodejs.org/docs/latest/api/file-system.html) APIs to write the prime numbers to a file:
+But also, I could use this generator along with Node.js [Stream](https://nodejs.org/api/stream.html) and [File System](https://nodejs.org/api/fs.html) APIs and the [`pipeline()`](https://nodejs.org/api/stream.html#streampipelinesource-transforms-destination-callback) utility to write the prime numbers to a file:
 
 ```typescript
 await pipeline(
@@ -84,7 +84,7 @@ await pipeline(
 );
 ```
 
-The `Transform` stream is required here to transform the prime numbers produced by `primeGenerator()` into strings with newlines. Otherwise, every prime number would be written immediately after one another on a single line.
+The [`Transform`](https://nodejs.org/api/stream.html#class-streamtransform) stream is required here to transform the prime numbers produced by `primeGenerator()` into strings with newlines. Otherwise, every prime number would be written immediately after one another on a single line.
 
 While this implementation is not the fastest way to generate primes, because it uses a generator, it could at least efficiently generate essentially infinite values without ever running out of memory. For the relatively low count of one-hundred thousand prime numbers, this script runs in 0.25 seconds on my M1 MacBook Pro and generates a 708KB file.
 
@@ -109,17 +109,17 @@ const primes = readFileSync('primes-count-100-000.txt', 'utf-8');
 const primeArray = primes
 		.trim()
 		.split('\n')
-		.map((n) => parseInt(n)),
+		.map((n) => parseInt(n));
 
 for (const prime of primeArray) {
   // 2, 3, 5, 7, 11, ...
 }
 
-primeArray[99] // the 100th prime number is ...
+primeArray[99]; // the 100th prime number is ...
 
 const primeSet = new Set(primeArray);
 
-primeSet.has(123) // equivalent `isPrime(123)` check
+primeSet.has(123); // equivalent `isPrime(123)` check
 ```
 
 > There is still some performance overhead to reading the file and then doing operations like `split()` and `map()`, but it is significantly faster compared to computing primes at runtime.
@@ -172,7 +172,7 @@ In order to find the _largest_, check _all_ prime numbers up to 9-digits long.
 For the naive solution, I went back to my prime number generator script and changed the limit to 1,000,000,000 since I needed all prime numbers up to 9-digits long.
 
 ```typescript
-primeGenerator({ limit: 1_000_000_000 })
+primeGenerator({ limit: 1_000_000_000 });
 ```
 
 This time it took nearly half-an-hour to execute, and the resulting text file is 480MB! My dev tools, VS Code and Git, can still handle this file size okay with only a little bit of lag. Something as simple as `git add primes-limit-1-000-000-000.txt` takes a few seconds now instead of the relatively-instantaneous few milliseconds.
@@ -193,7 +193,7 @@ So now I'm just curious, what is the 100,000,000th prime number? Double the amou
 After updating my generator back to using `count`:
 
 ```typescript
-primeGenerator({ count: 100_000_000 })
+primeGenerator({ count: 100_000_000 });
 ```
 
 And nearly an hour of execution time later, I had my answer: 2,038,074,743 is the 100,000,000th prime number!
@@ -214,7 +214,7 @@ And just how large is _this_ file?
   994M    primes-count-100-000-000.txt
 ```
 
-944MB, nearly an entire gigabyte! VS Code is nearly crashing trying to open this file, and git is completely timing out in my shell. In my project, I have prettier, husky, and lint-staged set up to do some automatic formatting on commit and this process completely breaks due to the size of the file. I'm not sure which tool can't handle it, but the point is nearly a gigabyte in size is just too large!
+994MB, nearly an entire gigabyte! VS Code is nearly crashing trying to open this file, and git is completely timing out in my shell. In my project, I have prettier, husky, and lint-staged set up to do some automatic formatting on commit and this process completely breaks due to the size of the file. I'm not sure which tool can't handle it, but the point is nearly a gigabyte in size is just too large!
 
 ## Data, oh so much data!
 
@@ -222,7 +222,7 @@ So what is there to do? I could just delete the file and return to a smaller set
 
 Inspired by stream-like characteristics of the `primeGenerator()` utility, I wondered how difficult it would be to not only split-up the large files I already have generated, but also create an interface for efficiently storing large number sets across multiple files.
 
-Since the `primeGenerator()` method was already producing `number` values, I decided to focus on building a stream sink that would generate take the numbers as inputs, and write them to files up to a given size separated by newlines. This allows for the files to not only be human readable, but also easy to work with programmatically.
+Since the `primeGenerator()` method was already producing `number` values, I decided to focus on building a stream sink that would take the numbers as inputs, and write them to files up to a given size separated by newlines. This allows for the files to not only be human readable, but also easy to work with programmatically.
 
 The existing files would be slightly harder, but my thinking was if I can succeed at building a sink that can store numbers efficiently, I then just had to create a transform utility to read and parse the numbers from the existing files, and stream them along to the same interface.
 
@@ -232,12 +232,12 @@ And both of these stream implementations would likely be useful for future compu
 
 As previously demonstrated, streams and generators work well together. When implemented properly, one stream can pipe to another without ever exceeding process memory limits enabling programmatic usage of very large data sources and sinks.
 
-Thus, the primary solution should be a custom Node.js Stream that can be used with the `pipeline()` and `stream.pipe()` utility methods. These methods are particularly useful as they automatically handle [backpressure](https://nodejs.org/en/learn/modules/backpressuring-in-streams) as long as all of the parts are properly implemented as well. A custom [`Writable`](https://nodejs.org/docs/latest/api/stream.html#class-streamwritable) should be sufficient as it will be the destination for the input data. This solution will be an intermediary between the input stream and the multiple file output streams ensuring the input data is valid and within the configured size limit, backpressure is respected during the actual file write operations, and that any errors are properly propagated. The Node.js File System API [`WriteStream`](https://nodejs.org/api/fs.html#class-fswritestream) will be very useful for this solution.
+Thus, the primary solution should be a custom Node.js Stream that can be used with the `pipeline()` and [`stream.pipe()`](https://nodejs.org/api/stream.html#readablepipedestination-options) utility methods. These methods are particularly useful as they automatically handle [backpressure](https://nodejs.org/api/stream.html#buffering) as long as all of the parts are properly implemented as well. A custom [`Writable`](https://nodejs.org/api/stream.html#class-streamwritable) should be sufficient as it will be the destination for the input data. This solution will be an intermediary between the input stream and the multiple file output streams ensuring the input data is valid and within the configured size limit, backpressure is respected during the actual file write operations, and that any errors are properly propagated. The Node.js File System API [`WriteStream`](https://nodejs.org/api/fs.html#class-fswritestream) will be very useful for this solution.
 
 At a high-level, this solution should:
 
 1. Receive data from an input stream source, validating each new value to be a JavaScript `number`
-2. Write the input values to an output file until the a file size is reached
+2. Write the input values to an output file until a file size is reached
    - [`writeStream.bytesWritten`](https://nodejs.org/api/fs.html#writestreambyteswritten) seems useful for this
    - The output destination and file size limit should be configurable
 3. Once the file size is reached, rotate the output file
@@ -251,7 +251,7 @@ At a high-level, this solution should:
 
 Getting started with some boilerplate:
 
-```ts
+```typescript
 import { Writable } from 'node:stream';
 
 type Callback = (error?: Error | null) => void;
@@ -271,13 +271,13 @@ export class NumberWriter extends Writable {
 
 For simplicity, the `_writev()` method is omitted. Furthermore, the `Callback` type is extracted from the `Writable` type definitions to simplify method type signatures throughout the implementation.
 
-Input values are intended to be JavaScript `number` type; thus, enable the Writable `objectMode` option. I've found it easiest to limit and validate chunk types to exactly what I want to support; otherwise, the complexity can get out of hand. You can always use a `Transform` stream to convert chunk types efficiently. Now, this option doesn't necessarily limit what can be written to this stream, and so we will also validate chunks within the `_write()` method.
+Input values are intended to be JavaScript `number` type; thus, enable the Writable [`objectMode`](https://nodejs.org/api/stream.html#object-mode) option. I've found it easiest to limit and validate chunk types to exactly what I want to support; otherwise, the complexity can get out of hand. You can always use a `Transform` stream to convert chunk types efficiently. Now, this option doesn't necessarily limit what can be written to this stream, and so we will also validate chunks within the `_write()` method.
 
-The output destination and file size limit should be configurable. These should be constructor options, and the `maxFileSize` should have some reasonable default, like 100MB. Additionally, this option should be validated to be at least as large as one number per file. For obvious reasons this edge-case of storing one number per file would be extremely inefficient, but it is beneficial to consider the possibility nonetheless. I used the `max` prefix here, because the implementation technically won't always have the same file size. The last file will likely be smaller, and when working we reasonably large numbers, there is the possibility for small size differentials when the next prime would exceed the specified maximum file size. 
+The output destination and file size limit should be configurable. These should be constructor options, and the `maxFileSize` should have some reasonable default, like 100MB. Additionally, this option should be validated to be at least as large as one number per file. For obvious reasons this edge-case of storing one number per file would be extremely inefficient, but it is beneficial to consider the possibility nonetheless. I used the `max` prefix here, because the implementation technically won't always have the same file size. The last file will likely be smaller, and when working with reasonably large numbers, there is the possibility for small size differentials when the next prime would exceed the specified maximum file size. 
 
-Right now, the implementation focusses on integers, but could easily be adapted to support `BigInt` or even floats too.
+Right now, the implementation focuses on integers, but could easily be adapted to support `BigInt` or even floats too.
 
-```ts
+```typescript
 import { Writable } from 'node:stream';
 
 type Callback = (error?: Error | null) => void;
@@ -291,7 +291,7 @@ const minFileSize = Buffer.from(`${Number.MAX_SAFE_INTEGER}\n`, 'utf8').length;
 
 export class NumberWriter extends Writable {
 	#outputDir: string;
-	#maxFileSize: string;
+	#maxFileSize: number;
 
 	constructor(options: NumberWriterOptions = {}) {
 		// Enable `objectMode` to support JavaScript `number` types in `_write()`
@@ -308,7 +308,7 @@ export class NumberWriter extends Writable {
 		}
 
 		if (options.maxFileSize < minFileSize) {
-			throw new TypeError(`\`maxFileSize\` option should be greater than or equal to the minimum file size of ${minFileSize} bytes`)
+			throw new TypeError(`\`maxFileSize\` option should be greater than or equal to the minimum file size of ${minFileSize} bytes`);
 		}
 
 		this.#maxFileSize = options.maxFileSize || 50 * 1024 * 1024; // default: 50MB
@@ -320,7 +320,7 @@ It may be useful to support additional `Writable` options here and pass them thr
 
 Next, lets implement the `_construct()` method. This is a reasonable place to asynchronously setup the output directory, and the first output file stream.
 
-```ts
+```typescript
 import { createWriteStream, type WriteStream } from 'node:fs';
 import { join } from 'node:path';
 
@@ -363,11 +363,11 @@ export class NumberWriter extends Writable {
 
 There are two new private instance properties, `#currentFileIndex` is an incremental index for the file output names and `#currentStream` is the current file output `WriteStream`.
 
-The `_construct()` method starts off simple enough checking the `#outputDir` value and asynchronously creating the output directory if specified. It properly handles any errors that occur as a result of `mkdir()`, and then moves on to creating the first output file stream. The `#openNextFile()` method uses the `#currentFileIndex` to create a file name by padding `0`s to the front of the index value. So for example if the index value is `1`, the resulting file name is `000001.txt`. It then creates the output file stream using `createWriteStream()`. The try-catch block is there to catch any errors thrown by `createWriteStream()` since it does not accept a callback. The resulting stream is assigned an `'error'` event listener that passes along any errors to the instance's `destroy()` method. This error handling will be important and make more sense later when analyzing the `_write()` implementation. Finally, a singular `'ready'` event handler is established passing through the `callback`.
+The `_construct()` method starts off simple enough checking the `#outputDir` value and asynchronously creating the output directory if specified. It properly handles any errors that occur as a result of [`mkdir()`](https://nodejs.org/api/fs.html#fsmkdirpath-options-callback), and then moves on to creating the first output file stream. The `#openNextFile()` method uses the `#currentFileIndex` to create a file name by padding `0`s to the front of the index value. So for example if the index value is `1`, the resulting file name is `000001.txt`. It then creates the output file stream using [`createWriteStream()`](https://nodejs.org/api/fs.html#fscreatewritestreampath-options). The try-catch block is there to catch any errors thrown by `createWriteStream()` since it does not accept a callback. The resulting stream is assigned an `'error'` event listener that passes along any errors to the instance's `destroy()` method. This error handling will be important and make more sense later when analyzing the `_write()` implementation. Finally, a singular `'ready'` event handler is established passing through the `callback`.
 
 The error handling established here passes through errors from the output file stream to the `_destroy()` method:
 
-```ts
+```typescript
 export class NumberWriter extends Writable {
 	// ...
 
@@ -390,7 +390,7 @@ If an output file stream exists, this properly ends the stream with `end()`, rem
 
 With all the setup complete, now the `_write()` implementation.
 
-```ts
+```typescript
 export class NumberWriter extends Writable {
 	// ...
 
@@ -431,7 +431,7 @@ If the new `byteSize` and the current stream's `bytesWritten` exceeds the maximu
 
 Lastly, the `_final()` method is important to ensure everything is properly finished and cleaned up.
 
-```ts
+```typescript
 export class NumberWriter extends Writable {
 	// ...
 
@@ -452,7 +452,7 @@ This implementation is very similar to the `_destroy()` method, except that ther
 
 The complete implementation for `NumberWriter` is:
 
-```ts
+```typescript
 import { createWriteStream, mkdir, type WriteStream } from 'node:fs';
 import { join } from 'node:path';
 import { Writable } from 'node:stream';
@@ -577,7 +577,7 @@ export class NumberWriter extends Writable {
 
 Now for the fun part; lets integrate the `NumberWriter` with `primeGenerator()` and see it in action.
 
-Previously, `pipeline()` was used to write all of values from `primeGenerator()` to a `primes-count-100-000.txt` output file. For a reasonably sized example, lets use `{ limit: 1_000_000 }` for the generator and lets create a reference point to verify the new solution against.
+Previously, `pipeline()` was used to write all values from `primeGenerator()` to a `primes-count-100-000.txt` output file. For a reasonably sized example, lets use `{ limit: 1_000_000 }` for the generator and lets create a reference point to verify the new solution against.
 
 ```typescript
 await pipeline(
@@ -653,9 +653,9 @@ Fantastic, its working! The `NumberWriter` is able to efficiently generate a set
 
 Next, lets break up the extra large files.
 
-We'll continue to use `pipeline()` here, but we'll replace `primeGenerator()` with `fs.createReadStream()`. This method returns a `fs.ReadStream` which implements `Readable`. For demonstration purposes, lets use the `primes-count-100-000.txt` file (count 100,000) we created at the very beginning.
+We'll continue to use `pipeline()` here, but we'll replace `primeGenerator()` with [`fs.createReadStream()`](https://nodejs.org/api/fs.html#fscreatereadstreampath-options). This method returns a [`fs.ReadStream`](https://nodejs.org/api/fs.html#class-fsreadstream) which implements [`Readable`](https://nodejs.org/api/stream.html#class-streamreadable). For demonstration purposes, lets use the `primes-count-100-000.txt` file (count 100,000) we created at the very beginning.
 
-The `NumberWriter` is only designed to handle `number` type inputs, but the `createReadStream()` streams `Buffer` chunks by default. So now we need to implement some sort of transform stream to transform the chunks from the `ReadStream` into numbers.
+The `NumberWriter` is only designed to handle `number` type inputs, but the `createReadStream()` streams [`Buffer`](https://nodejs.org/api/buffer.html#class-buffer) chunks by default. So now we need to implement some sort of transform stream to transform the chunks from the `ReadStream` into numbers.
 
 Let's see what happens if we just pass each chunk to `parseInt()` after encoding it as a string.
 
@@ -700,7 +700,11 @@ Hmm, that is definitely incorrect.
 
 Lets add a log line to the `transform()` method and inspect the chunk sizes.
 
-```ts
+```typescript
+await pipeline(
+	// ...
+	new Transform({
+		// ...
 		transform(chunk, encoding, callback) {
 			console.log(
 				'chunk details:',
@@ -709,6 +713,9 @@ Lets add a log line to the `transform()` method and inspect the chunk sizes.
 			);
 			callback(null, parseInt(chunk.toString('utf8'), 10));
 		},
+	}),
+	// ...
+);
 ```
 
 Result:
@@ -728,7 +735,7 @@ chunk details: 55124 6892
 
 So the first chunk is `65536` bytes long, and seems to contain 10,937 lines. Subsequent chunks are the same size (except for the last one) and contain decreasing number of lines. So no wonder the `parseInt()` didn't work!
 
-The `ReadStream` doesn't care about the new lines; they are just another byte. Instead, it will always stream chunks of a certain size. The `ReadStream` defaults to `64KB`, or `64 * 1024`. This value is configurable by the `highWaterMark` property.
+The `ReadStream` doesn't care about the new lines; they are just another byte. Instead, it will always stream chunks of a certain size. The `ReadStream` defaults to `64KB`, or `64 * 1024`. This value is configurable by the [`highWaterMark`](https://nodejs.org/api/fs.html#fscreatereadstreampath-options) property.
 
 Since the lines within the file are all of different lengths, there is no magic number that would consistently return chunks line-by-line. We have to buffer and implement this ourselves.
 
@@ -754,7 +761,7 @@ export class LineToNumber extends Transform {
 
 Transform streams implement both Writable and Readable streams hence the name. Data can be written to and read from a transform stream, for the purpose of _transforming_ the data.
 
-The key detail in this boilerplate is the options passed to `super()`. Since this transform stream will be producing `number` values, the `readableObjectMode` must be enabled.
+The key detail in this boilerplate is the options passed to `super()`. Since this transform stream will be producing `number` values, the [`readableObjectMode`](https://nodejs.org/api/stream.html#object-mode) must be enabled.
 
 Now for the `_transform()` method implementation:
 
@@ -793,6 +800,8 @@ export class LineToNumber extends Transform {
 }
 ```
 
+> **Note**: This implementation prioritizes correctness and clarity. When processing extremely large files (100M+ lines), there are additional memory optimization techniques that can further reduce garbage collection pressure, which I'll explore in a follow-up post.
+
 Since we'll be controlling the source feeding into `LineToNumber`, we can assume that the `chunk` will always be a `Buffer`. A more general purpose solution may need some handling for `string` types as well.
 
 The `_transform()` method is what is responsible for accepting input and producing output. Behind the scenes, the `Transform` class handles backpressure by managing writable and readable queues. The `callback()` method is for signaling when another chunk is ready for processing (pop a chunk from the internal writable queue and signal to source it can write another chunk). And the `this.push()` method is for pushing data to the read queue. Transforms do not have to be one-to-one. One input chunk can result in many output chunks, and vice-versa.
@@ -803,7 +812,7 @@ The slice is then encoded as a string using `utf8` and then parsed as an integer
 
 > Sorry Windows users; you may need to implement additional logic for `\r\n` line endings instead of just `\n`.
 
-Tracking the last known newline is crucial for ensuring that numbers can be produced across chunk boundaries. If the last known newline is not the end of the chunk itself, the remaining bytes are tracked in `this.prev` and will be incorporated into the next transform step.
+Tracking the last known newline is crucial for ensuring that numbers can be produced across chunk boundaries. If the last known newline is not the end of the chunk itself, the remaining bytes are tracked in `this.#prev` and will be incorporated into the next transform step.
 
 Additionally, the `_flush()` method is important for an edge case where a file does not end in a newline character (resulting in the last chunk storing the last prime number in `this.prev`).
 
@@ -811,9 +820,9 @@ Additionally, the `_flush()` method is important for an edge case where a file d
 export class LineToNumber extends Transform {
 	// ...
 	_flush(callback: TransformCallback) {
-		if (this.prev) {
+		if (this.#prev) {
 			this.push(parseInt(this.#prev.toString('utf8'), 10));
-			this.prev = undefined;
+			this.#prev = undefined;
 		}
 		callback(null);
 	}
@@ -956,7 +965,7 @@ Verify the size:
 994M    primes/primes-count-100-000-000.txt
 ```
 
-> The 3M difference makes sense for the file system overhead of 19 individual files.
+> The 3M difference makes sense for the file system overhead of 20 individual files.
 
 And line count:
 
@@ -989,11 +998,11 @@ And line count:
 
 Perfect! We've split up the 100,000,000 prime number list into 20 separate 50MB files.
 
-### Garbage Collector Thrashing
+### Performance Considerations and Future Optimizations
 
-Unfortunately, as I was finalizing this post to be published I noticed significant garbage collection thrashing when profiling the script. 
+Unfortunately, as I was finalizing this post to be published I noticed significant garbage collection thrashing when profiling the script.
 
-Upon closer inspection I realized the `LineToNumber` implementation is the cause.Considering a default chunk size of 64KB with thousands of lines in it, the transform method allocates 3 objects per line (`slice`, `.toString()`, and `parseInt()`), and occasionally a 4th and 5th objects for `this.#prev`. For the 100,000,000 prime number list, the average line size is about 9 bytes, meaning that a 64KB chunk contains ~7,000 lines on average. This would result in every chunk allocating at least 21,000 objects! You can see this thrashing for yourself by using `--trace-gc` when executing the script (look for the `allocation failure` messages in the trace logs).
+Upon closer inspection I realized the `LineToNumber` implementation is the cause. Considering a default chunk size of 64KB with thousands of lines in it, the transform method allocates 3 objects per line (`slice`, `.toString()`, and `parseInt()`), and occasionally a 4th and 5th objects for `this.#prev`. For the 100,000,000 prime number list, the average line size is about 9 bytes, meaning that a 64KB chunk contains ~7,000 lines on average. This would result in every chunk allocating at least 21,000 objects! You can see this thrashing for yourself by using `--trace-gc` when executing the script (look for the `allocation failure` messages in the trace logs).
 
 My first thought was to try and tweak `highWaterMark` options to reduce chunk sizes, but I was unable to find values that simultaneously prevented the thrashing and performed efficiently.
 
