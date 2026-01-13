@@ -1,9 +1,9 @@
 ---
 layout: ../../layouts/PostLayout.astro
-title: "Primes, Streams, and Really Large Files"
-pubDate: 2025-11-02T12:00:00-06:00
-editDate: 2025-11-02T12:00:00-06:00
-description: ""
+title: "Building Custom Node.js Streams: Splitting a 1GB File Without Running Out of Memory"
+pubDate: 2026-01-13T12:00:00-06:00
+editDate: 2026-01-13T12:00:00-06:00
+description: "What started as generating prime numbers for Project Euler problems evolved into a ~1GB file that broke my development tools. Follow along as I build custom Node.js Writable and Transform streams to efficiently split large files, learning about backpressure, memory management, and the pitfalls of garbage collection along the way."
 ---
 
 ## Prime Number Curiosity
