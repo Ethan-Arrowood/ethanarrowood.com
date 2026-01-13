@@ -170,6 +170,19 @@ import githubLogo from "../images/logos/github-dark.png";
 			integrity="sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ"
 			crossorigin="anonymous"
 		/>
+		<!-- Google Analytics (Production only) -->
+		{import.meta.env.PROD && (
+			<>
+				<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-FKHLX85PGZ"></script>
+				<script is:inline>
+					window.dataLayer = window.dataLayer || [];
+					function gtag(){dataLayer.push(arguments);}
+					gtag('js', new Date());
+
+					gtag('config', 'G-FKHLX85PGZ');
+				</script>
+			</>
+		)}
 		<title>Ethan Arrowood</title>
 	</head>
 	<body>
