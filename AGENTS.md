@@ -6,7 +6,7 @@ Agent guide for [ethanarrowood.com](https://ethanarrowood.com), a personal websi
 
 Static site deployed to GitHub Pages via GitHub Actions. No CMS; all content is Markdown files with frontmatter.
 
-- **Framework**: Astro 5 with TypeScript (strict)
+- **Framework**: Astro 6 with TypeScript (strict)
 - **Node**: 24
 - **Package manager**: npm
 - **Domain**: ethanarrowood.com (CNAME)
