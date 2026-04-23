@@ -3,6 +3,7 @@ import type { MarkdownInstance } from "astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import TalkCard from "../components/TalkCard.astro";
 import BookMeSpeaker from "../components/BookMeSpeaker.astro";
+import SectionHeading from "../components/SectionHeading.astro";
 import type { TalkFrontmatter } from "../utils/talkfrontmatter";
 
 const allTalks = Object.values(
@@ -57,7 +58,7 @@ const past = allTalks.filter((talk) =>
 	{
 		upcoming.length > 0 && (
 			<section>
-				<h2>Upcoming</h2>
+				<SectionHeading id="upcoming">Upcoming</SectionHeading>
 				<ul class="talks-list">
 					{upcoming.map((talk) => (
 						<li>
@@ -69,7 +70,7 @@ const past = allTalks.filter((talk) =>
 		)
 	}
 	<section>
-		<h2>Past Talks</h2>
+		<SectionHeading id="past-talks">Past Talks</SectionHeading>
 		{
 			past.length > 0 ? (
 				<ul class="talks-list">

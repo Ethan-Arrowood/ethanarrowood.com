@@ -1,0 +1,30 @@
+---
+interface Props {
+	id: string;
+	level?: 1 | 2 | 3 | 4 | 5 | 6;
+	class?: string;
+}
+
+const { id, level = 2, class: className } = Astro.props;
+const Tag = `h${level}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+---
+
+<Tag {id} class:list={["section-heading", className]}>
+	<a href={`#${id}`}><slot /></a>
+</Tag>
+
+<style>
+	.section-heading a {
+		color: var(--text-primary);
+		text-decoration: none;
+		display: block;
+	}
+
+	.section-heading a::after {
+		display: none;
+	}
+
+	.section-heading a:hover {
+		color: var(--accent);
+	}
+</style>

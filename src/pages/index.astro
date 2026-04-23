@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 import Link from "../components/Link.astro";
 import BookMeSpeaker from "../components/BookMeSpeaker.astro";
+import SectionHeading from "../components/SectionHeading.astro";
 
 import { Image } from "astro:assets";
 import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
@@ -238,7 +239,7 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 		/>
 
 		<div class="highlights-container">
-			<h2 class="sub-title">Highlights</h2>
+			<SectionHeading id="highlights" class="sub-title">Highlights</SectionHeading>
 			<ul class="highlights-list">
 				<li class="highlights-list-item">
 					Head of Open Source Engineering at <Link href="https://harpersystems.dev"
@@ -269,7 +270,7 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 	</section>
 
 	<section id="professional-summary" class="professional-summary-container">
-		<h2 class="sub-title">Summary</h2>
+		<SectionHeading id="summary" class="sub-title">Summary</SectionHeading>
 		<p class="professional-summary-text">
 			I am Head of Open Source Engineering at Harper, where I led the
 			company's transition from a closed-source product to an open-source-first
@@ -302,7 +303,7 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 	</section>
 
 	<section id="talks" class="talks-container">
-		<h2 class="sub-title">Talks</h2>
+		<SectionHeading id="talks" class="sub-title">Talks</SectionHeading>
 		<div>
 			<h3 class="talks-sub-heading">Upcoming</h3>
 			<ul class="upcoming-talks-list">
@@ -354,7 +355,7 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 	</section>
 
 	<section id="consulting" class="consulting-container">
-		<h2 class="sub-title">Consulting & Investing</h2>
+		<SectionHeading id="consulting" class="sub-title">Consulting & Investing</SectionHeading>
 		<p class="professional-summary-text">
 			I take on select consulting engagements through <Link
 				href="https://alpinemooseinnovations.com">Alpine Moose Innovations</Link
@@ -380,7 +381,7 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 	</section>
 
 	<section id="experience" class="experience-container">
-		<h2 class="sub-title">Experience</h2>
+		<SectionHeading id="experience" class="sub-title">Experience</SectionHeading>
 		<ol class="experience-list">
 			<li class="experience-list-item">
 				<h3 class="experience-list-item-title">
