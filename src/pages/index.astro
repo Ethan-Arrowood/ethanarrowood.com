@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 import Link from "../components/Link.astro";
+import BookMeSpeaker from "../components/BookMeSpeaker.astro";
 
 import { Image } from "astro:assets";
 import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
@@ -88,6 +89,47 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 	}
 
 	/* Talks */
+
+	.talks-sub-heading {
+		font-size: 1.1rem;
+		font-weight: 500;
+		color: var(--text-secondary);
+		margin-block-end: 1rem;
+	}
+
+	.upcoming-talks-list {
+		list-style-type: none;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.upcoming-talk-item {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.upcoming-talk-title {
+		font-size: 1.1rem;
+		font-weight: 500;
+	}
+
+	.upcoming-talk-description {
+		font-size: 1rem;
+		line-height: 1.6;
+		color: var(--text-primary);
+	}
+
+	.upcoming-talk-events {
+		list-style-type: none;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		font-size: 0.9rem;
+		padding-inline-start: 0;
+		margin-block-start: 0.25rem;
+	}
 
 	lite-youtube {
 		margin: auto;
@@ -199,7 +241,7 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 			<h2 class="sub-title">Highlights</h2>
 			<ul class="highlights-list">
 				<li class="highlights-list-item">
-					Senior Software Engineer at <Link href="https://harpersystems.dev"
+					Head of Open Source Engineering at <Link href="https://harpersystems.dev"
 						>Harper</Link
 					>
 				</li>
@@ -229,55 +271,112 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 	<section id="professional-summary" class="professional-summary-container">
 		<h2 class="sub-title">Summary</h2>
 		<p class="professional-summary-text">
-			I am a seasoned Senior Software Engineer with nearly a decade of
-			experience building scalable, high-performance systems and leading
-			innovative development initiatives. My expertise spans distributed
-			application platforms, cloud engineering, modern web technologies, and
-			AI-driven development workflows. I have a proven track record at
-			industry-leading companies including Harper, Vercel, and Microsoft.
-			Throughout my career, I have demonstrated exceptional technical leadership
-			by architecting enterprise solutions, contributing to open-source projects
-			such as Node.js and Next.js, and contributing to prestigious, technical
-			organizations including the OpenJS Foundation, WinterCG, and TC39.
+			I am Head of Open Source Engineering at Harper, where I lead the
+			company's transition from a closed-source product to an open-source-first
+			platform. This means owning the dual-license model (Apache 2.0 core with
+			a source-available pro tier), building contribution procedures, and
+			growing a developer community grounded in trust and transparency.
 		</p>
 		<p class="professional-summary-text">
-			Currently at Harper, I serve as a key core engineer developing our
-			cutting-edge distributed application platform that unifies database,
-			caching, and networking technologies into a single, high performance
-			system. I lead development across multiple critical areas including the
-			application plugin system, major front-end framework integrations such as
-			Next.js and Astro, and our integrated GraphQL engine. Furthermore, I
-			helped lead the replatforming of the documentation infrastructure to
-			improve accessibility and development velocity. My work increasingly
-			leverages AI tooling to accelerate development processes and explore
-			innovative solutions to complex technical challenges.
+			Outside of Harper, I am a Node.js core contributor and Undici maintainer.
+			I represent the Node.js and JavaScript ecosystem in the OpenJS Foundation
+			and WinterTC (ECMA TC55), where I work on standards and community
+			development for web-interoperable runtimes. I have spoken at JSConf NA
+			and NodeConf EU.
 		</p>
 		<p class="professional-summary-text">
-			I offer strategic consulting services through Alpine Moose Innovations,
-			working with startups and established businesses across a range of
-			technical domains including AI integration and strategy, custom
-			application development, API and SDK engineering, and website development.
-			I specialize in helping organizations navigate the rapidly evolving AI
-			landscape and integrate intelligent solutions into their technology stack.
-			Contact me at <Link href="mailto:ethan@arrowood.dev"
-				>ethan@arrowood.dev</Link
-			> for inquiries about my consulting services.
+			Previous roles include Senior Software Engineer at Vercel, where I worked
+			on the core build platform and contributed performance improvements to
+			Next.js, and Software Engineer II at Microsoft, where I built enterprise
+			Azure solutions for large partners. Outside of work, I am a certified ski
+			instructor at Breckenridge, a Protect Our Winters member, and a volunteer
+			with outdoor education programs in Summit County, Colorado. I care about
+			climate and environmental stewardship, and I am particularly drawn to
+			working with companies building in that space. I take on select consulting
+			engagements through <Link href="https://alpinemooseinnovations.com"
+				>Alpine Moose Innovations</Link
+			> and am open to early-stage investing conversations. Reach me at <Link
+				href="mailto:ethan@arrowood.dev">ethan@arrowood.dev</Link
+			>.
 		</p>
 	</section>
 
 	<section id="talks" class="talks-container">
 		<h2 class="sub-title">Talks</h2>
-		<lite-youtube
-			videoid="_8-PJzHC8ng"
-			playlistid="PL70YCHVvqVvxfJX9B81P-TjvbbKoXjegG"
-		>
-			<Link
-				href="https://www.youtube.com/playlist?list=PL70YCHVvqVvxfJX9B81P-TjvbbKoXjegG"
-				class="lite-youtube-fallback"
+		<div>
+			<h3 class="talks-sub-heading">Upcoming</h3>
+			<ul class="upcoming-talks-list">
+				<li class="upcoming-talk-item">
+					<p class="upcoming-talk-title">
+						<Link href="/talks/building-sustainable-open-source-the-harper-story"
+							>Building Sustainable Open Source: The Harper Story</Link
+						>
+					</p>
+					<p class="upcoming-talk-description">
+						A practical account of open sourcing a near-decade-old commercial
+						system: the business decisions that made it viable, the technical
+						realities of the transition, and how Harper is maintaining open
+						source momentum alongside commercial success.
+					</p>
+					<ul class="upcoming-talk-events">
+						<li>
+							<Link
+								href="https://events.linuxfoundation.org/open-source-summit-north-america/"
+								>Open Source Summit NA 2026</Link
+							> &mdash; May 18&ndash;20, 2026 &mdash; <Link
+								href="https://sched.co/2JQuD">Talk page</Link
+							>
+						</li>
+						<li>
+							<Link href="https://renderatl.com"
+								>Node.js Interactive @ Render ATL 2026</Link
+							> &mdash; August 12&ndash;13, 2026
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<h3 class="talks-sub-heading">Past Talks</h3>
+			<lite-youtube
+				videoid="_8-PJzHC8ng"
+				playlistid="PL70YCHVvqVvxfJX9B81P-TjvbbKoXjegG"
 			>
-				YouTube playlist of all my talks
-			</Link>
-		</lite-youtube>
+				<Link
+					href="https://www.youtube.com/playlist?list=PL70YCHVvqVvxfJX9B81P-TjvbbKoXjegG"
+					class="lite-youtube-fallback"
+				>
+					YouTube playlist of all my talks
+				</Link>
+			</lite-youtube>
+		</div>
+		<BookMeSpeaker />
+	</section>
+
+	<section id="consulting" class="consulting-container">
+		<h2 class="sub-title">Consulting & Investing</h2>
+		<p class="professional-summary-text">
+			I take on select consulting engagements through <Link
+				href="https://alpinemooseinnovations.com">Alpine Moose Innovations</Link
+			>. My focus areas are open source program development, API and SDK
+			engineering, Node.js performance, and developer experience. I work best
+			with technical founders and engineering teams that need a senior
+			practitioner for a defined scope, not a generalist agency.
+		</p>
+		<p class="professional-summary-text">
+			I am especially drawn to climate tech, clean energy, and environmental
+			companies. I grew up in the mountains, I see climate change reshaping
+			the places I love, and I want to put my technical background to work in
+			that space. If you are building there, reach out even if the scope is
+			not fully defined.
+		</p>
+		<p class="professional-summary-text">
+			I am also exploring early-stage angel investing, with a focus on climate,
+			green energy, and developer tooling. If you are raising and think there
+			is a fit, I am happy to have a conversation. Contact me at <Link
+				href="mailto:ethan@arrowood.dev">ethan@arrowood.dev</Link
+			>.
+		</p>
 	</section>
 
 	<section id="experience" class="experience-container">
@@ -285,41 +384,48 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 		<ol class="experience-list">
 			<li class="experience-list-item">
 				<h3 class="experience-list-item-title">
-					Harper - Senior Software Engineer
+					Harper - Head of Open Source Engineering
 				</h3>
 				<p class="experience-list-item-date">August 2024 - Present</p>
 				<ol class="experience-list-item-description">
 					<li class="experience-list-item-description-item">
-						Developing a distributed, high performance application platform that
-						integrates database, caching, streaming, and more into one cohesive
-						system
+						Leading Harper's transition from a closed-source product to an
+						open-source-first platform, including strategy, community, and
+						business model.
 					</li>
 					<li class="experience-list-item-description-item">
-						Leveraging high-performance Node.js and C++ to optimize the
-						performance of the core product
+						Architected a dual-license model: Apache 2.0 core with a
+						source-available pro tier, balancing community openness and
+						commercial sustainability.
 					</li>
 					<li class="experience-list-item-description-item">
-						Created a new application plugin system (<Link
+						Built contribution infrastructure: governance docs, issue triage
+						workflows, and contributor onboarding to support a growing developer
+						community.
+					</li>
+					<li class="experience-list-item-description-item">
+						Representing Harper in the OpenJS Foundation and WinterTC (ECMA TC55),
+						contributing to Node.js ecosystem and JavaScript interoperability
+						standards.
+					</li>
+					<li class="experience-list-item-description-item">
+						Created the <Link
 							href="https://docs.harperdb.io/docs/reference/components/plugins"
 							>Harper Plugin API</Link
-						>) that simultaneously simplifies the API while enhancing its
-						capabilities.
+						>, simplifying the extension model while expanding its capabilities.
 					</li>
 					<li class="experience-list-item-description-item">
-						Lead the development of major front-end framework integrations
-						including Next.js and Astro, and an integrated GraphQL engine.
+						Led development of major front-end framework integrations including
+						Next.js and Astro, and an integrated GraphQL engine.
 					</li>
 					<li class="experience-list-item-description-item">
-						Replatformed the documentation site, improving the user experience
-						and accessibility of the documentation as well as increasing the
+						Replatformed the documentation site, improving accessibility and
 						developer experience velocity.
 					</li>
 					<li class="experience-list-item-description-item">
-						Contributing to the OpenJS Foundation and WinterTC organizations on
-						behalf of the company focussing on improving the Node.js open source
-						community and JavaScript interoperability.
+						Using high-performance Node.js and C++ to optimize core product
+						performance.
 					</li>
-					<!-- TODO: Add "leading open source" section -->
 				</ol>
 			</li>
 			<li class="experience-list-item">
@@ -331,13 +437,22 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 				<p class="experience-list-item-date">June 2024 - Present</p>
 				<ol class="experience-list-item-description">
 					<li class="experience-list-item-description-item">
-						Founded a personal consulting company focused on delivering
-						high-quality software solutions and advising services.
+						Independent consulting practice focused on open source strategy,
+						API and SDK engineering, Node.js performance, and modern web
+						application development.
 					</li>
 					<li class="experience-list-item-description-item">
-						Provided consulting services to various clients, including startups
-						and established businesses, to help them achieve their software
-						development goals.
+						Advising startups and technical teams on architecture decisions,
+						developer experience, and open source program development.
+					</li>
+					<li class="experience-list-item-description-item">
+						Particularly interested in working with climate tech and green
+						energy companies where software infrastructure can accelerate the
+						energy transition.
+					</li>
+					<li class="experience-list-item-description-item">
+						Open to early-stage investing conversations in climate, clean
+						energy, and developer tooling.
 					</li>
 				</ol>
 			</li>

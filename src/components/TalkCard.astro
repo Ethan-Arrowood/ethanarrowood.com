@@ -1,0 +1,65 @@
+---
+import type { MarkdownInstance } from "astro";
+import type { TalkFrontmatter, TalkEvent } from "../utils/talkfrontmatter";
+
+interface Props {
+	talk: MarkdownInstance<TalkFrontmatter>;
+}
+
+const { title, description, events } = Astro.props.talk.frontmatter;
+const { url } = Astro.props.talk;
+---
+
+<style>
+	.talk-card {
+		display: block;
+		padding: 1rem;
+		border-radius: 0.5rem;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		color: inherit;
+		text-decoration: none;
+		line-height: 1.5;
+	}
+
+	.talk-card:hover {
+		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+	}
+
+	.title {
+		margin: 0.5rem 0;
+		display: inline-block;
+		font-size: 1.5rem;
+		font-weight: 500;
+	}
+
+	.description {
+		margin: 0.5rem 0;
+		font-size: 1rem;
+	}
+
+	.events {
+		margin-top: 0.75rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.event {
+		font-size: 0.9rem;
+		color: var(--text-secondary);
+	}
+</style>
+
+<a href={url} class="talk-card">
+	<h3 class="title">{title}</h3>
+	<p class="description">{description}</p>
+	<div class="events">
+		{
+			events.map((event: TalkEvent) => (
+				<span class="event">
+					{event.name} &mdash; {event.date}
+				</span>
+			))
+		}
+	</div>
+</a>

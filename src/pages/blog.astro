@@ -7,6 +7,10 @@ const allPosts = Object.values(
 	import.meta.glob<MarkdownInstance<Frontmatter>>("./blog/*.md", {
 		eager: true,
 	}),
+).sort(
+	(a, b) =>
+		new Date(b.frontmatter.pubDate).valueOf() -
+		new Date(a.frontmatter.pubDate).valueOf(),
 );
 ---
 

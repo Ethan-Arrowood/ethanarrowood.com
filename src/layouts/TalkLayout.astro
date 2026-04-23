@@ -1,0 +1,57 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import BookMeSpeaker from "../components/BookMeSpeaker.astro";
+import type { TalkEvent } from "../utils/talkfrontmatter";
+import "../styles/post.css";
+import "../styles/talk.css";
+
+const { frontmatter } = Astro.props;
+---
+
+<BaseLayout title={frontmatter.title}>
+	<section class="talk-container">
+		<div class="talk-header">
+			<h1 class="talk-title">{frontmatter.title}</h1>
+			<dl class="talk-meta">
+				{frontmatter.audienceLevel && (
+					<>
+						<dt class="talk-meta-label">Audience Level</dt>
+						<dd class="talk-meta-value">{frontmatter.audienceLevel}</dd>
+					</>
+				)}
+				{frontmatter.sessionFormat && (
+					<>
+						<dt class="talk-meta-label">Session Format</dt>
+						<dd class="talk-meta-value">{frontmatter.sessionFormat}</dd>
+					</>
+				)}
+			</dl>
+			<div class="talk-events">
+				{
+					frontmatter.events.map((event: TalkEvent) => (
+						<div class="talk-event">
+							<span class="talk-event-name">{event.name}</span>
+							<span class="talk-event-date">{event.date}</span>
+							<div class="talk-event-links">
+								<a href={event.eventUrl} target="_blank" rel="noreferrer">
+									Event site
+								</a>
+								{event.talkUrl && (
+									<a href={event.talkUrl} target="_blank" rel="noreferrer">
+										Talk page
+									</a>
+								)}
+							</div>
+						</div>
+					))
+				}
+			</div>
+		</div>
+
+		<div class="post-content">
+			<slot />
+		</div>
+
+		<BookMeSpeaker />
+	</section>
+</BaseLayout>

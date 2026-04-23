@@ -1,6 +1,13 @@
 ---
 import { Image } from "astro:assets";
 import githubLogo from "../images/logos/github-dark.png";
+
+interface Props {
+	title?: string;
+}
+
+const { title } = Astro.props;
+const pageTitle = title ? `${title} | Ethan Arrowood` : "Ethan Arrowood";
 ---
 
 <style is:global>
@@ -157,7 +164,7 @@ import githubLogo from "../images/logos/github-dark.png";
 		<meta name="author" content="Ethan Arrowood" />
 		<meta
 			name="description"
-			content="Personal website for Ethan Arrowood. Avid adventurer. Open source maintainer. Harper Senior Software Engineer. Node.js Contributor. Breckenridge Ski Instructor."
+			content="Personal website for Ethan Arrowood. Head of Open Source Engineering at Harper. Node.js contributor. OpenJS Foundation and WinterTC collaborator. Breckenridge ski instructor."
 		/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link
@@ -183,17 +190,18 @@ import githubLogo from "../images/logos/github-dark.png";
 				</script>
 			</>
 		)}
-		<title>Ethan Arrowood</title>
+		<title>{pageTitle}</title>
 	</head>
 	<body>
 		<header>
 			<div>
 				<h1 class="title">Ethan Arrowood</h1>
-				<h2 class="tagline">Optimizing Software, Overcoming Summits</h2>
+				<h2 class="tagline">Optimizing Systems, Organizing Communities, Overcoming Summits</h2>
 			</div>
 			<nav>
 				<a href="/">home</a>
 				<a href="/blog">blog</a>
+				<a href="/talks">talks</a>
 			</nav>
 		</header>
 		<main>
