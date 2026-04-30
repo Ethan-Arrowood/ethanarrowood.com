@@ -21,6 +21,7 @@ export default defineConfig({
 		],
 		shikiConfig: {
 			theme: "github-light",
+			// Code is easier to read not-wrapped on mobile
 			wrap: false,
 		},
 	},

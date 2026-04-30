@@ -1,0 +1,272 @@
+---
+layout: ../../layouts/PostLayout.astro
+title: "Can AI write its own AGENTS.md?"
+pubDate: 2026-04-30T12:00:00-06:00
+editDate: 2026-04-30T12:00:00-06:00
+description: "What I learned trying to get an AI agent to write its own AGENTS.md file, and why I had to write it myself first."
+---
+
+## How well does AI generate an `AGENTS.md` file?
+
+With a healthy level of skepticism, I've been exploring how to use AI to improve my engineering productivity. Agents can be helpful sometimes, but also frustratingly _dumb_. One key detail I (and many others) have figured out is more detailed context often improves agent capabilities. One effective pattern I've witnessed is `AGENTS.md`. So what better way to try and learn how to use one effectively, than to ask the agents about it! Assuming that an agent would know exactly what should go in an `AGENTS.md` file, I asked it to generate one. And it failed spectacularly.
+
+```text
+Review the project repo and generate an AGENTS.md file for it. Reference relevant sections of the existing README.md and CONTRIBUTING.md
+```
+
+What I quickly learned is that I was not at all specific enough. And this turns out to be generally true for any sort of AI assisted development. The **more specific and relevant context** I supply in the prompt, the **better the agent performs**. This is obvious in hindsight, but there was once a (recent) time when agents had limited token sizes, and brevity mattered. Plus, it seems like every few months we invent a new way to tell the agents what to do (stay tuned for my adventure into skills and rules).
+
+The first iteration using this prompt wasn't great. Here is an [example](https://github.com/HarperFast/nextjs/pull/39/changes/dcf8264c306c738f9bbf0304ada9334cde6c3896) from when I used it on the `@harperfast/nextjs` project.
+
+<details>
+
+<summary>
+Click to expand <code>@harperfast/nextjs/AGENTS.md</code> (first iteration)
+</summary>
+
+````md
+# Agent Guidelines: @harperfast/nextjs
+
+This is the `@harperfast/nextjs` package — a [Harper Plugin](https://docs.harperdb.io/docs/reference/components/plugins) for running Next.js applications (v14, v15, v16) within the Harper distributed runtime. It wraps Next.js config, manages the application lifecycle within Harper, and optionally provides ISR caching backed by Harper's database.
+
+## Repository Structure
+
+```
+src/
+  plugin.ts          # Harper plugin entry point (ESM, loaded by Harper runtime)
+  withHarper.cts     # withHarper() Next.js config helper (CJS, loaded by Next.js)
+  CacheHandler.cts   # Harper-backed ISR cache handler (CJS, loaded by Next.js at runtime)
+schema.graphql       # Harper table definitions (NextBuildInfo, NextISRCache)
+config.yaml          # Harper plugin configuration (pluginModule, graphqlSchema)
+fixtures/            # Minimal Next.js apps used as integration test targets
+  next-14/           # next.config.js (CommonJS require)
+  next-15/           # next.config.mjs (ESM import)
+  next-16/           # next.config.ts (TypeScript)
+  next-16-caching/   # Experimental ISR caching fixture
+integrationTests/    # Playwright integration test suite
+  fixture.ts         # Harper lifecycle wiring for Playwright
+  next-14.pw.ts      # Tests for next-14 fixture
+  next-15.pw.ts      # Tests for next-15 fixture
+  next-16.pw.ts      # Tests for next-16 fixture
+  playwright.config.ts
+scripts/
+  install-fixtures.js  # Installs dependencies for all fixture apps
+dist/                  # Compiled output (do not edit)
+```
+
+## Development
+
+**Build** (compiles `.cts` files to `dist/cjs/`):
+```sh
+npm run build
+```
+
+`src/plugin.ts` is **not** compiled — Harper loads it directly via Node's type-stripping. Only `src/withHarper.cts` and `src/CacheHandler.cts` are compiled.
+
+**Format:**
+```sh
+npm run format:check   # check
+npm run format:fix     # fix
+```
+
+**Requirements:** Node.js ≥ 20, npm.
+
+## Module System Notes
+
+`.cts` marks a file as CommonJS. This is required for `withHarper.cts` and `CacheHandler.cts` because Next.js config files use CommonJS resolution. `plugin.ts` stays ESM since it is loaded only by Harper's runtime. Do not change file extensions without understanding this distinction.
+
+## Testing
+
+See [CONTRIBUTING.md#testing](./CONTRIBUTING.md#testing) for the full testing guide. Tests are Playwright integration tests that run against real Harper instances using `@harperfast/integration-testing` for lifecycle management.
+
+**Setup (once, and after updating fixture deps):**
+```sh
+npm run install:fixtures
+```
+
+**Run all tests:**
+```sh
+npm run test:integration
+```
+
+**Run a specific test file:**
+```sh
+npm run test:integration -- integrationTests/next-15.pw.ts
+```
+
+### How Tests Are Structured
+
+Each test file maps to one fixture. The `fixture()` helper in `integrationTests/fixture.ts` starts Harper with the named fixture, exposes `harper`, `page`, and `request` to every test, then tears down Harper when the file finishes. Tests within a file run **sequentially**; separate test files run **in parallel** across Playwright workers.
+
+Each test callback may receive:
+- **`harper`** — `HarperContext` from `@harperfast/integration-testing` (includes `harper.httpURL`, `harper.operationsAPIURL`)
+- **`page`** — Playwright `Page` for browser-based assertions
+- **`request`** — Playwright `APIRequestContext` for raw HTTP calls
+
+### Adding a New Test File
+
+1. Create a fixture app in `fixtures/<name>/` with the plugin installed and configured (see existing fixtures for reference).
+2. Run `npm run install:fixtures` to install its dependencies.
+3. Create `integrationTests/<name>.pw.ts`:
+
+```ts
+import { fixture } from './fixture.ts';
+
+const { test, expect } = fixture('<name>');
+
+test('home page renders', async ({ page, harper }) => {
+  await page.goto(harper.httpURL);
+  await expect(page.locator('h1')).toHaveText('Expected heading');
+});
+
+test('health endpoint returns 200', async ({ request, harper }) => {
+  const response = await request.get(`${harper.operationsAPIURL}/health`);
+  expect(response.status()).toBe(200);
+});
+```
+
+## Key Source Files
+
+**`src/plugin.ts`** — Harper plugin implementation. Handles the full Next.js application lifecycle: config resolution, build (version-specific for v14/15/16), serving via Harper's HTTP middleware, dev mode with HMR, and build info tracking to avoid redundant rebuilds across threads. Reads `HARPER_NEXTJS_MODE` env var (`dev` / `build` / `prod`).
+
+**`src/withHarper.cts`** — Wraps user's Next.js config. Adds `harper`, `harper-pro`, and `harperdb` to `serverExternalPackages` so Harper's native dependencies are excluded from bundling. Optionally enables ISR caching via `experimentalHarperCache: true`.
+
+**`src/CacheHandler.cts`** — Implements Next.js `CacheHandler` interface. Stores ISR cached page data in Harper's `harperfast_nextjs.nextjs_isr_cache` table instead of the filesystem, making cached pages available across all nodes in a Harper cluster.
+
+## Database Schema
+
+Defined in `schema.graphql`, used by `harperfast_nextjs` database:
+
+- **`NextBuildInfo`** — tracks build state per app (`appName` PK, `buildId`, `status`)
+- **`NextISRCache`** — stores ISR cache entries (`id` PK, `data`, `lastModified` auto-updated)
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `HARPER_NEXTJS_MODE` | Plugin mode: `dev` (HMR), `build` (build-only, then exit), `prod` (default) |
+| `HARPER_INTEGRATION_TEST_LOG_DIR` | If set, Harper test logs are written here (used in CI) |
+
+## CI
+
+The GitHub Actions workflow (`.github/workflows/integration-tests.yml`) runs integration tests on push to `main` and on pull requests. It installs dependencies, builds, installs fixture dependencies, installs Playwright browsers, and runs the full test suite. Playwright traces and Harper logs are uploaded as artifacts on failure.
+
+> Note: CI jobs are currently disabled (`if: false`). When re-enabling, set the matrix job condition back to `true`.
+````
+
+</details>
+
+My main concerns were that it contained information already present in the `README.md` and `CONTRIBUTING.md`, and it was overly verbose in many of its sections. Also, it really likes generating file maps that will be annoying to maintain in the future.
+
+I didn't love it, so I started thinking about it some more, and even "discussed" my concerns with another Claude agent. This helped me create a better prompt that constrained the task around some categories.
+
+```text
+Lets refine the AGENTS.md. You provided too much information that is already reasonably covered by the CONTRIBUTING and README docs. Do not describe what the project is or how to contribute; that belongs in README and CONTRIBUTING. Focus only on three things: (1) behavioral contracts — what an agent should and should not do autonomously, including which commands are safe to run without confirmation; (2) operational grounding — things a human would infer from context that an agent needs stated explicitly, particularly around the module system, file extension conventions, and environment setup; (3) failure surface — known footguns, fragile areas, and constraints an agent should respect. Be concise. If information already exists in README or CONTRIBUTING, link to it rather than repeating it.
+```
+
+I still wasn't loving this either, but thought I'd give it a shot. Here is the [updated example](https://github.com/HarperFast/nextjs/pull/39/changes/21ac6613985d273a05cd7c491e7e0e4af9cfef09).
+
+<details>
+
+<summary>
+Click to expand <code>@harperfast/nextjs/AGENTS.md</code> (second iteration)
+</summary>
+
+````md
+# Agent Guidelines: @harperfast/nextjs
+
+## Autonomous Actions
+
+Run freely without confirmation:
+- `npm run build`
+- `npm run format:fix`
+- `npm run install:fixtures`
+- `npm run test:integration` (and with `-- <file>` to target one file)
+
+Ask before doing:
+- Modifying fixture `package.json` files or their installed dependencies
+- Changing `schema.graphql` or `config.yaml`
+- Touching anything in `dist/` (it's compiled output — change the source)
+
+## Operational Grounding
+
+**Module system:** The repo is `"type": "module"` (ESM), but `src/withHarper.cts` and `src/CacheHandler.cts` must be CommonJS because Next.js config files require CJS resolution. The `.cts` extension enforces this. `src/plugin.ts` is ESM and is **not compiled** — Harper loads it directly via Node's type-stripping. Do not change file extensions.
+
+**Build output:** Only `.cts` files compile to `dist/cjs/`. After editing `src/withHarper.cts` or `src/CacheHandler.cts`, run `npm run build` before testing. Editing `src/plugin.ts` takes effect immediately without a build.
+
+**Fixture dependencies are isolated:** Each `fixtures/<name>/` app is a self-contained package with its own `node_modules`. `npm install` at the repo root does not install fixture deps. Run `npm run install:fixtures` after adding or changing fixture dependencies.
+
+**Test startup is slow:** Each test file starts a real Harper instance and waits up to 2 minutes for Next.js to build. This is expected — do not assume a hanging test is broken.
+
+**Tests run sequentially within a file, parallel across files.** See [CONTRIBUTING.md#testing](./CONTRIBUTING.md#testing) for structure and how to add a new test file.
+
+## Failure Surface
+
+**Do not rename or re-extension source files** without updating `tsconfig.build.json`, `config.yaml`, and any import paths. The ESM/CJS split is load-order-sensitive; getting it wrong produces silent runtime failures, not build errors.
+
+**`npm run install:fixtures` must re-run after any fixture `package.json` change.** If tests fail with module-not-found errors inside a fixture, this is the likely cause.
+
+**The ISR cache tests in `integrationTests/next-16.pw.ts` are intentionally skipped.** `CacheHandler.cts` is a work in progress. Do not remove the `.skip` without verifying the implementation is complete.
+
+**CI is currently disabled** (`if: false` on the matrix job in `.github/workflows/integration-tests.yml`). Tests must be run locally.
+
+**`dist/` is gitignored.** It is not committed and not published from the repo directly — it is built as part of the publish step.
+````
+
+</details>
+
+I like the specificity more, and it avoids repeating information from `CONTRIBUTING.md` or `README.md` (mostly). Most importantly, this iteration demonstrated that the agent took the more specific instructions much more literally. It actually created sections following the categories included in the prompt. Unfortunately, it is still too verbose in its explanations. The code, workflows, and patterns are well commented and documented already; why should `AGENTS.md` reiterate reasoning for these facts?
+
+Also, sections like `Autonomous Actions:` stand out as becoming unmaintainable, inaccurate, and insecure. There isn't much I would let an AI run autonomously beyond modifying and creating files. I particularly prefer to manually approve every command it asks to execute.
+
+## Thinking for myself
+
+I could keep refining the prompt, but at this point did I even know what I really wanted in the `AGENTS.md`? So I did some research. I reviewed https://agents.md, and some of the examples it shared. The most apparent detail was the succinctness. A few section headers and bulleted lists of facts with minimal explanations. **KISS** (_**k**eep **i**t **s**imple, **s**tupid_), in other words.
+
+Beyond that, I thought critically about what purpose the other repository files serve:
+
+- The `README.md` is the primary entrypoint for any project. It answers _what is this?_, _how do I use it?_, and _where do I go next?_.
+- The `CONTRIBUTING.md` is the internal guide for anyone working on the project. It answers _how is this project developed, tested, and maintained?_.
+
+So then, what is the purpose of `AGENTS.md`?
+
+The `AGENTS.md` is a minimal, agent-specific document _complementary_ to the `README.md` and `CONTRIBUTING.md`. It answers _what does an agent need to know that it **cannot reliably infer** from existing documentation?_. Furthermore, it does **not replace or duplicate** existing documentation. The audience is strictly agents. If a human contributor would also benefit from reading something in `AGENTS.md`, it probably belongs in `README.md` or `CONTRIBUTING.md` instead.
+
+Like anything in technical writing, succinctness and specificity is crucial. So finally, I took a pass at writing the `AGENTS.md` document myself. Here is the [final, manual draft](https://github.com/HarperFast/nextjs/pull/39/changes/21ac6613985d273a05cd7c491e7e0e4af9cfef09..7ec52e14579ff3f01477c2e9ab02b482705a3bc1):
+
+<details>
+
+<summary>
+Click to expand <code>@harperfast/nextjs/AGENTS.md</code> (third iteration)
+</summary>
+
+````md
+# AGENTS.md
+
+Review the `README.md` and `CONTRIBUTING.md` for all relevant repository information.
+
+## Development Tips
+- Use `npm install` to install dependencies
+- Use `npm run build` to build the project files
+- Do not edit files in `dist/`; it is compiled output and gitignored.
+- Do not run `npm version` or `npm publish`; these commands are for humans only.
+- The `.cts` extension is intentional and load-order-sensitive. Do not change file extensions in `src/`.
+
+## Code Style
+- Use Prettier for formatting: `npm run format:fix`
+- `src/plugin.ts` is ESM. `src/withHarper.cts` and `src/CacheHandler.cts` are CommonJS (required by Next.js config resolution). Keep them that way.
+
+## Testing Tips
+- Use `npm link` in this directory and `npm link @harperfast/nextjs` in other project directories to test out changes locally
+- Run `npm run install:fixtures` before running tests for the first time, and again after changing any fixture's `package.json`.
+- Run `npm run test:integration` to run all tests, or `npm run test:integration -- integrationTests/next-15.pw.ts` for a single file.
+- Test startup is slow by design — each test file starts a real Harper instance and waits for Next.js to build (up to 2 minutes). A slow start is not a failure.
+- The ISR cache tests in `integrationTests/next-16.pw.ts` are intentionally skipped; `CacheHandler.cts` is a work in progress.
+- CI is currently disabled (`if: false` in `.github/workflows/integration-tests.yml`). Run tests locally.
+````
+
+</details>
+
+This is much better. No fluff, quick to review, and easy to update. Agents are instructed to review the `README.md` and `CONTRIBUTING.md` immediately. There is no ambiguity.
+
+Lesson learned, **you can't outsource writing the instructions until you understand what the instructions should be**. I believe this extends beyond just `AGENTS.md` to any sort of documentation.
