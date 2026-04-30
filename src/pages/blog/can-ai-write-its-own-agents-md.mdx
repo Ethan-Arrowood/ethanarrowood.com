@@ -6,13 +6,13 @@ editDate: 2026-04-30T12:00:00-06:00
 description: "What I learned trying to get an AI agent to write its own AGENTS.md file, and why I had to write it myself first."
 ---
 
+import { Code } from "astro:components";
+
 ## How well does AI generate an `AGENTS.md` file?
 
 With a healthy level of skepticism, I've been exploring how to use AI to improve my engineering productivity. Agents can be helpful sometimes, but also frustratingly _dumb_. One key detail I (and many others) have figured out is more detailed context often improves agent capabilities. One effective pattern I've witnessed is `AGENTS.md`. So what better way to try and learn how to use one effectively, than to ask the agents about it! Assuming that an agent would know exactly what should go in an `AGENTS.md` file, I asked it to generate one. And it failed spectacularly.
 
-```text
-Review the project repo and generate an AGENTS.md file for it. Reference relevant sections of the existing README.md and CONTRIBUTING.md
-```
+<Code code={`Review the project repo and generate an AGENTS.md file for it. Reference relevant sections of the existing README.md and CONTRIBUTING.md`} lang="text" theme="github-light" wrap />
 
 What I quickly learned is that I was not at all specific enough. And this turns out to be generally true for any sort of AI assisted development. The **more specific and relevant context** I supply in the prompt, the **better the agent performs**. This is obvious in hindsight, but there was once a (recent) time when agents had limited token sizes, and brevity mattered. Plus, it seems like every few months we invent a new way to tell the agents what to do (stay tuned for my adventure into skills and rules).
 
@@ -160,9 +160,7 @@ My main concerns were that it contained information already present in the `READ
 
 I didn't love it, so I started thinking about it some more, and even "discussed" my concerns with another Claude agent. This helped me create a better prompt that constrained the task around some categories.
 
-```text
-Lets refine the AGENTS.md. You provided too much information that is already reasonably covered by the CONTRIBUTING and README docs. Do not describe what the project is or how to contribute; that belongs in README and CONTRIBUTING. Focus only on three things: (1) behavioral contracts — what an agent should and should not do autonomously, including which commands are safe to run without confirmation; (2) operational grounding — things a human would infer from context that an agent needs stated explicitly, particularly around the module system, file extension conventions, and environment setup; (3) failure surface — known footguns, fragile areas, and constraints an agent should respect. Be concise. If information already exists in README or CONTRIBUTING, link to it rather than repeating it.
-```
+<Code code={`Lets refine the AGENTS.md. You provided too much information that is already reasonably covered by the CONTRIBUTING and README docs. Do not describe what the project is or how to contribute; that belongs in README and CONTRIBUTING. Focus only on three things: (1) behavioral contracts — what an agent should and should not do autonomously, including which commands are safe to run without confirmation; (2) operational grounding — things a human would infer from context that an agent needs stated explicitly, particularly around the module system, file extension conventions, and environment setup; (3) failure surface — known footguns, fragile areas, and constraints an agent should respect. Be concise. If information already exists in README or CONTRIBUTING, link to it rather than repeating it.`} lang="text" theme="github-light" wrap />
 
 I still wasn't loving this either, but thought I'd give it a shot. Here is the [updated example](https://github.com/HarperFast/nextjs/pull/39/changes/21ac6613985d273a05cd7c491e7e0e4af9cfef09).
 
