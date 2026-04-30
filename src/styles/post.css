@@ -175,3 +175,8 @@
 	background-color: var(--accent);
 	color: var(--background);
 }
+
+/* Details/Summary */
+.post-content summary > p {
+	display: inline;
+}

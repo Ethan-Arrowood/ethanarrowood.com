@@ -25,5 +25,8 @@
 			"name": "node",
 			"version": "24"
 		}
+	},
+	"dependencies": {
+		"@astrojs/mdx": "5.0.4"
 	}
 }
