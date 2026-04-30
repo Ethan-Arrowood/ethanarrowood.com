@@ -173,6 +173,7 @@ const pageDescription = description || defaultDescription;
 		<meta property="og:description" content={pageDescription} />
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content={Astro.url.href} />
+		<meta property="og:locale" content="en_US" />
 		<meta property="og:image" content={new URL(ogImage.src, Astro.site)} />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={pageTitle} />
