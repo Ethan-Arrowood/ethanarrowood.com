@@ -8,6 +8,7 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
 export default defineConfig({
+	site: "https://ethanarrowood.com",
 	integrations: [mdx()],
 	markdown: {
 		remarkPlugins: [remarkDatePlugin, remarkAlert, remarkMath],
