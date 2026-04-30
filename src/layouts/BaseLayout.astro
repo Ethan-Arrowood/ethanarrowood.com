@@ -4,10 +4,14 @@ import githubLogo from "../images/logos/github-dark.png";
 
 interface Props {
 	title?: string;
+	description?: string;
 }
 
-const { title } = Astro.props;
+const { title, description } = Astro.props;
 const pageTitle = title ? `${title} | Ethan Arrowood` : "Ethan Arrowood";
+const defaultDescription =
+	"Personal website for Ethan Arrowood. Head of Open Source Engineering at Harper. Node.js contributor. OpenJS Foundation and WinterTC collaborator. Breckenridge ski instructor.";
+const pageDescription = description || defaultDescription;
 ---
 
 <style is:global>
@@ -162,11 +166,15 @@ const pageTitle = title ? `${title} | Ethan Arrowood` : "Ethan Arrowood";
 	<head>
 		<meta charset="utf-8" />
 		<meta name="author" content="Ethan Arrowood" />
-		<meta
-			name="description"
-			content="Personal website for Ethan Arrowood. Head of Open Source Engineering at Harper. Node.js contributor. OpenJS Foundation and WinterTC collaborator. Breckenridge ski instructor."
-		/>
+		<meta name="description" content={pageDescription} />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={pageDescription} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={Astro.url.href} />
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={pageTitle} />
+		<meta name="twitter:description" content={pageDescription} />
 		<link
 			rel="icon"
 			href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏔️</text></svg>"

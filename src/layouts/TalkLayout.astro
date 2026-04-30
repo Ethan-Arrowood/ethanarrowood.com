@@ -8,7 +8,7 @@ import "../styles/talk.css";
 const { frontmatter } = Astro.props;
 ---
 
-<BaseLayout title={frontmatter.title}>
+<BaseLayout title={frontmatter.title} description={frontmatter.description}>
 	<section class="talk-container">
 		<div class="talk-header">
 			<h1 class="talk-title">{frontmatter.title}</h1>
