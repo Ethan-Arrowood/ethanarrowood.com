@@ -5,7 +5,7 @@ import BlogPostCard from "../components/BlogPostCard.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import type { Frontmatter } from "../utils/frontmatter";
 const allPosts = Object.values(
-	import.meta.glob<MarkdownInstance<Frontmatter>>("./blog/*.md", {
+	import.meta.glob<MarkdownInstance<Frontmatter>>("./blog/*.(md|mdx)", {
 		eager: true,
 	}),
 ).sort(
