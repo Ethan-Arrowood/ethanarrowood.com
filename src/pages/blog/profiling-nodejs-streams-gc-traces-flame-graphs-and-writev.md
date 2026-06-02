@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/PostLayout.astro
 title: "Profiling Node.js Streams: GC Traces, Flame Graphs, and `_writev`"
-pubDate: 2026-05-29T12:00:00-06:00
+pubDate: 2026-06-01T12:00:00-06:00
 editDate: 2026-06-01T12:00:00-06:00
 description: "I ended my last post sure a custom Transform stream was thrashing the garbage collector. When I actually profiled it — first GC traces, then a flame graph — the GC turned out to be a rounding error, and the real bottleneck was hiding one stream over. A practical tour of reading profiler output and optimizing an object-mode Node.js stream with `_writev`."
 ---
