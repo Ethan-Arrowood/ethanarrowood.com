@@ -3,6 +3,7 @@ import BaseLayout from "./BaseLayout.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import "remark-github-blockquote-alert/alert.css";
 import "../styles/post.css";
+import { renderInlineCode, stripCode } from "../utils/title";
 const { frontmatter, headings } = Astro.props;
 ---
 
@@ -24,6 +25,12 @@ const { frontmatter, headings } = Astro.props;
 		font-weight: 500;
 		font-size: 1.5rem;
 	}
+	.post-title code {
+		background-color: var(--code-bg);
+		padding: 0.1rem 0.4rem;
+		border-radius: 0.4rem;
+		font-size: 0.9em;
+	}
 
 	.post-pub-date,
 	.post-edit-date {
@@ -32,10 +39,10 @@ const { frontmatter, headings } = Astro.props;
 	}
 </style>
 
-<BaseLayout title={frontmatter.title} description={frontmatter.description}>
+<BaseLayout title={stripCode(frontmatter.title)} description={frontmatter.description}>
 	<section class="post-container">
 		<div class="post-header">
-			<h1 class="post-title">{frontmatter.title}</h1>
+			<h1 class="post-title" set:html={renderInlineCode(frontmatter.title)}></h1>
 			<p class="post-pub-date">Published: {frontmatter.pubDate}</p>
 			{
 				frontmatter.editDate &&

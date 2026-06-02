@@ -2,7 +2,7 @@
 layout: ../../layouts/PostLayout.astro
 title: "Building Custom Node.js Streams: Splitting a 1GB File Without Running Out of Memory"
 pubDate: 2026-01-13T12:00:00-06:00
-editDate: 2026-01-13T12:00:00-06:00
+editDate: 2026-06-02T12:00:00-06:00
 description: "What started as generating prime numbers for Project Euler problems evolved into a ~1GB file that broke my development tools. Follow along as I build custom Node.js Writable and Transform streams to efficiently split large files, learning about backpressure, memory management, and the pitfalls of garbage collection along the way."
 ---
 
@@ -17,6 +17,9 @@ Math has always fascinated me, especially when it intersects with programming. R
 > This information is only provided from a story-telling perspective in order to explain why and how I wound up with a large file of prime numbers!
 > 
 > Other than the specific details above, there are no other Project Euler spoilers in this post. Enjoy!
+
+> [!NOTE]
+> The streams and scripts built in this post are available in the [`node-streams-numberwriter`](https://github.com/Ethan-Arrowood/node-streams-numberwriter) repo, under [`01-building-custom-streams/`](https://github.com/Ethan-Arrowood/node-streams-numberwriter/tree/main/01-building-custom-streams).
 
 ### Prime Number Utilities
 
