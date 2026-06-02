@@ -3,7 +3,7 @@ layout: ../../layouts/PostLayout.astro
 title: "Profiling Node.js Streams: GC Traces, Flame Graphs, and `_writev`"
 pubDate: 2026-06-01T12:00:00-06:00
 editDate: 2026-06-01T12:00:00-06:00
-description: "I ended my last post sure a custom Transform stream was thrashing the garbage collector. When I actually profiled it — first GC traces, then a flame graph — the GC turned out to be a rounding error, and the real bottleneck was hiding one stream over. A practical tour of reading profiler output and optimizing an object-mode Node.js stream with `_writev`."
+description: "What I thought was garbage-collection thrashing in a custom Node.js stream was really a 4% rounding error. Finding the real bottleneck took GC traces, a flame graph, and _writev."
 ---
 
 This post is a follow-up to [Building Custom Node.js Streams: Splitting a 1GB File Without Running Out of Memory](/blog/building-custom-nodejs-streams-for-large-files). You can read this one standalone, but the previous post is where the `NumberWriter` and `LineToNumber` streams came from and what problem they solve: taking a ~1GB file of newline-separated prime numbers and splitting it into smaller, more manageable files.
