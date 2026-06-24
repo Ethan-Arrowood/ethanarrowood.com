@@ -79,7 +79,8 @@ events:
   - name: "Conference Name Year"
     date: "Month DD, YYYY"
     eventUrl: "https://..."
-    talkUrl: "https://..."   # optional
+    talkUrl: "https://..."   # optional, schedule/talk page
+    videoUrl: "https://..."  # optional, recording
 ---
 
 ## Description
@@ -87,8 +88,19 @@ events:
 Content here.
 ```
 
-- `talkUrl` is optional (link to recording or schedule entry).
-- Talks are split into "upcoming" and "past" on the listing page based on event dates.
+- `talkUrl` is optional (schedule or talk page entry); `videoUrl` is optional (link to a recording).
+- Talks are split into "upcoming" and "past" on the listing page based on event dates (a talk is "upcoming" if any of its events is in the future). On the talk page itself, each event also gets an "Upcoming"/"Past" badge, upcoming events sort first, and a `videoUrl` surfaces a "Watch recording" link.
+- **Embedding a video** in a talk body: use the `lite-youtube` web component, not a raw `<iframe>`. It renders a thumbnail and only loads the YouTube iframe on click (no third-party JS/cookies until play). `TalkLayout.astro` already registers the component, so just drop it into the Markdown body:
+
+  ```html
+  <lite-youtube videoid="VIDEO_ID" videotitle="Talk Title">
+    <a href="https://www.youtube.com/watch?v=VIDEO_ID" class="lite-youtube-fallback" target="_blank" rel="noreferrer">
+      Watch "Talk Title" on YouTube
+    </a>
+  </lite-youtube>
+  ```
+
+  `videoid` is the `v=` value from a watch URL. For a playlist (e.g. the homepage embed in `index.astro`), add `playlistid` (the `list=` value from a playlist URL).
 
 ## Key Patterns
 
