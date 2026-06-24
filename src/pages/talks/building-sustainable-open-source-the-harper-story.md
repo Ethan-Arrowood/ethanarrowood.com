@@ -19,16 +19,16 @@ events:
 
 Recorded at Open Source Summit North America 2026.
 
-<div class="video-embed">
-	<iframe
-		src="https://www.youtube-nocookie.com/embed/IvyLMwMNU0g"
-		title="Building Sustainable Open Source: The Harper Story"
-		loading="lazy"
-		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-		referrerpolicy="strict-origin-when-cross-origin"
-		allowfullscreen
-	></iframe>
-</div>
+<lite-youtube videoid="IvyLMwMNU0g" videotitle="Building Sustainable Open Source: The Harper Story">
+	<a
+		href="https://www.youtube.com/watch?v=IvyLMwMNU0g"
+		class="lite-youtube-fallback"
+		target="_blank"
+		rel="noreferrer"
+	>
+		Watch "Building Sustainable Open Source: The Harper Story" on YouTube
+	</a>
+</lite-youtube>
 
 ## Description
 

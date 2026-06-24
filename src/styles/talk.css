@@ -114,19 +114,10 @@
 	transform-origin: bottom left;
 }
 
-.video-embed {
-	position: relative;
+.post-content lite-youtube {
 	width: 100%;
-	aspect-ratio: 16 / 9;
+	max-width: 100%;
 	border-radius: 0.5rem;
 	overflow: hidden;
-}
-
-.video-embed iframe {
-	position: absolute;
-	inset: 0;
-	width: 100%;
-	height: 100%;
-	border: 0;
 }
 
