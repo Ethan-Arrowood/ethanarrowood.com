@@ -8,7 +8,7 @@ import SectionHeading from "../components/SectionHeading.astro";
 import type { TalkFrontmatter, TalkEvent } from "../utils/talkfrontmatter";
 
 import { Image } from "astro:assets";
-import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
+import headshot from "../images/headshot.jpeg";
 
 const allTalks = Object.values(
 	import.meta.glob<MarkdownInstance<TalkFrontmatter>>("./talks/*.md", {
@@ -54,13 +54,15 @@ const upcomingTalks = allTalks.filter((talk) =>
 
 	.profile-image {
 		margin: auto;
-		border-radius: 50%;
+		border-radius: 1rem;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 		transition: box-shadow 0.3s ease;
 		object-fit: cover;
 		display: block;
-		width: 16rem;
-		height: 16rem;
+		width: 22rem;
+		max-width: 100%;
+		aspect-ratio: 3 / 2;
+		height: auto;
 	}
 
 	.profile-image:hover {
@@ -246,8 +248,8 @@ const upcomingTalks = allTalks.filter((talk) =>
 <BaseLayout>
 	<section id="intro" class="intro-container">
 		<Image
-			src={carryingLincoln}
-			alt="Ethan standing with his late dog, Lincoln, over his shoulders (in a fireman carry). The background is a scenic summer day with a dirt trail, mountain peaks, trees, and other rocks and shrubs too."
+			src={headshot}
+			alt="Ethan standing with his arms crossed in front of a dramatic mountain gorge with steep cliffs, green slopes, a distant peak, and blue sky on a sunny day. He is wearing sunglasses, a cap, and a hydration vest."
 			class="profile-image"
 			loading="eager"
 		/>
