@@ -3,6 +3,7 @@ export interface TalkEvent {
 	date: string;
 	eventUrl: string;
 	talkUrl?: string;
+	videoUrl?: string;
 }
 
 export interface TalkFrontmatter {

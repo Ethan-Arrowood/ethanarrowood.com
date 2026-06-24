@@ -6,6 +6,16 @@ import "../styles/post.css";
 import "../styles/talk.css";
 
 const { frontmatter } = Astro.props;
+
+const now = new Date();
+
+const events = (frontmatter.events as TalkEvent[])
+	.map((event) => ({
+		...event,
+		isUpcoming: new Date(event.date) >= now,
+	}))
+	// Upcoming events first, then most recent past events.
+	.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 ---
 
 <BaseLayout title={frontmatter.title} description={frontmatter.description}>
@@ -28,9 +38,19 @@ const { frontmatter } = Astro.props;
 			</dl>
 			<div class="talk-events">
 				{
-					frontmatter.events.map((event: TalkEvent) => (
+					events.map((event) => (
 						<div class="talk-event">
-							<span class="talk-event-name">{event.name}</span>
+							<div class="talk-event-heading">
+								<span class="talk-event-name">{event.name}</span>
+								<span
+									class:list={[
+										"talk-event-status",
+										event.isUpcoming ? "is-upcoming" : "is-past",
+									]}
+								>
+									{event.isUpcoming ? "Upcoming" : "Past"}
+								</span>
+							</div>
 							<span class="talk-event-date">{event.date}</span>
 							<div class="talk-event-links">
 								<a href={event.eventUrl} target="_blank" rel="noreferrer">
@@ -39,6 +59,11 @@ const { frontmatter } = Astro.props;
 								{event.talkUrl && (
 									<a href={event.talkUrl} target="_blank" rel="noreferrer">
 										Talk page
+									</a>
+								)}
+								{event.videoUrl && (
+									<a href={event.videoUrl} target="_blank" rel="noreferrer">
+										Watch recording
 									</a>
 								)}
 							</div>
@@ -55,3 +80,7 @@ const { frontmatter } = Astro.props;
 		<BookMeSpeaker />
 	</section>
 </BaseLayout>
+
+<script>
+	import("@justinribeiro/lite-youtube/lite-youtube.js");
+</script>
