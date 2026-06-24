@@ -4,6 +4,7 @@ export interface TalkEvent {
 	eventUrl: string;
 	talkUrl?: string;
 	videoUrl?: string;
+	slidesUrl?: string;
 }
 
 export interface TalkFrontmatter {
