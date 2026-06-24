@@ -7,6 +7,7 @@ events:
   - name: "Web Engines Hackfest 2026"
     date: "June 15, 2026"
     eventUrl: "https://webengineshackfest.org/"
+    talkUrl: "https://webengineshackfest.org/#registry"
     slidesUrl: "https://webengineshackfest.org/slides/how_to_ship_a_registry_when_nobody_wants_to_run_one_by_aki_rose_braun_and_ethan_arrowood.pdf"
 ---
 
