@@ -2,8 +2,8 @@
 layout: "../../layouts/TalkLayout.astro"
 title: "Performant, Parallelizable, Framework Agnostic Node.js Integration Testing"
 description: "How I built the Harper Integration Testing framework to run integration tests in parallel across any test framework: process isolation, dynamic port allocation, and a framework-agnostic API that works on local machines, multiple operating systems, and CI."
-audienceLevel: "Any"
-sessionFormat: "Adaptable to all time formats from 15 min to 45 min+"
+audienceLevel: "Intermediate"
+sessionFormat: "30 min"
 events:
   - name: "NodeConf EU 2026"
     date: "September 29, 2026"
