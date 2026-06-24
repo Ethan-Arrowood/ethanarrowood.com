@@ -21,6 +21,15 @@ const upcoming = allTalks.filter((talk) =>
 const past = allTalks.filter((talk) =>
 	talk.frontmatter.events.every((e) => new Date(e.date) < now),
 );
+
+const longBio = `Ethan Arrowood is the Head of Open Source Engineering at Harper, where he leads the company's transition to an open-source-first platform balancing community trust, business sustainability, and engineering velocity. He is a Node.js core contributor, and an active member of the OpenJS Foundation and WinterTC (ECMA TC55) driving standards and community work for web interoperable runtimes. Previously, Ethan held engineering roles at Vercel and Microsoft. He has spoken internationally at events including JSConf NA and NodeConf EU, delivering talks such as "Inside the Push for JavaScript Interoperability" and "Making Fetch Happen," which draws on his contributions to bringing the Fetch API to Node.js. Off the clock, Ethan is a professional ski instructor and active volunteer with organizations dedicated to adaptive recreation, environmental sustainability, and outdoor youth development. It's a passion that parallels his approach to open source, rooted in patience, presence, and community investment.`;
+
+const shortBio = `Ethan Arrowood is the Head of Open Source Engineering at Harper, where he leads the company's transition to an open-source-first platform. He is a Node.js core contributor and an active member of the OpenJS Foundation and WinterTC (ECMA TC55), driving standards work for web interoperable runtimes. Previously at Vercel and Microsoft, Ethan has spoken at JSConf NA and NodeConf EU. Off the clock, he is a professional ski instructor and volunteer in outdoor education and sustainability.`;
+
+const bios = [
+	{ id: "bio-long", label: "Long", text: longBio },
+	{ id: "bio-short", label: "Short", text: shortBio },
+];
 ---
 
 <style>
@@ -51,6 +60,60 @@ const past = allTalks.filter((talk) =>
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+	}
+
+	.bio-intro {
+		color: var(--text-secondary);
+		margin: 0;
+	}
+
+	.bio {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.bio-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.bio-label {
+		font-size: 1.1rem;
+		font-weight: 500;
+		margin: 0;
+	}
+
+	.bio-count {
+		font-size: 0.85rem;
+		color: var(--text-secondary);
+		margin-inline-end: auto;
+	}
+
+	.bio-copy {
+		font: inherit;
+		font-size: 0.85rem;
+		cursor: pointer;
+		color: var(--accent);
+		background: transparent;
+		border: 1px solid var(--accent);
+		border-radius: 0.375rem;
+		padding: 0.2rem 0.6rem;
+		transition:
+			background-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.bio-copy:hover,
+	.bio-copy.is-copied {
+		background-color: var(--accent);
+		color: var(--background);
+	}
+
+	.bio-text {
+		margin: 0;
+		line-height: 1.6;
 	}
 </style>
 
@@ -86,6 +149,60 @@ const past = allTalks.filter((talk) =>
 		}
 	</section>
 	<section>
+		<SectionHeading id="speaker-bio">Speaker Bio</SectionHeading>
+		<p class="bio-intro">
+			Ready-to-use bios for event organizers. Pick the length that fits, or copy
+			it directly.
+		</p>
+		{
+			bios.map((bio) => (
+				<div class="bio">
+					<div class="bio-header">
+						<h3 class="bio-label">{bio.label}</h3>
+						<span class="bio-count">{bio.text.length} characters</span>
+						<button
+							class="bio-copy"
+							type="button"
+							data-target={bio.id}
+							aria-label={`Copy ${bio.label.toLowerCase()} bio`}
+						>
+							Copy
+						</button>
+					</div>
+					<p class="bio-text" id={bio.id}>
+						{bio.text}
+					</p>
+				</div>
+			))
+		}
+	</section>
+	<section>
 		<BookMeSpeaker />
 	</section>
 </BaseLayout>
+
+<script>
+	document
+		.querySelectorAll<HTMLButtonElement>(".bio-copy")
+		.forEach((button) => {
+			button.addEventListener("click", async () => {
+				const id = button.dataset.target;
+				const text = id
+					? document.getElementById(id)?.textContent?.trim()
+					: undefined;
+				if (!text) return;
+				try {
+					await navigator.clipboard.writeText(text);
+					const original = button.textContent;
+					button.textContent = "Copied";
+					button.classList.add("is-copied");
+					setTimeout(() => {
+						button.textContent = original;
+						button.classList.remove("is-copied");
+					}, 2000);
+				} catch {
+					/* clipboard unavailable; user can still select the text */
+				}
+			});
+		});
+</script>
