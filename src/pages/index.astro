@@ -1,12 +1,26 @@
 ---
+import type { MarkdownInstance } from "astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 import Link from "../components/Link.astro";
 import BookMeSpeaker from "../components/BookMeSpeaker.astro";
 import SectionHeading from "../components/SectionHeading.astro";
+import type { TalkFrontmatter, TalkEvent } from "../utils/talkfrontmatter";
 
 import { Image } from "astro:assets";
 import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
+
+const allTalks = Object.values(
+	import.meta.glob<MarkdownInstance<TalkFrontmatter>>("./talks/*.md", {
+		eager: true,
+	}),
+);
+
+const now = new Date();
+
+const upcomingTalks = allTalks.filter((talk) =>
+	talk.frontmatter.events.some((e) => new Date(e.date) >= now),
+);
 ---
 
 <style>
@@ -306,36 +320,38 @@ import carryingLincoln from "../images/carrying_lincoln_cropped.jpeg";
 		<SectionHeading id="talks" class="sub-title">Talks</SectionHeading>
 		<div>
 			<h3 class="talks-sub-heading">Upcoming</h3>
-			<ul class="upcoming-talks-list">
-				<li class="upcoming-talk-item">
-					<p class="upcoming-talk-title">
-						<Link href="/talks/building-sustainable-open-source-the-harper-story"
-							>Building Sustainable Open Source: The Harper Story</Link
-						>
-					</p>
-					<p class="upcoming-talk-description">
-						A practical account of open sourcing a near-decade-old commercial
-						system: the business decisions that made it viable, the technical
-						realities of the transition, and how Harper is maintaining open
-						source momentum alongside commercial success.
-					</p>
-					<ul class="upcoming-talk-events">
-						<li>
-							<Link
-								href="https://events.linuxfoundation.org/open-source-summit-north-america/"
-								>Open Source Summit NA 2026</Link
-							> &mdash; May 18&ndash;20, 2026 &mdash; <Link
-								href="https://sched.co/2JQuD">Talk page</Link
-							>
-						</li>
-						<li>
-							<Link href="https://renderatl.com"
-								>Node.js Interactive @ Render ATL 2026</Link
-							> &mdash; August 12&ndash;13, 2026
-						</li>
+			{
+				upcomingTalks.length > 0 ? (
+					<ul class="upcoming-talks-list">
+						{upcomingTalks.map((talk) => (
+							<li class="upcoming-talk-item">
+								<p class="upcoming-talk-title">
+									<Link href={talk.url}>{talk.frontmatter.title}</Link>
+								</p>
+								<p class="upcoming-talk-description">
+									{talk.frontmatter.description}
+								</p>
+								<ul class="upcoming-talk-events">
+									{talk.frontmatter.events.map((event: TalkEvent) => (
+										<li>
+											<Link href={event.eventUrl}>{event.name}</Link> &mdash;{" "}
+											{event.date}
+											{event.talkUrl && (
+												<>
+													{" "}
+													&mdash; <Link href={event.talkUrl}>Talk page</Link>
+												</>
+											)}
+										</li>
+									))}
+								</ul>
+							</li>
+						))}
 					</ul>
-				</li>
-			</ul>
+				) : (
+					<p>No upcoming talks right now.</p>
+				)
+			}
 		</div>
 		<div>
 			<h3 class="talks-sub-heading">Past Talks</h3>
