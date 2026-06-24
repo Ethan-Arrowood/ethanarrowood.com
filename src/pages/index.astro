@@ -54,13 +54,15 @@ const upcomingTalks = allTalks.filter((talk) =>
 
 	.profile-image {
 		margin: auto;
-		border-radius: 50%;
+		border-radius: 1rem;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 		transition: box-shadow 0.3s ease;
 		object-fit: cover;
 		display: block;
-		width: 16rem;
-		height: 16rem;
+		width: 22rem;
+		max-width: 100%;
+		aspect-ratio: 3 / 2;
+		height: auto;
 	}
 
 	.profile-image:hover {
