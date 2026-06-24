@@ -81,6 +81,7 @@ events:
     eventUrl: "https://..."
     talkUrl: "https://..."   # optional, schedule/talk page
     videoUrl: "https://..."  # optional, recording
+    slidesUrl: "https://..." # optional, slides
 ---
 
 ## Description
@@ -88,8 +89,8 @@ events:
 Content here.
 ```
 
-- `talkUrl` is optional (schedule or talk page entry); `videoUrl` is optional (link to a recording).
-- Talks are split into "upcoming" and "past" on the listing page based on event dates (a talk is "upcoming" if any of its events is in the future). On the talk page itself, each event also gets an "Upcoming"/"Past" badge, upcoming events sort first, and a `videoUrl` surfaces a "Watch recording" link.
+- `talkUrl` (schedule or talk page entry), `videoUrl` (recording), and `slidesUrl` (slides) are all optional per-event links.
+- Talks are split into "upcoming" and "past" on the listing page based on event dates (a talk is "upcoming" if any of its events is in the future). On the talk page itself, each event also gets an "Upcoming"/"Past" badge, upcoming events sort first, and `videoUrl`/`slidesUrl` surface "Watch recording" / "Slides" links.
 - **Embedding a video** in a talk body: use the `lite-youtube` web component, not a raw `<iframe>`. It renders a thumbnail and only loads the YouTube iframe on click (no third-party JS/cookies until play). `TalkLayout.astro` already registers the component, so just drop it into the Markdown body:
 
   ```html

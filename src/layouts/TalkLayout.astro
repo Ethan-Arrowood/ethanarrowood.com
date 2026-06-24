@@ -66,6 +66,11 @@ const events = (frontmatter.events as TalkEvent[])
 										Watch recording
 									</a>
 								)}
+								{event.slidesUrl && (
+									<a href={event.slidesUrl} target="_blank" rel="noreferrer">
+										Slides
+									</a>
+								)}
 							</div>
 						</div>
 					))
