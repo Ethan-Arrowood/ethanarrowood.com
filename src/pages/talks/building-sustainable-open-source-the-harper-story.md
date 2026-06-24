@@ -9,10 +9,26 @@ events:
     date: "May 18, 2026"
     eventUrl: "https://events.linuxfoundation.org/open-source-summit-north-america/"
     talkUrl: "https://sched.co/2JQuD"
+    videoUrl: "https://www.youtube.com/watch?v=IvyLMwMNU0g"
   - name: "Node.js Interactive @ Render ATL 2026"
     date: "August 12, 2026"
     eventUrl: "https://renderatl.com"
 ---
+
+## Recording
+
+Recorded at Open Source Summit North America 2026.
+
+<div class="video-embed">
+	<iframe
+		src="https://www.youtube-nocookie.com/embed/IvyLMwMNU0g"
+		title="Building Sustainable Open Source: The Harper Story"
+		loading="lazy"
+		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+		referrerpolicy="strict-origin-when-cross-origin"
+		allowfullscreen
+	></iframe>
+</div>
 
 ## Description
 
