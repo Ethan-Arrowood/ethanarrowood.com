@@ -253,11 +253,13 @@ const upcomingTalks = allTalks.filter((talk) =>
 		/>
 
 		<div class="highlights-container">
-			<SectionHeading id="highlights" class="sub-title">Highlights</SectionHeading>
+			<SectionHeading id="highlights" class="sub-title"
+				>Highlights</SectionHeading
+			>
 			<ul class="highlights-list">
 				<li class="highlights-list-item">
-					Head of Open Source Engineering at <Link href="https://harpersystems.dev"
-						>Harper</Link
+					Head of Open Source Engineering at <Link
+						href="https://harpersystems.dev">Harper</Link
 					>
 				</li>
 				<li class="highlights-list-item">
@@ -286,18 +288,18 @@ const upcomingTalks = allTalks.filter((talk) =>
 	<section id="professional-summary" class="professional-summary-container">
 		<SectionHeading id="summary" class="sub-title">Summary</SectionHeading>
 		<p class="professional-summary-text">
-			I am Head of Open Source Engineering at Harper, where I led the
-			company's transition from a closed-source product to an open-source-first
-			platform. This means owning the dual-license model (Apache 2.0 core with
-			a source-available pro tier), building contribution procedures, and
-			growing a developer community grounded in trust and transparency.
+			I am Head of Open Source Engineering at Harper, where I led the company's
+			transition from a closed-source product to an open-source-first platform.
+			This means owning the dual-license model (Apache 2.0 core with a
+			source-available pro tier), building contribution procedures, and growing
+			a developer community grounded in trust and transparency.
 		</p>
 		<p class="professional-summary-text">
 			Outside of Harper, I am a Node.js core contributor and Undici maintainer.
 			I represent the Node.js and JavaScript ecosystem in the OpenJS Foundation
 			and WinterTC (ECMA TC55), where I work on standards and community
-			development for web-interoperable runtimes. I have spoken at JSConf NA
-			and NodeConf EU.
+			development for web-interoperable runtimes. I have spoken at JSConf NA and
+			NodeConf EU.
 		</p>
 		<p class="professional-summary-text">
 			Previous roles include Senior Software Engineer at Vercel, where I worked
@@ -332,18 +334,20 @@ const upcomingTalks = allTalks.filter((talk) =>
 									{talk.frontmatter.description}
 								</p>
 								<ul class="upcoming-talk-events">
-									{talk.frontmatter.events.map((event: TalkEvent) => (
-										<li>
-											<Link href={event.eventUrl}>{event.name}</Link> &mdash;{" "}
-											{event.date}
-											{event.talkUrl && (
-												<>
-													{" "}
-													&mdash; <Link href={event.talkUrl}>Talk page</Link>
-												</>
-											)}
-										</li>
-									))}
+									{talk.frontmatter.events
+										.filter((event) => new Date(event.date) >= now)
+										.map((event: TalkEvent) => (
+											<li>
+												<Link href={event.eventUrl}>{event.name}</Link> &mdash;{" "}
+												{event.date}
+												{event.talkUrl && (
+													<>
+														{" "}
+														&mdash; <Link href={event.talkUrl}>Talk page</Link>
+													</>
+												)}
+											</li>
+										))}
 								</ul>
 							</li>
 						))}
@@ -371,7 +375,9 @@ const upcomingTalks = allTalks.filter((talk) =>
 	</section>
 
 	<section id="consulting" class="consulting-container">
-		<SectionHeading id="consulting" class="sub-title">Consulting & Investing</SectionHeading>
+		<SectionHeading id="consulting" class="sub-title"
+			>Consulting & Investing</SectionHeading
+		>
 		<p class="professional-summary-text">
 			I take on select consulting engagements through <Link
 				href="https://alpinemooseinnovations.com">Alpine Moose Innovations</Link
@@ -382,22 +388,23 @@ const upcomingTalks = allTalks.filter((talk) =>
 		</p>
 		<p class="professional-summary-text">
 			I am especially drawn to climate tech, clean energy, and environmental
-			companies. I grew up in the mountains, I see climate change reshaping
-			the places I love, and I want to put my technical background to work in
-			that space. If you are building there, reach out even if the scope is
-			not fully defined.
+			companies. I grew up in the mountains, I see climate change reshaping the
+			places I love, and I want to put my technical background to work in that
+			space. If you are building there, reach out even if the scope is not fully
+			defined.
 		</p>
 		<p class="professional-summary-text">
 			I am also exploring early-stage angel investing, with a focus on climate,
-			green energy, and developer tooling. If you are raising and think there
-			is a fit, I am happy to have a conversation. Contact me at <Link
+			green energy, and developer tooling. If you are raising and think there is
+			a fit, I am happy to have a conversation. Contact me at <Link
 				href="mailto:ethan@arrowood.dev">ethan@arrowood.dev</Link
 			>.
 		</p>
 	</section>
 
 	<section id="experience" class="experience-container">
-		<SectionHeading id="experience" class="sub-title">Experience</SectionHeading>
+		<SectionHeading id="experience" class="sub-title">Experience</SectionHeading
+		>
 		<ol class="experience-list">
 			<li class="experience-list-item">
 				<h3 class="experience-list-item-title">
@@ -421,9 +428,9 @@ const upcomingTalks = allTalks.filter((talk) =>
 						community.
 					</li>
 					<li class="experience-list-item-description-item">
-						Representing Harper in the OpenJS Foundation and WinterTC (ECMA TC55),
-						contributing to Node.js ecosystem and JavaScript interoperability
-						standards.
+						Representing Harper in the OpenJS Foundation and WinterTC (ECMA
+						TC55), contributing to Node.js ecosystem and JavaScript
+						interoperability standards.
 					</li>
 					<li class="experience-list-item-description-item">
 						Created the <Link
@@ -454,9 +461,9 @@ const upcomingTalks = allTalks.filter((talk) =>
 				<p class="experience-list-item-date">June 2024 - Present</p>
 				<ol class="experience-list-item-description">
 					<li class="experience-list-item-description-item">
-						Independent consulting practice focused on open source strategy,
-						API and SDK engineering, Node.js performance, and modern web
-						application development.
+						Independent consulting practice focused on open source strategy, API
+						and SDK engineering, Node.js performance, and modern web application
+						development.
 					</li>
 					<li class="experience-list-item-description-item">
 						Advising startups and technical teams on architecture decisions,
@@ -484,8 +491,8 @@ const upcomingTalks = allTalks.filter((talk) =>
 						runtimes, package managers, and frameworks
 					</li>
 					<li class="experience-list-item-description-item">
-						Led development of the configuration override feature enabling
-						finer control of Vercel deployments
+						Led development of the configuration override feature enabling finer
+						control of Vercel deployments
 					</li>
 					<li class="experience-list-item-description-item">
 						Created the Vercel Azure DevOps Extension enabling improved CI/CD
