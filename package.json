@@ -23,8 +23,11 @@
 	"devEngines": {
 		"runtime": {
 			"name": "node",
-			"version": "24"
+			"version": "24.18.0"
 		}
+	},
+	"engines": {
+		"node": "24.18.0"
 	},
 	"dependencies": {
 		"@astrojs/mdx": "5.0.4"
