@@ -1,0 +1,888 @@
+/*!
+ * Dais — a web-native, HTML+CSS-first presentation framework.
+ *
+ * One stylesheet, no build step, no required JavaScript.
+ * Authoring guide: docs/authoring.md · Reference: docs/reference.md
+ *
+ * Deck skeleton:
+ *
+ *   <main class="dais" aria-label="Talk title" tabindex="0">
+ *     <section class="slide title" id="intro"><h1>…</h1></section>
+ *     <section class="slide" id="topic"><h2>…</h2> …</section>
+ *   </main>
+ */
+
+/* -------------------------------------------------------------------------
+ * 1. Design tokens
+ *
+ * The entire default look flows through these custom properties. Themes
+ * (themes/*.css) and per-deck overrides only need to re-declare tokens.
+ * ---------------------------------------------------------------------- */
+
+:root {
+  /* Geometry */
+  --dais-aspect: 16 / 9;
+
+  /* Color */
+  --dais-stage: #14161a;         /* letterbox area around the deck */
+  --dais-bg: #fdfdfc;            /* slide background */
+  --dais-surface: #f1f2f4;       /* cards, code blocks, note panels */
+  --dais-text: #1d232b;
+  --dais-muted: #5b6572;
+  --dais-accent: #2451b2;        /* headings, links, active markers */
+  --dais-accent-2: #b23524;      /* highlights, second-level accents */
+  --dais-code-bg: #14161a;
+  --dais-code-text: #e8eaed;
+
+  /* Syntax highlighting (the .tok-* classes). Every value below clears WCAG
+     AA against --dais-code-bg; keep that true if you retune them. */
+  --dais-tok-comment: #8792a2;
+  --dais-tok-keyword: #c792ea;
+  --dais-tok-string: #a5d6a7;
+  --dais-tok-number: #f2a071;
+  --dais-tok-fn: #82aaff;
+  --dais-tok-type: #7fdbca;
+  --dais-tok-punct: #99a3b3;
+
+  /* Type */
+  --dais-font: system-ui, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --dais-font-display: var(--dais-font);
+  --dais-font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+
+  /* Shape & rhythm. Slide padding uses %, which (like cqi) resolves against
+     the slide's inline size in every axis, so it scales in overview/print. */
+  --dais-radius: 0.5cqi;
+  --dais-slide-padding: 5% 7%;
+  --dais-reveal-step: 0.35s;     /* stagger between incremental reveal items */
+  --dais-code-size: 0.72em;      /* <pre> size; shrink for long snippets */
+
+  /* Printed page height; the width is derived from --dais-aspect. */
+  --dais-page-height: 180mm;
+}
+
+/* -------------------------------------------------------------------------
+ * 2. The stage
+ *
+ * The page centers the deck and letterboxes it to --dais-aspect.
+ * ---------------------------------------------------------------------- */
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  background: var(--dais-stage);
+  font-family: var(--dais-font);
+  /* Lets the optional progress bar subscribe to the deck's scroll timeline. */
+  timeline-scope: --dais-scroller;
+}
+
+/* -------------------------------------------------------------------------
+ * 3. The deck engine
+ *
+ * A horizontally scroll-snapping flex row. Swipe, trackpad, scrollbar and
+ * keyboard (scrollable regions are focusable) all navigate it natively.
+ * ---------------------------------------------------------------------- */
+
+.dais {
+  width: min(100dvw, calc(100dvh * var(--dais-aspect)));
+  aspect-ratio: var(--dais-aspect);
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  counter-reset: dais-slide;
+  anchor-name: --dais;
+  scroll-timeline: --dais-scroller x;
+  /* Size container: cqi units declared ON a slide (the nearest inner
+     container) resolve against the nearest ANCESTOR container, i.e. this
+     element — which matches the slide's own size in presentation mode. */
+  container: dais-deck / size;
+}
+
+.dais:focus-visible {
+  outline: 0.3cqi solid var(--dais-accent);
+  outline-offset: 0.3cqi;
+}
+
+/* --- Pure-CSS prev/next buttons (CSS carousel spec; enhancement) -------- */
+
+.dais {
+  scroll-marker-group: after;
+}
+
+.dais::scroll-button(*) {
+  position: fixed;
+  position-anchor: --dais;
+  align-self: anchor-center;
+  border: none;
+  background: none;
+  color: color-mix(in srgb, var(--dais-text) 40%, var(--dais-bg));
+  font-size: 2.5cqi;
+  font-family: inherit;
+  padding: 1cqi;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.dais::scroll-button(*):hover,
+.dais::scroll-button(*):focus-visible {
+  color: var(--dais-accent);
+}
+
+.dais::scroll-button(*):disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.dais::scroll-button(inline-start) {
+  content: "‹" / "Previous slide";
+  position-area: inline-start center;
+}
+
+.dais::scroll-button(inline-end) {
+  content: "›" / "Next slide";
+  position-area: inline-end center;
+}
+
+/* --- Pure-CSS slide dots (enhancement) ---------------------------------- */
+
+.dais::scroll-marker-group {
+  position: fixed;
+  position-anchor: --dais;
+  position-area: block-end;
+  margin-block-start: -3cqi;   /* sit just inside the deck's bottom edge */
+  display: flex;
+  gap: 0.6cqi;
+  z-index: 2;
+}
+
+.dais > section::scroll-marker {
+  content: "" / "";
+  width: 0.7cqi;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--dais-text) 45%, var(--dais-bg));
+  cursor: pointer;
+}
+
+.dais > section::scroll-marker:target-current {
+  background: var(--dais-accent);
+  border-color: var(--dais-accent);
+}
+
+.dais > section::scroll-marker:focus-visible {
+  outline: 2px solid var(--dais-accent);
+  outline-offset: 2px;
+}
+
+/* -------------------------------------------------------------------------
+ * 4. Slides
+ *
+ * Each slide is a size + scroll-state container; ALL slide typography uses
+ * cqi units (1cqi = 1% of slide width), so content scales perfectly in
+ * fullscreen, overview mode, embeds, and print.
+ * ---------------------------------------------------------------------- */
+
+.dais > section {
+  flex: 0 0 100%;
+  height: 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  container: dais-slide / size scroll-state;
+  counter-increment: dais-slide;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: var(--dais-slide-padding);
+  display: flex;
+  flex-direction: column;
+  gap: 2%;                     /* % of slide height ≈ scales like cqi */
+  background: var(--dais-bg);
+  color: var(--dais-text);
+  font-size: 2.4cqi;           /* resolves against the deck container */
+  line-height: 1.45;
+}
+
+/* Re-anchor the base font size on each slide's direct children so it
+   resolves against the SLIDE container — this is what keeps typography
+   proportional in overview mode, where deck and slide sizes diverge.
+   :where() keeps specificity at zero so any component rule wins. */
+:where(.dais) > section > * {
+  font-size: 2.4cqi;
+}
+
+.dais > section * {
+  box-sizing: border-box;
+}
+
+/* Slide number, bottom-right. Suppressed on .title and .no-number slides. */
+.dais > section::after {
+  content: counter(dais-slide);
+  position: absolute;
+  bottom: 1.6cqi;
+  right: 2.2cqi;
+  font-size: 1.4cqi;
+  color: var(--dais-muted);
+}
+
+.dais > section:is(.title, .no-number)::after {
+  content: none;
+}
+
+/* --- Slide typography ---------------------------------------------------- */
+
+.dais :is(h1, h2, h3) {
+  font-family: var(--dais-font-display);
+  line-height: 1.12;
+  text-wrap: balance;
+  margin: 0;
+  color: var(--dais-accent);
+}
+
+.dais h1 {
+  font-size: 6.4cqi;
+  letter-spacing: -0.02em;
+}
+
+.dais h2 {
+  font-size: 4.6cqi;
+  letter-spacing: -0.015em;
+  margin-block-end: 0.4em;
+}
+
+.dais h3 {
+  font-size: 3cqi;
+  color: var(--dais-text);
+}
+
+.dais p,
+.dais ul,
+.dais ol {
+  margin: 0;
+}
+
+.dais :is(ul, ol) {
+  padding-inline-start: 1.2em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45em;
+}
+
+.dais li::marker {
+  color: var(--dais-accent);
+}
+
+.dais a {
+  color: var(--dais-accent);
+  text-underline-offset: 0.15em;
+}
+
+.dais a:focus-visible {
+  outline: 0.25cqi solid var(--dais-accent);
+  outline-offset: 0.2cqi;
+  border-radius: 0.2cqi;
+}
+
+.dais strong {
+  color: var(--dais-accent-2);
+}
+
+.dais img,
+.dais video {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: var(--dais-radius);
+}
+
+.dais figure {
+  margin: 0;
+  min-height: 0;              /* allow images to shrink inside flex column */
+  display: flex;
+  flex-direction: column;
+  gap: 0.8cqi;
+  align-items: center;
+}
+
+.dais figcaption {
+  font-size: 0.65em;
+  color: var(--dais-muted);
+}
+
+/* --- Tables --------------------------------------------------------------- */
+
+.dais table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.85em;
+  font-variant-numeric: tabular-nums;
+}
+
+.dais :is(th, td) {
+  padding: 0.4em 0.8em;
+  text-align: start;
+  border-block-end: 1px solid color-mix(in srgb, var(--dais-text) 15%, transparent);
+}
+
+.dais th {
+  color: var(--dais-accent);
+  font-weight: 600;
+}
+
+.dais thead th {
+  border-block-end: 0.25cqi solid var(--dais-accent);
+}
+
+.dais tbody tr:last-child :is(th, td) {
+  border-block-end: none;
+}
+
+/* Right-align a numeric column: <td class="num">. */
+.dais :is(th, td).num {
+  text-align: end;
+}
+
+.dais caption {
+  caption-side: bottom;
+  padding-block-start: 0.6em;
+  font-size: 0.8em;
+  color: var(--dais-muted);
+  text-align: start;
+}
+
+/* --- Code ----------------------------------------------------------------- */
+
+.dais code,
+.dais kbd {
+  font-family: var(--dais-font-mono);
+  font-size: 0.85em;
+}
+
+.dais :not(pre) > code {
+  background: var(--dais-surface);
+  padding: 0.1em 0.35em;
+  border-radius: 0.25em;
+}
+
+.dais kbd {
+  background: var(--dais-surface);
+  border: 1px solid color-mix(in srgb, var(--dais-text) 25%, transparent);
+  border-bottom-width: 2px;
+  border-radius: 0.3em;
+  padding: 0.05em 0.4em;
+}
+
+.dais pre {
+  margin: 0;
+  background: var(--dais-code-bg);
+  color: var(--dais-code-text);
+  padding: 1.6cqi 2cqi;
+  border-radius: var(--dais-radius);
+  font-size: var(--dais-code-size);
+  line-height: 1.5;
+  text-align: start;
+  overflow: auto;
+  max-height: 100%;
+}
+
+.dais pre code {
+  background: none;
+  padding: 0;
+  font-size: 1em;
+}
+
+.dais mark {
+  background: color-mix(in srgb, var(--dais-accent-2) 22%, transparent);
+  color: inherit;
+  padding: 0.05em 0.2em;
+  border-radius: 0.2em;
+}
+
+/* --- Syntax highlighting --------------------------------------------------
+ *
+ * A small, hand-authorable class vocabulary. Wrap spans yourself for short
+ * snippets, or emit these classes from a highlighter at author time — Dais
+ * never highlights at runtime. See docs/authoring.md.
+ * ---------------------------------------------------------------------- */
+
+.dais .tok-comment { color: var(--dais-tok-comment); font-style: italic; }
+.dais .tok-keyword { color: var(--dais-tok-keyword); }
+.dais .tok-string  { color: var(--dais-tok-string); }
+.dais .tok-number  { color: var(--dais-tok-number); }
+.dais .tok-fn      { color: var(--dais-tok-fn); }
+.dais .tok-type    { color: var(--dais-tok-type); }
+.dais .tok-punct   { color: var(--dais-tok-punct); }
+
+/* One line per <span class="line">, so lines can be called out or dimmed.
+   Flex column, not block flow: a flex container drops whitespace-only child
+   text nodes, so the newlines *between* line spans don't each render as an
+   extra blank line. min-width keeps long lines scrollable rather than clipped.
+   Only applied when line spans are actually present. */
+.dais pre code:has(.line) {
+  display: flex;
+  flex-direction: column;
+  min-width: max-content;
+}
+
+/* Bleed the full-width line background out to the <pre> padding edges. */
+.dais pre .line {
+  margin-inline: -2cqi;
+  padding-inline: 2cqi;
+}
+
+.dais pre .line.hl {
+  background: color-mix(in srgb, var(--dais-accent) 26%, transparent);
+  box-shadow: inset 0.35cqi 0 0 var(--dais-accent);
+}
+
+.dais pre .line.add { background: color-mix(in srgb, var(--dais-tok-string) 18%, transparent); }
+.dais pre .line.del { background: color-mix(in srgb, var(--dais-accent-2) 20%, transparent); }
+
+/* Push finished/irrelevant code back so the point stands out. */
+.dais pre .dim { opacity: 0.4; }
+
+/* <mark> needs more punch on a dark code background than on a slide. */
+.dais pre mark {
+  background: color-mix(in srgb, var(--dais-accent) 32%, transparent);
+  color: var(--dais-code-text);
+}
+
+/* -------------------------------------------------------------------------
+ * 5. Slide templates
+ * ---------------------------------------------------------------------- */
+
+/* Title slide — the deck's <h1> lives here. */
+.dais > section.title {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 3.5%;
+}
+
+.dais > section.title p {
+  color: var(--dais-muted);
+  font-size: 2.2cqi;
+}
+
+/* Divider — a section break; inverted colors, one big centered heading. */
+.dais > section.divider {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: var(--dais-accent);
+}
+
+.dais > section.divider :is(h2, h3, p) {
+  color: var(--dais-bg);
+}
+
+.dais > section.divider::after {
+  color: color-mix(in srgb, var(--dais-bg) 70%, transparent);
+}
+
+/* Quote — a single big blockquote with optional footer attribution. */
+.dais > section.quote {
+  justify-content: center;
+}
+
+.dais > section.quote blockquote {
+  margin: 0;
+  font-size: 3.6cqi;
+  line-height: 1.3;
+  text-wrap: balance;
+  border-inline-start: 0.6cqi solid var(--dais-accent);
+  padding-inline-start: 2.5cqi;
+}
+
+.dais > section.quote blockquote footer {
+  margin-block-start: 0.8em;
+  font-size: 0.55em;
+  color: var(--dais-muted);
+}
+
+/* Media-full — one image/video fills the slide edge to edge. */
+.dais > section.media-full {
+  padding: 0;
+  gap: 0;
+}
+
+.dais > section.media-full > :is(img, video),
+.dais > section.media-full > figure > :is(img, video) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.dais > section.media-full :is(h2, figcaption) {
+  position: absolute;
+  inset: auto 0 0 0;
+  margin: 0;
+  padding: 1.5cqi 2.5cqi;
+  background: color-mix(in srgb, var(--dais-code-bg) 72%, transparent);
+  color: var(--dais-code-text);
+  font-size: 2.2cqi;
+}
+
+/* -------------------------------------------------------------------------
+ * 6. Layout utilities (deliberately few)
+ * ---------------------------------------------------------------------- */
+
+/* Center the slide's content both ways. */
+.dais .center,
+.dais > section.center {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* Column layout for a region of a slide: <div class="cols"> … </div>.
+   Defaults to 2 columns; set --cols: 3 inline for more. */
+.dais .cols {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 2), 1fr);
+  gap: 3cqi;
+  align-items: start;
+  min-height: 0;
+}
+
+/* Vertical stack with tight, even spacing. */
+.dais .stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1cqi;
+  min-height: 0;
+}
+
+/* Push subsequent content to the bottom of the slide. */
+.dais .spacer {
+  flex: 1;
+}
+
+/* Giant statement text. */
+.dais .fit {
+  font-size: 8cqi;
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.dais .muted { color: var(--dais-muted); }
+.dais .small { font-size: 0.7em; }
+.dais .accent { color: var(--dais-accent); }
+.dais .accent-2 { color: var(--dais-accent-2); }
+
+/* A simple card surface. */
+.dais .card {
+  background: var(--dais-surface);
+  border-radius: var(--dais-radius);
+  padding: 1.8cqi 2.2cqi;
+}
+
+/* -------------------------------------------------------------------------
+ * 7. Incremental reveals
+ *
+ * <ul class="reveal"> — children fade in one by one when the slide snaps
+ * into view. Guarded by @supports: browsers without scroll-state queries
+ * (and print/overview/reduced-motion) show everything immediately.
+ * ---------------------------------------------------------------------- */
+
+@keyframes dais-reveal {
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@supports (container-type: scroll-state) {
+  .dais .reveal > * {
+    --dais-i: 12;              /* items beyond the 12th share the last delay */
+    opacity: 0;
+    translate: 0 0.4em;
+  }
+
+  .dais .reveal > :nth-child(1)  { --dais-i: 0; }
+  .dais .reveal > :nth-child(2)  { --dais-i: 1; }
+  .dais .reveal > :nth-child(3)  { --dais-i: 2; }
+  .dais .reveal > :nth-child(4)  { --dais-i: 3; }
+  .dais .reveal > :nth-child(5)  { --dais-i: 4; }
+  .dais .reveal > :nth-child(6)  { --dais-i: 5; }
+  .dais .reveal > :nth-child(7)  { --dais-i: 6; }
+  .dais .reveal > :nth-child(8)  { --dais-i: 7; }
+  .dais .reveal > :nth-child(9)  { --dais-i: 8; }
+  .dais .reveal > :nth-child(10) { --dais-i: 9; }
+  .dais .reveal > :nth-child(11) { --dais-i: 10; }
+  .dais .reveal > :nth-child(12) { --dais-i: 11; }
+
+  @container dais-slide scroll-state(snapped: x) {
+    .dais .reveal > * {
+      animation: dais-reveal 0.5s ease-out forwards;
+      animation-delay: calc(0.3s + var(--dais-reveal-step) * var(--dais-i));
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------
+ * 8. Speaker notes & presenter controls
+ *
+ * <aside class="notes"> inside a slide is hidden from the audience. The
+ * optional .dais-controls checkbox cluster toggles them (and overview mode)
+ * with zero JavaScript via :has().
+ * ---------------------------------------------------------------------- */
+
+.dais .notes {
+  display: none;
+}
+
+body:has(.dais-notes-toggle:checked) .dais .notes {
+  display: block;
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 1;
+  background: color-mix(in srgb, var(--dais-surface) 94%, transparent);
+  border-top: 0.3cqi solid var(--dais-accent);
+  color: var(--dais-text);
+  font-size: 1.8cqi;
+  line-height: 1.5;
+  text-align: start;
+  padding: 1.4cqi 2.2cqi;
+  max-height: 34%;
+  overflow-y: auto;
+}
+
+/* The control cluster: faint until hovered or focused. */
+.dais-controls {
+  position: fixed;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 3;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  font-size: 0.8rem;
+  color: #fff;
+  background: color-mix(in srgb, #000 55%, transparent);
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  opacity: 0.15;
+  transition: opacity 0.25s;
+}
+
+.dais-controls:hover,
+.dais-controls:focus-within {
+  opacity: 1;
+}
+
+.dais-controls label {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.dais-controls input {
+  accent-color: var(--dais-accent);
+}
+
+/* Slide counter and presenter timer; dais.js fills both, so they stay
+   hidden when the script isn't loaded. */
+.dais-counter:empty,
+.dais-timer:empty {
+  display: none;
+}
+
+.dais-timer {
+  font-variant-numeric: tabular-nums;
+  min-width: 3.2em;
+  text-align: end;
+  cursor: pointer;
+}
+
+.dais-timer.is-warn { color: #ffd479; }
+.dais-timer.is-over { color: #ff9c8f; font-weight: 700; }
+
+/* -------------------------------------------------------------------------
+ * 9. Overview mode
+ *
+ * The deck re-lays itself as a grid of thumbnails. Because slide typography
+ * is in cqi units, every slide shrinks losslessly — no transforms needed.
+ * ---------------------------------------------------------------------- */
+
+body:has(.dais-overview-toggle:checked) .dais {
+  width: 100dvw;
+  height: 100dvh;
+  aspect-ratio: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(24rem, 44dvw), 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow: hidden auto;
+  scroll-snap-type: none;
+}
+
+body:has(.dais-overview-toggle:checked) .dais > section {
+  flex: none;
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--dais-aspect);
+  border-radius: 0.5rem;
+  outline: 1px solid color-mix(in srgb, var(--dais-text) 25%, transparent);
+  cursor: pointer;
+}
+
+body:has(.dais-overview-toggle:checked) .dais > section:hover {
+  outline: 3px solid var(--dais-accent);
+}
+
+/* Nothing is "snapped" in the grid, so force reveal items visible. */
+body:has(.dais-overview-toggle:checked) .dais .reveal > * {
+  opacity: 1;
+  translate: none;
+  animation: none;
+}
+
+body:has(.dais-overview-toggle:checked) .dais::scroll-marker-group,
+body:has(.dais-overview-toggle:checked) .dais::scroll-button(*) {
+  display: none;
+}
+
+/* -------------------------------------------------------------------------
+ * 10. Progress bar (optional element, scroll-driven, zero JS)
+ *
+ *   <div class="dais-progress" aria-hidden="true"></div>
+ * ---------------------------------------------------------------------- */
+
+@keyframes dais-progress-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.dais-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 0.25rem;
+  z-index: 3;
+  background: color-mix(in srgb, var(--dais-accent) 18%, transparent);
+  pointer-events: none;
+}
+
+.dais-progress::before {
+  content: "";
+  display: block;
+  height: 100%;
+  background: var(--dais-accent);
+  transform-origin: left;
+  animation: dais-progress-grow linear both;
+  animation-timeline: --dais-scroller;
+}
+
+body:has(.dais-overview-toggle:checked) .dais-progress {
+  display: none;
+}
+
+/* -------------------------------------------------------------------------
+ * 11. Print / PDF export
+ *
+ * One slide per landscape page. Open the browser's print dialog, choose
+ * "Save as PDF", and disable margins/headers if offered.
+ * ---------------------------------------------------------------------- */
+
+@media print {
+  @page {
+    /* Derived from --dais-aspect, so a 4/3 deck prints 4/3 pages. */
+    size: calc(var(--dais-page-height) * var(--dais-aspect)) var(--dais-page-height);
+    margin: 0;
+  }
+
+  body {
+    display: block;
+    background: none;
+    min-height: auto;
+  }
+
+  .dais {
+    display: block;
+    width: auto;
+    aspect-ratio: auto;
+    overflow: visible;
+    /* Size containment would collapse the block-flow deck to zero height. */
+    container-type: normal;
+  }
+
+  .dais > section {
+    width: calc(var(--dais-page-height) * var(--dais-aspect));
+    height: var(--dais-page-height);
+    break-after: page;
+    break-inside: avoid;
+  }
+
+  .dais > section:last-child {
+    break-after: auto;         /* no trailing blank page */
+  }
+
+  .dais .reveal > * {
+    opacity: 1 !important;
+    translate: none !important;
+    animation: none !important;
+  }
+
+  .dais-controls,
+  .dais-progress {
+    display: none;
+  }
+
+  /* The pure-CSS arrows and dots are position: fixed, so paged media places
+     them on every sheet. They are navigation, not content — drop them. */
+  .dais::scroll-button(*),
+  .dais::scroll-marker-group {
+    display: none;
+  }
+
+  .dais .notes {
+    display: none;
+  }
+
+  /* Opt in to printing speaker notes: <body class="dais-print-notes"> */
+  body.dais-print-notes .dais .notes {
+    display: block;
+    position: absolute;
+    inset: auto 0 0 0;
+    background: var(--dais-surface);
+    border-top: 0.3cqi solid var(--dais-accent);
+    font-size: 1.8cqi;
+    text-align: start;
+    padding: 1.4cqi 2.2cqi;
+    max-height: 34%;
+    overflow: hidden;
+  }
+}
+
+/* -------------------------------------------------------------------------
+ * 12. Reduced motion
+ * ---------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .dais {
+    scroll-behavior: auto;
+  }
+
+  .dais .reveal > * {
+    opacity: 1 !important;
+    translate: none !important;
+    animation: none !important;
+  }
+}

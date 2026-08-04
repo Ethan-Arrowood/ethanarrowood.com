@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Performant, Parallelizable, Framework Agnostic Node.js Integration Testing</title>
+  <meta name="description" content="How the Harper integration testing framework runs integration tests in parallel across any test framework: process isolation, loopback address pooling, and a framework-agnostic API.">
+  <link rel="stylesheet" href="/dais/dais.css">
+  <link rel="stylesheet" href="/dais/themes/midnight.css">
+  <script src="/dais/dais.js" defer></script>
+  <style>
+    /* This deck only. */
+    :root {
+      --dais-code-size: 0.66em;
+    }
+
+    /* Benchmark table: the plateau row and the max-parallelism row are the
+       argument, so they get a persistent visual weight. */
+    #results tbody tr.best {
+      background: color-mix(in srgb, var(--dais-accent) 20%, transparent);
+    }
+
+    #results tbody tr.worse {
+      color: var(--dais-muted);
+    }
+
+    #results table {
+      font-size: 0.72em;
+    }
+
+    /* A bar chart drawn from the real medians, so the plateau is visible
+       rather than asserted. Widths are proportional to duration. */
+    /* Twelve rows is the most this slide can hold; sized to fit, not to taste. */
+    .bars {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 0.2em 0.8em;
+      align-items: center;
+      font-size: 0.72em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .bars b {
+      font-weight: 400;
+      color: var(--dais-muted);
+    }
+
+    .bars i {
+      display: block;
+      height: 1.1em;
+      border-radius: 0.2cqi;
+      background: var(--dais-muted);
+      width: calc(var(--pct) * 1%);
+    }
+
+    .bars .peak i {
+      background: var(--dais-accent);
+    }
+
+    .bars .over i {
+      background: var(--dais-accent-2);
+    }
+
+    /* Two-column code comparison at a readable size on one slide. */
+    #two-runners .cols {
+      gap: 2cqi;
+    }
+
+    #two-runners h3 {
+      font-size: 2.2cqi;
+      margin-block-end: 0.5em;
+    }
+
+    /* Two code blocks side by side need to be smaller than one. Print clips
+       an overflowing pre rather than scrolling it, so these must actually fit. */
+    #two-runners pre {
+      --dais-code-size: 0.56em;
+    }
+
+    /* The pool diagram: a row of address slots. */
+    .slots {
+      display: flex;
+      gap: 0.6cqi;
+      font-size: 1.5cqi;
+      font-family: var(--dais-font-mono);
+    }
+
+    .slots span {
+      flex: 1;
+      padding: 0.6em 0.2em;
+      border-radius: 0.3cqi;
+      text-align: center;
+      background: var(--dais-surface);
+      border: 1px solid color-mix(in srgb, var(--dais-text) 12%, transparent);
+    }
+
+    .slots span.taken {
+      background: color-mix(in srgb, var(--dais-accent) 24%, transparent);
+      border-color: var(--dais-accent);
+    }
+
+    .slots span.free {
+      color: var(--dais-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="dais-controls" aria-label="Presentation controls">
+    <label><input type="checkbox" class="dais-overview-toggle"> Overview</label>
+    <label><input type="checkbox" class="dais-notes-toggle"> Notes</label>
+    <output class="dais-counter"></output>
+    <output class="dais-timer" data-dais-limit="30" title="Presenter timer — click or press T to pause"></output>
+  </nav>
+
+  <div class="dais-progress" aria-hidden="true"></div>
+
+  <main class="dais" aria-label="Performant, Parallelizable, Framework Agnostic Node.js Integration Testing" tabindex="0">
+
+    <section class="slide title" id="intro">
+      <h1>Performant, Parallelizable, Framework&nbsp;Agnostic Node.js Integration Testing</h1>
+      <p>Ethan Arrowood · Node.js Interactive @ Render ATL 2026</p>
+      <aside class="notes">
+        30 minute slot. The timer in the top-right starts when I advance off
+        this slide and turns amber at 24 minutes.
+
+        Open on the problem, not on Harper. Everyone in this room has a test
+        suite that got slower than it should be.
+      </aside>
+    </section>
+
+    <section class="slide" id="the-shape">
+      <h2>The system under test</h2>
+      <p>Harper is an open-source Node.js application platform. In one process:</p>
+      <ul class="reveal">
+        <li>A database</li>
+        <li>An HTTP server and an Operations API</li>
+        <li>A file system layer and a CLI</li>
+        <li>Applications, components, and plugins</li>
+        <li>Worker threads for parallelism</li>
+      </ul>
+      <aside class="notes">
+        This is a collapsed stack — the deployment story is "one process," which
+        is great for operators and awkward for testers.
+
+        Don't sell Harper here. The audience needs exactly enough to understand
+        why the testing problem is shaped the way it is.
+      </aside>
+    </section>
+
+    <section class="slide" id="why-hard">
+      <h2>Why a collapsed stack resists integration testing</h2>
+      <div class="cols">
+        <div class="stack">
+          <h3>Conventional service</h3>
+          <ul>
+            <li>Mock the database</li>
+            <li>Mock the queue</li>
+            <li>Boot the app in-process</li>
+            <li>Tests are cheap and parallel by default</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <h3>Harper</h3>
+          <ul>
+            <li>The database <strong>is</strong> the thing under test</li>
+            <li>So is the network layer, and the CLI</li>
+            <li>A real test needs a <strong>real Harper process</strong></li>
+            <li>Tests are expensive and conflict by default</li>
+          </ul>
+        </div>
+      </div>
+      <aside class="notes">
+        The key line: you cannot mock the thing you are trying to test. Every
+        seam a conventional service would mock is inside the system boundary
+        here.
+
+        So the unit of isolation is a process, not a fixture.
+      </aside>
+    </section>
+
+    <section class="slide center" id="the-question">
+      <h2 class="fit">Every test needs its own process.<br>Now make it fast.</h2>
+      <aside class="notes">
+        This is the whole talk in one slide. Pause here.
+      </aside>
+    </section>
+
+    <section class="slide" id="constraints">
+      <h2>Four constraints</h2>
+      <ol class="reveal">
+        <li><strong>Parallelize</strong> — but each test owns a heavyweight process</li>
+        <li><strong>Don't collide</strong> — every instance wants the same ports</li>
+        <li><strong>Run anywhere</strong> — three operating systems, laptops and CI</li>
+        <li><strong>Don't marry a runner</strong> — <code>node:test</code> for APIs, Playwright for browsers</li>
+      </ol>
+      <aside class="notes">
+        These four are the talk's structure. Each one gets a section.
+
+        Say explicitly: constraint 4 is the one that most teams skip, and it's
+        the one that determines whether the other three stay solved.
+      </aside>
+    </section>
+
+    <section class="slide divider" id="part-parallel">
+      <h2>1. How parallel is too parallel?</h2>
+      <p>Measuring instead of guessing</p>
+    </section>
+
+    <section class="slide" id="two-concepts">
+      <h2>Two things called "concurrency"</h2>
+      <div class="cols">
+        <div class="stack">
+          <h3>File parallelism — real</h3>
+          <pre><code>node --test \
+  --test-concurrency=<span class="tok-number">5</span> \
+  <span class="tok-string">"*.test.js"</span></code></pre>
+          <p class="small">Each <em>file</em> gets its own child process. Separate memory, real OS parallelism.</p>
+        </div>
+        <div class="stack">
+          <h3>Test concurrency — async</h3>
+          <pre><code><span class="tok-fn">suite</span>(<span class="tok-string">'x'</span>, { concurrency: <span class="tok-keyword">true</span> }, () =&gt; {
+  <span class="tok-fn">test</span>(<span class="tok-string">'a'</span>, <span class="tok-keyword">async</span> () =&gt; { … });
+  <span class="tok-fn">test</span>(<span class="tok-string">'b'</span>, <span class="tok-keyword">async</span> () =&gt; { … });
+});</code></pre>
+          <p class="small">One event loop. <code>Promise.all</code>, not processes.</p>
+        </div>
+      </div>
+      <aside class="notes">
+        These get conflated constantly, and the distinction is load-bearing for
+        the rest of the talk: only the left one spawns processes, so only the
+        left one contends for CPU, disk, and addresses.
+
+        If each test file spawns a Harper, file parallelism is the dial that
+        matters.
+      </aside>
+    </section>
+
+    <section class="slide" id="the-default">
+      <h2>Node's default is built for cheap tests</h2>
+      <pre><code><span class="tok-comment">// node:test default --test-concurrency</span>
+os.<span class="tok-fn">availableParallelism</span>()   <span class="tok-comment">// 12 on my laptop</span></code></pre>
+      <p>Reasonable for unit tests. For twelve simultaneous database processes,
+      it is a guess — so I measured it.</p>
+      <aside class="notes">
+        Be fair to Node here: the default is right for the common case. The
+        claim is narrower — it's wrong for resource-intensive integration tests.
+
+        Hypothesis going in: too few is slow, too many causes contention and
+        thrashing.
+      </aside>
+    </section>
+
+    <section class="slide" id="the-experiment">
+      <h2>The experiment</h2>
+      <ul>
+        <li><strong>20 generated test files</strong>, each starting a simulated
+        application in its own process</li>
+        <li>Work per file randomized within a <strong>mode</strong> — 0–100&nbsp;MB
+        file I/O, 0–3 processes, 0–4 worker threads</li>
+        <li>Concurrency swept <strong>1 → 12</strong> (sequential to max parallelism)</li>
+        <li><strong>25 samples</strong> per level, on a normally-used laptop</li>
+      </ul>
+      <p class="small muted">Optimizing for developer experience, not benchmark
+      numbers — nobody stops using their machine while tests run.</p>
+      <aside class="notes">
+        Modes matter: in a real suite one file does far more work than the next.
+        A fixed workload would have produced a cleaner graph and a less useful
+        answer.
+
+        Call out the "normally-used laptop" choice. Maximum parallelism wins on
+        an idle machine, and an idle machine is not a thing developers have.
+      </aside>
+    </section>
+
+    <section class="slide" id="results">
+      <h2>Median duration, 20 files, 25 samples</h2>
+      <table>
+        <caption>Total suite duration, milliseconds. 80 tests passed, 0 failed, at every level.</caption>
+        <thead>
+          <tr>
+            <th>Concurrency</th>
+            <th class="num">Median</th>
+            <th class="num">Std dev</th>
+            <th class="num">p95</th>
+            <th class="num">Speedup</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1 <span class="muted small">(sequential)</span></td><td class="num">9,939</td><td class="num">363</td><td class="num">10,607</td><td class="num">1.00×</td></tr>
+          <tr><td>2</td><td class="num">5,776</td><td class="num">307</td><td class="num">6,164</td><td class="num">1.72×</td></tr>
+          <tr><td>4</td><td class="num">3,904</td><td class="num">368</td><td class="num">4,648</td><td class="num">2.55×</td></tr>
+          <tr class="best"><td><strong>7</strong></td><td class="num"><strong>3,468</strong></td><td class="num"><strong>294</strong></td><td class="num"><strong>3,990</strong></td><td class="num"><strong>2.87×</strong></td></tr>
+          <tr class="worse"><td>10</td><td class="num">3,534</td><td class="num">654</td><td class="num">5,339</td><td class="num">2.81×</td></tr>
+          <tr class="worse"><td>12 <span class="small">(max)</span></td><td class="num">3,952</td><td class="num">488</td><td class="num">4,792</td><td class="num">2.51×</td></tr>
+        </tbody>
+      </table>
+      <aside class="notes">
+        Walk the table top to bottom, then stop on row 7.
+
+        Sequential to 4 buys most of the win. 7 is the peak. And then it gets
+        worse — not just "stops improving."
+
+        Full 12-row table and raw data are in the analysis repo; these are the
+        rows that make the point.
+      </aside>
+    </section>
+
+    <section class="slide" id="plateau">
+      <h2>The gain plateaus, then reverses</h2>
+      <div class="bars">
+        <b>1</b>  <i style="--pct: 100"></i>          <b>9,939 ms</b>
+        <b>2</b>  <i style="--pct: 58"></i>           <b>5,776</b>
+        <b>3</b>  <i style="--pct: 46"></i>           <b>4,582</b>
+        <b>4</b>  <i style="--pct: 39"></i>           <b>3,904</b>
+        <b>5</b>  <i style="--pct: 38"></i>           <b>3,759</b>
+        <b>6</b>  <i style="--pct: 36"></i>           <b>3,597</b>
+        <b class="accent">7</b> <span class="peak"><i style="--pct: 35"></i></span> <b class="accent">3,468 ← best</b>
+        <b>8</b>  <i style="--pct: 37"></i>           <b>3,671</b>
+        <b>9</b>  <i style="--pct: 36"></i>           <b>3,601</b>
+        <b>10</b> <i style="--pct: 36"></i>           <b>3,534</b>
+        <b>11</b> <i style="--pct: 37"></i>           <b>3,724</b>
+        <b class="accent-2">12</b> <span class="over"><i style="--pct: 40"></i></span> <b class="accent-2">3,952</b>
+      </div>
+      <aside class="notes">
+        The shape is the argument: a steep drop, a knee around 4, a shallow
+        basin from 5 to 10, and a climb back out.
+
+        Max parallelism is 14% slower at the median than the peak. You are
+        paying for twelve processes and getting concurrency-4 performance.
+      </aside>
+    </section>
+
+    <section class="slide" id="variance">
+      <h2>The mean hides the real cost</h2>
+      <table>
+        <thead>
+          <tr><th>Concurrency</th><th class="num">Std dev</th><th class="num">p95</th><th class="num">Worst run</th></tr>
+        </thead>
+        <tbody>
+          <tr class="best"><td>7</td><td class="num">294</td><td class="num">3,990</td><td class="num">4,520</td></tr>
+          <tr><td>10</td><td class="num">654</td><td class="num">5,339</td><td class="num">5,466</td></tr>
+          <tr><td>11</td><td class="num">690</td><td class="num">5,096</td><td class="num">5,717</td></tr>
+        </tbody>
+      </table>
+      <p>Past the plateau, variance more than <strong>doubles</strong>. The p95 at
+      concurrency 10 is worse than the <em>median at concurrency 4</em> — more
+      than twice the processes, to land in worse territory.</p>
+      <p class="small muted">Developers don't experience your median. They
+      experience the run they're waiting on.</p>
+      <aside class="notes">
+        This is the slide I'd keep if I had to cut the section to one.
+
+        Over-parallelizing doesn't make the suite slower on average so much as
+        it makes it *unpredictable*, and unpredictable is what makes people stop
+        trusting a suite.
+      </aside>
+    </section>
+
+    <section class="slide" id="honesty">
+      <h2>What I expected, and what I got</h2>
+      <div class="cols">
+        <div class="card">
+          <h3>Hypothesis</h3>
+          <p>Over-parallelizing causes resource contention, thrashing, and
+          <strong>unpredictable failures</strong>.</p>
+        </div>
+        <div class="card">
+          <h3>Measured</h3>
+          <p>Contention and thrashing: yes. Failures: <strong>zero</strong>, at
+          every concurrency level, in all 25 samples.</p>
+        </div>
+      </div>
+      <p>Correctness held. The cost showed up entirely in the tail.</p>
+      <aside class="notes">
+        Be straight about this. I went in expecting flakiness and the data
+        didn't show any — 80 passed, 0 failed, every level, every sample.
+
+        Worth saying why: the tests were independent, hermetic, and
+        deterministic by construction. Contention made them slow, not wrong.
+        That's a result about the test design as much as about the runner.
+      </aside>
+    </section>
+
+    <section class="slide" id="the-default-that-shipped">
+      <h2>So this became the default</h2>
+      <pre><code><span class="tok-comment">// @harperfast/integration-testing — src/run.ts</span>
+<span class="tok-keyword">const</span> CONCURRENCY = concurrencyOption
+  ? <span class="tok-fn">parseInt</span>(concurrencyOption, <span class="tok-number">10</span>)
+  : Math.<span class="tok-fn">max</span>(<span class="tok-number">1</span>, Math.<span class="tok-fn">floor</span>(<span class="tok-fn">availableParallelism</span>() / <span class="tok-number">2</span>) + <span class="tok-number">1</span>);</code></pre>
+      <p><code>floor(12 / 2) + 1 = <strong>7</strong></code> — the measured
+      optimum on the machine the measurements came from.</p>
+      <p class="small muted">Half of available parallelism, plus one. Overridable
+      by flag or environment variable, because your workload isn't mine.</p>
+      <aside class="notes">
+        Honest caveat: n=1 machine. The heuristic is "roughly half," not "7."
+        The shape of the curve is what generalizes — the basin is wide and flat,
+        so being approximately right is enough.
+
+        The override path matters more than the default. Someone on a 96-core CI
+        box with light tests should turn it up.
+      </aside>
+    </section>
+
+    <section class="slide divider" id="part-isolation">
+      <h2>2. Two databases, one machine</h2>
+      <p>Everything wants port 9925</p>
+    </section>
+
+    <section class="slide" id="port-problem">
+      <h2>The obvious fix, and why I skipped it</h2>
+      <p><strong>Dynamic port allocation:</strong> ask the OS for a free port,
+      hand it to the instance.</p>
+      <p>Except one Harper instance doesn't bind <em>a</em> port:</p>
+      <ul class="reveal">
+        <li>Operations API — 9925</li>
+        <li>HTTP / application server — 9926</li>
+        <li>Replication, clustering, and more</li>
+      </ul>
+      <p>Remapping all of them, per instance, means threading a config matrix
+      through every test — and every URL in every assertion.</p>
+      <aside class="notes">
+        The abstract for this talk says "dynamic port allocation," and this is
+        where I correct myself in public: I tried it, and the config surface
+        made it not worth it.
+
+        The insight is that the conflict isn't really about ports. It's about
+        the address you bind them to.
+      </aside>
+    </section>
+
+    <section class="slide center" id="the-trick">
+      <h2 class="fit">Don't change the ports.<br>Change the address.</h2>
+      <aside class="notes">
+        Beat. This is the idea I most want people to take home, because it
+        generalizes to anything that binds well-known ports.
+      </aside>
+    </section>
+
+    <section class="slide" id="loopback">
+      <h2>One loopback address per instance</h2>
+      <pre><code><span class="tok-comment">// every instance keeps its default ports</span>
+worker 1 → <span class="tok-string">http://127.0.0.2:9925</span>
+worker 2 → <span class="tok-string">http://127.0.0.3:9925</span>
+worker 3 → <span class="tok-string">http://127.0.0.4:9925</span></code></pre>
+      <ul>
+        <li>Zero config remapping — 9925 is still 9925</li>
+        <li><code>127.0.0.0/8</code> is <strong>16.7 million</strong> addresses</li>
+        <li>Instances are isolated by address, not by port bookkeeping</li>
+      </ul>
+      <aside class="notes">
+        The whole loopback /8 belongs to localhost. We use 32 by default,
+        starting at .2 so we never fight whatever the developer already has
+        bound to 127.0.0.1.
+
+        This is the trade: a little platform setup cost, in exchange for
+        deleting an entire category of configuration.
+      </aside>
+    </section>
+
+    <section class="slide" id="platform">
+      <h2>The catch: only Linux gives them to you</h2>
+      <table>
+        <thead><tr><th>Platform</th><th><code>127.0.0.2</code>–<code>127.255.255.255</code></th></tr></thead>
+        <tbody>
+          <tr><td>Linux (Ubuntu)</td><td>Enabled by default</td></tr>
+          <tr><td>macOS</td><td>Must be added per address</td></tr>
+          <tr><td>Windows</td><td>Must be added per address</td></tr>
+        </tbody>
+      </table>
+      <pre><code>npx harper-integration-test-setup-loopback   <span class="tok-comment"># needs sudo</span></code></pre>
+      <p class="small muted">A one-time, per-machine cost — and the honest price
+      of this design.</p>
+      <aside class="notes">
+        Don't hide this. It's the main objection to the approach and it deserves
+        a straight answer: it's one command, once, per machine, and it's in the
+        setup docs and the CI workflow.
+
+        Sequential mode (--isolation=none) skips the requirement entirely, which
+        matters for a contributor who just wants to run one test.
+      </aside>
+    </section>
+
+    <section class="slide" id="pool">
+      <h2>The pool is a JSON array of PIDs</h2>
+      <div class="slots">
+        <span class="taken">42</span>
+        <span class="taken">43</span>
+        <span class="free">null</span>
+        <span class="taken">45</span>
+        <span class="free">null</span>
+        <span class="free">null</span>
+      </div>
+      <p class="small muted">index 0 → 127.0.0.2 · index 1 → 127.0.0.3 · …</p>
+      <ul>
+        <li>Index is the address; value is the owning process ID</li>
+        <li>Lives in <code>tmpdir()</code>, so every test process shares it</li>
+        <li>First-available allocation; released on teardown</li>
+      </ul>
+      <aside class="notes">
+        Storing the PID rather than a boolean is what makes recovery possible —
+        see the next slide but one.
+
+        Why a file and not a coordinating parent process? Because of the
+        constraint on the runner script: tests must work under plain
+        `node --test`, with no parent to coordinate them.
+      </aside>
+    </section>
+
+    <section class="slide" id="lock">
+      <h2>Cross-process mutex in one flag</h2>
+      <pre><code><span class="tok-comment">// 'wx' fails if the file already exists — atomically</span>
+<span class="tok-keyword">const</span> handle = <span class="tok-keyword">await</span> <span class="tok-fn">open</span>(LOCK_PATH, <span class="tok-string">'wx'</span>);
+<span class="tok-keyword">await</span> handle.<span class="tok-fn">close</span>();   <span class="tok-comment">// we hold the lock</span></code></pre>
+      <p>No dependency, no daemon, no shared memory. The file system already
+      has the primitive.</p>
+      <p class="small muted">Plus a stale-lock timeout: a lock file older than
+      10 seconds is assumed abandoned and removed — because a crashed test
+      process cannot unlink its own lock.</p>
+      <aside class="notes">
+        `wx` is O_CREAT | O_EXCL. The atomicity guarantee comes from the kernel.
+
+        The stale timeout is the unglamorous half. Every file-lock scheme needs
+        one, and picking the timeout is a judgment call: too short and you break
+        a slow-but-live process, too long and a crash stalls the suite.
+      </aside>
+    </section>
+
+    <section class="slide" id="reaping">
+      <h2>Crashed tests would leak addresses forever</h2>
+      <pre><code><span class="tok-comment">// signal 0 checks liveness without signalling</span>
+<span class="tok-keyword">try</span> {
+  process.<span class="tok-fn">kill</span>(pid, <span class="tok-number">0</span>);       <span class="tok-comment">// alive — leave it allocated</span>
+} <span class="tok-keyword">catch</span> {
+  loopbackPool[index] = <span class="tok-keyword">null</span>;  <span class="tok-comment">// dead — reclaim it</span>
+}</code></pre>
+      <p>Reaped lazily, only when the pool looks full. A <kbd>Ctrl</kbd>+<kbd>C</kbd>
+      mid-run costs you nothing on the next run.</p>
+      <aside class="notes">
+        This is why the pool stores PIDs instead of booleans. A boolean pool
+        can't distinguish "in use" from "leaked."
+
+        Lazily, not eagerly: reaping on every allocation would mean a syscall
+        per slot per allocation for a condition that's almost never true.
+      </aside>
+    </section>
+
+    <section class="slide" id="trust-but-verify">
+      <h2>Allocated is not the same as usable</h2>
+      <pre><code><span class="tok-comment">// bind to port 0 just to prove the address exists</span>
+server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loopbackAddress, () =&gt; {
+  server.<span class="tok-fn">close</span>(() =&gt; <span class="tok-fn">resolve</span>(loopbackAddress));
+});</code></pre>
+      <p>Verified twice: once for the whole pool at startup — with an actionable
+      error naming the setup script — and once per allocation.</p>
+      <aside class="notes">
+        The failure this prevents is the worst kind: Harper starts, binds
+        nothing, and the test times out 30 seconds later with a message about
+        HTTP. Fail at allocation instead, and say which command fixes it.
+
+        Good error messages are a feature of test infrastructure, not a polish
+        item. A confused contributor is a contributor who stops running tests.
+      </aside>
+    </section>
+
+    <section class="slide" id="lifecycle">
+      <h2>What a test actually gets</h2>
+      <pre><code><span class="tok-keyword">await</span> <span class="tok-fn">startHarper</span>(ctx);
+<span class="tok-comment">// 1. allocate a loopback address from the pool</span>
+<span class="tok-comment">// 2. create a temporary install directory</span>
+<span class="tok-comment">// 3. spawn Harper, wait until it is actually ready</span>
+<span class="tok-comment">// 4. populate ctx.harper</span>
+
+ctx.harper.httpURL            <span class="tok-comment">// 'http://127.0.0.3:9926'</span>
+ctx.harper.operationsAPIURL   <span class="tok-comment">// 'http://127.0.0.3:9925'</span>
+
+<span class="tok-keyword">await</span> <span class="tok-fn">teardownHarper</span>(ctx);
+<span class="tok-comment">// kill, release the address, remove the directory</span></code></pre>
+      <aside class="notes">
+        Temporary install directory per instance is the other half of isolation
+        — address isolation without filesystem isolation still gives you two
+        processes fighting over one data root.
+
+        "Wait until actually ready" is doing a lot of work. Spawning is not
+        readiness, and a 30-second startup timeout with captured stdout/stderr
+        is what makes a startup failure diagnosable.
+      </aside>
+    </section>
+
+    <section class="slide divider" id="part-agnostic">
+      <h2>3. Framework agnostic</h2>
+      <p>The constraint that keeps the rest honest</p>
+    </section>
+
+    <section class="slide" id="agnostic-api">
+      <h2>The API imports nothing from a test runner</h2>
+      <pre><code><span class="tok-fn">startHarper</span>(ctx, options?)
+<span class="tok-fn">setupHarperWithFixture</span>(ctx, fixturePath, options?)
+<span class="tok-fn">killHarper</span>(ctx)
+<span class="tok-fn">teardownHarper</span>(ctx)
+<span class="tok-fn">createHarperContext</span>(name?)   <span class="tok-comment">// for non-node:test frameworks</span></code></pre>
+      <p><code>ctx</code> is <strong>any object</strong> with an optional
+      <code>name</code> and a <code>harper</code> property to write to.</p>
+      <p class="small muted">Deliberately loose, so a <code>node:test</code>
+      context and a plain object both satisfy it.</p>
+      <aside class="notes">
+        The type is the whole trick. If the signature demanded a node:test
+        TestContext, Playwright could never call it.
+
+        Requirement on any framework: async setup and teardown hooks. That's it.
+        Every runner has them.
+      </aside>
+    </section>
+
+    <section class="slide" id="not-required">
+      <h2>The rule that made it possible</h2>
+      <blockquote>
+        <p><em>"Important! This script should not be required to execute
+        integration tests."</em></p>
+        <footer>— the first line of <code>src/run.ts</code></footer>
+      </blockquote>
+      <p>The convenience runner holds <strong>no state</strong>. Every test file
+      still runs under plain <code>node --test</code>, and parallelization still
+      works.</p>
+      <aside class="notes">
+        This is the design decision everything else follows from. Because the
+        runner couldn't own setup, setup had to live in the test files, which
+        forced the pool to be file-based and cross-process rather than
+        parent-coordinated.
+
+        The constraint that looked like a limitation is what made the second
+        framework integration cheap.
+      </aside>
+    </section>
+
+    <section class="slide" id="two-runners">
+      <h2>Two runners, same lifecycle</h2>
+      <div class="cols">
+        <div class="stack">
+          <h3><code>node:test</code> — file per process</h3>
+          <pre><code><span class="tok-fn">suite</span>(<span class="tok-string">'install'</span>, (ctx: ContextWithHarper) =&gt; {
+  <span class="tok-fn">before</span>(<span class="tok-keyword">async</span> () =&gt; {
+    <span class="tok-keyword">await</span> <span class="tok-fn">startHarper</span>(ctx);
+  });
+  <span class="tok-fn">after</span>(<span class="tok-keyword">async</span> () =&gt; {
+    <span class="tok-keyword">await</span> <span class="tok-fn">teardownHarper</span>(ctx);
+  });
+
+  <span class="tok-fn">test</span>(<span class="tok-string">'serves'</span>, <span class="tok-keyword">async</span> () =&gt; {
+    <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> <span class="tok-fn">fetch</span>(ctx.harper.httpURL);
+    <span class="tok-fn">strictEqual</span>(res.status, <span class="tok-number">200</span>);
+  });
+});</code></pre>
+        </div>
+        <div class="stack">
+          <h3>Playwright — worker-scoped fixture</h3>
+          <pre><code><span class="tok-keyword">const</span> test = base.<span class="tok-fn">extend</span>&lt;
+  {}, { harper: <span class="tok-type">HarperContext</span> }
+&gt;({
+  harper: [<span class="tok-fn">makeHarperFixture</span>(name),
+           { scope: <span class="tok-string">'worker'</span> }],
+});
+
+<span class="tok-fn">test</span>(<span class="tok-string">'home page renders'</span>,
+  <span class="tok-keyword">async</span> ({ page, harper }) =&gt; {
+    <span class="tok-keyword">await</span> page.<span class="tok-fn">goto</span>(harper.httpURL);
+    <span class="tok-keyword">await</span> <span class="tok-fn">expect</span>(page.<span class="tok-fn">locator</span>(<span class="tok-string">'h1'</span>))
+      .<span class="tok-fn">toHaveText</span>(<span class="tok-string">'Next.js v16'</span>);
+  });</code></pre>
+        </div>
+      </div>
+      <aside class="notes">
+        Left is @harperfast/integration-testing's own template. Right is real
+        code from @harperfast/nextjs, testing the Next.js plugin.
+
+        The mapping to draw out loud: a node:test *file process* and a
+        Playwright *worker* play the same role. Both are the unit that owns one
+        Harper instance.
+      </aside>
+    </section>
+
+    <section class="slide" id="playwright-fixture">
+      <h2>The entire Playwright integration</h2>
+      <pre><code><span class="tok-keyword">export function</span> <span class="tok-fn">makeHarperFixture</span>(fixtureName: <span class="tok-type">string</span>) {
+  <span class="tok-keyword">return async</span> ({}, use) =&gt; {
+    <span class="tok-keyword">const</span> ctx = <span class="tok-fn">createHarperContext</span>(fixtureName);
+    <span class="tok-keyword">const</span> started = <span class="tok-keyword">await</span> <span class="tok-fn">setupHarperWithFixture</span>(ctx, fixturePath, {
+      harperBinPath: <span class="tok-fn">getHarperBinPath</span>(),
+      startupTimeoutMs: <span class="tok-number">120_000</span>,   <span class="tok-comment">// a Next.js build is slow</span>
+    });
+
+    <span class="tok-keyword">await</span> <span class="tok-fn">use</span>(started.harper);
+
+    <span class="tok-keyword">await</span> <span class="tok-fn">teardownHarper</span>(started);
+  };
+}</code></pre>
+      <p class="small muted">~40 lines including error handling. The pool, the
+      locking, and the address assignment are all inherited for free.</p>
+      <aside class="notes">
+        This is the payoff slide for the whole framework-agnostic argument. The
+        second integration cost an afternoon, not a rewrite.
+
+        Note what isn't here: no ports, no coordination between workers, no
+        knowledge that other workers exist.
+      </aside>
+    </section>
+
+    <section class="slide" id="scope">
+      <h2>What the framework won't decide for you</h2>
+      <ul class="reveal">
+        <li>Starting an instance has <strong>real cost</strong> — a process, an
+        address, a directory</li>
+        <li>One instance per <em>logical test block</em>: usually right</li>
+        <li>One instance per <em>assertion</em>: almost always wasteful</li>
+        <li>The only hard rule: <strong>concurrent scopes need separate
+        instances</strong></li>
+      </ul>
+      <p class="small muted">The pool makes cross-process allocation safe. Your
+      setup and teardown hooks decide the boundaries.</p>
+      <aside class="notes">
+        Deliberately not automated. Instance scope is a judgment call about what
+        a test means, and a framework that guessed would guess wrong.
+
+        The Playwright config makes this choice explicitly:
+        fullyParallel: false, so files run in parallel but tests within a file
+        share the worker's instance and run in order.
+      </aside>
+    </section>
+
+    <section class="slide" id="ethos">
+      <h2>None of this works without disciplined tests</h2>
+      <ul>
+        <li><strong>Independent</strong> — no dependence on order or shared state</li>
+        <li><strong>Hermetic</strong> — self-contained, no external side effects</li>
+        <li><strong>Deterministic</strong> — same input, same output</li>
+      </ul>
+      <p>These aren't style preferences. They are the <em>precondition</em> for
+      safe concurrency — and the reason 25 samples at every concurrency level
+      produced zero failures.</p>
+      <aside class="notes">
+        Tie back to the honesty slide. The reason over-parallelizing cost
+        latency and not correctness is that the tests obeyed these three
+        properties.
+
+        Without them, parallelization doesn't get slower. It gets flaky, which
+        is much worse and much harder to debug.
+      </aside>
+    </section>
+
+    <section class="slide divider" id="part-ci">
+      <h2>4. Surviving CI</h2>
+      <p>Where the laptop assumptions break</p>
+    </section>
+
+    <section class="slide" id="ci">
+      <h2>Default runners can't take the parallelism</h2>
+      <ul class="reveal">
+        <li>A standard GitHub runner handles <em>one</em> integration test fine
+        — and buckles running many</li>
+        <li>Overloaded runners cause flaky failures; <strong>correctness is
+        never traded for speed</strong></li>
+        <li>So parallelize <em>across</em> runners: matrix jobs plus test
+        sharding</li>
+      </ul>
+      <pre><code>npm run test:integration -- --shard=<span class="tok-number">1</span>/<span class="tok-number">4</span>   <span class="tok-comment"># one job per shard</span></code></pre>
+      <aside class="notes">
+        Same lesson as the concurrency curve, one level up: the constrained
+        resource moved from cores to runners, and the answer is still "don't
+        oversubscribe."
+
+        Bigger runners exist. They cost real money, and org-level job caps mean
+        queue time can eat the savings — measure before buying.
+      </aside>
+    </section>
+
+    <section class="slide" id="when-to-run">
+      <h2>And be deliberate about <em>when</em></h2>
+      <ul>
+        <li>Full matrix on every commit of every PR exhausts concurrency limits</li>
+        <li>Path filters, manual triggers, and merge-time-only full runs</li>
+        <li><strong>Merge queue:</strong> one configuration per PR, the whole
+        matrix before merge</li>
+      </ul>
+      <p class="small muted">Fast iteration on the PR, thorough verification on
+      the branch that matters.</p>
+      <aside class="notes">
+        This is the pragmatic close on CI: the cheapest optimization is not
+        running the suite when it can't tell you anything new.
+      </aside>
+    </section>
+
+    <section class="slide" id="takeaways">
+      <h2>What to take home</h2>
+      <ol class="reveal">
+        <li><strong>Measure your concurrency ceiling.</strong> For
+        process-heavy tests it's near half your cores, not all of them.</li>
+        <li><strong>Watch the tail, not the mean.</strong> Over-parallelizing
+        buys variance.</li>
+        <li><strong>Isolate by address, not by port.</strong> One loopback
+        address per instance deletes a config matrix.</li>
+        <li><strong>The file system has your mutex.</strong>
+        <code>open(path, 'wx')</code> plus a stale timeout.</li>
+        <li><strong>Make the runner optional.</strong> That constraint is what
+        buys you the second framework.</li>
+      </ol>
+      <aside class="notes">
+        Five points, and only 1, 3, and 5 really need to land. If the timer is
+        red, read 1, 3, 5 and go to the last slide.
+      </aside>
+    </section>
+
+    <section class="slide title no-number" id="thanks">
+      <h2>Thank you</h2>
+      <p>
+        <a href="https://github.com/HarperFast/integration-testing">HarperFast/integration-testing</a> ·
+        <a href="https://github.com/Ethan-Arrowood/node-test-runner-parallelization-analysis">the parallelization analysis</a> ·
+        <a href="https://github.com/HarperFast/nextjs">HarperFast/nextjs</a>
+      </p>
+      <p class="muted small">Ethan Arrowood · ethanarrowood.com · slides built with Dais</p>
+      <aside class="notes">
+        Leave this up for questions. All three repos are open source.
+
+        Likely questions: why not Docker (startup cost, and the CLI/filesystem
+        surface is part of what's under test); why not testcontainers (same, plus
+        it doesn't remove the addressing problem); does the loopback trick work
+        in containers (yes, and Linux needs no setup).
+      </aside>
+    </section>
+
+  </main>
+</body>
+</html>
