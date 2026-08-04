@@ -10,7 +10,7 @@ events:
     eventUrl: "https://events.linuxfoundation.org/open-source-summit-north-america/"
     talkUrl: "https://sched.co/2JQuD"
     videoUrl: "https://www.youtube.com/watch?v=IvyLMwMNU0g"
-  - name: "Node.js Interactive @ Render ATL 2026"
+  - name: "Render ATL 2026"
     date: "August 12, 2026"
     eventUrl: "https://renderatl.com"
 ---

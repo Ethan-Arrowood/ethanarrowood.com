@@ -5,9 +5,9 @@ description: "How I built the Harper Integration Testing framework to run integr
 audienceLevel: "Intermediate"
 sessionFormat: "30 min"
 events:
-  - name: "NodeConf EU 2026"
-    date: "September 29, 2026"
-    eventUrl: "https://nodeconf.eu"
+  - name: "Node.js Interactive @ Render ATL 2026"
+    date: "August 13, 2026"
+    eventUrl: "https://renderatl.com"
 ---
 
 ## Description
