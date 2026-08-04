@@ -9,6 +9,7 @@ events:
     eventUrl: "https://webengineshackfest.org/"
     talkUrl: "https://webengineshackfest.org/#registry"
     slidesUrl: "https://webengineshackfest.org/slides/how_to_ship_a_registry_when_nobody_wants_to_run_one_by_aki_rose_braun_and_ethan_arrowood.pdf"
+    videoUrl: "https://www.youtube.com/watch?v=gWaKQwjM5Uo"
 ---
 
 ## Description
@@ -19,6 +20,6 @@ TC55 (formerly WinterCG) works on common APIs across JavaScript runtimes. Part o
 
 Instead of building infrastructure, we published the registry as an Ecma Technical Report. The report is the registry: versioned, standards-backed, and citable, without any servers to operate. This talk walks through how we arrived at that approach, what the Technical Report process looks like in practice, and the trade-offs of treating a published document as a registry.
 
-## Slides
+[Slides are available as a PDF](https://webengineshackfest.org/slides/how_to_ship_a_registry_when_nobody_wants_to_run_one_by_aki_rose_braun_and_ethan_arrowood.pdf).
 
-There is no recording. [Slides are available as a PDF](https://webengineshackfest.org/slides/how_to_ship_a_registry_when_nobody_wants_to_run_one_by_aki_rose_braun_and_ethan_arrowood.pdf).
+[Talk Recording](https://www.youtube.com/watch?v=gWaKQwjM5Uo)
