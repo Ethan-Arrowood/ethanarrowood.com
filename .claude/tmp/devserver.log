@@ -1,0 +1,51 @@
+
+> dev
+> astro dev
+
+[vite] connected.
+21:13:38 [types] Generated 1ms
+21:13:38 [WARN] [content] Content config not loaded
+ astro  v6.1.9 ready in 439 ms
+┃ Local    http://localhost:4321/
+┃ Network  use --host to expose
+21:13:38 watching for file changes...
+
+ update  ▶ New version of Astro available: 7.0.2
+  Run npx @astrojs/upgrade to update
+
+21:13:48 [200] / 13ms
+21:13:48 [200] / 2ms
+21:14:07 [200] / 7ms
+21:14:08 [200] /_image 221ms
+21:15:36 [200] / 9ms
+21:15:36 [200] /_image 212ms
+21:15:46 [watch] /src/pages/index.astro?astro&type=style&index=0&lang.css
+21:15:46 [watch] src/pages/index.astro
+[vite] program reload
+21:15:59 [200] / 10ms
+21:15:59 [200] / 2ms
+21:16:25 [200] / 7ms
+21:16:38 [200] /talks 8ms
+21:16:46 [200] /talks 2ms
+21:16:55 [watch] /src/pages/index.astro?astro&type=style&index=0&lang.css
+21:16:55 [watch] src/pages/index.astro
+[vite] program reload
+21:17:01 [200] / 26ms
+21:17:01 [200] /_image 218ms
+21:17:02 [200] / 3ms
+21:19:45 [200] / 9ms
+21:19:50 [watch] /src/pages/index.astro?astro&type=style&index=0&lang.css
+21:19:50 [watch] src/pages/index.astro
+[vite] program reload
+21:19:53 [200] / 8ms
+21:22:35 [200] / 8ms
+21:22:36 [200] / 7ms
+21:22:37 [200] / 6ms
+21:22:38 [200] /_image 221ms
+21:23:44 [watch] src/pages/index.astro
+21:23:45 [200] / 10ms
+21:23:45 [200] /_image 175ms
+21:23:47 [watch] src/pages/index.astro
+21:23:47 [200] / 9ms
+21:24:14 [200] / 3ms
+00:47:08 [200] / 122ms
