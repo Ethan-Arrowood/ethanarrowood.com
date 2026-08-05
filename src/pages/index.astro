@@ -223,6 +223,45 @@ const upcomingTalks = allTalks.filter((talk) =>
 		margin-block-end: 0;
 	}
 
+	/* Company block with multiple roles (e.g. a promotion) */
+	.experience-list-item-grouped {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.experience-list-item-company {
+		color: var(--text-primary);
+		font-size: 1.3rem;
+		font-weight: 700;
+		margin: 0;
+	}
+
+	.experience-role {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0.75rem;
+	}
+
+	.experience-role .experience-list-item-date {
+		grid-row: 1;
+	}
+
+	.experience-role .experience-list-item-title {
+		grid-row: 2;
+		font-size: 1.05rem;
+	}
+
+	.experience-role .experience-list-item-description {
+		grid-row: 3;
+	}
+
+	.experience-role-divider {
+		border: none;
+		border-block-start: 1px solid var(--divider);
+		margin: 0;
+	}
+
 	/* Responsive */
 	/* Small */
 	@media (min-width: 640px) {
@@ -275,6 +314,9 @@ const upcomingTalks = allTalks.filter((talk) =>
 					> Collaborator
 				</li>
 				<li class="highlights-list-item">
+					<Link href="https://endowment.dev">Open Source Endowment</Link> Donor
+				</li>
+				<li class="highlights-list-item">
 					Consulting via <Link href="https://alpinemooseinnovations.com"
 						>Alpine Moose Innovations</Link
 					>
@@ -301,7 +343,8 @@ const upcomingTalks = allTalks.filter((talk) =>
 			I represent the Node.js and JavaScript ecosystem in the OpenJS Foundation
 			and WinterTC (ECMA TC55), where I work on standards and community
 			development for web-interoperable runtimes. I have spoken at JSConf NA and
-			NodeConf EU.
+			NodeConf EU. I also support open source sustainability directly as a donor
+			to the <Link href="https://endowment.dev">Open Source Endowment</Link>.
 		</p>
 		<p class="professional-summary-text">
 			Previous roles include Senior Software Engineer at Vercel, where I worked
@@ -314,7 +357,7 @@ const upcomingTalks = allTalks.filter((talk) =>
 			working with companies building in that space. I take on select consulting
 			engagements through <Link href="https://alpinemooseinnovations.com"
 				>Alpine Moose Innovations</Link
-			> and am open to early-stage investing conversations. Reach me at <Link
+			> and I am open to angel investing opportunities. Reach me at <Link
 				href="mailto:ethan@arrowood.dev">ethan@arrowood.dev</Link
 			>.
 		</p>
@@ -408,51 +451,99 @@ const upcomingTalks = allTalks.filter((talk) =>
 		<SectionHeading id="experience" class="sub-title">Experience</SectionHeading
 		>
 		<ol class="experience-list">
-			<li class="experience-list-item">
-				<h3 class="experience-list-item-title">
-					Harper - Head of Open Source Engineering
-				</h3>
-				<p class="experience-list-item-date">August 2024 - Present</p>
-				<ol class="experience-list-item-description">
-					<li class="experience-list-item-description-item">
-						Leading Harper's transition from a closed-source product to an
-						open-source-first platform, including strategy, community, and
-						business model.
-					</li>
-					<li class="experience-list-item-description-item">
-						Architected a dual-license model: Apache 2.0 core with a
-						source-available pro tier, balancing community openness and
-						commercial sustainability.
-					</li>
-					<li class="experience-list-item-description-item">
-						Built contribution infrastructure: governance docs, issue triage
-						workflows, and contributor onboarding to support a growing developer
-						community.
-					</li>
-					<li class="experience-list-item-description-item">
-						Representing Harper in the OpenJS Foundation and WinterTC (ECMA
-						TC55), contributing to Node.js ecosystem and JavaScript
-						interoperability standards.
-					</li>
-					<li class="experience-list-item-description-item">
-						Created the <Link
-							href="https://docs.harperdb.io/docs/reference/components/plugins"
-							>Harper Plugin API</Link
-						>, simplifying the extension model while expanding its capabilities.
-					</li>
-					<li class="experience-list-item-description-item">
-						Led development of major front-end framework integrations including
-						Next.js and Astro, and an integrated GraphQL engine.
-					</li>
-					<li class="experience-list-item-description-item">
-						Replatformed the documentation site, improving accessibility and
-						developer experience velocity.
-					</li>
-					<li class="experience-list-item-description-item">
-						Using high-performance Node.js and C++ to optimize core product
-						performance.
-					</li>
-				</ol>
+			<li class="experience-list-item experience-list-item-grouped">
+				<p class="experience-list-item-company">Harper</p>
+				<div class="experience-role">
+					<p class="experience-list-item-date">February 2026 - Present</p>
+					<h3 class="experience-list-item-title">
+						Head of Open Source Engineering
+					</h3>
+					<ol class="experience-list-item-description">
+						<li class="experience-list-item-description-item">
+							Founded and lead Harper's Open Source Program Office (OSPO),
+							coordinating open source strategy, developer relations, and
+							community across engineering, marketing, and sales, and driving the
+							company's transition from a closed-source product to an
+							open-source-first platform. See my talk <Link
+								href="/talks/building-sustainable-open-source-the-harper-story"
+								>Building Sustainable Open Source: The Harper Story</Link
+							> for more information.
+						</li>
+						<li class="experience-list-item-description-item">
+							Architected a dual-license model: Apache 2.0 core with a
+							source-available tier, balancing community openness and commercial
+							sustainability.
+						</li>
+						<li class="experience-list-item-description-item">
+							Established the OSPO's program-management foundation: a repository
+							taxonomy and classification standard applied across the
+							organization's public repositories, contribution governance, and
+							shared <Link href="https://github.com/HarperFast/code-guidelines"
+								>engineering guidelines</Link
+							>.
+						</li>
+						<li class="experience-list-item-description-item">
+							Represent Harper in the OpenJS Foundation and WinterTC (ECMA
+							TC55), contributing to Node.js ecosystem and JavaScript runtime
+							interoperability standards, including the WinterTC <Link
+								href="https://github.com/WinterTC55/runtime-keys"
+								>Runtime Keys</Link
+							> technical report.
+						</li>
+						<li class="experience-list-item-description-item">
+							Coordinate Harper's developer relations and open source content:
+							the conference program, participation in the "Business of Open
+							Source" podcast, and the Harper Learn tutorial series.
+						</li>
+						<li class="experience-list-item-description-item">
+							Replatformed the <Link href="https://github.com/HarperFast/documentation"
+								>documentation site</Link
+							> onto Docusaurus and Harper Fabric (dogfooding the platform) with
+							per-PR preview and continuous deploys, and drove an
+							AI-discoverability initiative (<code>llms.txt</code> + <code>*.md</code>) so Harper's docs are
+							consumable by LLMs and coding agents.
+						</li>
+						<li class="experience-list-item-description-item">
+							Created the Harper <Link
+								href="https://github.com/HarperFast/integration-testing"
+								>integration-testing framework</Link
+							>: a performant, parallelizable, and framework-agnostic system that
+							runs the full
+							test suite against real Harper instances, using process isolation
+							and dynamic port allocation to run in parallel across local
+							machines, multiple operating systems, and CI. See my talk <Link
+								href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing"
+								>Performance, Parallelizable, Framework Agnostic Node.js Integration Testing</Link
+							> for more information.
+						</li>
+					</ol>
+				</div>
+				<hr class="experience-role-divider" />
+				<div class="experience-role">
+					<p class="experience-list-item-date">August 2024 - February 2026</p>
+					<h3 class="experience-list-item-title">Senior Software Engineer</h3>
+					<ol class="experience-list-item-description">
+						<li class="experience-list-item-description-item">
+							Created the <Link
+								href="https://docs.harperdb.io/docs/reference/components/plugins"
+								>Harper Plugin API</Link
+							> and led migration of core surfaces (REST, MQTT, GraphQL,
+							authentication) onto the plugin and component architecture.
+						</li>
+						<li class="experience-list-item-description-item">
+							Built Harper's front-end framework integrations, including the <Link
+								href="https://github.com/HarperFast/nextjs">Next.js</Link
+							> plugin with a custom Next.js cache handler, and <Link
+								href="https://github.com/HarperFast/astro">Astro</Link
+							>, plus an integrated GraphQL engine.
+						</li>
+						<li class="experience-list-item-description-item">
+							Optimized core product performance with high-performance Node.js
+							and C++, and debugged production Harper Fabric instances across the
+							storage (LMDB/RocksDB) and replication layers.
+						</li>
+					</ol>
+				</div>
 			</li>
 			<li class="experience-list-item">
 				<h3 class="experience-list-item-title">
