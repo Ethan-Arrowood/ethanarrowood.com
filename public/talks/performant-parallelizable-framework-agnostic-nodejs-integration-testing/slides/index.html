@@ -102,6 +102,82 @@
     .slots span.free {
       color: var(--dais-muted);
     }
+
+    /* Persistent deck footer: identity on the left, event on the right, with
+       the framework's nav dots centered between them. Anchored to the deck box
+       (--dais) so it tracks the letterboxed deck, not the viewport. The footer
+       is an inline-size container, so its children's cqi units resolve against
+       the deck width and scale in fullscreen exactly like the slides do.
+       Deck-only; the vendored framework is untouched. */
+    .deck-footer {
+      position: fixed;
+      position-anchor: --dais;
+      left: anchor(left);
+      right: anchor(right);
+      bottom: anchor(bottom);
+      container-type: inline-size;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .deck-footer .id,
+    .deck-footer .event {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35em;
+      white-space: nowrap;
+      font-size: 1.4cqi;
+      line-height: 1.1;
+      color: var(--dais-muted);
+      padding-block-end: 1.7cqi;   /* centers the two-line stack on the dot row */
+    }
+
+    .deck-footer .id { padding-inline-start: 2.6cqi; align-items: start; }
+    .deck-footer .event { padding-inline-end: 2.6cqi; align-items: end; text-align: end; }
+
+    /* Both footer lines can carry a leading icon. */
+    .deck-footer .line1,
+    .deck-footer .line2 {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4em;
+    }
+
+    /* Both social links (GitHub, Bluesky) match in size and color; only the
+       date under the event stays subtle. */
+    .deck-footer .event .line2 {
+      font-size: 0.82em;
+      opacity: 0.8;
+    }
+
+    .deck-footer .bsky,
+    .deck-footer .gh {
+      width: 1.05em;
+      height: 1.05em;
+      fill: currentColor;
+      translate: 0 0.04em;   /* optical centering against the text baseline */
+    }
+
+    /* The footer is chrome, not slide content — hide it wherever the framework
+       hides its own nav dots: overview mode and print. */
+    body:has(.dais-overview-toggle:checked) .deck-footer {
+      display: none;
+    }
+
+    @media print {
+      .deck-footer { display: none; }
+    }
+
+    /* On screen, position is already shown three ways (top counter, nav dots,
+       and the footer), so the framework's per-slide corner number is redundant
+       and would collide with the footer's event label on the right. Suppress it
+       on screen only — print keeps it, since there the footer and dots are gone. */
+    @media screen {
+      .dais > section::after { content: none; }
+    }
   </style>
 </head>
 <body>
@@ -828,5 +904,25 @@ ctx.harper.operationsAPIURL   <span class="tok-comment">// 'http://127.0.0.3:992
     </section>
 
   </main>
+
+  <footer class="deck-footer" aria-hidden="true">
+    <span class="id">
+      <span class="line1">
+        <svg class="gh" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GitHub">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        @Ethan-Arrowood</span>
+      <span class="line2">
+        <svg class="bsky" viewBox="0 0 568 501" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bluesky">
+          <path d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.209C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.749 114.875 19.53 144.097 84.29 80.986 149.05-119.859 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.843 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.05-65.72 11.184-139.6-7.296-159.875-79.749C9.945 203.66 0 75.293 0 57.947 0-28.906 76.135-1.611 123.121 33.664Z"/>
+        </svg>
+        @arrowood.dev</span>
+    </span>
+    <span class="event">
+      <span class="line1">Node.js Interactive · RenderATL</span>
+      <span class="line2">August 13, 2026</span>
+    </span>
+  </footer>
+
 </body>
 </html>
