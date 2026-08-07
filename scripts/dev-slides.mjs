@@ -38,12 +38,89 @@ const MIME = {
 	".ttf": "font/ttf",
 };
 
-// A tiny reload client, injected into every HTML response.
+// Live-update client, injected into every HTML response.
+//
+// For HTML edits (the usual slide-tweaking case) it updates the slides IN PLACE:
+// it re-fetches the page and swaps each slide's inner content, the deck styles,
+// and the footer, without touching scroll position or re-running dais.js — so the
+// deck stays exactly on the slide you're viewing. It falls back to a full reload
+// only when the slide structure changed (a slide added/removed/reordered) or a
+// non-HTML file changed (dais.js, CSS, images), and that reload restores scroll
+// instantly so it never starts at slide 1 and scrolls over.
 const RELOAD_CLIENT = `<script>
 (() => {
+  const deck = () => document.querySelector(".dais");
+
+  // --- Instant scroll restore across a full reload -------------------------
+  try { history.scrollRestoration = "manual"; } catch (e) {}
+  const saved = sessionStorage.getItem("__daisLeft");
+  if (saved !== null) {
+    sessionStorage.removeItem("__daisLeft");
+    // Drop the hash so neither the browser nor dais.js smooth-scrolls to it.
+    history.replaceState(null, "", location.pathname + location.search);
+    const put = () => {
+      const d = deck();
+      if (!d) return;
+      const prev = d.style.scrollBehavior;
+      d.style.scrollBehavior = "auto";
+      d.scrollLeft = +saved;
+      d.style.scrollBehavior = prev;
+    };
+    put();
+    addEventListener("DOMContentLoaded", put);
+    addEventListener("load", () => requestAnimationFrame(put));
+  }
+
+  const reload = () => {
+    const d = deck();
+    if (d) sessionStorage.setItem("__daisLeft", d.scrollLeft);
+    location.reload();
+  };
+
+  // Swap slide contents in place. Section ELEMENTS are preserved (only their
+  // innerHTML changes), so dais.js's cached slide list and listeners stay valid
+  // and scrollLeft is untouched.
+  const morph = async () => {
+    const d = deck();
+    if (!d) return reload();
+    let doc;
+    try {
+      const html = await (await fetch(location.href, { cache: "no-store" })).text();
+      doc = new DOMParser().parseFromString(html, "text/html");
+    } catch (e) { return reload(); }
+    const nd = doc.querySelector(".dais");
+    if (!nd) return reload();
+    const cur = [...d.children].filter((el) => el.tagName === "SECTION");
+    const next = [...nd.children].filter((el) => el.tagName === "SECTION");
+    const sameShape =
+      cur.length === next.length && cur.every((s, i) => s.id === next[i].id);
+    if (!sameShape) return reload();
+
+    const nStyle = doc.querySelector("head style");
+    const cStyle = document.querySelector("head style");
+    if (nStyle && cStyle && nStyle.textContent !== cStyle.textContent)
+      cStyle.textContent = nStyle.textContent;
+
+    const nFoot = doc.querySelector(".deck-footer");
+    const cFoot = document.querySelector(".deck-footer");
+    if (nFoot && cFoot && nFoot.innerHTML !== cFoot.innerHTML)
+      cFoot.innerHTML = nFoot.innerHTML;
+
+    if (nd.className !== d.className) d.className = nd.className;
+    next.forEach((n, i) => {
+      if (cur[i].className !== n.className) cur[i].className = n.className;
+      if (cur[i].innerHTML !== n.innerHTML) cur[i].innerHTML = n.innerHTML;
+    });
+  };
+
+  const onChange = (path) => {
+    if (path && /\\.html?$/i.test(path)) morph();
+    else reload();
+  };
+
   const connect = () => {
     const es = new EventSource("/__reload");
-    es.onmessage = () => location.reload();
+    es.onmessage = (e) => onChange(e.data);
     es.onerror = () => { es.close(); setTimeout(connect, 500); };
   };
   connect();
@@ -105,12 +182,17 @@ const server = createServer(async (req, res) => {
 	res.end(await readFile(filePath));
 });
 
-// Watch public/ and push a reload to every open deck on any change (debounced).
+// Watch public/ and tell every open deck what changed (debounced). The client
+// uses the path to decide between an in-place morph (.html) and a full reload.
 let timer;
-watch(ROOT, { recursive: true }, () => {
+let changed = "";
+watch(ROOT, { recursive: true }, (_event, filename) => {
+	if (filename) changed = filename.split(sep).join("/");
 	clearTimeout(timer);
 	timer = setTimeout(() => {
-		for (const res of clients) res.write("data: reload\n\n");
+		const data = changed || "reload";
+		for (const res of clients) res.write(`data: ${data}\n\n`);
+		changed = "";
 	}, 60);
 });
 
