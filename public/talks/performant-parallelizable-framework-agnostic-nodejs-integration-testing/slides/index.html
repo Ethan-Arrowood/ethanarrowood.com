@@ -687,16 +687,15 @@ os.<span class="tok-fn">availableParallelism</span>()   <span class="tok-comment
 
     <section class="slide" id="port-problem">
       <h2>The obvious fix, and why I skipped it</h2>
-      <p><strong>Dynamic port allocation:</strong> ask the OS for a free port,
-      hand it to the instance.</p>
-      <p>Except one Harper instance doesn't bind <em>a</em> port:</p>
+      <p><strong>Dynamic ports:</strong> ask the OS for a free one, hand it over.</p>
+      <p>But one instance binds many:</p>
       <ul class="reveal">
         <li>Operations API — 9925</li>
         <li>HTTP / application server — 9926</li>
         <li>Replication, clustering, and more</li>
       </ul>
-      <p>Remapping all of them, per instance, means threading a config matrix
-      through every test — and every URL in every assertion.</p>
+      <p class="small muted">Remap them all, per instance, and a config matrix
+      threads through every test and every URL.</p>
       <aside class="notes">
         The abstract for this talk says "dynamic port allocation," and this is
         where I correct myself in public: I tried it, and the config surface
@@ -1059,15 +1058,13 @@ ctx.harper.operationsAPIURL   <span class="tok-comment">// 'http://127.0.0.3:992
     <section class="slide" id="scope">
       <h2>What the framework won't decide for you</h2>
       <ul class="reveal">
-        <li>Starting an instance has <strong>real cost</strong> — a process, an
-        address, a directory</li>
-        <li>One instance per <em>logical test block</em>: usually right</li>
-        <li>One instance per <em>assertion</em>: almost always wasteful</li>
-        <li>The only hard rule: <strong>concurrent scopes need separate
-        instances</strong></li>
+        <li>Each instance costs a process, an address, a directory</li>
+        <li>Per logical test block: usually right</li>
+        <li>Per assertion: almost always wasteful</li>
+        <li><strong>Concurrent scopes need separate instances</strong> — the one hard rule</li>
       </ul>
-      <p class="small muted">The pool makes cross-process allocation safe. Your
-      setup and teardown hooks decide the boundaries.</p>
+      <p class="small muted">The pool makes allocation safe. Your hooks pick the
+      boundaries.</p>
       <aside class="notes">
         Deliberately not automated. Instance scope is a judgment call about what
         a test means, and a framework that guessed would guess wrong.
@@ -1085,9 +1082,8 @@ ctx.harper.operationsAPIURL   <span class="tok-comment">// 'http://127.0.0.3:992
         <li><strong>Hermetic</strong> — self-contained, no external side effects</li>
         <li><strong>Deterministic</strong> — same input, same output</li>
       </ul>
-      <p>These aren't style preferences. They are the <em>precondition</em> for
-      safe concurrency — and the reason 25 samples at every concurrency level
-      produced zero failures.</p>
+      <p class="small muted">Not style — the <em>precondition</em> for safe
+      concurrency, and why 25 samples at every level had zero failures.</p>
       <aside class="notes">
         Tie back to the honesty slide. The reason over-parallelizing cost
         latency and not correctness is that the tests obeyed these three
@@ -1106,12 +1102,9 @@ ctx.harper.operationsAPIURL   <span class="tok-comment">// 'http://127.0.0.3:992
     <section class="slide" id="ci">
       <h2>Default runners can't take the parallelism</h2>
       <ul class="reveal">
-        <li>A standard GitHub runner handles <em>one</em> integration test fine
-        — and buckles running many</li>
-        <li>Overloaded runners cause flaky failures; <strong>correctness is
-        never traded for speed</strong></li>
-        <li>So parallelize <em>across</em> runners: matrix jobs plus test
-        sharding</li>
+        <li>One integration test per runner: fine. Many: it buckles</li>
+        <li>Overloaded runners go flaky — <strong>never trade correctness for speed</strong></li>
+        <li>So parallelize <em>across</em> runners: matrix + sharding</li>
       </ul>
       <pre><code>npm run test:integration -- --shard=<span class="tok-number">1</span>/<span class="tok-number">4</span>   <span class="tok-comment"># one job per shard</span></code></pre>
       <aside class="notes">
@@ -1127,13 +1120,11 @@ ctx.harper.operationsAPIURL   <span class="tok-comment">// 'http://127.0.0.3:992
     <section class="slide" id="when-to-run">
       <h2>And be deliberate about <em>when</em></h2>
       <ul>
-        <li>Full matrix on every commit of every PR exhausts concurrency limits</li>
-        <li>Path filters, manual triggers, and merge-time-only full runs</li>
-        <li><strong>Merge queue:</strong> one configuration per PR, the whole
-        matrix before merge</li>
+        <li>Full matrix on every PR commit exhausts your limits</li>
+        <li>Path filters, manual triggers, merge-time-only full runs</li>
+        <li><strong>Merge queue:</strong> the whole matrix, once, before merge</li>
       </ul>
-      <p class="small muted">Fast iteration on the PR, thorough verification on
-      the branch that matters.</p>
+      <p class="small muted">Fast on the PR, thorough on the branch that matters.</p>
       <aside class="notes">
         This is the pragmatic close on CI: the cheapest optimization is not
         running the suite when it can't tell you anything new.
