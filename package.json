@@ -4,6 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "astro dev",
+		"dev:slides": "node scripts/dev-slides.mjs",
 		"build": "astro build",
 		"start": "astro preview"
 	},
