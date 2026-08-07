@@ -107,6 +107,28 @@
        (print clips an overflowing pre rather than scrolling it). */
     #replication-code pre { --dais-code-size: 0.58em; }
 
+    /* "Testing is hard": a stack of overheard grievances that reveal one by one,
+       then the closing line lands last. */
+    #before .quotes {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4cqi;
+      margin-block-start: 1cqi;
+    }
+
+    #before .quotes p {
+      margin: 0;
+      font-size: 3.2cqi;
+      font-style: italic;
+    }
+
+    #before .quotes .close {
+      margin-block-start: 2.2cqi;
+      font-style: normal;
+      font-size: 2.4cqi;
+      color: var(--dais-muted);
+    }
+
     /* The integration-testing spectrum: the middle card is the one this talk is
        about, so it carries the accent weight. */
     #what-integration .accent-card {
@@ -114,17 +136,39 @@
       outline: 1px solid color-mix(in srgb, var(--dais-accent) 50%, transparent);
     }
 
-    /* Second slide: the Harper logo anchors "the system under test". The mark
-       is a transparent PNG with a white wordmark, so it sits on the midnight
-       background without a plate. */
+    /* "What am I testing?": the collapsed-stack illustration anchors the slide.
+       It's a tall, transparent WebP, so it's height-constrained (the slide is
+       ~56cqi tall) and sits on the midnight background without a plate. */
     #the-shape .cols { align-items: center; }
 
+    #the-shape .collapsed-stack {
+      width: auto;
+      max-width: 100%;
+      max-height: 44cqi;
+      align-self: center;
+      border-radius: 0;
+    }
+
+    /* Right column closes with the wordmark and where the code lives. */
     #the-shape .harper-logo {
-      width: 100%;
-      max-width: 36cqi;
+      width: auto;
+      max-width: 22cqi;
       height: auto;
       align-self: start;
       border-radius: 0;
+    }
+
+    #the-shape .repos {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3cqi;
+      margin-block-start: 1cqi;
+      font-size: 1.4cqi;
+    }
+
+    #the-shape .repos a {
+      color: var(--dais-muted);
+      text-decoration: none;
     }
 
     /* Persistent deck footer: identity on the left, event on the right, with
@@ -215,7 +259,7 @@
 
   <div class="dais-progress" aria-hidden="true"></div>
 
-  <main class="dais dais-dots dais-arrows" aria-label="Performant, Parallelizable, Framework Agnostic Node.js Integration Testing" tabindex="0">
+  <main class="dais" aria-label="Performant, Parallelizable, Framework Agnostic Node.js Integration Testing" tabindex="0">
 
     <section class="slide title" id="intro">
       <h1>Performant, Parallelizable, Framework&nbsp;Agnostic Node.js Integration Testing</h1>
@@ -231,53 +275,41 @@
 
     <section class="slide" id="before">
       <h2>Testing is hard</h2>
-      <div class="cols">
-        <div class="stack">
-          <h3>A pain you know</h3>
-          <ul class="reveal">
-            <li>CI slow enough to context-switch away from</li>
-            <li>Red half the time, and rarely because the code broke</li>
-            <li>No way to run it on your own machine</li>
-            <li>No way to run one test in isolation</li>
-          </ul>
-        </div>
-        <div class="stack">
-          <h3>Our version of it</h3>
-          <ul class="reveal">
-            <li>Integration tests gated behind Postman, sign-up and all</li>
-            <li>Thin docs; running them was tribal knowledge</li>
-            <li>Effectively cloud-only, with no real local story</li>
-            <li>End-to-end in spirit, runnable nowhere but CI</li>
-          </ul>
-        </div>
+      <div class="reveal quotes">
+        <p>"It works on my machine."</p>
+        <p>"That test's just flaky, re-run it."</p>
+        <p>"You can't run those locally."</p>
+        <p>"It only runs in CI."</p>
+        <p>"Don't touch it! It's finally green."</p>
       </div>
-      <p class="small muted">Not a knock on anyone. The situation was bad, and that
-      was the whole motivation to fix it.</p>
       <aside class="notes">
-        Open here, not on Harper. Everyone in the room has some version of the
-        left column — lead with the shared pain so the talk is about them, not us.
-
-        Be honest about the right column without throwing the team under the bus:
-        the point is the pain was real and shared, and that's what justified
-        building something new. A few years ago this was the reality; it isn't now.
+        Read a couple aloud and let them land, then the line: "I'm sure we've all
+        heard or felt these before. I know I sure have." Then pivot — this was our
+        reality a few years ago; it isn't now.
       </aside>
     </section>
 
     <section class="slide" id="the-shape">
-      <h2>The system under test</h2>
+      <h2>What am I testing?</h2>
       <div class="cols">
+        <div class="stack">
+          <img class="collapsed-stack" src="harper-collapsed-stack.png"
+               alt="Harper as a collapsed stack: one process holding the API layer (GraphQL, REST, WebSocket, MQTT), an in-memory cache, and a NoSQL, vector, and blob database."
+               width="2037" height="2277">
+        </div>
         <div class="stack">
           <img class="harper-logo" src="HarperPrimaryWht.png" alt="Harper"
                width="1963" height="494">
-          <p class="muted">An open-source Node.js application platform.</p>
-        </div>
-        <div class="stack">
+          <div class="repos">
+            <a href="https://github.com/HarperFast/harper">github.com/HarperFast/harper</a>
+            <a href="https://github.com/HarperFast/harper-pro">github.com/HarperFast/harper-pro</a>
+          </div>
           <p>One process contains:</p>
           <ul class="reveal">
-            <li>A database</li>
-            <li>An HTTP server and an Operations API</li>
-            <li>A file system layer and a CLI</li>
-            <li>Applications, components, and plugins</li>
+            <li>Database</li>
+            <li>Networking stack (socket, HTTP, WS, etc.)</li>
+            <li>File System & Blobs</li>
+            <li>Applications and plugins</li>
             <li>Worker threads for parallelism</li>
           </ul>
         </div>
@@ -301,18 +333,16 @@
         </div>
         <div class="card accent-card">
           <h3>Integration</h3>
-          <p class="small">The real, built Harper, running — but not deployed like
-          production. In CI, a container, or on your laptop.</p>
+          <p class="small">The complete, built application running in CI, a container, or on your laptop.</p>
         </div>
         <div class="card">
           <h3>End-to-end</h3>
-          <p class="small">Production-like infrastructure. Closest to a user, and
-          the most to stand up and manage.</p>
+          <p class="small">Deployed to production-like infrastructure</p>
         </div>
       </div>
-      <p>The rule that keeps it honest: <strong>talk to Harper only from the
+      <!-- <p>Primary rule: <strong>talk to Harper only from the
       outside</strong> — the CLI and the HTTP APIs, the way a user does. Run the
-      shipped binary; never import its internals.</p>
+      shipped binary; never import its internals.</p> -->
       <aside class="notes">
         "Integration test" means five different things to five people, so define
         it before building on it.
