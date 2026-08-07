@@ -9,9 +9,12 @@ deck references it with **relative** paths (`dais/dais.css`, etc.). That way a
 new talk can adopt a newer Dais without touching, or re-testing, any older deck.
 
 - Source: https://github.com/Ethan-Arrowood/dais (`@arrowood.dev/dais`)
-- Commit: b22777b488c5553fe6efca13b40ab7c3ff29d2e6
-- Version: 0.1.1
-- Vendored: 2026-08-04
+- Version: 0.2.0 (published npm tarball)
+- Vendored: 2026-08-07
+
+Note for 0.2.0: slide dots and edge arrows are now opt-in. The deck's
+`<main class="dais dais-dots dais-arrows">` enables both; drop a class to turn
+either off. `dais.js` and `themes/midnight.css` are unchanged from 0.1.1.
 
 To adopt a newer Dais for a future talk, copy `dais.css`, `dais.js`, and the
 theme CSS from that version into the new talk's `slides/dais/` and record the
