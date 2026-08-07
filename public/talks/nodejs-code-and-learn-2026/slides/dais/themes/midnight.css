@@ -1,0 +1,118 @@
+/*!
+ * Dais theme: Midnight — a restrained dark theme for technical talks.
+ *
+ * Built for code-heavy decks in dark conference rooms: high-contrast syntax
+ * colors, hairline-bordered code blocks and cards, quiet dividers, and an
+ * ink-friendly palette under @media print. Every text/background pair below
+ * clears WCAG AA.
+ *
+ * Activate by linking this file AFTER dais.css:
+ *   <link rel="stylesheet" href="dais.css">
+ *   <link rel="stylesheet" href="themes/midnight.css">
+ */
+
+:root {
+  /* Near-black stage, deliberately close to the slide background: on a
+     projector the deck reads edge-to-edge instead of inside a visible frame. */
+  --dais-stage: #05060a;
+  --dais-bg: #0f1218;
+  --dais-surface: #191d26;
+  --dais-text: #e6e9ef;
+  --dais-muted: #98a2b3;
+  --dais-accent: #6aa5ff;
+  --dais-accent-2: #f0a45c;
+
+  /* Darker than the slide, so code reads as inset rather than floating. */
+  --dais-code-bg: #0a0c10;
+  --dais-code-text: #e8eaed;
+
+  --dais-radius: 0.4cqi;
+}
+
+/* Form controls in the presenter chrome pick up the dark scheme. */
+:root {
+  color-scheme: dark;
+}
+
+/* A whisper of light from the top of each slide — enough to give the deck
+   depth on a projector without becoming a visual element. */
+.dais > section {
+  background:
+    radial-gradient(120cqi 70cqh at 50% -20%, rgb(106 165 255 / 0.07), transparent 65%),
+    var(--dais-bg);
+}
+
+/* Code and cards need an edge, since their surfaces sit close to the slide. */
+.dais pre,
+.dais .card {
+  border: 1px solid color-mix(in srgb, var(--dais-text) 12%, transparent);
+}
+
+/* Inline code reads as a chip, not a color change. */
+.dais :not(pre) > code {
+  border: 1px solid color-mix(in srgb, var(--dais-text) 10%, transparent);
+}
+
+/* Title slide: a short accent rule under the title instead of decoration. */
+.dais > section.title h1::after {
+  content: "" / "";
+  display: block;
+  width: 12cqi;
+  height: 0.5cqi;
+  margin: 2cqi auto 0;
+  border-radius: 999px;
+  background: var(--dais-accent);
+}
+
+/* Dividers stay quiet — inverting to a full accent field is too loud for a
+   deck you sit in front of for half an hour. */
+.dais > section.divider {
+  background: var(--dais-code-bg);
+}
+
+.dais > section.divider h2 {
+  color: var(--dais-accent);
+}
+
+.dais > section.divider :is(h3, p) {
+  color: var(--dais-muted);
+}
+
+.dais > section.divider::after {
+  color: color-mix(in srgb, var(--dais-text) 45%, transparent);
+}
+
+/* Quotes: the accent bar carries it; no italics, no ornament. */
+.dais > section.quote blockquote {
+  border-inline-start-color: var(--dais-accent);
+  color: var(--dais-text);
+}
+
+/* Tables: zebra striping survives a projector better than hairlines alone. */
+.dais tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--dais-text) 4%, transparent);
+}
+
+/* Print: paper is white, so re-tokenize to ink. Code blocks keep a dark
+   background (the syntax colors are tuned for it) — leave "Background
+   graphics" enabled in the print dialog. */
+@media print {
+  :root {
+    --dais-bg: #ffffff;
+    --dais-surface: #f1f2f4;
+    --dais-text: #14181f;
+    --dais-muted: #56606f;
+    --dais-accent: #17458f;
+    --dais-accent-2: #8a4c10;
+    color-scheme: light;
+  }
+
+  .dais > section,
+  .dais > section.divider {
+    background: var(--dais-bg);
+  }
+
+  .dais > section.divider h2 {
+    color: var(--dais-accent);
+  }
+}

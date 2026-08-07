@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js Code &amp; Learn</title>
+  <meta name="description" content="A hands-on Code &amp; Learn: make your first contribution to Node.js. What Node is, how contributions land, where to find work, and how to open your first PR.">
+  <link rel="stylesheet" href="dais/dais.css">
+  <link rel="stylesheet" href="dais/themes/midnight.css">
+  <script src="dais/dais.js" defer></script>
+  <style>
+    /* This deck only. */
+
+    /* Big statement lines (used on statement/divider-ish slides). */
+    .lead { font-size: 3.2cqi; margin-block: 1cqi 0; }
+
+    /* A row of "steps" chips for the contribution flow. */
+    .flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1cqi 0.4cqi;
+      font-family: var(--dais-font-mono);
+      font-size: 1.9cqi;
+    }
+    .flow span {
+      padding: 0.5em 0.7em;
+      border-radius: 0.4cqi;
+      background: var(--dais-surface);
+      border: 1px solid color-mix(in srgb, var(--dais-text) 14%, transparent);
+    }
+    .flow b { color: var(--dais-muted); font-weight: 400; padding: 0 0.15em; }
+    .flow .land {
+      background: color-mix(in srgb, var(--dais-accent) 22%, transparent);
+      border-color: var(--dais-accent);
+    }
+
+    /* Subsystem grid: labeled areas of the repo. */
+    .dais ul.subsystems {
+      list-style: none; margin: 0.3cqi 0 0; padding: 0;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7cqi;
+    }
+    .subsystems li {
+      background: var(--dais-surface);
+      border-radius: var(--dais-radius);
+      padding: 0.6cqi 1.2cqi;
+    }
+    .subsystems code { font-size: 1.8cqi; color: var(--dais-accent); }
+    .subsystems .starter {
+      background: color-mix(in srgb, var(--dais-accent) 14%, var(--dais-surface));
+      outline: 1px solid color-mix(in srgb, var(--dais-accent) 45%, transparent);
+    }
+    .subsystems p { margin: 0.15cqi 0 0; font-size: 1.25cqi; color: var(--dais-muted); }
+
+    /* Big bold tagline lists (find-work, non-code). */
+    .dais ul.big-list {
+      list-style: none; margin: 1cqi 0 0; padding: 0;
+      display: flex; flex-direction: column; gap: 1.6cqi;
+      font-family: var(--dais-font-display); font-weight: 700; font-size: 3.2cqi;
+    }
+    .big-list .sub {
+      display: block; font-family: var(--dais-font-body);
+      font-weight: 400; font-size: 0.5em; color: var(--dais-muted);
+    }
+
+    /* AI policy two-column do/don't. */
+    #ai .card h3 { display: flex; align-items: center; gap: 0.4em; }
+    #ai .yes { outline: 1px solid color-mix(in srgb, var(--dais-tok-string) 55%, transparent); }
+    #ai .no { outline: 1px solid color-mix(in srgb, var(--dais-accent-2) 55%, transparent); }
+    #ai .card ul { margin: 0.6cqi 0 0; }
+    #ai .card li { font-size: 1.7cqi; }
+    #ai .rule { margin-block-start: 1.6cqi; }
+
+    /* Prereq checklist. */
+    .dais ul.checklist { list-style: none; margin: 1cqi 0 0; padding: 0; display: grid; gap: 1.1cqi; }
+    .checklist li { font-size: 2.1cqi; }
+    .checklist li::before { content: "\2713"; color: var(--dais-accent); margin-inline-end: 0.6em; }
+
+    /* Thanks logos row (text-based placeholders for now). */
+    .orgs {
+      display: flex; flex-wrap: wrap; gap: 1.2cqi 2.4cqi; justify-content: center;
+      font-family: var(--dais-font-display); font-weight: 700; font-size: 3.4cqi;
+      margin-block: 2cqi 0;
+    }
+
+    /* ---- Persistent deck footer (shared pattern across the decks) ---- */
+    .deck-footer {
+      position: fixed;
+      position-anchor: --dais;
+      left: anchor(left);
+      right: anchor(right);
+      bottom: anchor(bottom);
+      container-type: inline-size;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .deck-footer .id,
+    .deck-footer .event {
+      display: flex; flex-direction: column; gap: 0.35em;
+      white-space: nowrap; font-size: 1.4cqi; line-height: 1.1;
+      color: var(--dais-muted); padding-block-end: 1.7cqi;
+    }
+    .deck-footer .id { padding-inline-start: 2.6cqi; align-items: start; }
+    .deck-footer .event { padding-inline-end: 2.6cqi; align-items: end; text-align: end; }
+    .deck-footer .line1,
+    .deck-footer .line2 { display: inline-flex; align-items: center; gap: 0.4em; }
+    .deck-footer .event .line2 { font-size: 0.82em; opacity: 0.8; }
+    .deck-footer .bsky,
+    .deck-footer .gh { width: 1.05em; height: 1.05em; fill: currentColor; translate: 0 0.04em; }
+    body:has(.dais-overview-toggle:checked) .deck-footer { display: none; }
+    @media print { .deck-footer { display: none; } }
+    @media screen { .dais > section::after { content: none; } }
+  </style>
+</head>
+<body>
+
+  <nav class="dais-controls" aria-label="Presentation controls">
+    <label><input type="checkbox" class="dais-overview-toggle"> Overview</label>
+    <label><input type="checkbox" class="dais-notes-toggle"> Notes</label>
+    <output class="dais-counter"></output>
+    <output class="dais-timer" title="Presenter timer — click or press T to pause"></output>
+  </nav>
+
+  <div class="dais-progress" aria-hidden="true"></div>
+
+  <main class="dais dais-dots dais-arrows" aria-label="Node.js Code & Learn" tabindex="0">
+
+    <section class="slide title" id="intro">
+      <h1>Node.js Code&nbsp;&amp;&nbsp;Learn</h1>
+      <p>Make your first contribution to Node.js — today.</p>
+      <aside class="notes">
+        Warm welcome. This is hands-on: by the end you'll have opened (or be
+        close to opening) a real PR against nodejs/node. Mentors are in the room.
+
+        Set expectations: we'll spend ~20 minutes on context, then the rest is
+        you coding with help on tap.
+      </aside>
+    </section>
+
+    <section class="slide" id="today">
+      <h2>What today is</h2>
+      <ol class="reveal">
+        <li>Pick an issue (we brought some)</li>
+        <li>Write the patch</li>
+        <li>Open a pull request</li>
+        <li>Get it reviewed by real collaborators</li>
+      </ol>
+      <p class="small muted">Mentors are circulating the whole time. Raise a hand.</p>
+      <aside class="notes">
+        The goal is the experience of contributing, not a perfect PR. A merged
+        typo fix counts. Getting stuck and asking counts.
+      </aside>
+    </section>
+
+    <section class="slide" id="what-is-node">
+      <h2>What is Node.js?</h2>
+      <p class="lead">The JavaScript runtime — <strong>V8</strong> + <strong>libuv</strong>
+      + a core library.</p>
+      <p class="small muted">One of the most depended-on projects in the world,
+      built and maintained by volunteers.</p>
+      <aside class="notes">
+        Keep this short. Enough to say: it's big, it's foundational, and it's
+        people — not a company — who keep it running. That's why you being here
+        matters.
+
+        V8 runs the JS, libuv is the async/event-loop + I/O layer, and the core
+        library (lib/) is the JS APIs everyone imports.
+      </aside>
+    </section>
+
+    <section class="slide center" id="its-a-repo">
+      <h2 class="fit">It's all one GitHub repo.<br><code>nodejs/node</code></h2>
+      <aside class="notes">
+        Demystify it. The thing that runs half the internet is a repo you can
+        fork right now. No special access required to contribute.
+      </aside>
+    </section>
+
+    <section class="slide" id="how-contributions-work">
+      <h2>How a contribution lands</h2>
+      <div class="flow reveal">
+        <span>fork</span><b>&rarr;</b>
+        <span>branch</span><b>&rarr;</b>
+        <span>commit <em>-s</em></span><b>&rarr;</b>
+        <span>pull request</span><b>&rarr;</b>
+        <span>CI</span><b>&rarr;</b>
+        <span>review</span><b>&rarr;</b>
+        <span class="land">a collaborator lands it</span>
+      </div>
+      <p class="small muted">Nobody pushes to <code>main</code>. Every change is a
+      PR, reviewed, and landed for you.</p>
+      <aside class="notes">
+        Walk the pipeline once. The two surprises for newcomers: commits are
+        signed off (DCO, `-s`), and you don't merge your own PR — a collaborator
+        lands it with git node land after review and green CI.
+
+        Reassure: CI is big and sometimes flaky. That's normal, not you.
+      </aside>
+    </section>
+
+    <section class="slide" id="who-lands">
+      <h2>Who reviews and lands</h2>
+      <ul class="reveal">
+        <li><strong>Collaborators</strong> — review and land PRs</li>
+        <li><strong>Subsystem teams</strong> — own an area, get pinged on it</li>
+        <li><strong>TSC</strong> — technical stewardship, tie-breaks</li>
+      </ul>
+      <p class="small muted">Landing needs approvals + green CI + a waiting
+      period. Then <code>git node land</code>.</p>
+      <aside class="notes">
+        The point: there's a human process behind every merge, and it's open —
+        anyone can become a collaborator by showing up and helping consistently.
+
+        Don't overstate the exact rules (approvals/48h) — the audience just needs
+        the shape.
+      </aside>
+    </section>
+
+    <section class="slide" id="subsystems">
+      <h2>Node is organized into subsystems</h2>
+      <ul class="subsystems reveal">
+        <li class="starter"><code>doc/</code><p>Docs &amp; guides — the friendliest start</p></li>
+        <li class="starter"><code>test/</code><p>The test suite — coverage &amp; flakes</p></li>
+        <li class="starter"><code>lib/</code><p>The JS core APIs</p></li>
+        <li><code>src/</code><p>C++ internals &amp; bindings</p></li>
+        <li><code>deps/</code><p>V8, libuv, and friends</p></li>
+        <li><code>build/ tools/</code><p>Build system &amp; automation</p></li>
+      </ul>
+      <aside class="notes">
+        PRs are labeled by subsystem, and the label pings the team that owns it —
+        say that out loud. The commit subject encodes it too: `doc: fix typo`.
+
+        Two takeaways: (1) the repo isn't a monolith you must understand whole —
+        pick one area; (2) doc, test, and lib are where most first contributions
+        live and where review is most welcoming.
+      </aside>
+    </section>
+
+    <section class="slide" id="find-work">
+      <h2>Where to find work</h2>
+      <ul class="big-list reveal">
+        <li>good first issue
+          <span class="sub">the label built for today</span></li>
+        <li>help wanted
+          <span class="sub">maintainers are asking for hands</span></li>
+        <li>docs &amp; tests
+          <span class="sub">always something to improve</span></li>
+        <li>flaky tests
+          <span class="sub">find one, make it reliable</span></li>
+      </ul>
+      <aside class="notes">
+        These are the reliable veins. `good first issue` is curated for events
+        like this. Docs and tests never run out and rarely need C++.
+      </aside>
+    </section>
+
+    <section class="slide center" id="source-your-own">
+      <h2 class="fit">The best issue is<br>the one you just hit.</h2>
+      <p>A confusing doc, a rough error message, a missing test — that's a contribution.</p>
+      <aside class="notes">
+        Sustainable sourcing: stop waiting for a curated list. Use Node, notice
+        friction, fix it. That's how most collaborators started, and it scales
+        past today.
+      </aside>
+    </section>
+
+    <section class="slide" id="not-just-code">
+      <h2>Contributions aren't just code</h2>
+      <div class="cols">
+        <div class="stack">
+          <h3>The project also needs</h3>
+          <ul class="reveal">
+            <li>Reviewers</li>
+            <li>Issue triagers</li>
+            <li>Docs &amp; translations</li>
+            <li>Test &amp; CI wranglers</li>
+            <li>People answering questions</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <h3>Why it matters</h3>
+          <p>Triage and review are the bottleneck, not patches. Helping here is
+          how you learn the codebase — and the path to becoming a collaborator.</p>
+        </div>
+      </div>
+      <aside class="notes">
+        Reframe "contributor" beyond code. For many people, triaging issues or
+        reviewing is a better on-ramp than a first patch — and it's what the
+        project needs most.
+      </aside>
+    </section>
+
+    <section class="slide" id="ai">
+      <h2>Using AI, responsibly</h2>
+      <div class="cols">
+        <div class="card yes">
+          <h3>Appropriate</h3>
+          <ul>
+            <li>Learn the codebase, explain unfamiliar code</li>
+            <li>Draft an approach you then read and own</li>
+            <li>Help write tests, docs, commit messages</li>
+          </ul>
+        </div>
+        <div class="card no">
+          <h3>Inappropriate</h3>
+          <ul>
+            <li>Bulk, low-effort AI-generated PRs</li>
+            <li>Submitting code you don't understand</li>
+            <li>Pasting output you haven't verified</li>
+          </ul>
+        </div>
+      </div>
+      <p class="rule small muted"><strong>You</strong> are accountable for your
+      contribution. Understand it, test it, and disclose AI use.</p>
+      <aside class="notes">
+        Draft framing — check against the current Node.js / OpenJS AI policy
+        before the event and update wording to match it exactly.
+
+        The spirit: AI is a fine tool for learning and drafting; it is not a way
+        to mass-produce PRs a human hasn't understood. Maintainer time is the
+        scarce resource we're protecting.
+      </aside>
+    </section>
+
+    <section class="slide" id="prereqs">
+      <h2>Before we start — you should already have</h2>
+      <ul class="checklist reveal">
+        <li>A fork &amp; clone of <code>nodejs/node</code></li>
+        <li>A build toolchain (Python 3, a C++ compiler, make)</li>
+        <li>A successful <code>./configure &amp;&amp; make -j4</code></li>
+        <li>Git set up, and you know <code>git commit -s</code> (DCO sign-off)</li>
+      </ul>
+      <p class="small muted">Missing one? Grab a mentor now — see
+      <code>BUILDING.md</code> and <code>CONTRIBUTING.md</code>.</p>
+      <aside class="notes">
+        This was in the pre-event prerequisites; this slide is the recap and a
+        checkpoint. If someone's build isn't done, pair them with a mentor
+        immediately so they're not blocked when we start.
+
+        A full build can take a while — anyone still building can start on a
+        doc-only change that doesn't need a compile.
+      </aside>
+    </section>
+
+    <section class="slide divider" id="lets-code">
+      <h2>Let's start coding.</h2>
+      <p>Pick an issue, or bring your own.</p>
+    </section>
+
+    <section class="slide" id="pick-an-issue">
+      <h2>Pick an issue</h2>
+      <div class="cols">
+        <div class="stack">
+          <h3>From our list</h3>
+          <p>Curated <em>good first issues</em> are on the handout — claim one by
+          commenting so we don't double up.</p>
+        </div>
+        <div class="stack">
+          <h3>Or self-source</h3>
+          <p>Fixing something you hit yourself is just as valid. Check with a
+          mentor that it's a good scope for today.</p>
+        </div>
+      </div>
+      <p class="small muted">Issue list &amp; details: the event repo (see the
+      pinned "good first issue" post).</p>
+      <aside class="notes">
+        Point to the handout / issue #14 list. Encourage claiming by comment.
+        Nudge self-sourcers to sanity-check scope so they don't fall down a hole.
+      </aside>
+    </section>
+
+    <section class="slide" id="first-pr">
+      <h2>Your first PR</h2>
+      <pre><code><span class="tok-comment"># branch off an up-to-date main</span>
+git checkout -b <span class="tok-string">my-first-contribution</span>
+
+<span class="tok-comment"># make the change, then commit with DCO sign-off</span>
+git commit -s -m <span class="tok-string">"doc: fix typo in fs.read docs"</span>
+
+<span class="tok-comment"># build &amp; test what you touched</span>
+make -j4 &amp;&amp; make test
+
+<span class="tok-comment"># push to your fork, then open a PR against nodejs/node</span>
+git push origin my-first-contribution</code></pre>
+      <p class="small muted">Commit subject: <code>subsystem: lowercase summary</code>,
+      under ~50 chars. <code>-s</code> is required.</p>
+      <aside class="notes">
+        The two things newcomers miss: DCO sign-off (`-s`) and the
+        `subsystem: summary` commit format. Everything else a mentor can walk
+        them through.
+
+        You don't need the whole test suite — run the tests relevant to your
+        change. Doc-only changes don't need a build.
+      </aside>
+    </section>
+
+    <section class="slide" id="while-you-work">
+      <h2>While you work</h2>
+      <ul class="reveal">
+        <li>Ask early — that's what mentors are for</li>
+        <li>Small &amp; focused beats big &amp; sprawling</li>
+        <li>CI is large and sometimes flaky; be patient</li>
+        <li>Review takes time — landing may be after today</li>
+      </ul>
+      <aside class="notes">
+        Manage expectations for after the event: a PR opened today may land next
+        week. That's success. Encourage them to keep watching the PR and
+        responding to review.
+      </aside>
+    </section>
+
+    <section class="slide title no-number" id="thanks">
+      <h2>Thank you</h2>
+      <div class="orgs">
+        <span>Node.js</span>
+        <span>OpenJS Foundation</span>
+        <span>Render</span>
+        <span>Harper</span>
+      </div>
+      <p class="muted small">And the organizers and mentors who made this happen.
+      Now go open that PR.</p>
+      <aside class="notes">
+        Genuine thanks to the foundations and sponsors, and especially the
+        volunteer organizers and mentors. Replace these names with logos before
+        the event.
+      </aside>
+    </section>
+
+  </main>
+
+  <footer class="deck-footer" aria-hidden="true">
+    <span class="id">
+      <span class="line1">
+        <svg class="gh" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GitHub">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        @Ethan-Arrowood</span>
+      <span class="line2">
+        <svg class="bsky" viewBox="0 0 568 501" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bluesky">
+          <path d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.209C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.749 114.875 19.53 144.097 84.29 80.986 149.05-119.859 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.843 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.05-65.72 11.184-139.6-7.296-159.875-79.749C9.945 203.66 0 75.293 0 57.947 0-28.906 76.135-1.611 123.121 33.664Z"/>
+        </svg>
+        @arrowood.dev</span>
+    </span>
+    <span class="event">
+      <span class="line1">Node.js Code &amp; Learn</span>
+      <span class="line2">Node.js Interactive · 2026</span>
+    </span>
+  </footer>
+
+</body>
+</html>
