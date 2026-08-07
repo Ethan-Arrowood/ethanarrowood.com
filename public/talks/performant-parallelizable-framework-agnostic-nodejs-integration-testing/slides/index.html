@@ -103,6 +103,30 @@
       color: var(--dais-muted);
     }
 
+    /* The replication snippet has a few long lines; shrink it so nothing clips
+       (print clips an overflowing pre rather than scrolling it). */
+    #replication-code pre { --dais-code-size: 0.58em; }
+
+    /* The integration-testing spectrum: the middle card is the one this talk is
+       about, so it carries the accent weight. */
+    #what-integration .accent-card {
+      background: color-mix(in srgb, var(--dais-accent) 16%, var(--dais-surface));
+      outline: 1px solid color-mix(in srgb, var(--dais-accent) 50%, transparent);
+    }
+
+    /* Second slide: the Harper logo anchors "the system under test". The mark
+       is a transparent PNG with a white wordmark, so it sits on the midnight
+       background without a plate. */
+    #the-shape .cols { align-items: center; }
+
+    #the-shape .harper-logo {
+      width: 100%;
+      max-width: 36cqi;
+      height: auto;
+      align-self: start;
+      border-radius: 0;
+    }
+
     /* Persistent deck footer: identity on the left, event on the right, with
        the framework's nav dots centered between them. Anchored to the deck box
        (--dais) so it tracks the letterboxed deck, not the viewport. The footer
@@ -205,22 +229,98 @@
       </aside>
     </section>
 
+    <section class="slide" id="before">
+      <h2>Testing is hard</h2>
+      <div class="cols">
+        <div class="stack">
+          <h3>A pain you know</h3>
+          <ul class="reveal">
+            <li>CI slow enough to context-switch away from</li>
+            <li>Red half the time, and rarely because the code broke</li>
+            <li>No way to run it on your own machine</li>
+            <li>No way to run one test in isolation</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <h3>Our version of it</h3>
+          <ul class="reveal">
+            <li>Integration tests gated behind Postman, sign-up and all</li>
+            <li>Thin docs; running them was tribal knowledge</li>
+            <li>Effectively cloud-only, with no real local story</li>
+            <li>End-to-end in spirit, runnable nowhere but CI</li>
+          </ul>
+        </div>
+      </div>
+      <p class="small muted">Not a knock on anyone. The situation was bad, and that
+      was the whole motivation to fix it.</p>
+      <aside class="notes">
+        Open here, not on Harper. Everyone in the room has some version of the
+        left column — lead with the shared pain so the talk is about them, not us.
+
+        Be honest about the right column without throwing the team under the bus:
+        the point is the pain was real and shared, and that's what justified
+        building something new. A few years ago this was the reality; it isn't now.
+      </aside>
+    </section>
+
     <section class="slide" id="the-shape">
       <h2>The system under test</h2>
-      <p>Harper is an open-source Node.js application platform. In one process:</p>
-      <ul class="reveal">
-        <li>A database</li>
-        <li>An HTTP server and an Operations API</li>
-        <li>A file system layer and a CLI</li>
-        <li>Applications, components, and plugins</li>
-        <li>Worker threads for parallelism</li>
-      </ul>
+      <div class="cols">
+        <div class="stack">
+          <img class="harper-logo" src="HarperPrimaryWht.png" alt="Harper"
+               width="1963" height="494">
+          <p class="muted">An open-source Node.js application platform.</p>
+        </div>
+        <div class="stack">
+          <p>One process contains:</p>
+          <ul class="reveal">
+            <li>A database</li>
+            <li>An HTTP server and an Operations API</li>
+            <li>A file system layer and a CLI</li>
+            <li>Applications, components, and plugins</li>
+            <li>Worker threads for parallelism</li>
+          </ul>
+        </div>
+      </div>
       <aside class="notes">
         This is a collapsed stack — the deployment story is "one process," which
         is great for operators and awkward for testers.
 
         Don't sell Harper here. The audience needs exactly enough to understand
         why the testing problem is shaped the way it is.
+      </aside>
+    </section>
+
+    <section class="slide" id="what-integration">
+      <h2>What "integration" means here</h2>
+      <div class="cols" style="--cols: 3">
+        <div class="card">
+          <h3>Unit</h3>
+          <p class="small">A slice of code, in isolation. Mocks and stubs are
+          fine. Fast, but it can't see the system.</p>
+        </div>
+        <div class="card accent-card">
+          <h3>Integration</h3>
+          <p class="small">The real, built Harper, running — but not deployed like
+          production. In CI, a container, or on your laptop.</p>
+        </div>
+        <div class="card">
+          <h3>End-to-end</h3>
+          <p class="small">Production-like infrastructure. Closest to a user, and
+          the most to stand up and manage.</p>
+        </div>
+      </div>
+      <p>The rule that keeps it honest: <strong>talk to Harper only from the
+      outside</strong> — the CLI and the HTTP APIs, the way a user does. Run the
+      shipped binary; never import its internals.</p>
+      <aside class="notes">
+        "Integration test" means five different things to five people, so define
+        it before building on it.
+
+        Mine: run the built app, treat it as a black box, interact only through
+        the surfaces a user has. No reaching into source. That constraint is what
+        makes the tests resemble real usage — and it's a deliberate design
+        decision, not an accident of tooling.
       </aside>
     </section>
 
@@ -660,6 +760,79 @@ ctx.harper.operationsAPIURL   <span class="tok-comment">// 'http://127.0.0.3:992
         "Wait until actually ready" is doing a lot of work. Spawning is not
         readiness, and a 30-second startup timeout with captured stdout/stderr
         is what makes a startup failure diagnosable.
+      </aside>
+    </section>
+
+    <section class="slide" id="replication">
+      <h2>Replication used to need a data center</h2>
+      <div class="cols">
+        <div class="stack">
+          <h3>The old way</h3>
+          <ul>
+            <li>Five Harper containers on a Docker network, or five VMs</li>
+            <li>Cluster env vars, IPs, and DNS templated in by hand</li>
+            <li>Driven by Postman collections in bespoke CI jobs</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <h3>Now</h3>
+          <ul>
+            <li>N in-process instances from the same loopback pool</li>
+            <li>Connected with a plain <code>add_node</code> operation</li>
+            <li>Write to one node, assert it lands on the others</li>
+          </ul>
+        </div>
+      </div>
+      <p>Parallelism was the goal. The bonus: a node dying and catching up, mesh
+      vs. star topology, even migrating off a legacy 4.x node — all in ordinary,
+      parallel <code>node:test</code> files.</p>
+      <aside class="notes">
+        This is the emotional peak. Call back to the opening: those Postman
+        collections gating the old suite? The cluster tests were the worst of it
+        — five containers on a network before you could assert a single write
+        replicated.
+
+        The reframe: the loopback pool wasn't just a speed trick. The moment many
+        real instances can coexist on one machine, an entire class of features
+        that used to demand infrastructure — replication, failover, topology —
+        becomes a plain integration test you can run on a laptop.
+
+        Real files in harper-pro: fullyConnectedReplication (4-node mesh),
+        replicationTopology (star, kill-and-catch-up, 4.x migration),
+        replicationLoad (stress across many databases).
+      </aside>
+    </section>
+
+    <section class="slide" id="replication-code">
+      <h2>A cluster is N instances plus <code>add_node</code></h2>
+      <pre><code><span class="tok-comment">// a cluster is N instances, each on its own loopback address</span>
+<span class="tok-keyword">const</span> nodes = <span class="tok-keyword">await</span> Promise.<span class="tok-fn">all</span>(
+  <span class="tok-fn">Array</span>(<span class="tok-number">4</span>).<span class="tok-fn">fill</span>().<span class="tok-fn">map</span>(<span class="tok-keyword">async</span> () =&gt; {
+    <span class="tok-keyword">const</span> ctx = { harper: { hostname: <span class="tok-keyword">await</span> <span class="tok-fn">getNextAvailableLoopbackAddress</span>() } };
+    <span class="tok-keyword">await</span> <span class="tok-fn">startHarper</span>(ctx, { config: replicationConfig });
+    <span class="tok-keyword">return</span> ctx.harper;
+  })
+);
+<span class="tok-comment">// connect each node to node 0, then write here and read there</span>
+<span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> node <span class="tok-keyword">of</span> nodes.<span class="tok-fn">slice</span>(<span class="tok-number">1</span>))
+  <span class="tok-keyword">await</span> <span class="tok-fn">sendOperation</span>(node, { operation: <span class="tok-string">'add_node'</span>, hostname: nodes[<span class="tok-number">0</span>].hostname });
+<span class="tok-keyword">await</span> <span class="tok-fn">sendOperation</span>(nodes[<span class="tok-number">0</span>], { operation: <span class="tok-string">'upsert'</span>, table: <span class="tok-string">'dog'</span>, records: [dog] });
+<span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> <span class="tok-fn">sendOperation</span>(nodes[<span class="tok-number">1</span>], { operation: <span class="tok-string">'search_by_id'</span>, ids: [<span class="tok-string">'1'</span>] });
+<span class="tok-fn">strictEqual</span>(res[<span class="tok-number">0</span>].name, <span class="tok-string">'Harper'</span>);</code></pre>
+      <p class="small muted">No cluster helper. Start the single instance N times
+      and wire the nodes with normal operations; the framework's one job is
+      handing out conflict-free addresses.</p>
+      <aside class="notes">
+        Simplified from harper-pro's fullyConnectedReplication test. The real
+        code sets a per-node replication securePort on that node's own loopback
+        address, and the write passes replicatedConfirmation: N-1 so the read is
+        deterministic rather than racing propagation — worth mentioning aloud,
+        cut here for space.
+
+        The honest point in the caption matters: the framework didn't grow a
+        cluster abstraction. It stayed small, and the loopback pool from the last
+        section is the only thing that makes N conflict-free instances possible.
+        add_node is an ordinary Harper operation.
       </aside>
     </section>
 
