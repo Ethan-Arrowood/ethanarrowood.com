@@ -14,6 +14,11 @@
       --dais-code-size: 0.66em;
     }
 
+    /* Slightly smaller slide titles (dais.css sets 4.6cqi) to reclaim vertical
+       space. Doesn't touch .fit titles or section dividers — those are more
+       specific. */
+    .dais h2 { font-size: 4cqi; margin-block-end: 0.3em; }
+
     /* Benchmark table: the plateau row and the max-parallelism row are the
        argument, so they get a persistent visual weight. */
     #results tbody tr.best {
@@ -129,47 +134,57 @@
       color: var(--dais-muted);
     }
 
-    /* The integration-testing spectrum: big cards, one line each, a Goldilocks
-       tag at the foot of each, and the middle "just right" one carries the
-       accent. The detail is spoken, not printed. */
-    #what-integration .cols { gap: 3cqi; align-items: stretch; }
+    /* Define "integration": three stacked cards on the left, the Goldilocks
+       illustration (with credit) on the right. The middle "just right" card
+       carries the accent. Sizes are tuned so the whole thing fits one screen. */
+    #define-integration .cols { gap: 3cqi; align-items: center; }
 
-    #what-integration .card {
-      padding: 3cqi 2.6cqi;
+    #define-integration .card {
+      padding: 1.4cqi 2cqi;
       display: flex;
       flex-direction: column;
-      gap: 1.2cqi;
+      gap: 0.4cqi;
       align-items: flex-start;
     }
 
-    #what-integration .card h3 { font-size: 3.4cqi; }
-    #what-integration .card p { margin: 0; font-size: 2cqi; }
+    #define-integration .card h3 { font-size: 2.6cqi; }
+    #define-integration .card p { margin: 0; font-size: 1.7cqi; }
 
-    #what-integration .card .tag {
-      margin-block-start: auto;   /* pin to the card's foot; cards are equal height */
-      font-size: 1.6cqi;
+    #define-integration .card .tag {
+      font-size: 1.4cqi;
       font-style: italic;
       color: var(--dais-muted);
     }
 
-    #what-integration .accent-card {
+    #define-integration .accent-card {
       background: color-mix(in srgb, var(--dais-accent) 16%, var(--dais-surface));
       outline: 1px solid color-mix(in srgb, var(--dais-accent) 50%, transparent);
     }
 
-    #what-integration .accent-card .tag {
+    #define-integration .accent-card .tag {
       font-style: normal;
       font-weight: 600;
       color: var(--dais-accent);
     }
 
-    #what-integration .axis {
-      display: flex;
-      justify-content: space-between;
-      margin-block-start: 2.4cqi;
-      font-size: 1.5cqi;
-      color: var(--dais-muted);
+    /* The Goldilocks illustration + its credit line. */
+    #define-integration .goldilocks {
+      width: auto;
+      max-width: 100%;
+      max-height: 34cqi;
+      border-radius: var(--dais-radius);
     }
+
+    #define-integration .goldilocks-fig figcaption {
+      max-width: 34cqi;
+      margin-block-start: 1cqi;
+      font-size: 1.2cqi;
+      font-style: normal;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    #define-integration .goldilocks-fig cite { font-style: italic; }
 
     /* "What am I testing?": the collapsed-stack illustration is the whole slide,
        centered, with the source repos beneath it. The words are spoken, not read.
@@ -184,7 +199,7 @@
       gap: 1.6cqi;
     }
 
-    #the-shape .collapsed-stack {
+    #the-shape .collapsed-stack, .goldilocks {
       width: auto;
       max-width: 100%;
       max-height: 40cqi;
@@ -195,50 +210,74 @@
       display: flex;
       gap: 2.4cqi;
       font-size: 1.4cqi;
+      color: var(--dais-muted);
     }
 
-    #the-shape .repos a {
+    #the-shape .repos p a {
       color: var(--dais-muted);
       text-decoration: none;
     }
 
-    /* Four problems: big bold taglines in a 2x2 grid, numbered in the accent.
-       No secondary text — each is expanded aloud, and each gets its own section. */
-    #constraints .problems {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      flex: 1;
-      min-height: 0;
-      align-content: center;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3cqi 5cqi;
-      counter-reset: problem;
+    /* Four questions that each complete the slide's "How do we…" title. Not a
+       list — four large lines that reveal one after another, no number or
+       bullet, each hanging off the title. The operative concept in every line
+       carries the accent so the four scopes read at a glance. */
+    #constraints .questions {
+      display: flex;
+      flex-direction: column;
+      gap: 2.4cqi;
+      margin-block-start: 2cqi;
+      padding-inline-start: 1.2cqi;
     }
 
-    #constraints .problems li {
-      counter-increment: problem;
+    #constraints .questions p {
+      margin: 0;
       font-family: var(--dais-font-display);
       font-weight: 700;
-      font-size: 5cqi;
-      line-height: 1.1;
-      display: flex;
-      align-items: baseline;
-      gap: 0.4em;
+      font-size: 4cqi;
+      line-height: 1.15;
+      color: var(--dais-text);
     }
 
-    #constraints .problems li::before {
-      content: counter(problem);
-      color: var(--dais-accent);
-      font-size: 0.7em;
-    }
+    #constraints .questions .k { color: var(--dais-accent); }
 
     /* Reframe: a general statement, then Harper's specific internals. Minimal
        text on both; the detail is spoken. */
-    #run-the-app .lead { font-size: 3.2cqi; margin-block: 1cqi 0; }
+    #application-equals-process .lead { font-size: 3.2cqi; margin-block: 1cqi 0; }
 
-    #why-hard .big-list {
+    /* A short accent rule splits the framing from the lifecycle list — the same
+       accent-rule motif the title slide uses, not a full-width hairline. */
+    #application-equals-process .rule {
+      width: 12cqi;
+      height: 0.5cqi;
+      margin-block: 2.6cqi 2.4cqi;
+      border-radius: 999px;
+      background: var(--dais-accent);
+      opacity: 0.7;
+    }
+
+    /* One list rendered as two columns. A grid with a fixed row count and
+       column-major flow keeps every item a single nth-child sequence — so
+       .reveal staggers them one-after-another down the left column and then
+       down the right — while a plain two-<ul> split would fire both columns in
+       lockstep. Row count = ceil(items / 2). */
+    #application-equals-process .proc {
+      list-style-position: inside;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-rows: repeat(5, auto);
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: 1.6cqi 8cqi;
+      font-size: 2.4cqi;
+    }
+
+    #application-equals-process .proc li {
+      margin: 0;
+    }
+
+    #app-complexities .big-list {
       list-style: none;
       margin: 1cqi 0 2cqi;
       padding: 0;
@@ -344,11 +383,7 @@
       <h1>Performant, Parallelizable, Framework&nbsp;Agnostic Node.js Integration Testing</h1>
       <p>Ethan Arrowood · Node.js Interactive @ Render ATL 2026</p>
       <aside class="notes">
-        30 minute slot. The timer in the top-right starts when I advance off
-        this slide and turns amber at 24 minutes.
-
-        Open on the problem, not on Harper. Everyone in this room has a test
-        suite that got slower than it should be.
+        Welcome, hello, lets dive right in.
       </aside>
     </section>
 
@@ -375,128 +410,171 @@
              alt="Harper as a collapsed stack: one process holding the API layer (GraphQL, REST, WebSocket, MQTT), an in-memory cache, and a NoSQL, vector, and blob database."
              width="2037" height="2277">
         <div class="repos">
-          <a href="https://github.com/HarperFast/harper">github.com/HarperFast/harper</a>
-          <a href="https://github.com/HarperFast/harper-pro">github.com/HarperFast/harper-pro</a>
+          <p><a href="https://github.com/HarperFast/harper">github.com/HarperFast/harper</a> (Apache 2.0)</p>
+          <p><a href="https://github.com/HarperFast/harper-pro">github.com/HarperFast/harper-pro</a> (ELv2)</p>
         </div>
       </div>
       <aside class="notes">
-        This is a collapsed stack — the deployment story is "one process," which
-        is great for operators and awkward for testers.
+        Harper is a all-in-one Node.js application platform.
 
-        Don't sell Harper here. The audience needs exactly enough to understand
-        why the testing problem is shaped the way it is.
+        We call it a collapsed stack. The whole thing is one process.
+
+        You business logic has direct access to your data so there is no network hops necessary for multiple services.
+
+        Harper has a lot of embedded features (point to graphic and name a few of the boxes)
       </aside>
     </section>
 
-    <section class="slide" id="what-integration">
-      <h2>What "integration" means here</h2>
-      <div class="cols" style="--cols: 3">
-        <div class="card">
-          <h3>Unit</h3>
-          <p>A single piece of code.</p>
-          <span class="tag">too little</span>
+    <section class="slide" id="define-integration">
+      <h2>Define "integration"</h2>
+      <div class="cols">
+        <div class="stack">
+          <div class="card">
+            <h3>Unit</h3>
+            <p>A single <i>unit</i> of code; everything else mocked/stubbed.</p>
+            <span class="tag">too little</span>
+          </div>
+          <div class="card accent-card">
+            <h3>Integration</h3>
+            <p>The complete application. No hooking into internals.</p>
+            <span class="tag">just right</span>
+          </div>
+          <div class="card">
+            <h3>End-to-end</h3>
+            <p>The full production stack. Like end users experience.</p>
+            <span class="tag">too much</span>
+          </div>
         </div>
-        <div class="card accent-card">
-          <h3>Integration</h3>
-          <p>The whole app, run for real.</p>
-          <span class="tag">just right</span>
-        </div>
-        <div class="card">
-          <h3>End-to-end</h3>
-          <p>The full production stack.</p>
-          <span class="tag">too much</span>
-        </div>
+        <figure class="goldilocks-fig">
+          <img class="goldilocks" src="goldilocks-and-the-three-bears.jpg" alt="Goldilocks and The Three Bears illustration">
+          <figcaption>Illustration by Arthur Rackham, 1918, in <cite>English
+            Fairy Tales</cite> by Flora Annie Steel for &ldquo;The Story of the
+            Three Bears&rdquo; ·
+            <a href="https://en.wikipedia.org/wiki/Goldilocks_and_the_Three_Bears">source</a></figcaption>
+        </figure>
       </div>
-      <p class="axis"><span>faster to run</span><span>closer to real</span></p>
       <aside class="notes">
-        "Integration test" means five different things to five people, so define
-        it before building on it.
+        Explain how integration sits right in the middle between unit and e2e on multiple axis.
 
-        Mine: run the built app, treat it as a black box, interact only through
-        the surfaces a user has. No reaching into source. That constraint is what
-        makes the tests resemble real usage — and it's a deliberate design
-        decision, not an accident of tooling.
+        Complexity, depth, performance, etc.
       </aside>
     </section>
 
-    <section class="slide" id="run-the-app">
-      <h2>First, the general problem</h2>
-      <p class="lead">To integration-test an application, you have to run it — so
-      every test spawns and manages a live <strong>process</strong>.</p>
-      <p class="small muted">Start it, wait until it's actually ready, tear it
-      down, clean up after it. That cost is there before the app does anything
-      interesting.</p>
-      <aside class="notes">
-        Start general, and generalize hard: this isn't a Harper problem. To
-        integration-test ANY application you must run the whole thing, and a
-        running application is a process you have to manage. That is the real
-        difference from unit testing, and it's a challenge on its own.
+    <!-- Can we do some kind of "black box" analogy here? Control inputs and outputs, but not internal operations; test must be behavior observation based. 
+     <section class="slide" id="box-analogy">
+      Think of integration testing like a box
+    </section> -->
 
-        Land this before naming Harper — the pattern applies to anyone in the
-        room testing a real application.
+    <section class="slide" id="application-equals-process">
+      <h2>Application = Process</h2>
+      <p>Integration testing an application means managing the lifecycle of the application <strong>process</strong></p>
+      <div class="rule" aria-hidden="true"></div>
+      <ul class="reveal proc">
+        <li>Start it</li>
+        <li>Wait for it to be ready</li>
+        <li>Restart it</li>
+        <li>Send signals to it</li>
+        <li>Write to stdin</li>
+        <li>Stream and read stdout and stderr</li>
+        <li>Read and process log files</li>
+        <li>Monitor crashes</li>
+        <li>Stop it</li>
+        <li>Clean up</li>
+      </ul>
+
+      <aside class="notes">
+        Applications are a process and testing applications in this scenario means managing that process and all that comes with it.
       </aside>
     </section>
 
-    <section class="slide" id="why-hard">
-      <h2>Then there's what runs inside Harper's process</h2>
+    <section class="slide" id="app-complexities">
+      <h2>In Harper's case...</h2>
       <ul class="reveal big-list">
         <li>Networking &amp; ports</li>
         <li>A file system and a database on disk</li>
         <li>Worker threads it spawns to go fast</li>
+        <li class="small muted">How do we keep everything isolated?</li>
       </ul>
-      <p class="small muted">Every one of these has to be isolated — per
-      instance, per test.</p>
       <aside class="notes">
-        Now, and only now, make it specific. Managing one process is the
-        baseline; Harper's process also binds network ports, reads and writes a
-        real database on the file system, and spawns worker threads. Each is
-        another thing that collides or leaks when you run many at once.
+        Now beyond just process management, you have to consider everything else involved in an application.
 
-        That's what turns "manage a process" into a design problem — and it's why
-        the rest of the talk exists.
+        Networking, file system, threads. Apps can be complicated!
       </aside>
     </section>
 
-    <section class="slide center" id="the-question">
-      <h2 class="fit">Every test needs its own process.<br>Now make it fast.</h2>
-      <aside class="notes">
-        This is the whole talk in one slide. Pause here.
-      </aside>
+    <section class="slide" id="harper-uses">
+      <h2>Harper is an application platform</h2>
+      <p class="lead">Harper can run all sorts of applications</p>
+      <ul class="reveal">
+        <li>Web apps: Vite, React, Astro</li>
+        <li>Backend APIs: REST, MQTT, GraphQL, MCP</li>
+        <li>Data stores: Blob, LMDB, RocksDB</li>
+        <li>Multi-instance replication</li>
+        <li>GPU access for LLMs</li>
+      </ul>
+      <p class="small muted">How do we build a testing framework that can test web apps as well as data-intensive backends?</p>
     </section>
+
+    <!-- <section class="slide center" id="the-question">
+      <h2 class="fit">1. How do we keep everything <span>isolated</span> and <span>performant</span>?<br>2. How do we ensure it <span>runs everywhere </span>and can test <span>multiple scenarios</span>?</h2>
+      <aside class="notes">
+        Pause here for a moment. This is first of two big questions the rest of the talk will address.
+      </aside>
+    </section> -->
 
     <section class="slide" id="constraints">
-      <h2>Four problems</h2>
-      <ol class="problems reveal">
-        <li>Parallelize</li>
-        <li>Don't collide</li>
-        <li>Run anywhere</li>
-        <li>Stay runner-agnostic</li>
-      </ol>
+      <h2>How do we&hellip;</h2>
+      <div class="reveal questions">
+        <p><span class="k">isolate</span> each test in its own process?</p>
+        <p>make the suite <span class="k">run everywhere</span>?</p>
+        <p>test <span class="k">every kind of application</span>?</p>
+        <p>do all of it <span class="k">performantly</span>?</p>
+      </div>
       <aside class="notes">
-        These four are the talk's structure. Each one gets a section.
-
-        Say explicitly: constraint 4 is the one that most teams skip, and it's
-        the one that determines whether the other three stay solved.
+        Four questions the talk will cover and the solution must address. Each
+        falls out of the complexity from the last two slides: a process to
+        isolate, many machines to run on, many application shapes to support —
+        and speed underneath all of it. Pause here so everyone understands the
+        scope.
       </aside>
+    </section>
+
+    <section class="slide">
+      <h2>Early decision: use <code>node:test</code> test runner API</h2>
+      <ul>
+        <li>One less dependency to manage</li>
+        <li>Simple concurrency model to architect around</li>
+        <li>Dogfood the new API</li>
+        <li>Still planning to build agnostic API to work with other runners, but needed <i>something</i> to help shape the implementation</li>
+      </ul>
     </section>
 
     <section class="slide divider" id="part-parallel">
-      <h2>1. How parallel is too parallel?</h2>
+      <p>When running multiple complex processes,</p>
+      <h2>how much parallelism is actually possible?</h2>
       <p>Measuring instead of guessing</p>
     </section>
 
+    <section class="slide">
+      <p>Concurrency is an overloaded term</p>
+      <p>Is it the same as parallelism?</p>
+      <p>How do you actually do multiple things at once in the Node.js event loop?</p>
+    </section>
+
+    <!-- TODO: maybe ditch the p after the code samples -->
     <section class="slide" id="two-concepts">
-      <h2>Two things called "concurrency"</h2>
-      <div class="cols">
+      <h2><code>node:test</code> "concurrency"</h2>
+      <div class="stack">
         <div class="stack">
-          <h3>File parallelism — real</h3>
+          <h3>Test <strong>runner</strong> concurrency = file-level multiprocess parallelism</h3>
           <pre><code>node --test \
   --test-concurrency=<span class="tok-number">5</span> \
   <span class="tok-string">"*.test.js"</span></code></pre>
           <p class="small">Each <em>file</em> gets its own child process. Separate memory, real OS parallelism.</p>
         </div>
         <div class="stack">
-          <h3>Test concurrency — async</h3>
+          <!-- TODO: word choice here "async code handling"?? -->
+          <h3>Test <strong>suite</strong> concurrency = event loop async handling</h3>
           <pre><code><span class="tok-fn">suite</span>(<span class="tok-string">'x'</span>, { concurrency: <span class="tok-keyword">true</span> }, () =&gt; {
   <span class="tok-fn">test</span>(<span class="tok-string">'a'</span>, <span class="tok-keyword">async</span> () =&gt; { … });
   <span class="tok-fn">test</span>(<span class="tok-string">'b'</span>, <span class="tok-keyword">async</span> () =&gt; { … });
@@ -514,8 +592,9 @@
       </aside>
     </section>
 
+    <!-- TODO: styles here and title is too long -->
     <section class="slide" id="the-default">
-      <h2>Node's default is built for cheap tests</h2>
+      <h2>Node's default test runner parallelism is built for cheap tests</h2>
       <pre><code><span class="tok-comment">// node:test default --test-concurrency</span>
 os.<span class="tok-fn">availableParallelism</span>()   <span class="tok-comment">// 12 on my laptop</span></code></pre>
       <p>Reasonable for unit tests. For twelve simultaneous database processes,
