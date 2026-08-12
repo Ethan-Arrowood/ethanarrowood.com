@@ -408,6 +408,60 @@
     #the-trick h2 { color: var(--dais-text); }
     #the-trick .dim { color: var(--dais-muted); }
 
+    /* Closing slide: photo centered above the sign-off. The image is already
+       square, so height:auto shows it whole — no object-fit, no crop. Stacked
+       (not side-by-side) so the full URLs get the slide's whole width and the
+       text can be large. */
+    #thanks .me {
+      width: 24cqi;
+      height: auto;
+      border-radius: 2cqi;
+      margin-block-end: 1.5cqi;
+    }
+
+    #thanks h2 { font-size: 6cqi; margin-block-end: 0.8cqi; }
+    #thanks .muted { font-size: 2cqi; margin-block: 0 1.4cqi; }
+    #thanks .links { font-size: 2cqi; line-height: 1.8; margin: 0; }
+    #thanks .links a { white-space: nowrap; }
+
+    /* Code & Learn CTA: text column on the left, mascot sticker on the right. */
+    #code-and-learn .cnl {
+      display: flex;
+      align-items: center;
+      gap: 5cqi;
+      flex: 1;
+      min-height: 0;
+    }
+
+    #code-and-learn .cnl-text { flex: 1; min-width: 0; }
+    #code-and-learn .node-logo { width: 22cqi; height: auto; display: block; margin-block-end: 2cqi; }
+    #code-and-learn h2 { font-size: 5cqi; margin-block-end: 0.3em; }
+    #code-and-learn .welcome { font-size: 2.4cqi; color: var(--dais-muted); margin-block: 0 2.4cqi; }
+
+    #code-and-learn .details {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8cqi;
+      font-size: 2.2cqi;
+      line-height: 1.3;
+    }
+
+    #code-and-learn .details strong { color: var(--dais-accent); }
+    #code-and-learn .details code { font-size: 0.9em; }
+
+    /* The mascot art sits on white; frame it as a rounded sticker so the white
+       reads as intentional against the dark slide. */
+    #code-and-learn .turtle {
+      height: 42cqi;
+      width: auto;
+      flex-shrink: 0;
+      border-radius: 2.5cqi;
+      box-shadow: 0 1cqi 3cqi color-mix(in srgb, #000 35%, transparent);
+    }
+
     /* The shipped-default takeaway sits above the equation as a lead line. */
     #the-default-that-shipped .lead { font-size: 2.6cqi; margin-block-end: 1.4cqi; }
 
@@ -652,20 +706,8 @@
         <li>Stop it</li>
         <li>Clean up</li>
       </ul>
-
       <aside class="notes"></aside>
     </section>
-
-    <!-- <section class="slide" id="app-complexities"> -->
-      <!-- <h2>In Harper's case...</h2>
-      <ul class="reveal big-list">
-        <li>Networking layer (Socket, HTTP, MQTT, GraphQL, REST)</li>
-        <li>A file system (apps, static, blobs) and a database on disk</li>
-        <li>Worker threads it spawns to go fast</li>
-        <li class="small muted">How do we keep everything isolated?</li>
-      </ul>
-      <aside class="notes"></aside>
-    </section> -->
 
     <section class="slide" id="harper-uses">
       <h2>Harper is an application platform</h2>
@@ -705,12 +747,6 @@
       <h2>how much parallelism is actually possible?</h2>
       <p>Measuring instead of guessing</p>
     </section>
-
-    <!-- <section class="slide">
-      <p>Concurrency is an overloaded term</p>
-      <p>Is it the same as parallelism?</p>
-      <p>How do you actually do multiple things at once in the Node.js event loop?</p>
-    </section> -->
 
     <section class="slide" id="two-concepts">
       <h2><code>node:test</code> "concurrency" is overloaded</h2>
@@ -761,32 +797,6 @@
       <p class="muted small">https://github.com/ethan-arrowood/node-test-runner-parallelization-analysis</p>
       <aside class="notes"></aside>
     </section>
-
-    <!-- todo: maybe skip this slide... the bar graph is better visual. -->
-    <!-- <section class="slide" id="results">
-      <h2>Median duration (ms), 20 files, 25 samples</h2>
-      <table>
-        <caption>Total suite duration, milliseconds. 80 tests passed, 0 failed, at every level.</caption>
-        <thead>
-          <tr>
-            <th>Concurrency</th>
-            <th class="num">Median</th>
-            <th class="num">Std dev</th>
-            <th class="num">p95</th>
-            <th class="num">Speedup</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>1 <span class="muted small">(sequential)</span></td><td class="num">9,939</td><td class="num">363</td><td class="num">10,607</td><td class="num">1.00×</td></tr>
-          <tr><td>2</td><td class="num">5,776</td><td class="num">307</td><td class="num">6,164</td><td class="num">1.72×</td></tr>
-          <tr><td>4</td><td class="num">3,904</td><td class="num">368</td><td class="num">4,648</td><td class="num">2.55×</td></tr>
-          <tr class="best"><td><strong>7</strong></td><td class="num"><strong>3,468</strong></td><td class="num"><strong>294</strong></td><td class="num"><strong>3,990</strong></td><td class="num"><strong>2.87×</strong></td></tr>
-          <tr class="worse"><td>10</td><td class="num">3,534</td><td class="num">654</td><td class="num">5,339</td><td class="num">2.81×</td></tr>
-          <tr class="worse"><td>12 <span class="small">(max)</span></td><td class="num">3,952</td><td class="num">488</td><td class="num">4,792</td><td class="num">2.51×</td></tr>
-        </tbody>
-      </table>
-      <aside class="notes"></aside>
-    </section> -->
 
     <section class="slide" id="plateau">
       <h2>The gain plateaus, then reverses</h2>
@@ -898,33 +908,6 @@
       <aside class="notes"></aside>
     </section>
 
-    <!-- todo: skip this slide maybe not sure what it really serves -->
-    <!-- <section class="slide" id="honesty">
-      <h2>Experiment successful?</h2>
-      <div class="cols">
-        <div class="card">
-          <h3>Hypothesis</h3>
-          <p>Over-parallelizing causes contention, thrashing, and
-          <strong>unpredictable failures</strong>.</p>
-        </div>
-        <div class="card">
-          <h3>Measured</h3>
-          <p>Contention and thrashing: yes. <br> Failures: <strong>zero</strong>
-          every level, all 25 samples.</p>
-        </div>
-      </div>
-      <p>Correctness held; the only cost was latency in the tail. So the right
-      default isn't the <em>most</em> parallelism &mdash; it's the <strong>peak</strong>.</p>
-      <aside class="notes">
-        Be straight about this. I went in expecting flakiness and the data
-        didn't show any — 80 passed, 0 failed, every level, every sample.
-
-        Worth saying why: the tests were independent, hermetic, and
-        deterministic by construction. Contention made them slow, not wrong.
-        That's a result about the test design as much as about the runner.
-      </aside>
-    </section> -->
-
     <section class="slide" id="the-default-that-shipped">
       <h2>Calculated default</h2>
       <p class="lead">When each test spawns its own application process, the ideal
@@ -978,10 +961,7 @@
 
     <section class="slide center" id="the-trick">
       <h2 class="fit">If we can't reliably reserve the <span class="dim">ports</span>&hellip;<br>what about the <span class="accent">address</span>?</h2>
-      <aside class="notes">
-        Beat. This is the idea I most want people to take home, because it
-        generalizes to anything that binds well-known ports.
-      </aside>
+      <aside class="notes"></aside>
     </section>
 
     <section class="slide" id="loopback">
@@ -1012,16 +992,7 @@ test/application 3 → <span class="tok-string">http://127.0.0.4:9925</span></co
       <pre><code><span class="tok-comment"># macOS: register each address as a loopback alias (once per machine)</span>
 sudo ifconfig lo0 alias 127.0.0.2 up
 sudo ifconfig lo0 alias 127.0.0.3 up</code></pre>
-      <aside class="notes">
-        Don't hide this. It's the main objection to the approach and it deserves
-        a straight answer: on macOS/Windows each address is a one-time alias, and
-        the setup script (npx harper-integration-test-setup-loopback, needs sudo)
-        just loops the ifconfig call across the pool. Once, per machine, and it's
-        in the setup docs and the CI workflow.
-
-        Sequential mode (--isolation=none) skips the requirement entirely, which
-        matters for a contributor who just wants to run one test.
-      </aside>
+      <aside class="notes"></aside>
     </section>
 
     <section class="slide" id="pool">
@@ -1033,18 +1004,7 @@ sudo ifconfig lo0 alias 127.0.0.3 up</code></pre>
         <li>Index is the address; value is the owning process ID</li>
         <li>First-available allocation; released on teardown</li>
       </ul>
-      <aside class="notes">
-        Storing the PID rather than a boolean is what makes recovery possible —
-        see the next slide but one.
-
-        Why a file and not a coordinating parent process? The runner script must
-        be optional: tests have to work under plain `node --test`, with no parent
-        to coordinate them.
-
-        Honest limit: this only coordinates test-runner processes. Another app on
-        the machine could still grab an address — far less common, and you can
-        avoid it by not racing other servers while tests run.
-      </aside>
+      <aside class="notes"></aside>
     </section>
 
     <section class="slide" id="lock">
@@ -1054,15 +1014,7 @@ sudo ifconfig lo0 alias 127.0.0.3 up</code></pre>
 <span class="tok-keyword">await</span> handle.<span class="tok-fn">close</span>();   <span class="tok-comment">// we hold the lock</span></code></pre>
       <p>One of many options (daemon, orchestrator, atomics).</p>
       <p>File lock was simplest. Plus a stale-lock timeout for crashed processes.</p>
-      <aside class="notes">
-        The job is just "one process touches the pool at a time." `wx` is
-        O_CREAT | O_EXCL — the atomicity guarantee comes from the kernel. Many
-        ways to solve this; a file lock was the most familiar and got the job done.
-
-        The stale timeout is the unglamorous half. Every file-lock scheme needs
-        one, and picking it is a judgment call: too short and you break a
-        slow-but-live process, too long and a crash stalls the suite.
-      </aside>
+      <aside class="notes"></aside>
     </section>
 
     <section class="slide" id="reaping">
@@ -1074,13 +1026,7 @@ sudo ifconfig lo0 alias 127.0.0.3 up</code></pre>
   loopbackPool[index] = <span class="tok-keyword">null</span>;  <span class="tok-comment">// dead — reclaim it</span>
 }</code></pre>
       <p class="small muted">A <kbd>Ctrl</kbd>+<kbd>C</kbd> mid-run doesn't break the pool</p>
-      <aside class="notes">
-        This is why the pool stores PIDs instead of booleans — a boolean pool
-        can't distinguish "in use" from "leaked."
-
-        Reaped lazily, only when the pool looks full: reaping on every allocation
-        would mean a syscall per slot for a condition that's almost never true.
-      </aside>
+      <aside class="notes"></aside>
     </section>
 
     <section class="slide" id="trust-but-verify">
@@ -1092,16 +1038,7 @@ server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loo
       <p>1. Verify the whole pool at startup (ensure setup script was run)</p>
       <p>2. Verify again per allocation to avoid collisions</p>
       <p class="small muted">Still not immune to race condition with another app, but loopback allocation collides far less often than dynamic ports.</p>
-      <aside class="notes">
-        Remember the racey dynamic allocation issue? Well we can actually use that to our advantage here to at least check that the address is usable.
-
-        The failure this prevents is the worst kind: Harper starts, binds
-        nothing, and the test times out 30 seconds later with a message about
-        HTTP. Fail at allocation instead, and say which command fixes it.
-
-        Good error messages are a feature of test infrastructure, not a polish
-        item. A confused contributor is a contributor who stops running tests.
-      </aside>
+      <aside class="notes"></aside>
     </section>
 
     <section class="slide" id="lifecycle">
@@ -1119,91 +1056,8 @@ ctx.harper.operationsAPIURL   <span class="tok-comment">// 'http://127.0.0.3:992
 ctx.harper.rootpath           <span class="tok-comment">// '/var/folders/js/abc123_def456/T/harper-test-789'</span>
 
 <span class="tok-keyword">await</span> <span class="tok-fn">teardownHarper</span>(ctx);    <span class="tok-comment">// kill, release the address, remove the directory</span></code></pre>
-      <aside class="notes">
-        Temporary install directory per instance is the other half of isolation
-        — address isolation without filesystem isolation still gives you two
-        processes fighting over one data root.
-
-        "Wait until actually ready" is doing a lot of work. Spawning is not
-        readiness, and a 30-second startup timeout with captured stdout/stderr
-        is what makes a startup failure diagnosable.
-      </aside>
+      <aside class="notes"></aside>
     </section>
-
-    <!-- I don't know about this replication section. I think honestly its getting too complex now. Maybe worth just _saying_ its possible and let users connect the dots themselves. -->
-    <!-- too many words here but useful. Need a like "section" slide for replication. Its introduce too randomly I think. -->
-    <!-- <section class="slide" id="replication">
-      <h2>Replication used to need a data center</h2>
-      <div class="cols">
-        <div class="stack">
-          <h3>The old way</h3>
-          <ul>
-            <li>Five Harper containers on a Docker network, or five VMs</li>
-            <li>Cluster env vars, IPs, and DNS templated in by hand</li>
-            <li>Driven by Postman collections in bespoke CI jobs</li>
-          </ul>
-        </div>
-        <div class="stack">
-          <h3>Now</h3>
-          <ul>
-            <li>N in-process instances from the same loopback pool</li>
-            <li>Connected with a plain <code>add_node</code> operation</li>
-            <li>Write to one node, assert it lands on the others</li>
-          </ul>
-        </div>
-      </div>
-      <p>Parallelism was the goal. The bonus: a node dying and catching up, mesh
-      vs. star topology, even migrating off a legacy 4.x node — all in ordinary,
-      parallel <code>node:test</code> files.</p>
-      <aside class="notes">
-        This is the emotional peak. Call back to the opening: those Postman
-        collections gating the old suite? The cluster tests were the worst of it
-        — five containers on a network before you could assert a single write
-        replicated.
-
-        The reframe: the loopback pool wasn't just a speed trick. The moment many
-        real instances can coexist on one machine, an entire class of features
-        that used to demand infrastructure — replication, failover, topology —
-        becomes a plain integration test you can run on a laptop.
-
-        Real files in harper-pro: fullyConnectedReplication (4-node mesh),
-        replicationTopology (star, kill-and-catch-up, 4.x migration),
-        replicationLoad (stress across many databases).
-      </aside>
-    </section>
-
-    <section class="slide" id="replication-code">
-      <h2>A cluster is N instances plus <code>add_node</code></h2>
-      <pre><code><span class="tok-comment">// a cluster is N instances, each on its own loopback address</span>
-<span class="tok-keyword">const</span> nodes = <span class="tok-keyword">await</span> Promise.<span class="tok-fn">all</span>(
-  <span class="tok-fn">Array</span>(<span class="tok-number">4</span>).<span class="tok-fn">fill</span>().<span class="tok-fn">map</span>(<span class="tok-keyword">async</span> () =&gt; {
-    <span class="tok-keyword">const</span> ctx = { harper: { hostname: <span class="tok-keyword">await</span> <span class="tok-fn">getNextAvailableLoopbackAddress</span>() } };
-    <span class="tok-keyword">await</span> <span class="tok-fn">startHarper</span>(ctx, { config: replicationConfig });
-    <span class="tok-keyword">return</span> ctx.harper;
-  })
-);
-<span class="tok-comment">// connect each node to node 0, then write here and read there</span>
-<span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> node <span class="tok-keyword">of</span> nodes.<span class="tok-fn">slice</span>(<span class="tok-number">1</span>))
-  <span class="tok-keyword">await</span> <span class="tok-fn">sendOperation</span>(node, { operation: <span class="tok-string">'add_node'</span>, hostname: nodes[<span class="tok-number">0</span>].hostname });
-<span class="tok-keyword">await</span> <span class="tok-fn">sendOperation</span>(nodes[<span class="tok-number">0</span>], { operation: <span class="tok-string">'upsert'</span>, table: <span class="tok-string">'dog'</span>, records: [dog] });
-<span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> <span class="tok-fn">sendOperation</span>(nodes[<span class="tok-number">1</span>], { operation: <span class="tok-string">'search_by_id'</span>, ids: [<span class="tok-string">'1'</span>] });
-<span class="tok-fn">strictEqual</span>(res[<span class="tok-number">0</span>].name, <span class="tok-string">'Harper'</span>);</code></pre>
-      <p class="small muted">No cluster helper. Start the single instance N times
-      and wire the nodes with normal operations; the framework's one job is
-      handing out conflict-free addresses.</p>
-      <aside class="notes">
-        Simplified from harper-pro's fullyConnectedReplication test. The real
-        code sets a per-node replication securePort on that node's own loopback
-        address, and the write passes replicatedConfirmation: N-1 so the read is
-        deterministic rather than racing propagation — worth mentioning aloud,
-        cut here for space.
-
-        The honest point in the caption matters: the framework didn't grow a
-        cluster abstraction. It stayed small, and the loopback pool from the last
-        section is the only thing that makes N conflict-free instances possible.
-        add_node is an ordinary Harper operation.
-      </aside>
-    </section> -->
 
     <section class="slide divider" id="part-agnostic">
       <h2>3. Framework agnostic</h2>
@@ -1220,13 +1074,7 @@ ctx.harper.rootpath           <span class="tok-comment">// '/var/folders/js/abc1
       <code>name</code> and a <code>harper</code> property to write to.</p>
       <p class="small muted">Deliberately loose, so a <code>node:test</code>
       context and a plain object both satisfy it.</p>
-      <aside class="notes">
-        The type is the whole trick. If the signature demanded a node:test
-        TestContext, Playwright could never call it.
-
-        Requirement on any framework: async setup and teardown hooks. That's it.
-        Every runner has them.
-      </aside>
+      <aside class="notes"></aside>
     </section>
 
     <section class="slide" id="not-required">
@@ -1234,18 +1082,10 @@ ctx.harper.rootpath           <span class="tok-comment">// '/var/folders/js/abc1
       <pre><code><span class="tok-comment">// src/run.ts, line 1:</span>
 <span class="tok-comment">// Important! This script should not be required</span>
 <span class="tok-comment">// to execute integration tests.</span></code></pre>
-      <p class="small muted"><a href="https://github.com/HarperFast/integration-testing/blob/main/src/run.ts">HarperFast/integration-testing · src/run.ts</a></p>
+      <p class="small muted"><a href="https://github.com/HarperFast/integration-testing/blob/main/src/run.ts">https://github.com/HarperFast/integration-testing/blob/main/src/run.ts</a></p>
       <p>The convenience runner (configures a smarter concurrency default) holds <strong>no state</strong>.</p>
       <p>Every test file still runs under plain <code>node --test</code>, and parallelization still works.</p>
-      <aside class="notes">
-        This is the design decision everything else follows from. Because the
-        runner couldn't own setup, setup had to live in the test files, which
-        forced the pool to be file-based and cross-process rather than
-        parent-coordinated.
-
-        The constraint that looked like a limitation is what made the second
-        framework integration cheap.
-      </aside>
+      <aside class="notes"></aside>
     </section>
 
     <section class="slide" id="two-runners">
@@ -1302,16 +1142,13 @@ ctx.harper.rootpath           <span class="tok-comment">// '/var/folders/js/abc1
     <span class="tok-keyword">await</span> <span class="tok-fn">teardownHarper</span>(started);
   };
 }</code></pre>
-      <p class="small muted"><a href="https://github.com/HarperFast/nextjs/blob/main/integrationTests/fixtures.ts">HarperFast/nextjs · integrationTests/fixtures.ts</a></p>
-      <aside class="notes">
-        ~40 lines including error handling. The pool, the locking, and the
-        address assignment are all inherited for free — the second framework
-        integration cost an afternoon, not a rewrite.
-      </aside>
+      <p class="small muted"><a href="https://github.com/HarperFast/nextjs/blob/main/integrationTests/fixtures.ts">https://github.com/HarperFast/nextjs/blob/main/integrationTests/fixtures.ts</a></p>
+      <aside class="notes"></aside>
     </section>
 
     <section class="slide" id="ethos">
       <h2>Discovering core testing values for high quality tests</h2>
+      <!-- todo: make the content text bigger  -->
       <ul>
         <li><strong>Independent</strong>: no dependence on order or shared state</li>
         <li><strong>Hermetic</strong>: self-contained, no external side effects</li>
@@ -1334,7 +1171,7 @@ strategy:
     shard: [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>]
 steps:
   - run: node --test --test-shard=${{ matrix.shard }}/<span class="tok-number">4</span></code></pre>
-      <p class="small muted"><code>--test-shard=1/3</code> always runs the same group of tests, on any machine · <a href="https://github.com/HarperFast/harper/blob/main/.github/workflows/integration-tests.yml">HarperFast/harper · integration-tests.yml</a></p>
+      <p class="small muted"><code>--test-shard=1/3</code> always runs the same group of tests, on any machine <br><a href="https://github.com/HarperFast/harper/blob/main/.github/workflows/integration-tests.yml">https://github.com/HarperFast/harper/blob/main/.github/workflows/integration-tests.yml</a></p>
       <aside class="notes">
         node:test also exposes this programmatically: run({ shard: { index, total } }).
         The groupings are deterministic — shard 1/3 is the same set of files on
@@ -1342,46 +1179,33 @@ steps:
       </aside>
     </section>
 
-    <!-- IDK if we need this slide. If so, I need a better summary/wrapup -->
-    <!-- <section class="slide" id="takeaways">
-      <h2>What to take home</h2>
-      <ol class="reveal">
-        <li><strong>Measure your concurrency ceiling.</strong> For
-        process-heavy tests it's near half your cores, not all of them.</li>
-        <li><strong>Watch the tail, not the mean.</strong> Over-parallelizing
-        buys variance.</li>
-        <li><strong>Isolate by address, not by port.</strong> One loopback
-        address per instance deletes a config matrix.</li>
-        <li><strong>The file system has your mutex.</strong>
-        <code>open(path, 'wx')</code> plus a stale timeout.</li>
-        <li><strong>Make the runner optional.</strong> That constraint is what
-        buys you the second framework.</li>
-      </ol>
-      <aside class="notes">
-        Five points, and only 1, 3, and 5 really need to land. If the timer is
-        red, read 1, 3, 5 and go to the last slide.
-      </aside>
-    </section> -->
-
-    <!-- todo (needs assets): add a photo of Ethan (drop the image file in this dir
-         and set the <img> src below). And add a "Code & Learn tomorrow" callout
-         once the event details/link are known. -->
     <section class="slide title no-number" id="thanks">
+      <img class="me" src="ethan.jpg" alt="Ethan Arrowood on a ski slope" width="2800" height="2800">
       <h2>Thank you</h2>
-      <p class="muted small">Ethan Arrowood · Head of Open Source Engineering, Harper · ethanarrowood.com</p>
+      <p class="muted">Ethan Arrowood · Head of Open Source Engineering, Harper · ethanarrowood.com</p>
       <p class="links">
         <a href="https://github.com/HarperFast/integration-testing">github.com/HarperFast/integration-testing</a><br>
         <a href="https://github.com/Ethan-Arrowood/node-test-runner-parallelization-analysis">github.com/Ethan-Arrowood/node-test-runner-parallelization-analysis</a><br>
         <a href="https://github.com/HarperFast/nextjs">github.com/HarperFast/nextjs</a>
       </p>
-      <aside class="notes">
-        Leave this up for questions. All three repos are open source.
+      <aside class="notes"></aside>
+    </section>
 
-        Likely questions: why not Docker (startup cost, and the CLI/filesystem
-        surface is part of what's under test); why not testcontainers (same, plus
-        it doesn't remove the addressing problem); does the loopback trick work
-        in containers (yes, and Linux needs no setup).
-      </aside>
+    <section class="slide" id="code-and-learn">
+      <div class="cnl">
+        <div class="cnl-text">
+          <img class="node-logo" src="nodejs-logo.png" alt="Node.js" width="534" height="160">
+          <h2>Contribute to Node.js!</h2>
+          <p class="welcome">Everyone of any coding ability is welcome.</p>
+          <ul class="details">
+            <li>(Tomorrow) <strong>Aug 13</strong> · 2:00&ndash;5:00&nbsp;PM</li>
+            <li>Join <code>renderatl.com/discord</code> &rarr; <strong>#nodejs-interactive-code-and-learn</strong></li>
+            <li>Complete the <strong>mandatory prerequisite steps</strong> beforehand!</li>
+          </ul>
+        </div>
+        <img class="turtle" src="render-rocket-turtle.jpg" alt="RenderATL rocket-turtle mascot riding a Node.js and OpenJS Foundation rocket" width="1080" height="1350">
+      </div>
+      <aside class="notes"></aside>
     </section>
 
   </main>
