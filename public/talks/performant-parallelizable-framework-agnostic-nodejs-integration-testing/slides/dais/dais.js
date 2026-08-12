@@ -29,6 +29,10 @@
   const slides = [...deck.querySelectorAll(":scope > section")];
   if (slides.length === 0) return;
 
+  // Marks that the enhancement script is live. dais.css gates step hiding on
+  // this class, so a no-JS deck shows every step (its composed final state).
+  deck.classList.add("dais-js");
+
   // Ensure every slide has an id so hash sync and deep links work.
   slides.forEach((slide, i) => {
     if (!slide.id) slide.id = `slide-${i + 1}`;
@@ -58,6 +62,101 @@
   const goTo = (i) => {
     const slide = slides[Math.max(0, Math.min(slides.length - 1, i))];
     slide.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  };
+
+  // --- Steps (fragments) ----------------------------------------------------
+  // A slide is "stepped" when it holds .step / [data-step] elements, or
+  // declares data-dais-steps="N". Right/Space advances one step before moving
+  // to the next section; Left reverses. Each step element has an integer order
+  // (explicit data-step, else its position among the step elements); advancing
+  // toggles .step-active (order <= current) and .step-current (order ==
+  // current), and .step also hides until active (dais.css). Current step lives
+  // on the section as --dais-step / [data-dais-step]; 0 means nothing active.
+  const stepData = new Map();
+
+  const stepItems = (root) =>
+    [...root.querySelectorAll(".step, [data-step]")].map((el, i) => {
+      const explicit = Number(el.dataset.step);
+      const order = Number.isFinite(explicit) && explicit > 0 ? explicit : i + 1;
+      return { el, order };
+    });
+
+  const setStepClasses = (items, cur) => {
+    items.forEach(({ el, order }) => {
+      el.classList.toggle("step-active", order <= cur);
+      el.classList.toggle("step-current", order === cur);
+    });
+  };
+
+  const applyStep = (section, cur) => {
+    const data = stepData.get(section);
+    if (!data) return;
+    data.cur = cur;
+    section.style.setProperty("--dais-step", cur);
+    section.dataset.daisStep = cur;
+    setStepClasses(data.items, cur);
+  };
+
+  slides.forEach((section) => {
+    const items = stepItems(section);
+    const declared = Number(section.dataset.daisSteps);
+    const n = Math.max(declared > 0 ? declared : 0, ...items.map((it) => it.order), 0);
+    if (n > 0) {
+      stepData.set(section, { n, cur: 0, items });
+      applyStep(section, 0);
+    }
+  });
+
+  // --- Print & overview expansion -------------------------------------------
+  // A stepped slide is a single <section>, so print and overview would show
+  // only its composed final state. Before printing, and while overview is open,
+  // insert one frozen clone per step so each sub-step becomes its own page /
+  // thumbnail; the source is hidden (dais.css) and restored on collapse.
+  let expanded = false;
+
+  const freezeClone = (clone, cur) => {
+    clone.style.setProperty("--dais-step", cur);
+    clone.dataset.daisStep = cur;
+    setStepClasses(stepItems(clone), cur);
+  };
+
+  const expandSteps = () => {
+    if (expanded) return;
+    expanded = true;
+    slides.forEach((section) => {
+      const data = stepData.get(section);
+      if (!data) return;
+      const frag = document.createDocumentFragment();
+      for (let k = 1; k <= data.n; k++) {
+        const clone = section.cloneNode(true);
+        // Strip descendant ids to avoid collisions, but KEEP the section's own
+        // id: deck step styling is scoped by slide id (e.g. `#results tr.step-
+        // current`), so a clone must carry it to render. The source stays first
+        // in DOM order, so getElementById() still resolves to it. Clones live
+        // only while expanded (overview/print) and are removed on collapse.
+        clone.querySelectorAll("[id]").forEach((el) => el.removeAttribute("id"));
+        clone.dataset.cloneOf = section.id;
+        clone.classList.add("dais-clone");
+        freezeClone(clone, k);
+        frag.appendChild(clone);
+      }
+      section.classList.add("dais-step-source");
+      section.after(frag);
+    });
+  };
+
+  const collapseSteps = () => {
+    if (!expanded) return;
+    expanded = false;
+    deck.querySelectorAll(":scope > .dais-clone").forEach((c) => c.remove());
+    slides.forEach((s) => s.classList.remove("dais-step-source"));
+  };
+
+  const setOverview = (on) => {
+    if (!overviewToggle) return;
+    overviewToggle.checked = on;
+    if (on) expandSteps();
+    else collapseSteps();
   };
 
   const updateCounter = () => {
@@ -96,12 +195,28 @@
     timer.addEventListener("click", () => runTimer(!ticking));
   }
 
+  // Reset a slide's steps when it becomes active. Forward entry (or a manual
+  // scroll/jump) opens at step 0; stepping back into a slide opens it fully
+  // revealed (enterAtEnd), matching the direction you arrived from.
+  let lastActive = -1;
+  let enterAtEnd = -1;
+
   const sync = () => {
+    const i = currentIndex();
     updateCounter();
+    if (i !== lastActive) {
+      const data = stepData.get(slides[i]);
+      if (data) {
+        const target = enterAtEnd === i ? data.n : 0;
+        if (data.cur !== target) applyStep(slides[i], target);
+      }
+      enterAtEnd = -1;
+      lastActive = i;
+    }
     // Leaving the opening slide is the presenter starting the talk.
-    if (timer && !ticking && banked === 0 && currentIndex() > 0) runTimer(true);
+    if (timer && !ticking && banked === 0 && i > 0) runTimer(true);
     // Update the hash without adding history entries or re-scrolling.
-    history.replaceState(null, "", `#${slides[currentIndex()].id}`);
+    history.replaceState(null, "", `#${slides[i].id}`);
   };
 
   // "scrollend" fires once snapping settles; fall back to debounced "scroll".
@@ -137,7 +252,10 @@
       case " ":
         if (!inOverview()) {
           event.preventDefault();
-          goTo(currentIndex() + 1);
+          const i = currentIndex();
+          const data = stepData.get(slides[i]);
+          if (data && data.cur < data.n) applyStep(slides[i], data.cur + 1);
+          else goTo(i + 1);
         }
         break;
       case "ArrowLeft":
@@ -145,7 +263,15 @@
       case "PageUp":
         if (!inOverview()) {
           event.preventDefault();
-          goTo(currentIndex() - 1);
+          const i = currentIndex();
+          const data = stepData.get(slides[i]);
+          if (data && data.cur > 0) {
+            applyStep(slides[i], data.cur - 1);
+          } else {
+            // Ask the previous slide to open fully revealed.
+            if (i > 0 && stepData.has(slides[i - 1])) enterAtEnd = i - 1;
+            goTo(i - 1);
+          }
         }
         break;
       case "Home":
@@ -157,7 +283,7 @@
         goTo(slides.length - 1);
         break;
       case "o":
-        if (overviewToggle) overviewToggle.checked = !overviewToggle.checked;
+        setOverview(!inOverview());
         break;
       case "s":
         if (notesToggle) notesToggle.checked = !notesToggle.checked;
@@ -166,20 +292,38 @@
         runTimer(!ticking);
         break;
       case "Escape":
-        if (overviewToggle) overviewToggle.checked = false;
+        setOverview(false);
         break;
     }
   });
 
-  // In overview mode, clicking a slide exits the grid and jumps to it.
+  // Direct clicks on the overview checkbox fire "change"; a programmatic
+  // setOverview() does not, so both paths keep the clones in sync.
+  if (overviewToggle) {
+    overviewToggle.addEventListener("change", () => {
+      if (overviewToggle.checked) expandSteps();
+      else collapseSteps();
+    });
+  }
+
+  // Expand for print, collapse afterward.
+  window.addEventListener("beforeprint", expandSteps);
+  window.addEventListener("afterprint", collapseSteps);
+
+  // In overview mode, clicking a slide (or a step clone) exits the grid and
+  // jumps to the underlying section.
   deck.addEventListener("click", (event) => {
     if (!inOverview()) return;
-    const slide = event.target.closest(".dais > section");
-    if (!slide) return;
-    overviewToggle.checked = false;
+    const el = event.target.closest(".dais > section");
+    if (!el) return;
+    const target = el.classList.contains("dais-clone")
+      ? document.getElementById(el.dataset.cloneOf)
+      : el;
+    setOverview(false); // collapses the clones
+    if (!target) return;
     // Wait a frame for the layout to switch back before scrolling.
     requestAnimationFrame(() => {
-      slide.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+      target.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
       sync();
     });
   });

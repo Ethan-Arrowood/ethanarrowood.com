@@ -641,6 +641,53 @@ body {
 }
 
 /* -------------------------------------------------------------------------
+ * 7b. Steps (fragments)
+ *
+ * Within-slide stepping, driven by dais.js. Right/Space advances one step
+ * at a time before moving to the next section; Left reverses. A slide is
+ * "stepped" when it contains .step / [data-step] elements or declares
+ * data-dais-steps="N".
+ *
+ *   .step        additive fragment — hidden until its step is reached, then
+ *                stays (a built-in reveal-on-step, for bullets/callouts).
+ *   [data-step]  participates in stepping at that order but gets NO built-in
+ *                visual — for stationary elements (e.g. a <tr>) that stay put
+ *                and only change emphasis. The deck styles .step-current /
+ *                .step-active itself.
+ *
+ * dais.js reflects state on the section (--dais-step / [data-dais-step]) and
+ * toggles .step-active (order <= current) and .step-current (order == current)
+ * on each step element.
+ *
+ * Progressive enhancement: the hidden state is gated on .dais-js, a class
+ * dais.js adds only when it runs. Without JS (and in the no-CSS reading order,
+ * print, and screen readers) every .step is simply visible — the composed
+ * final state. dais.js expands stepped slides into one page/thumbnail per step
+ * for print and overview (see §9, §11); the source slide is hidden while
+ * expanded via .dais-step-source.
+ * ---------------------------------------------------------------------- */
+
+@supports (container-type: scroll-state) {
+  .dais.dais-js .step {
+    transition: opacity 0.4s ease-out, translate 0.4s ease-out;
+  }
+
+  .dais.dais-js .step:not(.step-active) {
+    opacity: 0;
+    translate: 0 0.4em;
+  }
+}
+
+/* Stepping is user-driven content, not ambient motion, so it stays on under
+   reduced motion — but without the transition. (This differs from .reveal,
+   which force-shows.) */
+@media (prefers-reduced-motion: reduce) {
+  .dais.dais-js .step {
+    transition: none;
+  }
+}
+
+/* -------------------------------------------------------------------------
  * 8. Speaker notes & presenter controls
  *
  * <aside class="notes"> inside a slide is hidden from the audience. The
@@ -766,6 +813,12 @@ body:has(.dais-overview-toggle:checked) .dais::scroll-button(*) {
   display: none;
 }
 
+/* While dais.js has expanded stepped slides into one thumbnail per step, the
+   source slide is replaced by its clones. */
+body:has(.dais-overview-toggle:checked) .dais > section.dais-step-source {
+  display: none;
+}
+
 /* -------------------------------------------------------------------------
  * 10. Progress bar (optional element, scroll-driven, zero JS)
  *
@@ -838,6 +891,12 @@ body:has(.dais-overview-toggle:checked) .dais-progress {
 
   .dais > section:last-child {
     break-after: auto;         /* no trailing blank page */
+  }
+
+  /* dais.js expands stepped slides into one page per step; the source slide is
+     replaced by its clones, so it must not print. */
+  .dais > section.dais-step-source {
+    display: none;
   }
 
   .dais .reveal > * {
