@@ -17,6 +17,7 @@ Static site deployed to GitHub Pages via GitHub Actions. No CMS; all content is 
 npm run dev    # local dev server
 npm run build  # production build to ./dist
 npm run start  # preview production build
+npm run format # format with oxfmt
 ```
 
 ## Directory Structure
@@ -112,7 +113,7 @@ These slide decks may use Ethan's personal HTML+CSS based presentation framework
 - **Markdown plugins**: remark (dates, math, GitHub alerts) + rehype (KaTeX, slug, autolink headings, Shiki syntax highlighting with `github-light`).
 - **Code blocks**: Copy-to-clipboard buttons injected client-side in `PostLayout.astro`; excluded for `plain-text`, `bash`, and `terminal` blocks.
 - **Table of contents**: `TableOfContents.astro` auto-generates from h2/h3 headings.
-- **Formatting**: Prettier with tabs. Run on `.astro`, `.ts`, `.md` files.
+- **Formatting**: [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) with tabs and 80 columns (`.oxfmtrc.json`). `npm run format` to fix, `npm run format:check` to verify (CI runs this on pull requests). `public/` is ignored so vendored slide decks are never touched.
 
 ## CSS Variables (from BaseLayout)
 
