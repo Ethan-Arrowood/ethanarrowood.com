@@ -95,6 +95,14 @@
     #plateau .small { margin-block: 0.4cqi 1.2cqi; }
     #plateau .bars { font-size: 0.6em; gap: 0.15em 0.8em; }
 
+    /* Color reveal (data-dais-steps="2"): step 0 is all muted, step 1 marks
+       the optimum, step 2 adds the orange comparison rows. Without dais.js
+       there is no data-dais-step, so every color shows. */
+    #plateau[data-dais-step="0"] .bars :is(.best, .accent-2),
+    #plateau[data-dais-step="1"] .bars .accent-2 { color: var(--dais-muted); }
+    #plateau[data-dais-step="0"] .bars :is(.peak, .over) i,
+    #plateau[data-dais-step="1"] .bars .over i { background: var(--dais-muted); }
+
     /* Variance: one full 12-row table that never shifts. Stepping (dais
        data-dais-steps) changes only the highlighted cells, the heading, and the
        caption, so it reads as walking the argument in place. 12 rows must
@@ -813,7 +821,7 @@
       <aside class="notes"></aside>
     </section>
 
-    <section class="slide" id="plateau">
+    <section class="slide" id="plateau" data-dais-steps="2">
       <h2>The gain plateaus, then reverses</h2>
       <p class="small muted">Total median suite duration (shorter is faster)</p>
       <div class="bars-head">
@@ -827,7 +835,7 @@
         <b class="accent-2">4</b>  <span class="over"><i style="--pct: 39"></i></span> <b class="accent-2">3,904</b>
         <b>5</b>  <i style="--pct: 38"></i>           <b>3,759</b>
         <b>6</b>  <i style="--pct: 36"></i>           <b>3,597</b>
-        <b class="best">7</b> <span class="peak"><i style="--pct: 35"></i></span> <b class="best">3,468 ← best</b>
+        <b class="best">7</b> <span class="peak"><i style="--pct: 35"></i></span> <b class="best">3,468 <span class="step" data-step="1">← best</span></b>
         <b>8</b>  <i style="--pct: 37"></i>           <b>3,671</b>
         <b>9</b>  <i style="--pct: 36"></i>           <b>3,601</b>
         <b>10</b> <i style="--pct: 36"></i>           <b>3,534</b>
