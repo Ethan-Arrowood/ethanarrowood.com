@@ -170,7 +170,7 @@ I still wasn't loving this either, but thought I'd give it a shot. Here is the [
 Click to expand <code>@harperfast/nextjs/AGENTS.md</code> (second iteration)
 </summary>
 
-````md
+```md
 # Agent Guidelines: @harperfast/nextjs
 
 ## Autonomous Actions
@@ -209,7 +209,7 @@ Ask before doing:
 **CI is currently disabled** (`if: false` on the matrix job in `.github/workflows/integration-tests.yml`). Tests must be run locally.
 
 **`dist/` is gitignored.** It is not committed and not published from the repo directly — it is built as part of the publish step.
-````
+```
 
 </details>
 
@@ -238,7 +238,7 @@ Like anything in technical writing, succinctness and specificity is crucial. So 
 Click to expand <code>@harperfast/nextjs/AGENTS.md</code> (third iteration)
 </summary>
 
-````md
+```md
 # AGENTS.md
 
 Review the `README.md` and `CONTRIBUTING.md` for all relevant repository information.
@@ -261,7 +261,7 @@ Review the `README.md` and `CONTRIBUTING.md` for all relevant repository informa
 - Test startup is slow by design — each test file starts a real Harper instance and waits for Next.js to build (up to 2 minutes). A slow start is not a failure.
 - The ISR cache tests in `integrationTests/next-16.pw.ts` are intentionally skipped; `CacheHandler.cts` is a work in progress.
 - CI is currently disabled (`if: false` in `.github/workflows/integration-tests.yml`). Run tests locally.
-````
+```
 
 </details>
 

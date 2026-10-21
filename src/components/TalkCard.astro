@@ -54,12 +54,8 @@ const { url } = Astro.props.talk;
 	<h3 class="title">{title}</h3>
 	<p class="description">{description}</p>
 	<div class="events">
-		{
-			events.map((event: TalkEvent) => (
-				<span class="event">
-					{event.name} &mdash; {event.date}
-				</span>
-			))
-		}
+		{events.map((event: TalkEvent) => <span class="event">
+			{event.name} &mdash; {event.date}
+		</span>)}
 	</div>
 </a>

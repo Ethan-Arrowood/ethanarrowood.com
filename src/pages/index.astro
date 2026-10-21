@@ -299,25 +299,24 @@ const upcomingTalks = allTalks.filter((talk) =>
 			>
 			<ul class="highlights-list">
 				<li class="highlights-list-item">
-					Head of Open Source Engineering at <Link
-						href="https://harpersystems.dev">Harper</Link
-					>
+					Head of Open Source Engineering at
+					<Link href="https://harpersystems.dev">Harper</Link>
 				</li>
 				<li class="highlights-list-item">
-					<Link href="https://nodejs.org">Node.js</Link> Contributor & <Link
-						href="https://github.com/nodejs/undici/">Undici</Link
-					> Maintainer
+					<Link href="https://nodejs.org">Node.js</Link> Contributor &
+					<Link href="https://github.com/nodejs/undici/">Undici</Link>
+					Maintainer
 				</li>
 				<li class="highlights-list-item">
-					<Link href="https://openjsf.org">OpenJS Foundation</Link> & <Link
-						href="https://wintertc.org">WinterTC</Link
-					> Collaborator
+					<Link href="https://openjsf.org">OpenJS Foundation</Link> &
+					<Link href="https://wintertc.org">WinterTC</Link> Collaborator
 				</li>
 				<li class="highlights-list-item">
 					<Link href="https://endowment.dev">Open Source Endowment</Link> Donor
 				</li>
 				<li class="highlights-list-item">
-					Consulting via <Link href="https://alpinemooseinnovations.com"
+					Consulting via
+					<Link href="https://alpinemooseinnovations.com"
 						>Alpine Moose Innovations</Link
 					>
 				</li>
@@ -355,11 +354,12 @@ const upcomingTalks = allTalks.filter((talk) =>
 			with outdoor education programs in Summit County, Colorado. I care about
 			climate and environmental stewardship, and I am particularly drawn to
 			working with companies building in that space. I take on select consulting
-			engagements through <Link href="https://alpinemooseinnovations.com"
+			engagements through
+			<Link href="https://alpinemooseinnovations.com"
 				>Alpine Moose Innovations</Link
-			> and I am open to angel investing opportunities. Reach me at <Link
-				href="mailto:ethan@arrowood.dev">ethan@arrowood.dev</Link
-			>.
+			>
+			and I am open to angel investing opportunities. Reach me at
+			<Link href="mailto:ethan@arrowood.dev">ethan@arrowood.dev</Link>.
 		</p>
 	</section>
 
@@ -367,40 +367,34 @@ const upcomingTalks = allTalks.filter((talk) =>
 		<SectionHeading id="talks" class="sub-title">Talks</SectionHeading>
 		<div>
 			<h3 class="talks-sub-heading">Upcoming</h3>
-			{
-				upcomingTalks.length > 0 ? (
-					<ul class="upcoming-talks-list">
-						{upcomingTalks.map((talk) => (
-							<li class="upcoming-talk-item">
-								<p class="upcoming-talk-title">
-									<Link href={talk.url}>{talk.frontmatter.title}</Link>
-								</p>
-								<p class="upcoming-talk-description">
-									{talk.frontmatter.description}
-								</p>
-								<ul class="upcoming-talk-events">
-									{talk.frontmatter.events
-										.filter((event) => new Date(event.date) >= now)
-										.map((event: TalkEvent) => (
-											<li>
-												<Link href={event.eventUrl}>{event.name}</Link> &mdash;{" "}
-												{event.date}
-												{event.talkUrl && (
-													<>
-														{" "}
-														&mdash; <Link href={event.talkUrl}>Talk page</Link>
-													</>
-												)}
-											</li>
-										))}
-								</ul>
-							</li>
-						))}
-					</ul>
-				) : (
-					<p>No upcoming talks right now.</p>
-				)
-			}
+			{upcomingTalks.length > 0 ? (
+				<ul class="upcoming-talks-list">
+					{upcomingTalks.map((talk) => <li class="upcoming-talk-item">
+						<p class="upcoming-talk-title">
+							<Link href={talk.url}>{talk.frontmatter.title}</Link>
+						</p>
+						<p class="upcoming-talk-description">
+							{talk.frontmatter.description}
+						</p>
+						<ul class="upcoming-talk-events">
+							{talk.frontmatter.events
+								.filter((event) => new Date(event.date) >= now)
+								.map((event: TalkEvent) => <li>
+									<Link href={event.eventUrl}>{event.name}</Link> &mdash;{" "}
+									{event.date}
+									{event.talkUrl && (
+										<>
+											{" "}
+											&mdash; <Link href={event.talkUrl}>Talk page</Link>
+										</>
+									)}
+								</li>)}
+						</ul>
+					</li>)}
+				</ul>
+			) : (
+				<p>No upcoming talks right now.</p>
+			)}
 		</div>
 		<div>
 			<h3 class="talks-sub-heading">Past Talks</h3>
@@ -424,8 +418,9 @@ const upcomingTalks = allTalks.filter((talk) =>
 			>Consulting & Investing</SectionHeading
 		>
 		<p class="professional-summary-text">
-			I take on select consulting engagements through <Link
-				href="https://alpinemooseinnovations.com">Alpine Moose Innovations</Link
+			I take on select consulting engagements through
+			<Link href="https://alpinemooseinnovations.com"
+				>Alpine Moose Innovations</Link
 			>. My focus areas are open source program development, API and SDK
 			engineering, Node.js performance, and developer experience. I work best
 			with technical founders and engineering teams that need a senior
@@ -441,14 +436,14 @@ const upcomingTalks = allTalks.filter((talk) =>
 		<p class="professional-summary-text">
 			I am also exploring early-stage angel investing, with a focus on climate,
 			green energy, and developer tooling. If you are raising and think there is
-			a fit, I am happy to have a conversation. Contact me at <Link
-				href="mailto:ethan@arrowood.dev">ethan@arrowood.dev</Link
-			>.
+			a fit, I am happy to have a conversation. Contact me at
+			<Link href="mailto:ethan@arrowood.dev">ethan@arrowood.dev</Link>.
 		</p>
 	</section>
 
 	<section id="experience" class="experience-container">
-		<SectionHeading id="experience" class="sub-title">Experience</SectionHeading
+		<SectionHeading id="experience" class="sub-title"
+			>Experience</SectionHeading
 		>
 		<ol class="experience-list">
 			<li class="experience-list-item experience-list-item-grouped">
@@ -462,12 +457,14 @@ const upcomingTalks = allTalks.filter((talk) =>
 						<li class="experience-list-item-description-item">
 							Founded and lead Harper's Open Source Program Office (OSPO),
 							coordinating open source strategy, developer relations, and
-							community across engineering, marketing, and sales, and driving the
-							company's transition from a closed-source product to an
-							open-source-first platform. See my talk <Link
+							community across engineering, marketing, and sales, and driving
+							the company's transition from a closed-source product to an
+							open-source-first platform. See my talk
+							<Link
 								href="/talks/building-sustainable-open-source-the-harper-story"
 								>Building Sustainable Open Source: The Harper Story</Link
-							> for more information.
+							>
+							for more information.
 						</li>
 						<li class="experience-list-item-description-item">
 							Architected a dual-license model: Apache 2.0 core with a
@@ -478,17 +475,19 @@ const upcomingTalks = allTalks.filter((talk) =>
 							Established the OSPO's program-management foundation: a repository
 							taxonomy and classification standard applied across the
 							organization's public repositories, contribution governance, and
-							shared <Link href="https://github.com/HarperFast/code-guidelines"
+							shared
+							<Link href="https://github.com/HarperFast/code-guidelines"
 								>engineering guidelines</Link
 							>.
 						</li>
 						<li class="experience-list-item-description-item">
 							Represent Harper in the OpenJS Foundation and WinterTC (ECMA
 							TC55), contributing to Node.js ecosystem and JavaScript runtime
-							interoperability standards, including the WinterTC <Link
-								href="https://github.com/WinterTC55/runtime-keys"
+							interoperability standards, including the WinterTC
+							<Link href="https://github.com/WinterTC55/runtime-keys"
 								>Runtime Keys</Link
-							> technical report.
+							>
+							technical report.
 						</li>
 						<li class="experience-list-item-description-item">
 							Coordinate Harper's developer relations and open source content:
@@ -496,25 +495,31 @@ const upcomingTalks = allTalks.filter((talk) =>
 							Source" podcast, and the Harper Learn tutorial series.
 						</li>
 						<li class="experience-list-item-description-item">
-							Replatformed the <Link href="https://github.com/HarperFast/documentation"
+							Replatformed the
+							<Link href="https://github.com/HarperFast/documentation"
 								>documentation site</Link
-							> onto Docusaurus and Harper Fabric (dogfooding the platform) with
+							>
+							onto Docusaurus and Harper Fabric (dogfooding the platform) with
 							per-PR preview and continuous deploys, and drove an
-							AI-discoverability initiative (<code>llms.txt</code> + <code>*.md</code>) so Harper's docs are
-							consumable by LLMs and coding agents.
+							AI-discoverability initiative (<code>llms.txt</code> +
+							<code>*.md</code>) so Harper's docs are consumable by LLMs and
+							coding agents.
 						</li>
 						<li class="experience-list-item-description-item">
-							Created the Harper <Link
-								href="https://github.com/HarperFast/integration-testing"
+							Created the Harper
+							<Link href="https://github.com/HarperFast/integration-testing"
 								>integration-testing framework</Link
-							>: a performant, parallelizable, and framework-agnostic system that
-							runs the full
-							test suite against real Harper instances, using process isolation
-							and dynamic port allocation to run in parallel across local
-							machines, multiple operating systems, and CI. See my talk <Link
+							>: a performant, parallelizable, and framework-agnostic system
+							that runs the full test suite against real Harper instances, using
+							process isolation and dynamic port allocation to run in parallel
+							across local machines, multiple operating systems, and CI. See my
+							talk
+							<Link
 								href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing"
-								>Performance, Parallelizable, Framework Agnostic Node.js Integration Testing</Link
-							> for more information.
+								>Performance, Parallelizable, Framework Agnostic Node.js
+								Integration Testing</Link
+							>
+							for more information.
 						</li>
 					</ol>
 				</div>
@@ -524,23 +529,25 @@ const upcomingTalks = allTalks.filter((talk) =>
 					<h3 class="experience-list-item-title">Senior Software Engineer</h3>
 					<ol class="experience-list-item-description">
 						<li class="experience-list-item-description-item">
-							Created the <Link
+							Created the
+							<Link
 								href="https://docs.harperdb.io/docs/reference/components/plugins"
 								>Harper Plugin API</Link
-							> and led migration of core surfaces (REST, MQTT, GraphQL,
+							>
+							and led migration of core surfaces (REST, MQTT, GraphQL,
 							authentication) onto the plugin and component architecture.
 						</li>
 						<li class="experience-list-item-description-item">
-							Built Harper's front-end framework integrations, including the <Link
-								href="https://github.com/HarperFast/nextjs">Next.js</Link
-							> plugin with a custom Next.js cache handler, and <Link
-								href="https://github.com/HarperFast/astro">Astro</Link
-							>, plus an integrated GraphQL engine.
+							Built Harper's front-end framework integrations, including the
+							<Link href="https://github.com/HarperFast/nextjs">Next.js</Link>
+							plugin with a custom Next.js cache handler, and
+							<Link href="https://github.com/HarperFast/astro">Astro</Link>,
+							plus an integrated GraphQL engine.
 						</li>
 						<li class="experience-list-item-description-item">
 							Optimized core product performance with high-performance Node.js
-							and C++, and debugged production Harper Fabric instances across the
-							storage (LMDB/RocksDB) and replication layers.
+							and C++, and debugged production Harper Fabric instances across
+							the storage (LMDB/RocksDB) and replication layers.
 						</li>
 					</ol>
 				</div>
@@ -549,7 +556,8 @@ const upcomingTalks = allTalks.filter((talk) =>
 				<h3 class="experience-list-item-title">
 					<Link href="https://alpinemooseinnovations.com"
 						>Alpine Moose Innovations</Link
-					> - Founder & Consultant
+					>
+					- Founder & Consultant
 				</h3>
 				<p class="experience-list-item-date">June 2024 - Present</p>
 				<ol class="experience-list-item-description">

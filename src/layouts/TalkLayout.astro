@@ -37,44 +37,46 @@ const events = (frontmatter.events as TalkEvent[])
 				)}
 			</dl>
 			<div class="talk-events">
-				{
-					events.map((event) => (
-						<div class="talk-event">
-							<div class="talk-event-heading">
-								<span class="talk-event-name">{event.name}</span>
-								<span
-									class:list={[
-										"talk-event-status",
-										event.isUpcoming ? "is-upcoming" : "is-past",
-									]}
-								>
-									{event.isUpcoming ? "Upcoming" : "Past"}
-								</span>
-							</div>
-							<span class="talk-event-date">{event.date}</span>
-							<div class="talk-event-links">
-								<a href={event.eventUrl} target="_blank" rel="noreferrer">
-									Event site
-								</a>
-								{event.talkUrl && (
-									<a href={event.talkUrl} target="_blank" rel="noreferrer">
-										Talk page
-									</a>
-								)}
-								{event.videoUrl && (
-									<a href={event.videoUrl} target="_blank" rel="noreferrer">
-										Watch recording
-									</a>
-								)}
-								{event.slidesUrl && (
-									<a href={event.slidesUrl} target="_blank" rel="noreferrer">
-										Slides
-									</a>
-								)}
-							</div>
-						</div>
-					))
-				}
+				{events.map((event) => <div class="talk-event">
+					<div class="talk-event-heading">
+						<span class="talk-event-name">{event.name}</span>
+						<span
+							class:list={[
+								"talk-event-status",
+								event.isUpcoming ? "is-upcoming" : "is-past",
+							]}
+						>
+							{event.isUpcoming ? "Upcoming" : "Past"}
+						</span>
+					</div>
+					<span class="talk-event-date">{event.date}</span>
+					<div class="talk-event-links">
+						<a href={event.eventUrl} target="_blank" rel="noreferrer">
+							Event site
+						</a>
+						{event.talkUrl && <a
+							href={event.talkUrl}
+							target="_blank"
+							rel="noreferrer"
+						>
+							Talk page
+						</a>}
+						{event.videoUrl && <a
+							href={event.videoUrl}
+							target="_blank"
+							rel="noreferrer"
+						>
+							Watch recording
+						</a>}
+						{event.slidesUrl && <a
+							href={event.slidesUrl}
+							target="_blank"
+							rel="noreferrer"
+						>
+							Slides
+						</a>}
+					</div>
+				</div>)}
 			</div>
 		</div>
 

@@ -205,13 +205,19 @@ const pageDescription = description || defaultDescription;
 		<!-- Google Analytics (Production only) -->
 		{import.meta.env.PROD && (
 			<>
-				<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-FKHLX85PGZ"></script>
+				<script
+					is:inline
+					async
+					src="https://www.googletagmanager.com/gtag/js?id=G-FKHLX85PGZ"
+				></script>
 				<script is:inline>
 					window.dataLayer = window.dataLayer || [];
-					function gtag(){dataLayer.push(arguments);}
-					gtag('js', new Date());
+					function gtag() {
+						dataLayer.push(arguments);
+					}
+					gtag("js", new Date());
 
-					gtag('config', 'G-FKHLX85PGZ');
+					gtag("config", "G-FKHLX85PGZ");
 				</script>
 			</>
 		)}
@@ -221,7 +227,9 @@ const pageDescription = description || defaultDescription;
 		<header>
 			<div>
 				<h1 class="title">Ethan Arrowood</h1>
-				<h2 class="tagline">Optimizing Systems, Organizing Communities, Overcoming Summits</h2>
+				<h2 class="tagline">
+					Optimizing Systems, Organizing Communities, Overcoming Summits
+				</h2>
 			</div>
 			<nav>
 				<a href="/">home</a>

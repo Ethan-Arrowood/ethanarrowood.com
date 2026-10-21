@@ -50,7 +50,7 @@ const { url } = Astro.props.post;
 </style>
 
 <a href={url} class="blog-post-card">
-	<h3 class="title" set:html={renderInlineCode(title)}></h3>
+	<h3 class="title" set:html={renderInlineCode(title)} />
 	<p class="date">{pubDate}</p>
 	<p class="description">{description}</p>
 </a>

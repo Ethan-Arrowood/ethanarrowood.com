@@ -54,13 +54,9 @@ const allPosts = Object.values(
 	<section class="posts-container">
 		<SectionHeading id="posts">Posts</SectionHeading>
 		<ul class="posts-list">
-			{
-				allPosts.map((post: any) => (
-					<li class="posts-list-item">
-						<BlogPostCard {post} />
-					</li>
-				))
-			}
+			{allPosts.map((post: any) => <li class="posts-list-item">
+				<BlogPostCard {post} />
+			</li>)}
 		</ul>
 	</section>
 </BaseLayout>

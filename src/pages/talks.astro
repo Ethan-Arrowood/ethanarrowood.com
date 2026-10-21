@@ -118,35 +118,25 @@ const bios = [
 </style>
 
 <BaseLayout title="Talks">
-	{
-		upcoming.length > 0 && (
-			<section>
-				<SectionHeading id="upcoming">Upcoming</SectionHeading>
-				<ul class="talks-list">
-					{upcoming.map((talk) => (
-						<li>
-							<TalkCard talk={talk} />
-						</li>
-					))}
-				</ul>
-			</section>
-		)
-	}
+	{upcoming.length > 0 && <section>
+		<SectionHeading id="upcoming">Upcoming</SectionHeading>
+		<ul class="talks-list">
+			{upcoming.map((talk) => <li>
+				<TalkCard talk={talk} />
+			</li>)}
+		</ul>
+	</section>}
 	<section>
 		<SectionHeading id="past-talks">Past Talks</SectionHeading>
-		{
-			past.length > 0 ? (
-				<ul class="talks-list">
-					{past.map((talk) => (
-						<li>
-							<TalkCard talk={talk} />
-						</li>
-					))}
-				</ul>
-			) : (
-				<p>Past talks coming soon.</p>
-			)
-		}
+		{past.length > 0 ? (
+			<ul class="talks-list">
+				{past.map((talk) => <li>
+					<TalkCard talk={talk} />
+				</li>)}
+			</ul>
+		) : (
+			<p>Past talks coming soon.</p>
+		)}
 	</section>
 	<section>
 		<SectionHeading id="speaker-bio">Speaker Bio</SectionHeading>
@@ -154,27 +144,23 @@ const bios = [
 			Ready-to-use bios for event organizers. Pick the length that fits, or copy
 			it directly.
 		</p>
-		{
-			bios.map((bio) => (
-				<div class="bio">
-					<div class="bio-header">
-						<h3 class="bio-label">{bio.label}</h3>
-						<span class="bio-count">{bio.text.length} characters</span>
-						<button
-							class="bio-copy"
-							type="button"
-							data-target={bio.id}
-							aria-label={`Copy ${bio.label.toLowerCase()} bio`}
-						>
-							Copy
-						</button>
-					</div>
-					<p class="bio-text" id={bio.id}>
-						{bio.text}
-					</p>
-				</div>
-			))
-		}
+		{bios.map((bio) => <div class="bio">
+			<div class="bio-header">
+				<h3 class="bio-label">{bio.label}</h3>
+				<span class="bio-count">{bio.text.length} characters</span>
+				<button
+					class="bio-copy"
+					type="button"
+					data-target={bio.id}
+					aria-label={`Copy ${bio.label.toLowerCase()} bio`}
+				>
+					Copy
+				</button>
+			</div>
+			<p class="bio-text" id={bio.id}>
+				{bio.text}
+			</p>
+		</div>)}
 	</section>
 	<section>
 		<BookMeSpeaker />

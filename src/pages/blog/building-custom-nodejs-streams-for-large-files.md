@@ -11,11 +11,11 @@ description: "What started as generating prime numbers for Project Euler problem
 Math has always fascinated me, especially when it intersects with programming. Recently, I started working through the [Project Euler](https://projecteuler.net/) problem set to sharpen my computational mathematics skills. As an added challenge, I avoid using any third-party libraries when solving these problems limiting myself to the standard JavaScript `Math` API and whatever I can build from scratch. My overall goal is not just to solve the problems, but also to deeply understand them, the underlying concepts, and even work through potential optimizations both mathematically and algorithmically.
 
 > This post does not contain any Project Euler solutions, but it is not technically 100% spoiler-free.
-> 
+>
 > It includes some utility functions I created to solve problems, a small hint to problem 5, and briefly discusses the extremely-inefficient, naive solution concept for problem 41.
 >
 > This information is only provided from a story-telling perspective in order to explain why and how I wound up with a large file of prime numbers!
-> 
+>
 > Other than the specific details above, there are no other Project Euler spoilers in this post. Enjoy!
 
 > [!NOTE]
@@ -92,7 +92,7 @@ The [`Transform`](https://nodejs.org/api/stream.html#class-streamtransform) stre
 While this implementation is not the fastest way to generate primes, because it uses a generator, it could at least efficiently generate essentially infinite values without ever running out of memory. For the relatively low count of one-hundred thousand prime numbers, this script runs in 0.25 seconds on my M1 MacBook Pro and generates a 708KB file.
 
 ```
-❯ time node generatePrimes.ts 
+❯ time node generatePrimes.ts
   node generatePrimes.ts  0.29s user 0.02s system 125% cpu 0.250 total
 ❯ du -h primes-count-100-000.txt
   708K    primes-count-100-000.txt
@@ -145,14 +145,13 @@ primeGenerator({ limit: 2_000_000 });
 Now, this script takes 0.376 seconds and results in a file 2.0MB large; not bad!
 
 > And with a couple more useful commands, it turns out the largest prime number less than two million is 1,999,993 and it is the 148,933rd prime number!
-> 
+>
 > ```
 > ❯ tail -n 1 primes/primes.txt
 >   1999993
 > ❯ wc -l primes/primes.txt
 >   148933 primes/primes.txt
 > ```
->
 
 So in order to solve problem 10, I only had to generate roughly 50,000 more prime numbers than I had previously.
 
@@ -161,8 +160,8 @@ So in order to solve problem 10, I only had to generate roughly 50,000 more prim
 Fast-forward to problem 41, [Pandigital Prime](https://projecteuler.net/problem=41):
 
 > We shall say that an $n$-digit number is pandigital if it makes use of all the
-digits $1$ to $n$ exactly once. For example, $2143$ is a $4$-digit pandigital
-and is also prime.
+> digits $1$ to $n$ exactly once. For example, $2143$ is a $4$-digit pandigital
+> and is also prime.
 >
 > What is the largest $n$-digit pandigital prime that exists?
 
@@ -276,7 +275,7 @@ For simplicity, the `_writev()` method is omitted. Furthermore, the `Callback` t
 
 Input values are intended to be JavaScript `number` type; thus, enable the Writable [`objectMode`](https://nodejs.org/api/stream.html#object-mode) option. I've found it easiest to limit and validate chunk types to exactly what I want to support; otherwise, the complexity can get out of hand. You can always use a `Transform` stream to convert chunk types efficiently. Now, this option doesn't necessarily limit what can be written to this stream, and so we will also validate chunks within the `_write()` method.
 
-The output destination and file size limit should be configurable. These should be constructor options, and the `maxFileSize` should have some reasonable default, like 100MB. Additionally, this option should be validated to be at least as large as one number per file. For obvious reasons this edge-case of storing one number per file would be extremely inefficient, but it is beneficial to consider the possibility nonetheless. I used the `max` prefix here, because the implementation technically won't always have the same file size. The last file will likely be smaller, and when working with reasonably large numbers, there is the possibility for small size differentials when the next prime would exceed the specified maximum file size. 
+The output destination and file size limit should be configurable. These should be constructor options, and the `maxFileSize` should have some reasonable default, like 100MB. Additionally, this option should be validated to be at least as large as one number per file. For obvious reasons this edge-case of storing one number per file would be extremely inefficient, but it is beneficial to consider the possibility nonetheless. I used the `max` prefix here, because the implementation technically won't always have the same file size. The last file will likely be smaller, and when working with reasonably large numbers, there is the possibility for small size differentials when the next prime would exceed the specified maximum file size.
 
 Right now, the implementation focuses on integers, but could easily be adapted to support `BigInt` or even floats too.
 
@@ -624,7 +623,7 @@ primes-limit-1-000-000/
 And to verify the size:
 
 ```
-❯ du -h primes/primes-limit-1-000-000/*         
+❯ du -h primes/primes-limit-1-000-000/*
 100K    primes/primes-limit-1-000-000/000000.txt
 100K    primes/primes-limit-1-000-000/000001.txt
 100K    primes/primes-limit-1-000-000/000002.txt
@@ -640,7 +639,7 @@ That looks good to me!
 And line count:
 
 ```
-❯ wc -l primes/primes-limit-1-000-000/*  
+❯ wc -l primes/primes-limit-1-000-000/*
    16202 primes/primes-limit-1-000-000/000000.txt
    14628 primes/primes-limit-1-000-000/000001.txt
    14628 primes/primes-limit-1-000-000/000002.txt
@@ -722,6 +721,7 @@ await pipeline(
 ```
 
 Result:
+
 ```
 chunk details: 65536 10937
 chunk details: 65536 9363
@@ -876,7 +876,7 @@ Verify the size:
 100K    primes/primes-count-100-000/000004.txt
 100K    primes/primes-count-100-000/000005.txt
  96K    primes/primes-count-100-000/000006.txt
-❯ du -h primes/primes-count-100-000/ 
+❯ du -h primes/primes-count-100-000/
 696K    primes/primes-count-100-000/
 ❯ du -h primes/primes-count-100-000.txt
 696K    primes/primes-count-100-000.txt
@@ -885,7 +885,7 @@ Verify the size:
 And line count:
 
 ```
-❯ wc -l ./primes/primes-count-100-000/*      
+❯ wc -l ./primes/primes-count-100-000/*
    16202 ./primes/primes-count-100-000/000000.txt
    14628 ./primes/primes-count-100-000/000001.txt
    14628 ./primes/primes-count-100-000/000002.txt
@@ -894,7 +894,7 @@ And line count:
    13273 ./primes/primes-count-100-000/000005.txt
    12013 ./primes/primes-count-100-000/000006.txt
   100000 total
-❯ wc -l primes/primes-count-100-000.txt  
+❯ wc -l primes/primes-count-100-000.txt
   100000 primes/primes-count-100-000.txt
 ```
 
@@ -962,7 +962,7 @@ Verify the size:
  50M    primes/primes-count-100-000-000/000017.txt
  50M    primes/primes-count-100-000-000/000018.txt
  45M    primes/primes-count-100-000-000/000019.txt
-❯ du -h primes/primes-count-100-000-000/ 
+❯ du -h primes/primes-count-100-000-000/
 997M    primes/primes-count-100-000-000/
 ❯ du -h primes/primes-count-100-000-000.txt
 994M    primes/primes-count-100-000-000.txt

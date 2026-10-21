@@ -39,17 +39,20 @@ const { frontmatter, headings } = Astro.props;
 	}
 </style>
 
-<BaseLayout title={stripCode(frontmatter.title)} description={frontmatter.description}>
+<BaseLayout
+	title={stripCode(frontmatter.title)}
+	description={frontmatter.description}
+>
 	<section class="post-container">
 		<div class="post-header">
-			<h1 class="post-title" set:html={renderInlineCode(frontmatter.title)}></h1>
+			<h1 class="post-title" set:html={renderInlineCode(frontmatter.title)} />
 			<p class="post-pub-date">Published: {frontmatter.pubDate}</p>
-			{
-				frontmatter.editDate &&
-					frontmatter.pubDate.valueOf() !== frontmatter.editDate.valueOf() && (
-						<p class="post-edit-date">Updated: {frontmatter.editDate}</p>
-					)
-			}
+			{frontmatter.editDate &&
+				frontmatter.pubDate.valueOf() !== frontmatter.editDate.valueOf() && <p
+					class="post-edit-date"
+				>
+					Updated: {frontmatter.editDate}
+				</p>}
 		</div>
 		<TableOfContents headings={headings} />
 		<div class="post-content">
@@ -60,7 +63,8 @@ const { frontmatter, headings } = Astro.props;
 
 <script>
 	document.addEventListener("DOMContentLoaded", () => {
-		const codeBlocks = document.querySelectorAll<HTMLPreElement>(".post-content pre");
+		const codeBlocks =
+			document.querySelectorAll<HTMLPreElement>(".post-content pre");
 
 		codeBlocks.forEach((pre) => {
 			const code = pre.querySelector("code");

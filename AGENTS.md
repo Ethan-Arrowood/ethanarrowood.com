@@ -117,13 +117,13 @@ These slide decks may use Ethan's personal HTML+CSS based presentation framework
 
 ## CSS Variables (from BaseLayout)
 
-| Variable          | Value       | Use                   |
-|-------------------|-------------|-----------------------|
-| `--background`    | `#f5f5f1`   | Page background       |
-| `--accent`        | `#2d8b72`   | Links, highlights     |
-| `--text-primary`  | `#1a1a1a`   | Body text             |
-| `--text-secondary`| `#666666`   | Metadata, secondary   |
-| `--code-bg`       | `#d4d4d4`   | Inline code           |
+| Variable           | Value     | Use                 |
+| ------------------ | --------- | ------------------- |
+| `--background`     | `#f5f5f1` | Page background     |
+| `--accent`         | `#2d8b72` | Links, highlights   |
+| `--text-primary`   | `#1a1a1a` | Body text           |
+| `--text-secondary` | `#666666` | Metadata, secondary |
+| `--code-bg`        | `#d4d4d4` | Inline code         |
 
 ## Writing Style Rules
 
