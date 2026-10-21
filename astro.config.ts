@@ -1,5 +1,6 @@
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
+import { unified } from "@astrojs/markdown-remark";
 import { remarkDatePlugin } from "./src/utils/remarkDatePlugin.js";
 import { remarkAlert } from "remark-github-blockquote-alert";
 import remarkMath from "remark-math";
@@ -11,17 +12,19 @@ export default defineConfig({
 	site: "https://ethanarrowood.com",
 	integrations: [mdx()],
 	markdown: {
-		remarkPlugins: [remarkDatePlugin, remarkAlert, remarkMath],
-		rehypePlugins: [
-			rehypeKatex,
-			rehypeSlug,
-			[
-				rehypeAutolinkHeadings,
-				{
-					behavior: "wrap",
-				},
+		processor: unified({
+			remarkPlugins: [remarkDatePlugin, remarkAlert, remarkMath],
+			rehypePlugins: [
+				rehypeKatex,
+				rehypeSlug,
+				[
+					rehypeAutolinkHeadings,
+					{
+						behavior: "wrap",
+					},
+				],
 			],
-		],
+		}),
 		shikiConfig: {
 			theme: "github-light",
 			// Code is easier to read not-wrapped on mobile
