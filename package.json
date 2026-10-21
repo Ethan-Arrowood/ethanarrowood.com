@@ -10,7 +10,7 @@
 	},
 	"devDependencies": {
 		"@justinribeiro/lite-youtube": "1.9.0",
-		"astro": "6.1.9",
+		"astro": "6.4.8",
 		"prettier": "3.9.10",
 		"prettier-plugin-astro": "1.1.1",
 		"rehype-autolink-headings": "7.1.0",
@@ -31,6 +31,6 @@
 		"node": "26"
 	},
 	"dependencies": {
-		"@astrojs/mdx": "5.0.4"
+		"@astrojs/mdx": "6.0.3"
 	}
 }
