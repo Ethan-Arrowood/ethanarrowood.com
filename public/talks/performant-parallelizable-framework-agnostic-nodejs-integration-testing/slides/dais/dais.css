@@ -772,14 +772,44 @@ body:has(.dais-notes-toggle:checked) .dais .notes {
  *
  * The deck re-lays itself as a grid of thumbnails. Because slide typography
  * is in cqi units, every slide shrinks losslessly — no transforms needed.
+ *
+ * Two things the grid can't infer, so it uses a known column count and
+ * derives a thumbnail width from it:
+ * - A slide's OWN font-size (2.4cqi, §4) resolves against the deck, not the
+ *   slide, so it would stay full-size and every em inside the slide
+ *   (tables, code, .small, deck styles) would blow up.
+ * - A slide is a size container, so it contributes no height to its grid
+ *   row; rows would collapse to the padding and thumbnails would overlap.
  * ---------------------------------------------------------------------- */
+
+body:has(.dais-overview-toggle:checked) {
+  /* Thumbnails stay ≥ 24rem: n columns need 25n + 1 rem (1rem gaps/padding). */
+  --dais-overview-cols: 2;
+  --dais-overview-thumb: calc(
+    (100dvw - 2rem - (var(--dais-overview-cols) - 1) * 1rem)
+    / var(--dais-overview-cols)
+  );
+}
+
+@media (min-width: 76rem) {
+  body:has(.dais-overview-toggle:checked) { --dais-overview-cols: 3; }
+}
+
+@media (min-width: 101rem) {
+  body:has(.dais-overview-toggle:checked) { --dais-overview-cols: 4; }
+}
+
+@media (min-width: 126rem) {
+  body:has(.dais-overview-toggle:checked) { --dais-overview-cols: 5; }
+}
 
 body:has(.dais-overview-toggle:checked) .dais {
   width: 100dvw;
   height: 100dvh;
   aspect-ratio: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(24rem, 44dvw), 1fr));
+  grid-template-columns: repeat(var(--dais-overview-cols), minmax(0, 1fr));
+  grid-auto-rows: calc(var(--dais-overview-thumb) / (var(--dais-aspect)));
   gap: 1rem;
   padding: 1rem;
   box-sizing: border-box;
@@ -795,6 +825,7 @@ body:has(.dais-overview-toggle:checked) .dais > section {
   border-radius: 0.5rem;
   outline: 1px solid color-mix(in srgb, var(--dais-text) 25%, transparent);
   cursor: pointer;
+  font-size: calc(var(--dais-overview-thumb) * 0.024);  /* 2.4cqi of the thumb */
 }
 
 body:has(.dais-overview-toggle:checked) .dais > section:hover {

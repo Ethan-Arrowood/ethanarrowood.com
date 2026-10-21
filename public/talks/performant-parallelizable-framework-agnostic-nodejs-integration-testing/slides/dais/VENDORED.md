@@ -9,15 +9,17 @@ deck references it with **relative** paths (`dais/dais.css`, etc.). That way a
 new talk can adopt a newer Dais without touching, or re-testing, any older deck.
 
 - Source: https://github.com/Ethan-Arrowood/dais (`@arrowood.dev/dais`)
-- Version: 0.3.0 (from source)
-- Vendored: 2026-08-11
+- Version: 0.3.0 (published npm tarball)
+- Vendored: 2026-10-21
 
 Note for 0.3.0: adds stepped slides (fragments). `.step` reveals an element on
 Right/Space; `data-step="k"` marks a stationary element (e.g. a `<tr>`) that
 only changes emphasis via the framework-toggled `.step-current`/`.step-active`
 hooks. Print and overview expand each stepped slide into one page/thumbnail per
-step. Without JS every step is visible (composed final state). `dais.css` and
-`dais.js` updated; `themes/midnight.css` unchanged.
+step. Without JS every step is visible (composed final state). Overview mode
+also stops thumbnails overlapping and sizes em-based content (tables, code)
+to the thumbnail. `dais.css` and `dais.js` updated; `themes/midnight.css`
+unchanged.
 
 Note for 0.2.0: slide dots and edge arrows are now opt-in. The deck's
 `<main class="dais dais-dots dais-arrows">` enables both; drop a class to turn
