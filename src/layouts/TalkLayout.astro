@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import BookMeSpeaker from "../components/BookMeSpeaker.astro";
-import type { TalkEvent } from "../utils/talkfrontmatter";
+import type { TalkEdition, TalkEvent } from "../utils/talkfrontmatter";
 import "../styles/post.css";
 import "../styles/talk.css";
 
@@ -9,13 +9,15 @@ const { frontmatter } = Astro.props;
 
 const now = new Date();
 
-const events = (frontmatter.events as TalkEvent[])
+const events = ((frontmatter.events ?? []) as TalkEvent[])
 	.map((event) => ({
 		...event,
 		isUpcoming: new Date(event.date) >= now,
 	}))
 	// Upcoming events first, then most recent past events.
 	.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+const editions = (frontmatter.editions ?? []) as TalkEdition[];
 ---
 
 <BaseLayout title={frontmatter.title} description={frontmatter.description}>
@@ -75,6 +77,19 @@ const events = (frontmatter.events as TalkEvent[])
 						>
 							Slides
 						</a>}
+					</div>
+				</div>)}
+				{editions.map((edition) => <div class="talk-event">
+					<div class="talk-event-heading">
+						<span class="talk-event-name">{edition.name}</span>
+						{edition.draft && <span class="talk-event-status is-draft">
+							Draft
+						</span>}
+					</div>
+					<div class="talk-event-links">
+						<a href={edition.slidesUrl} target="_blank" rel="noreferrer">
+							Slides
+						</a>
 					</div>
 				</div>)}
 			</div>

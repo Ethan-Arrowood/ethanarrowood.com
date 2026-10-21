@@ -6,7 +6,7 @@ interface Props {
 	talk: MarkdownInstance<TalkFrontmatter>;
 }
 
-const { title, description, events } = Astro.props.talk.frontmatter;
+const { title, description, events = [] } = Astro.props.talk.frontmatter;
 const { url } = Astro.props.talk;
 ---
 
@@ -54,9 +54,9 @@ const { url } = Astro.props.talk;
 <a href={url} class="talk-card">
 	<h3 class="title">{title}</h3>
 	<p class="description">{description}</p>
-	<div class="events">
+	{events.length > 0 && <div class="events">
 		{events.map((event: TalkEvent) => <span class="event">
 			{event.name} &mdash; {event.date}
 		</span>)}
-	</div>
+	</div>}
 </a>

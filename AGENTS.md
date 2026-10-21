@@ -83,6 +83,10 @@ events:
     talkUrl: "https://..."   # optional, schedule/talk page
     videoUrl: "https://..."  # optional, recording
     slidesUrl: "https://..." # optional, slides
+editions:                     # optional, decks not tied to an event
+  - name: "2027 edition"
+    slidesUrl: "/talks/<talk-slug>/2027/slides/"
+    draft: true               # optional, shows a "Draft" badge
 ---
 
 Content here.
@@ -90,6 +94,8 @@ Content here.
 
 - `talkUrl` (schedule or talk page entry), `videoUrl` (recording), and `slidesUrl` (slides) are all optional per-event links.
 - Talks are split into "upcoming" and "past" on the listing page based on event dates (a talk is "upcoming" if any of its events is in the future). On the talk page itself, each event also gets an "Upcoming"/"Past" badge, upcoming events sort first, and `videoUrl`/`slidesUrl` surface "Watch recording" / "Slides" links.
+- `events` is optional. A talk with no events is listed under "In Development" on the listing page.
+- `editions` lists versions of the deck that are not tied to an event, such as a new edition in development. Each shows on the talk page with a "Slides" link, after the events. `draft: true` adds a "Draft" badge.
 - **Embedding a video** in a talk body: use the `lite-youtube` web component, not a raw `<iframe>`. It renders a thumbnail and only loads the YouTube iframe on click (no third-party JS/cookies until play). `TalkLayout.astro` already registers the component, so just drop it into the Markdown body:
 
   ```html
@@ -107,6 +113,8 @@ Some talks slides are stored as static assets within the `public/talks/` directo
 For example, the talk "Performant, Parallelizable, Framework Agnostic Node.js Integration Testing" has its talk page at `ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing`, sourced from `src/pages/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing.md`. Its deck for "Node.js Interactive @ Render ATL 2026" lives in `public/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/nodejs-interactive-render-atl-2026/slides/` and is served at `ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/nodejs-interactive-render-atl-2026/slides/`. Point that event's `slidesUrl` at the same path.
 
 That deck used to live at `.../performant-parallelizable-framework-agnostic-nodejs-integration-testing/slides/`. A small redirect page stays there (keeping the `#slide` hash) because the old URL was shared. Keep redirects like it when moving a deck that has been shared.
+
+An edition's deck lives beside the event folders, in a folder named by its edition slug: `public/talks/<talk-slug>/<edition-slug>/slides/`. For example, a "2027 edition" lives in `public/talks/<talk-slug>/2027/slides/`. A draft deck's `index.html` carries `<meta name="robots" content="noindex">`; remove it once the edition is final. When an edition is presented at an event, copy its folder into that event's folder and point the event's `slidesUrl` at the copy. The event keeps the deck as presented while the edition keeps changing.
 
 Slides exported as a PDF go in the same event folder as `slides.pdf`, for example `public/talks/nodejs-code-and-learn/nodejs-interactive-render-atl-2026/slides.pdf`, with the event's `slidesUrl` pointing at it.
 

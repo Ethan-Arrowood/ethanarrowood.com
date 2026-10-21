@@ -8,7 +8,7 @@
 //   PORT=5000 node scripts/dev-slides.mjs
 //
 // Open the deck you're editing, e.g.
-//   http://localhost:4321/talks/<talk-slug>/<event-slug>/slides/
+//   http://localhost:4321/talks/<talk-slug>/<event-or-edition-slug>/slides/
 // then edit its index.html / CSS / dais files and the browser reloads.
 
 import { createServer } from "node:http";

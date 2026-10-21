@@ -14,13 +14,21 @@ const allTalks = Object.values(
 
 const now = new Date();
 
+const eventsOf = (talk: MarkdownInstance<TalkFrontmatter>) =>
+	talk.frontmatter.events ?? [];
+
 const upcoming = allTalks.filter((talk) =>
-	talk.frontmatter.events.some((e) => new Date(e.date) >= now),
+	eventsOf(talk).some((e) => new Date(e.date) >= now),
 );
 
-const past = allTalks.filter((talk) =>
-	talk.frontmatter.events.every((e) => new Date(e.date) < now),
+const past = allTalks.filter(
+	(talk) =>
+		eventsOf(talk).length > 0 &&
+		eventsOf(talk).every((e) => new Date(e.date) < now),
 );
+
+// Talks with no events yet.
+const inDevelopment = allTalks.filter((talk) => eventsOf(talk).length === 0);
 
 const longBio = `Ethan Arrowood is the Head of Open Source Engineering at Harper, where he leads the company's transition to an open-source-first platform balancing community trust, business sustainability, and engineering velocity. He is a Node.js core contributor, and an active member of the OpenJS Foundation and WinterTC (ECMA TC55) driving standards and community work for web interoperable runtimes. Previously, Ethan held engineering roles at Vercel and Microsoft. He has spoken internationally at events including JSConf NA and NodeConf EU, delivering talks such as "Inside the Push for JavaScript Interoperability" and "Making Fetch Happen," which draws on his contributions to bringing the Fetch API to Node.js. Off the clock, Ethan is a professional ski instructor and active volunteer with organizations dedicated to adaptive recreation, environmental sustainability, and outdoor youth development. It's a passion that parallels his approach to open source, rooted in patience, presence, and community investment.`;
 
@@ -122,6 +130,14 @@ const bios = [
 		<SectionHeading id="upcoming">Upcoming</SectionHeading>
 		<ul class="talks-list">
 			{upcoming.map((talk) => <li>
+				<TalkCard talk={talk} />
+			</li>)}
+		</ul>
+	</section>}
+	{inDevelopment.length > 0 && <section>
+		<SectionHeading id="in-development">In Development</SectionHeading>
+		<ul class="talks-list">
+			{inDevelopment.map((talk) => <li>
 				<TalkCard talk={talk} />
 			</li>)}
 		</ul>

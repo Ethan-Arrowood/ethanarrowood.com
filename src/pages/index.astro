@@ -19,7 +19,7 @@ const allTalks = Object.values(
 const now = new Date();
 
 const upcomingTalks = allTalks.filter((talk) =>
-	talk.frontmatter.events.some((e) => new Date(e.date) >= now),
+	(talk.frontmatter.events ?? []).some((e) => new Date(e.date) >= now),
 );
 ---
 
@@ -377,7 +377,7 @@ const upcomingTalks = allTalks.filter((talk) =>
 							{talk.frontmatter.description}
 						</p>
 						<ul class="upcoming-talk-events">
-							{talk.frontmatter.events
+							{(talk.frontmatter.events ?? [])
 								.filter((event) => new Date(event.date) >= now)
 								.map((event: TalkEvent) => <li>
 									<Link href={event.eventUrl}>{event.name}</Link> &mdash;{" "}

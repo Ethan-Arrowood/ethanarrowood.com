@@ -79,6 +79,11 @@
 	color: var(--text-secondary);
 }
 
+.talk-event-status.is-draft {
+	color: var(--text-secondary);
+	border-style: dashed;
+}
+
 .talk-event-date {
 	color: var(--text-secondary);
 	font-size: 0.9rem;
