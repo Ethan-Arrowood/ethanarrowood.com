@@ -1,0 +1,149 @@
+---
+// Pure CSS falling leaves. Each leaf gets its own position, size, speed, and
+// sway from a seeded generator, so builds are deterministic. Only rendered
+// visibly when <html data-animation="falling-leaves">.
+
+const LEAF_COUNT = 22;
+const SHAPES = ["maple", "oval", "round"];
+const COLORS = [
+	"#f2c230",
+	"#e8a317",
+	"#e8731a",
+	"#d4561b",
+	"#b8321f",
+	"#8f2416",
+];
+
+// mulberry32
+function seeded(seed: number) {
+	return () => {
+		seed |= 0;
+		seed = (seed + 0x6d2b79f5) | 0;
+		let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+		t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+		return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+	};
+}
+
+const random = seeded(0x1eaf);
+const between = (min: number, max: number) => min + random() * (max - min);
+function pick<T>(items: T[]): T {
+	return items[Math.floor(random() * items.length)]!;
+}
+
+const leaves = Array.from({ length: LEAF_COUNT }, (_, i) => {
+	const fall = between(14, 26);
+	return {
+		shape: pick(SHAPES),
+		style: {
+			// Spread leaves evenly across the width, then jitter.
+			"--x": `${((i + between(0.1, 0.9)) / LEAF_COUNT) * 100}%`,
+			"--size": `${between(14, 30).toFixed(1)}px`,
+			"--color": pick(COLORS),
+			"--fall": `${fall.toFixed(1)}s`,
+			// Negative delays start each leaf partway down the screen.
+			"--delay": `${(-random() * fall).toFixed(1)}s`,
+			"--sway": `${between(20, 70).toFixed(0)}px`,
+			"--sway-duration": `${between(2.5, 5).toFixed(1)}s`,
+			"--spin": `${between(-220, 220).toFixed(0)}deg`,
+			"--spin-duration": `${between(4, 9).toFixed(1)}s`,
+		},
+	};
+});
+---
+
+<div class="falling-leaves" aria-hidden="true">
+	{leaves.map((leaf) => <span class="leaf" style={leaf.style}>
+		<span class="leaf-sway">
+			<span class={`leaf-body leaf-${leaf.shape}`} />
+		</span>
+	</span>)}
+</div>
+
+<style>
+	.falling-leaves {
+		display: none;
+		position: fixed;
+		inset: 0;
+		z-index: -1;
+		overflow: hidden;
+		pointer-events: none;
+	}
+
+	:global(:root[data-animation="falling-leaves"]) .falling-leaves {
+		display: block;
+	}
+
+	.leaf {
+		position: absolute;
+		top: 0;
+		left: var(--x);
+		width: var(--size);
+		height: var(--size);
+		opacity: 0.55;
+		animation: leaf-fall var(--fall) linear var(--delay) infinite;
+	}
+
+	.leaf-sway {
+		display: block;
+		width: 100%;
+		height: 100%;
+		animation: leaf-sway var(--sway-duration) ease-in-out var(--delay) infinite
+			alternate;
+	}
+
+	.leaf-body {
+		display: block;
+		width: 100%;
+		height: 100%;
+		background-color: var(--color);
+		mask: var(--shape) center / contain no-repeat;
+		animation: leaf-spin var(--spin-duration) ease-in-out var(--delay) infinite
+			alternate;
+	}
+
+	.leaf-maple {
+		--shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 4 58 24 72 16 68 38 90 33 79 50 94 58 70 63 75 80 55 69 52 96H48L45 69 25 80 30 63 6 58 21 50 10 33 32 38 28 16 42 24Z'/%3E%3C/svg%3E");
+	}
+
+	.leaf-oval {
+		--shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 4C80 22 84 56 62 80 58 84 54 87 52 96H48C46 87 42 84 38 80 16 56 20 22 50 4Z'/%3E%3C/svg%3E");
+	}
+
+	.leaf-round {
+		--shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 8C82 14 92 46 74 70 66 80 56 84 52 96H48C44 84 34 80 26 70 8 46 18 14 50 8Z'/%3E%3C/svg%3E");
+	}
+
+	@keyframes leaf-fall {
+		from {
+			transform: translateY(-40px);
+		}
+		to {
+			transform: translateY(calc(100vh + 40px));
+		}
+	}
+
+	@keyframes leaf-sway {
+		from {
+			transform: translateX(calc(var(--sway) * -1));
+		}
+		to {
+			transform: translateX(var(--sway));
+		}
+	}
+
+	@keyframes leaf-spin {
+		from {
+			transform: rotate(calc(var(--spin) * -0.5)) rotateY(0deg);
+		}
+		to {
+			transform: rotate(var(--spin)) rotateY(160deg);
+		}
+	}
+
+	@media print {
+		.falling-leaves {
+			display: none !important;
+		}
+	}
+</style>

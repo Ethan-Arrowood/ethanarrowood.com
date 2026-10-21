@@ -115,15 +115,33 @@ These slide decks may use Ethan's personal HTML+CSS based presentation framework
 - **Table of contents**: `TableOfContents.astro` auto-generates from h2/h3 headings.
 - **Formatting**: [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) with tabs and 80 columns (`.oxfmtrc.json`). `npm run format` to fix, `npm run format:check` to verify (CI runs this on pull requests). `public/` is ignored so vendored slide decks are never touched.
 
-## CSS Variables (from BaseLayout)
+## Themes
 
-| Variable           | Value     | Use                 |
-| ------------------ | --------- | ------------------- |
-| `--background`     | `#f5f5f1` | Page background     |
-| `--accent`         | `#2d8b72` | Links, highlights   |
-| `--text-primary`   | `#1a1a1a` | Body text           |
-| `--text-secondary` | `#666666` | Metadata, secondary |
-| `--code-bg`        | `#d4d4d4` | Inline code         |
+Visitors pick a theme from the "theme" menu in the header (`ThemePicker.astro`). Preferences live in `localStorage` (`theme`: `system` or a theme id; `animations`: `on` or `off`).
+
+- `src/utils/themes.ts` is the theme registry. Each theme has an `id`, `label`, `group` (`standard` or `special` for seasonal and fun themes), `scheme` (`light` or `dark`), and an optional background `animation`.
+- `src/components/ThemeInit.astro` runs inline in `<head>` before first paint. It sets `data-theme`, `data-scheme`, and `data-animation` on `<html>`, and exposes `window.siteTheme` for the picker. `system` follows `prefers-color-scheme`. Animations default to on unless the visitor prefers reduced motion.
+- `src/styles/themes.css` defines the color tokens per theme, the dark Shiki colors, and GitHub alert colors.
+- Background animations live in `src/components/animations/` and are mounted by `BackgroundAnimation.astro`. Each renders hidden and shows itself when `<html data-animation>` matches its name. They sit behind content (`position: fixed; z-index: -1`) and are `aria-hidden`.
+
+To add a theme: add it to `themes.ts`, add a `:root[data-theme="<id>"]` block to `themes.css`, and check text contrast (WCAG AA, 4.5:1) for `--text-primary`, `--text-secondary`, and `--accent` against `--background` and `--surface`. To add an animation: create a component in `animations/`, mount it in `BackgroundAnimation.astro`, and reference its name from a theme.
+
+## CSS Variables (from themes.css)
+
+Light values shown. Use these tokens instead of hardcoded colors so every theme works.
+
+| Variable           | Value                 | Use                             |
+| ------------------ | --------------------- | ------------------------------- |
+| `--background`     | `#f5f5f1`             | Page background                 |
+| `--surface`        | `#fafaf9`             | Raised panels (TOC, theme menu) |
+| `--card-bg`        | `var(--background)`   | Cards                           |
+| `--accent`         | `#2d8b72`             | Links, highlights               |
+| `--text-body`      | `#000000`             | Default body text               |
+| `--text-primary`   | `#1a1a1a`             | Headings, primary text          |
+| `--text-secondary` | `#666666`             | Metadata, secondary             |
+| `--divider`        | `rgba(26,26,26,0.12)` | Thin rules                      |
+| `--code-bg`        | `#d4d4d4`             | Inline code                     |
+| `--shadow`         | `rgba(0,0,0,0.2)`     | Card and image shadows          |
 
 ## Writing Style Rules
 

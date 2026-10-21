@@ -1,0 +1,177 @@
+---
+import { themes } from "../utils/themes";
+
+const groups = [
+	{
+		legend: "Theme",
+		options: [
+			{ value: "system", label: "System" },
+			...themes
+				.filter((theme) => theme.group === "standard")
+				.map((theme) => ({ value: theme.id, label: theme.label })),
+		],
+	},
+	{
+		legend: "Special",
+		options: themes
+			.filter((theme) => theme.group === "special")
+			.map((theme) => ({ value: theme.id, label: theme.label })),
+	},
+];
+---
+
+<style>
+	.theme-button {
+		anchor-name: --theme-button;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		padding: 0;
+		border: none;
+		background: none;
+		font: inherit;
+		color: var(--text-primary);
+		cursor: pointer;
+	}
+
+	.theme-button:hover {
+		color: var(--accent);
+	}
+
+	.theme-button svg {
+		width: 1em;
+		height: 1em;
+	}
+
+	/* The picker needs JavaScript; hide it until ThemeInit has run. */
+	:global(:root:not([data-theme])) .theme-button {
+		display: none;
+	}
+
+	.theme-menu {
+		min-width: 14rem;
+		padding: 1rem;
+		border: 2px solid var(--accent);
+		border-radius: 0.5rem;
+		background-color: var(--surface);
+		color: var(--text-primary);
+		box-shadow: 0 8px 16px var(--shadow);
+	}
+
+	@supports (position-area: block-end) {
+		.theme-menu {
+			position-anchor: --theme-button;
+			position-area: block-end span-inline-start;
+			position-try-fallbacks: flip-inline;
+			inset: auto;
+			margin: 0.5rem 0 0;
+		}
+	}
+
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	fieldset {
+		border: none;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	legend {
+		margin-bottom: 0.5rem;
+		font-weight: 500;
+		color: var(--accent);
+	}
+
+	label {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		cursor: pointer;
+	}
+
+	input {
+		accent-color: var(--accent);
+	}
+
+	.hint {
+		font-size: 0.875rem;
+		color: var(--text-secondary);
+	}
+
+	.hint:empty {
+		display: none;
+	}
+</style>
+
+<button
+	type="button"
+	class="theme-button"
+	popovertarget="theme-menu"
+	aria-label="Theme settings"
+>
+	<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+		<path
+			d="M12 2.25a9.75 9.75 0 1 0 0 19.5 9.75 9.75 0 0 0 0-19.5Zm0 1.5v16.5a8.25 8.25 0 0 1 0-16.5Z"
+		></path>
+	</svg>
+	theme
+</button>
+<div id="theme-menu" class="theme-menu" popover>
+	<form>
+		{groups.map((group) => <fieldset>
+			<legend>{group.legend}</legend>
+			{group.options.map((option) => <label>
+				<input type="radio" name="theme" value={option.value} />
+				{option.label}
+			</label>)}
+		</fieldset>)}
+		<fieldset>
+			<legend>Effects</legend>
+			<label>
+				<input
+					type="checkbox"
+					name="animations"
+					role="switch"
+					aria-describedby="theme-animation-hint"
+				/>
+				Background animation
+			</label>
+			<p class="hint" id="theme-animation-hint"></p>
+		</fieldset>
+	</form>
+</div>
+
+<script>
+	const form = document.querySelector<HTMLFormElement>("#theme-menu form")!;
+	const hint = document.getElementById("theme-animation-hint")!;
+
+	function sync() {
+		const preferences = window.siteTheme.getPreferences();
+		const theme = window.siteTheme.current();
+		for (const input of form.querySelectorAll<HTMLInputElement>(
+			'input[name="theme"]',
+		)) {
+			input.checked = input.value === preferences.theme;
+		}
+		form.querySelector<HTMLInputElement>('input[name="animations"]')!.checked =
+			preferences.animations;
+		hint.textContent = theme.animation
+			? ""
+			: `The ${theme.label} theme has no background animation.`;
+	}
+
+	form.addEventListener("change", (event) => {
+		const input = event.target as HTMLInputElement;
+		if (input.name === "theme") window.siteTheme.setTheme(input.value);
+		if (input.name === "animations")
+			window.siteTheme.setAnimations(input.checked);
+	});
+
+	document.addEventListener("site-theme-change", sync);
+	sync();
+</script>

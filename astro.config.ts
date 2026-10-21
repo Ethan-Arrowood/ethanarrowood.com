@@ -29,7 +29,11 @@ export default defineConfig({
 			],
 		}),
 		shikiConfig: {
-			theme: "github-light",
+			// Dark colors are applied by src/styles/themes.css for dark themes.
+			themes: {
+				light: "github-light",
+				dark: "github-dark",
+			},
 			// Code is easier to read not-wrapped on mobile
 			wrap: false,
 		},

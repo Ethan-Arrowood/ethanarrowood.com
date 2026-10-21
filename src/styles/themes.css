@@ -1,0 +1,98 @@
+/*
+ * Theme tokens. `light` is the default and applies when no theme is set (for
+ * example with JavaScript disabled). `ThemeInit.astro` sets `data-theme` and
+ * `data-scheme` on <html> from the visitor's preference.
+ */
+
+:root {
+	color-scheme: light;
+	--background: #f5f5f1;
+	--background-image: none;
+	--surface: #fafaf9;
+	--card-bg: var(--background);
+	--accent: #2d8b72;
+	--text-body: #000000;
+	--text-primary: #1a1a1a;
+	--text-secondary: #666666;
+	--divider: rgba(26, 26, 26, 0.12);
+	--code-bg: #d4d4d4;
+	--shadow: rgba(0, 0, 0, 0.2);
+}
+
+:root[data-theme="dark"] {
+	color-scheme: dark;
+	--background: #0f1613;
+	--surface: #16201b;
+	--card-bg: var(--surface);
+	--accent: #5ccaa6;
+	--text-body: #e2ebe6;
+	--text-primary: #e2ebe6;
+	--text-secondary: #9fb1a8;
+	--divider: rgba(226, 235, 230, 0.14);
+	--code-bg: #26332d;
+	--shadow: rgba(0, 0, 0, 0.55);
+}
+
+:root[data-theme="spooky"] {
+	color-scheme: dark;
+	--background: #120d0a;
+	--background-image: radial-gradient(
+		ellipse at top,
+		rgba(255, 138, 31, 0.12),
+		transparent 60%
+	);
+	--surface: #1d1510;
+	--card-bg: var(--surface);
+	--accent: #ff8a1f;
+	--text-body: #f4e8d8;
+	--text-primary: #f4e8d8;
+	--text-secondary: #bfa991;
+	--divider: rgba(244, 232, 216, 0.14);
+	--code-bg: #33261b;
+	--shadow: rgba(0, 0, 0, 0.6);
+}
+
+/*
+ * Syntax highlighting. Shiki emits light colors inline and dark colors as
+ * `--shiki-dark*` variables (see `shikiConfig.themes` in astro.config.ts).
+ */
+:root[data-scheme="dark"] .astro-code,
+:root[data-scheme="dark"] .astro-code span {
+	color: var(--shiki-dark) !important;
+	background-color: var(--shiki-dark-bg) !important;
+	font-style: var(--shiki-dark-font-style) !important;
+	font-weight: var(--shiki-dark-font-weight) !important;
+	text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+/*
+ * GitHub alert colors. remark-github-blockquote-alert switches palettes with
+ * `prefers-color-scheme`, which ignores the chosen theme, so pin them here.
+ */
+:root .markdown-alert {
+	--borderColor-default: #d0d7de;
+	--fgColor-accent: #0969da;
+	--borderColor-accent-emphasis: #0969da;
+	--fgColor-danger: #d1242f;
+	--borderColor-danger-emphasis: #cf222e;
+	--fgColor-attention: #9a6700;
+	--borderColor-attention-emphasis: #9a6700;
+	--fgColor-done: #8250df;
+	--borderColor-done-emphasis: #8250df;
+	--fgColor-success: #1a7f37;
+	--borderColor-success-emphasis: #1f883d;
+}
+
+:root[data-scheme="dark"] .markdown-alert {
+	--borderColor-default: #30363d;
+	--fgColor-accent: #58a6ff;
+	--borderColor-accent-emphasis: #1f6feb;
+	--fgColor-danger: #f85149;
+	--borderColor-danger-emphasis: #da3633;
+	--fgColor-attention: #d29922;
+	--borderColor-attention-emphasis: #9e6a03;
+	--fgColor-done: #a371f7;
+	--borderColor-done-emphasis: #8957e5;
+	--fgColor-success: #3fb950;
+	--borderColor-success-emphasis: #238636;
+}

@@ -1,0 +1,95 @@
+---
+// Applies the stored theme before first paint, so pages never flash the wrong
+// colors. Must render inside <head>. Exposes `window.siteTheme` for the picker.
+import {
+	ANIMATIONS_STORAGE_KEY,
+	THEME_STORAGE_KEY,
+	themes,
+} from "../utils/themes";
+---
+
+<script
+	is:inline
+	define:vars={{
+		themes,
+		themeKey: THEME_STORAGE_KEY,
+		animationsKey: ANIMATIONS_STORAGE_KEY,
+	}}
+>
+	const root = document.documentElement;
+	const darkQuery = matchMedia("(prefers-color-scheme: dark)");
+	const reducedMotionQuery = matchMedia("(prefers-reduced-motion: reduce)");
+	const byId = new Map(themes.map((theme) => [theme.id, theme]));
+
+	function read(key) {
+		try {
+			return localStorage.getItem(key);
+		} catch {
+			return null;
+		}
+	}
+
+	function write(key, value) {
+		try {
+			localStorage.setItem(key, value);
+		} catch {
+			// Storage blocked; the choice still applies for this page view.
+		}
+	}
+
+	function getPreferences() {
+		const theme = read(themeKey);
+		const animations = read(animationsKey);
+		return {
+			theme:
+				theme && (theme === "system" || byId.has(theme)) ? theme : "system",
+			animations:
+				animations === "on" || animations === "off"
+					? animations === "on"
+					: !reducedMotionQuery.matches,
+		};
+	}
+
+	function apply() {
+		const preferences = getPreferences();
+		const id =
+			preferences.theme === "system"
+				? darkQuery.matches
+					? "dark"
+					: "light"
+				: preferences.theme;
+		const theme = byId.get(id);
+		root.dataset.theme = theme.id;
+		root.dataset.scheme = theme.scheme;
+		root.dataset.animation =
+			preferences.animations && theme.animation ? theme.animation : "none";
+		document.dispatchEvent(
+			new CustomEvent("site-theme-change", { detail: { theme, preferences } }),
+		);
+	}
+
+	window.siteTheme = {
+		themes,
+		getPreferences,
+		setTheme(value) {
+			write(themeKey, value);
+			apply();
+		},
+		setAnimations(enabled) {
+			write(animationsKey, enabled ? "on" : "off");
+			apply();
+		},
+		current() {
+			return byId.get(root.dataset.theme);
+		},
+	};
+
+	darkQuery.addEventListener("change", apply);
+	reducedMotionQuery.addEventListener("change", apply);
+	// Keep other open tabs in sync.
+	addEventListener("storage", (event) => {
+		if (event.key === themeKey || event.key === animationsKey) apply();
+	});
+
+	apply();
+</script>
