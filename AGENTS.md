@@ -59,7 +59,7 @@ description: "One or two sentence summary."
 Content here.
 ```
 
-- `pubDate` and `editDate` are ISO 8601. Both are required; if the post has never been edited, set them to the same value.
+- `pubDate` and `editDate` are ISO 8601. Both are required; if the post is new, set them to the same value.
 - Dates are auto-formatted to "Month Day, Year" (America/Denver) by the remark plugin.
 - `editDate` is only shown in the UI if it differs from `pubDate`.
 - Posts are sorted newest-first on the listing page.
@@ -84,8 +84,6 @@ events:
     slidesUrl: "https://..." # optional, slides
 ---
 
-## Description
-
 Content here.
 ```
 
@@ -102,6 +100,10 @@ Content here.
   ```
 
   `videoid` is the `v=` value from a watch URL. For a playlist (e.g. the homepage embed in `index.astro`), add `playlistid` (the `list=` value from a playlist URL).
+
+Some talks slides are stored as static assets within the `public/talks/` directory. That directory copies the expected output path for talk pages. For example, the talk "Performant, Parallelizable, Framework Agnostic Node.js Integration Testing" has its talk page located at `ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing` sourced from `src/pages/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing.md`. The slides for this talk can be found at `public/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/slides`. Thus, the slides are available at `ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/slides`.
+
+These slide decks may use Ethan's personal HTML+CSS based presentation framework, Dais. The framework is individually vendored into each slide directory in order to avoid existing/past presentations breaking whenever the framework is updated.
 
 ## Key Patterns
 
