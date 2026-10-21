@@ -108,7 +108,7 @@ For example, the talk "Performant, Parallelizable, Framework Agnostic Node.js In
 
 That deck used to live at `.../performant-parallelizable-framework-agnostic-nodejs-integration-testing/slides/`. A small redirect page stays there (keeping the `#slide` hash) because the old URL was shared. Keep redirects like it when moving a deck that has been shared.
 
-`public/talks/nodejs-code-and-learn-2026/slides/` is a draft deck that predates this convention and has no talk page yet; move it under `<talk-slug>/<event-slug>/` once it does.
+Slides exported as a PDF go in the same event folder as `slides.pdf`, for example `public/talks/nodejs-code-and-learn/nodejs-interactive-render-atl-2026/slides.pdf`, with the event's `slidesUrl` pointing at it.
 
 These slide decks may use Ethan's personal HTML+CSS based presentation framework, Dais. The framework is individually vendored into each slide directory in order to avoid existing/past presentations breaking whenever the framework is updated.
 
