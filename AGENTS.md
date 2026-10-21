@@ -123,6 +123,8 @@ Visitors pick a theme from the "theme" menu in the header (`ThemePicker.astro`).
 - `src/components/ThemeInit.astro` runs inline in `<head>` before first paint. It sets `data-theme`, `data-scheme`, and `data-animation` on `<html>`, and exposes `window.siteTheme` for the picker. `system` follows `prefers-color-scheme`. Animations default to on unless the visitor prefers reduced motion.
 - `src/styles/themes.css` defines the color tokens per theme, the dark Shiki colors, and GitHub alert colors.
 - Background animations live in `src/components/animations/` and are mounted by `BackgroundAnimation.astro`. Each renders hidden and shows itself when `<html data-animation>` matches its name. They sit behind content (`position: fixed; z-index: -1`) and are `aria-hidden`.
+  - `falling-leaves`: pure CSS leaves falling through the viewport. Not used by a theme right now.
+  - `leaf-pile` (Spooky): canvas leaves that land in a pile at the end of the page, behind the footer. Leaves that fall past the viewport while the end of the page is off screen still land on the pile. Settled leaves are painted once to an offscreen canvas, so cost stays flat as the pile grows. The pile persists across page navigations in `sessionStorage`. Leaf shapes and colors are shared in `animations/leaves.ts`.
 
 To add a theme: add it to `themes.ts`, add a `:root[data-theme="<id>"]` block to `themes.css`, and check text contrast (WCAG AA, 4.5:1) for `--text-primary`, `--text-secondary`, and `--accent` against `--background` and `--surface`. To add an animation: create a component in `animations/`, mount it in `BackgroundAnimation.astro`, and reference its name from a theme.
 

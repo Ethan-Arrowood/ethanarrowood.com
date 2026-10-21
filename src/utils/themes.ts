@@ -1,6 +1,6 @@
 export type ColorScheme = "light" | "dark";
 
-export type BackgroundAnimation = "falling-leaves";
+export type BackgroundAnimation = "falling-leaves" | "leaf-pile";
 
 export interface Theme {
 	id: string;
@@ -21,7 +21,7 @@ export const themes: Theme[] = [
 		label: "Spooky",
 		group: "special",
 		scheme: "dark",
-		animation: "falling-leaves",
+		animation: "leaf-pile",
 	},
 ];
 

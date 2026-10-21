@@ -1,0 +1,57 @@
+---
+// Canvas falling leaves that pile up along the bottom of the viewport. Runs
+// only while <html data-animation="leaf-pile">. See leaf-pile.ts.
+---
+
+<canvas class="leaf-pile" aria-hidden="true"></canvas>
+
+<style>
+	.leaf-pile {
+		display: none;
+		position: fixed;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+		pointer-events: none;
+	}
+
+	:global(:root[data-animation="leaf-pile"]) .leaf-pile {
+		display: block;
+	}
+
+	/* The pile sits behind the footer; keep its text and icons legible. */
+	:global(:root[data-animation="leaf-pile"] footer) {
+		text-shadow:
+			0 0 3px var(--background),
+			0 0 6px var(--background);
+	}
+
+	:global(:root[data-animation="leaf-pile"] footer svg) {
+		filter: drop-shadow(0 0 2px var(--background));
+	}
+
+	@media print {
+		.leaf-pile {
+			display: none !important;
+		}
+	}
+</style>
+
+<script>
+	import { LeafPile } from "./leaf-pile";
+
+	const canvas = document.querySelector<HTMLCanvasElement>(".leaf-pile")!;
+	const pile = new LeafPile(canvas);
+
+	function sync() {
+		if (document.documentElement.dataset.animation === "leaf-pile") {
+			pile.start();
+		} else {
+			pile.stop();
+		}
+	}
+
+	document.addEventListener("site-theme-change", sync);
+	sync();
+</script>

@@ -2,17 +2,9 @@
 // Pure CSS falling leaves. Each leaf gets its own position, size, speed, and
 // sway from a seeded generator, so builds are deterministic. Only rendered
 // visibly when <html data-animation="falling-leaves">.
+import { LEAF_COLORS, LEAF_SHAPE_NAMES, leafMaskUrl } from "./leaves";
 
 const LEAF_COUNT = 22;
-const SHAPES = ["maple", "oval", "round"];
-const COLORS = [
-	"#f2c230",
-	"#e8a317",
-	"#e8731a",
-	"#d4561b",
-	"#b8321f",
-	"#8f2416",
-];
 
 // mulberry32
 function seeded(seed: number) {
@@ -34,12 +26,12 @@ function pick<T>(items: T[]): T {
 const leaves = Array.from({ length: LEAF_COUNT }, (_, i) => {
 	const fall = between(14, 26);
 	return {
-		shape: pick(SHAPES),
 		style: {
+			"--shape": leafMaskUrl(pick(LEAF_SHAPE_NAMES)),
 			// Spread leaves evenly across the width, then jitter.
 			"--x": `${((i + between(0.1, 0.9)) / LEAF_COUNT) * 100}%`,
 			"--size": `${between(14, 30).toFixed(1)}px`,
-			"--color": pick(COLORS),
+			"--color": pick(LEAF_COLORS),
 			"--fall": `${fall.toFixed(1)}s`,
 			// Negative delays start each leaf partway down the screen.
 			"--delay": `${(-random() * fall).toFixed(1)}s`,
@@ -55,7 +47,7 @@ const leaves = Array.from({ length: LEAF_COUNT }, (_, i) => {
 <div class="falling-leaves" aria-hidden="true">
 	{leaves.map((leaf) => <span class="leaf" style={leaf.style}>
 		<span class="leaf-sway">
-			<span class={`leaf-body leaf-${leaf.shape}`} />
+			<span class="leaf-body" />
 		</span>
 	</span>)}
 </div>
@@ -100,18 +92,6 @@ const leaves = Array.from({ length: LEAF_COUNT }, (_, i) => {
 		mask: var(--shape) center / contain no-repeat;
 		animation: leaf-spin var(--spin-duration) ease-in-out var(--delay) infinite
 			alternate;
-	}
-
-	.leaf-maple {
-		--shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 4 58 24 72 16 68 38 90 33 79 50 94 58 70 63 75 80 55 69 52 96H48L45 69 25 80 30 63 6 58 21 50 10 33 32 38 28 16 42 24Z'/%3E%3C/svg%3E");
-	}
-
-	.leaf-oval {
-		--shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 4C80 22 84 56 62 80 58 84 54 87 52 96H48C46 87 42 84 38 80 16 56 20 22 50 4Z'/%3E%3C/svg%3E");
-	}
-
-	.leaf-round {
-		--shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 8C82 14 92 46 74 70 66 80 56 84 52 96H48C44 84 34 80 26 70 8 46 18 14 50 8Z'/%3E%3C/svg%3E");
 	}
 
 	@keyframes leaf-fall {
