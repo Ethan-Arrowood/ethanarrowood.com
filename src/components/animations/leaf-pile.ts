@@ -1,5 +1,5 @@
 // Falling leaves that collect into a pile along the bottom of the viewport,
-// until a little ghost comes by and rakes it away.
+// and a little ghost who rakes them away.
 //
 // Two canvases: falling leaves draw on one behind the content, so they never
 // cross text, and the pile and ghost draw on one in front of the content,
@@ -12,9 +12,11 @@
 // pile surface so new leaves land on top of earlier ones and slide off steep
 // spots, which shapes the pile into mounds.
 //
-// When the pile averages 10% of the viewport height, or peaks at 15%, a ghost
-// floats across the bottom of the screen and rakes the leaves off the other
-// side.
+// The ghost peeks out from the left edge of the screen. Clicking it (a real
+// <button> over the drawing) sends it across the bottom of the screen to rake
+// the pile off the right side. It also goes on its own once the pile averages
+// 10% of the viewport height or peaks at 15%. Afterwards it floats back to its
+// spot on the left.
 //
 // The pile is saved to sessionStorage so it carries across page navigations.
 
@@ -36,6 +38,15 @@ const PILE_CANVAS_MARGIN = 40;
 const RAKE_REACH = 46;
 /** Most raked leaves drawn in the heap in front of the rake. */
 const MAX_HEAP_LEAVES = 80;
+/** Ghost center while peeking, in CSS pixels from the left edge. */
+const PEEK_X = 4;
+/** How far the peeking ghost floats above the bottom of the viewport. */
+const PEEK_LIFT = 26;
+/** Extra lean while the ghost button is hovered or focused. */
+const PEEK_LEAN = 12;
+/** Pause before the ghost comes back after raking, and how long it takes. */
+const RETURN_DELAY = 1.5;
+const RETURN_SECONDS = 1;
 
 interface FallingLeaf {
 	x: number;
@@ -80,22 +91,21 @@ interface HeapLeaf {
 }
 
 interface Rake {
-	/** Ghost center, in CSS pixels. */
+	/** Ghost center, in CSS pixels. Moves left to right. */
 	x: number;
-	/** 1 when moving right, -1 when moving left. */
-	direction: 1 | -1;
 	speed: number;
-	time: number;
 	heap: HeapLeaf[];
 	raked: number;
 }
 
 const random = (min: number, max: number) => min + Math.random() * (max - min);
 const randomIndex = (length: number) => Math.floor(Math.random() * length);
+const easeOut = (t: number) => 1 - (1 - t) ** 3;
 
 export class LeafPile {
 	#back: CanvasRenderingContext2D;
 	#front: CanvasRenderingContext2D;
+	#button: HTMLButtonElement;
 	#pile = document.createElement("canvas");
 	#pileCtx = this.#pile.getContext("2d")!;
 	#shapes = LEAF_SHAPE_NAMES.map((name) => new Path2D(LEAF_SHAPES[name]));
@@ -103,6 +113,15 @@ export class LeafPile {
 	#settled: SettledLeaf[] = [];
 	#heights = new Float32Array(0);
 	#rake: Rake | undefined;
+	/** 0 when the ghost is out of sight on the left, 1 when it is peeking. */
+	#peek = 0;
+	/** Seconds to wait before the ghost starts floating back into view. */
+	#peekDelay = 0;
+	#leaning = false;
+	/** Whether the ghost button had focus when the ghost left to rake. */
+	#refocus = false;
+	#wantsRake = false;
+	#time = 0;
 	#width = 0;
 	#height = 0;
 	#dpr = 1;
@@ -110,10 +129,22 @@ export class LeafPile {
 	#lastTime = 0;
 	#dirty = false;
 
-	constructor(back: HTMLCanvasElement, front: HTMLCanvasElement) {
+	constructor(
+		back: HTMLCanvasElement,
+		front: HTMLCanvasElement,
+		button: HTMLButtonElement,
+	) {
 		this.#back = back.getContext("2d")!;
 		this.#front = front.getContext("2d")!;
+		this.#button = button;
 		this.#settled = load();
+
+		button.addEventListener("click", () => this.rake());
+		const lean = (leaning: boolean) => () => (this.#leaning = leaning);
+		button.addEventListener("pointerenter", lean(true));
+		button.addEventListener("pointerleave", lean(false));
+		button.addEventListener("focus", lean(true));
+		button.addEventListener("blur", lean(false));
 	}
 
 	get running() {
@@ -130,8 +161,13 @@ export class LeafPile {
 		this.#falling = Array.from({ length: target }, () =>
 			this.#spawn(random(-this.#height, this.#height * 0.8)),
 		);
-		// A pile carried over from another page may already be full.
-		if (!this.#rake && this.#isFull()) this.#startRake();
+		// The ghost floats in shortly after the page loads. A pile carried over
+		// from another page may already be full; it rakes once it arrives.
+		if (!this.#rake) {
+			this.#peek = 0;
+			this.#peekDelay = 1;
+		}
+		this.#wantsRake = this.#isFull();
 		this.#lastTime = performance.now();
 		this.#frame = requestAnimationFrame(this.#tick);
 	}
@@ -143,10 +179,17 @@ export class LeafPile {
 		removeEventListener("resize", this.#resize);
 		removeEventListener("pagehide", this.#save);
 		this.#save();
+		this.#button.hidden = true;
 		for (const ctx of [this.#back, this.#front]) {
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 		}
+	}
+
+	/** Send the ghost out to rake, if it is peeking and not already raking. */
+	rake() {
+		if (!this.running || this.#rake || this.#peek < 1) return;
+		this.#startRake();
 	}
 
 	#targetCount() {
@@ -275,7 +318,7 @@ export class LeafPile {
 		this.#paintSettled(settled);
 		this.#dirty = true;
 		Object.assign(leaf, this.#spawn());
-		if (!this.#rake && this.#isFull()) this.#startRake();
+		if (!this.#wantsRake) this.#wantsRake = this.#isFull();
 	}
 
 	#isFull() {
@@ -291,29 +334,35 @@ export class LeafPile {
 		);
 	}
 
+	/** Where the ghost floats while peeking, easing in as it arrives. */
+	#peekX() {
+		const lean = this.#leaning ? PEEK_LEAN : Math.sin(this.#time * 0.7) * 3;
+		return -40 + (PEEK_X + 40 + lean) * easeOut(this.#peek);
+	}
+
 	#startRake() {
-		const direction = Math.random() < 0.5 ? 1 : -1;
 		this.#rake = {
-			x: direction === 1 ? -RAKE_REACH - 40 : this.#width + RAKE_REACH + 40,
-			direction,
+			x: this.#peekX(),
 			speed: Math.min(220, Math.max(110, this.#width / 7)),
-			time: 0,
 			heap: [],
 			raked: 0,
 		};
+		this.#wantsRake = false;
+		this.#peek = 0;
+		this.#peekDelay = RETURN_DELAY;
+		this.#leaning = false;
+		this.#refocus = document.activeElement === this.#button;
+		this.#button.hidden = true;
 	}
 
 	/** Move the ghost and sweep up every leaf behind the rake. */
 	#updateRake(rake: Rake, dt: number) {
-		rake.time += dt;
-		rake.x += rake.direction * rake.speed * dt;
-		const rakeX = rake.x + rake.direction * RAKE_REACH;
-		const behind = (x: number) =>
-			rake.direction === 1 ? x <= rakeX : x >= rakeX;
+		rake.x += rake.speed * dt;
+		const rakeX = rake.x + RAKE_REACH;
 
 		const remaining: SettledLeaf[] = [];
 		for (const leaf of this.#settled) {
-			if (!behind(leaf.x * this.#width)) {
+			if (leaf.x * this.#width > rakeX) {
 				remaining.push(leaf);
 				continue;
 			}
@@ -334,26 +383,29 @@ export class LeafPile {
 		}
 
 		// Clear the swept ground: the height map and the painted pile.
-		const column = Math.floor(rakeX / COLUMN_WIDTH);
-		if (rake.direction === 1) {
-			this.#heights.fill(0, 0, Math.max(0, column + 1));
-		} else {
-			this.#heights.fill(0, Math.max(0, column));
-		}
-		const clearFrom = rake.direction === 1 ? 0 : Math.max(0, rakeX);
-		const clearTo = rake.direction === 1 ? Math.max(0, rakeX) : this.#width;
+		const cleared = Math.max(0, rakeX);
+		this.#heights.fill(0, 0, Math.floor(cleared / COLUMN_WIDTH) + 1);
 		const ctx = this.#pileCtx;
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
-		ctx.clearRect(
-			clearFrom * this.#dpr,
-			0,
-			(clearTo - clearFrom) * this.#dpr,
-			this.#pile.height,
-		);
+		ctx.clearRect(0, 0, cleared * this.#dpr, this.#pile.height);
 
-		const offscreen =
-			rake.direction === 1 ? rake.x > this.#width + 160 : rake.x < -160;
-		if (offscreen) this.#rake = undefined;
+		if (rake.x > this.#width + 160) this.#rake = undefined;
+	}
+
+	/** Bring the ghost back to its peeking spot after a rake. */
+	#updatePeek(dt: number) {
+		if (this.#peekDelay > 0) {
+			this.#peekDelay -= dt;
+			return;
+		}
+		if (this.#peek < 1) {
+			this.#peek = Math.min(1, this.#peek + dt / RETURN_SECONDS);
+			if (this.#peek === 1) {
+				this.#button.hidden = false;
+				if (this.#refocus) this.#button.focus({ preventScroll: true });
+				this.#refocus = false;
+			}
+		}
 	}
 
 	#paintLeaf(
@@ -398,6 +450,7 @@ export class LeafPile {
 		// Clamp so a background tab doesn't teleport every leaf on return.
 		const dt = Math.min((now - this.#lastTime) / 1000, 0.05);
 		this.#lastTime = now;
+		this.#time += dt;
 		const floor = this.#height;
 
 		const back = this.#back;
@@ -442,6 +495,10 @@ export class LeafPile {
 		if (this.#falling.length > target) this.#falling.length = target;
 
 		if (this.#rake) this.#updateRake(this.#rake, dt);
+		else {
+			this.#updatePeek(dt);
+			if (this.#wantsRake && this.#peek === 1) this.#startRake();
+		}
 
 		const front = this.#front;
 		front.setTransform(1, 0, 0, 1, 0, 0);
@@ -453,14 +510,18 @@ export class LeafPile {
 			(floor - this.#pileCanvasHeight()) * this.#dpr,
 		);
 		if (this.#rake) this.#paintRake(this.#rake, floor);
+		else if (this.#peek > 0) {
+			const bob = Math.sin(this.#time * 2) * 3;
+			this.#paintGhost(this.#peekX(), floor - PEEK_LIFT + bob);
+		}
 
 		this.#frame = requestAnimationFrame(this.#tick);
 	};
 
 	#paintRake(rake: Rake, floor: number) {
 		const ctx = this.#front;
-		const { direction: dir, time } = rake;
-		const rakeX = rake.x + dir * RAKE_REACH;
+		const time = this.#time;
+		const rakeX = rake.x + RAKE_REACH;
 
 		// The heap of raked leaves, pushed along in front of the rake.
 		const heapWidth = Math.min(90, 10 + Math.sqrt(rake.raked) * 5);
@@ -468,10 +529,10 @@ export class LeafPile {
 		for (const leaf of rake.heap) {
 			this.#paintLeaf(
 				ctx,
-				rakeX + dir * (4 + leaf.ahead * heapWidth),
+				rakeX + 4 + leaf.ahead * heapWidth,
 				floor - 4 - leaf.up * heapHeight * (1 - leaf.ahead * 0.6),
 				leaf.size,
-				leaf.rotation + time * dir * 0.6,
+				leaf.rotation + time * 0.6,
 				1,
 				0.7,
 				PILE_ALPHA,
@@ -481,24 +542,19 @@ export class LeafPile {
 		}
 
 		// Ghost, floating and bobbing just above the floor.
-		const bob = Math.sin(time * 3) * 4;
-		const baseY = floor - 14 + bob;
-		ctx.setTransform(this.#dpr, 0, 0, this.#dpr, 0, 0);
-		ctx.globalAlpha = 1;
+		const baseY = floor - 14 + Math.sin(time * 3) * 4;
 
 		// Rake: handle from the ghost's hand down to a toothed head on the ground.
-		const sweep = Math.sin(time * 9) * 3;
-		const handX = rake.x + dir * 20;
-		const handY = baseY - 26;
-		const headX = rakeX + sweep * dir;
+		const headX = rakeX + Math.sin(time * 9) * 3;
+		ctx.setTransform(this.#dpr, 0, 0, this.#dpr, 0, 0);
+		ctx.globalAlpha = 1;
 		ctx.lineCap = "round";
 		ctx.strokeStyle = "#8b5a2b";
 		ctx.lineWidth = 3;
 		ctx.beginPath();
-		ctx.moveTo(handX, handY);
+		ctx.moveTo(rake.x + 20, baseY - 26);
 		ctx.lineTo(headX, floor - 6);
 		ctx.stroke();
-		ctx.lineWidth = 3;
 		ctx.beginPath();
 		ctx.moveTo(headX, floor - 16);
 		ctx.lineTo(headX, floor - 1);
@@ -508,15 +564,23 @@ export class LeafPile {
 			const y = floor - 15 + tooth * 3.5;
 			ctx.beginPath();
 			ctx.moveTo(headX, y);
-			ctx.lineTo(headX + dir * 5, y + 1);
+			ctx.lineTo(headX + 5, y + 1);
 			ctx.stroke();
 		}
 
-		// Body: round head, straight sides, wavy hem.
+		this.#paintGhost(rake.x, baseY);
+	}
+
+	/** A small sheet ghost facing right, centered at x with its hem at y. */
+	#paintGhost(x: number, y: number) {
+		const ctx = this.#front;
 		const w = 22;
-		const wave = time * 8;
-		ctx.save();
-		ctx.translate(rake.x, baseY);
+		const wave = this.#time * 8;
+		ctx.setTransform(this.#dpr, 0, 0, this.#dpr, 0, 0);
+		ctx.globalAlpha = 1;
+		ctx.translate(x, y);
+
+		// Body: round head, straight sides, wavy hem.
 		ctx.shadowColor = "rgba(255, 240, 220, 0.6)";
 		ctx.shadowBlur = 14;
 		ctx.fillStyle = "#f6efe3";
@@ -535,29 +599,27 @@ export class LeafPile {
 		ctx.fill();
 		ctx.shadowBlur = 0;
 
-		// Little arm reaching for the rake.
+		// Little arm.
 		ctx.beginPath();
-		ctx.ellipse(dir * (w - 2), -26, 7, 4, dir * -0.5, 0, Math.PI * 2);
+		ctx.ellipse(w - 2, -26, 7, 4, -0.5, 0, Math.PI * 2);
 		ctx.fill();
 
-		// Face, looking where it's going.
-		const look = dir * 3;
+		// Face, looking right.
 		ctx.fillStyle = "#1a1310";
 		for (const side of [-1, 1]) {
 			ctx.beginPath();
-			ctx.ellipse(look + side * 7, -36, 3, 4.5, 0, 0, Math.PI * 2);
+			ctx.ellipse(3 + side * 7, -36, 3, 4.5, 0, 0, Math.PI * 2);
 			ctx.fill();
 		}
 		ctx.beginPath();
-		ctx.ellipse(look, -25, 2.5, 3.2, 0, 0, Math.PI * 2);
+		ctx.ellipse(3, -25, 2.5, 3.2, 0, 0, Math.PI * 2);
 		ctx.fill();
 		ctx.fillStyle = "rgba(255, 138, 140, 0.45)";
 		for (const side of [-1, 1]) {
 			ctx.beginPath();
-			ctx.ellipse(look + side * 12, -29, 3.5, 2.2, 0, 0, Math.PI * 2);
+			ctx.ellipse(3 + side * 12, -29, 3.5, 2.2, 0, 0, Math.PI * 2);
 			ctx.fill();
 		}
-		ctx.restore();
 	}
 
 	#save = () => {

@@ -223,7 +223,6 @@ const pageDescription = description || defaultDescription;
 		<title>{pageTitle}</title>
 	</head>
 	<body>
-		<BackgroundAnimation />
 		<header>
 			<div>
 				<h1 class="title">Ethan Arrowood</h1>
@@ -304,5 +303,7 @@ const pageDescription = description || defaultDescription;
 				by Ethan
 			</p>
 		</footer>
+		<!-- Last, so any animation controls come last in tab order. -->
+		<BackgroundAnimation />
 	</body>
 </html>
