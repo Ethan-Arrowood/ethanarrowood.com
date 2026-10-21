@@ -95,26 +95,41 @@
     #plateau .small { margin-block: 0.4cqi 1.2cqi; }
     #plateau .bars { font-size: 0.6em; gap: 0.15em 0.8em; }
 
-    /* Variance: one full 12-row table shown across three slides that never
-       shift — only the highlighted cells and the caption change, so it reads as
-       stepping through the argument in place. 12 rows must clear the footer. */
-    .vtable table { font-size: 0.46em; }
-    .vtable :is(th, td) { padding: 0.18em 0.8em; }
+    /* Variance: one full 12-row table that never shifts. Stepping (dais
+       data-dais-steps) changes only the highlighted cells, the heading, and the
+       caption, so it reads as walking the argument in place. 12 rows must
+       clear the footer. */
+    #variance table { font-size: 0.46em; }
+    #variance :is(th, td) { padding: 0.18em 0.8em; }
     /* 12 rows + a two-line caption is tall; keep captions compact so the last
-       line clears the footer on all three steps (variance-3 is tightest). */
-    .vtable > p { font-size: 0.82em; margin-block: 0.9cqi 0; }
-    .vtable > p.small { font-size: 0.62em; margin-block: 0.6cqi 0; }
+       line clears the footer on every step (step 3 is tightest). */
+    #variance > p { font-size: 0.82em; margin-block: 0.9cqi 0; }
+    #variance > p.small { font-size: 0.62em; margin-block: 0.6cqi 0; }
 
-    .vtable td.hi-good {
+    /* data-at="1 2" = visible on steps 1 and 2. Without dais.js there is no
+       data-dais-step, so the slide shows its final (step 3) state. */
+    #variance [data-at] { display: none; }
+    #variance[data-dais-step="0"] [data-at~="0"],
+    #variance[data-dais-step="1"] [data-at~="1"],
+    #variance[data-dais-step="2"] [data-at~="2"],
+    #variance[data-dais-step="3"] [data-at~="3"],
+    #variance:not([data-dais-step]) [data-at~="3"] { display: revert; }
+
+    /* data-hi="g1 b2" = good on step 1, bad on step 2, and so on. */
+    #variance[data-dais-step="1"] td[data-hi~="g1"],
+    #variance[data-dais-step="2"] td[data-hi~="g2"] {
       background: color-mix(in srgb, var(--deck-good) 24%, transparent);
       color: var(--dais-text);
       font-weight: 700;
     }
-    .vtable td.hi-bad {
+    #variance[data-dais-step="2"] td[data-hi~="b2"],
+    #variance[data-dais-step="3"] td[data-hi~="b3"],
+    #variance:not([data-dais-step]) td[data-hi~="b3"] {
       background: color-mix(in srgb, var(--dais-accent-2) 26%, transparent);
       font-weight: 700;
     }
-    .vtable td.hi-cmp {
+    #variance[data-dais-step="3"] td[data-hi~="c3"],
+    #variance:not([data-dais-step]) td[data-hi~="c3"] {
       background: color-mix(in srgb, var(--dais-accent) 28%, transparent);
       font-weight: 700;
     }
@@ -822,14 +837,12 @@
       <aside class="notes"></aside>
     </section>
 
-    <!-- Variance argument in three steps over ONE table. The three sections
-         below share identical table markup (same column widths, same rows) and
-         differ only in highlighted cells + caption, so advancing between them
-         reads as highlighting-in-place with zero layout shift. Queued as
-         follow-up: fold these into a real dais "steps" feature so they collapse
-         to one authored slide. Numbers are the real 25-sample medians. -->
-    <section class="slide vtable" id="variance">
-      <h2>All the data</h2>
+    <!-- Variance argument in three steps over ONE table. Step 0 is the bare
+         data; each step then changes only the highlighted cells, heading, and
+         caption (see the #variance CSS for data-at / data-hi), so the table
+         never shifts. Numbers are the real 25-sample medians. -->
+    <section class="slide" id="variance" data-dais-steps="3">
+      <h2><span data-at="0 1">All the data</span><span data-at="2">Past the plateau, variance more than doubles</span><span data-at="3">The real developer experience is in the <strong>tail</strong></span></h2>
       <p class="small muted">20 test files · 25 samples per level · concurrency 1&ndash;12 · duration in ms</p>
       <table>
         <thead>
@@ -839,73 +852,25 @@
           <tr><td>1</td><td class="num">9,939</td><td class="num">363</td><td class="num">10,607</td><td class="num">10,885</td></tr>
           <tr><td>2</td><td class="num">5,776</td><td class="num">307</td><td class="num">6,164</td><td class="num">6,876</td></tr>
           <tr><td>3</td><td class="num">4,582</td><td class="num">365</td><td class="num">5,252</td><td class="num">5,729</td></tr>
-          <tr><td>4</td><td class="num">3,904</td><td class="num">368</td><td class="num">4,648</td><td class="num">5,238</td></tr>
+          <tr><td>4</td><td class="num" data-hi="c3">3,904</td><td class="num">368</td><td class="num">4,648</td><td class="num">5,238</td></tr>
           <tr><td>5</td><td class="num">3,759</td><td class="num">332</td><td class="num">4,264</td><td class="num">4,739</td></tr>
           <tr><td>6</td><td class="num">3,597</td><td class="num">459</td><td class="num">4,751</td><td class="num">4,874</td></tr>
-          <tr><td class="hi-good">7</td><td class="num hi-good">3,468</td><td class="num hi-good">294</td><td class="num hi-good">3,990</td><td class="num hi-good">4,520</td></tr>
+          <tr><td data-hi="g1">7</td><td class="num" data-hi="g1">3,468</td><td class="num" data-hi="g1 g2">294</td><td class="num" data-hi="g1">3,990</td><td class="num" data-hi="g1">4,520</td></tr>
           <tr><td>8</td><td class="num">3,671</td><td class="num">472</td><td class="num">4,575</td><td class="num">5,106</td></tr>
           <tr><td>9</td><td class="num">3,601</td><td class="num">473</td><td class="num">4,804</td><td class="num">5,177</td></tr>
-          <tr><td>10</td><td class="num">3,534</td><td class="num">654</td><td class="num">5,339</td><td class="num">5,466</td></tr>
-          <tr><td>11</td><td class="num">3,724</td><td class="num">690</td><td class="num">5,096</td><td class="num">5,717</td></tr>
+          <tr><td>10</td><td class="num">3,534</td><td class="num" data-hi="b2">654</td><td class="num" data-hi="b3">5,339</td><td class="num">5,466</td></tr>
+          <tr><td>11</td><td class="num">3,724</td><td class="num" data-hi="b2">690</td><td class="num">5,096</td><td class="num">5,717</td></tr>
           <tr><td>12</td><td class="num">3,952</td><td class="num">488</td><td class="num">4,792</td><td class="num">5,055</td></tr>
         </tbody>
       </table>
-      <p>The median flattens after 7. The real story is in the <strong>tail</strong> &mdash; std&nbsp;dev, p95, worst run.</p>
-      <aside class="notes"></aside>
-    </section>
-
-    <section class="slide vtable" id="variance-2">
-      <h2>Past the plateau, variance more than doubles</h2>
-      <table>
-        <thead>
-          <tr><th>Concurrency</th><th class="num">Median</th><th class="num">Std dev</th><th class="num">p95</th><th class="num">Worst run</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>1</td><td class="num">9,939</td><td class="num">363</td><td class="num">10,607</td><td class="num">10,885</td></tr>
-          <tr><td>2</td><td class="num">5,776</td><td class="num">307</td><td class="num">6,164</td><td class="num">6,876</td></tr>
-          <tr><td>3</td><td class="num">4,582</td><td class="num">365</td><td class="num">5,252</td><td class="num">5,729</td></tr>
-          <tr><td>4</td><td class="num">3,904</td><td class="num">368</td><td class="num">4,648</td><td class="num">5,238</td></tr>
-          <tr><td>5</td><td class="num">3,759</td><td class="num">332</td><td class="num">4,264</td><td class="num">4,739</td></tr>
-          <tr><td>6</td><td class="num">3,597</td><td class="num">459</td><td class="num">4,751</td><td class="num">4,874</td></tr>
-          <tr><td>7</td><td class="num">3,468</td><td class="num hi-good">294</td><td class="num">3,990</td><td class="num">4,520</td></tr>
-          <tr><td>8</td><td class="num">3,671</td><td class="num">472</td><td class="num">4,575</td><td class="num">5,106</td></tr>
-          <tr><td>9</td><td class="num">3,601</td><td class="num">473</td><td class="num">4,804</td><td class="num">5,177</td></tr>
-          <tr><td>10</td><td class="num">3,534</td><td class="num hi-bad">654</td><td class="num">5,339</td><td class="num">5,466</td></tr>
-          <tr><td>11</td><td class="num">3,724</td><td class="num hi-bad">690</td><td class="num">5,096</td><td class="num">5,717</td></tr>
-          <tr><td>12</td><td class="num">3,952</td><td class="num">488</td><td class="num">4,792</td><td class="num">5,055</td></tr>
-        </tbody>
-      </table>
-      <p>Std&nbsp;dev jumps from <strong>294</strong> at the optimum to <strong>654</strong> and <strong>690</strong> just past it <br> The run-to-run spread more than doubles.</p>
+      <p data-at="1">The median flattens after 7. The real story is in the <strong>tail</strong> &mdash; std&nbsp;dev, p95, worst run.</p>
+      <p data-at="2">Std&nbsp;dev jumps from <strong>294</strong> at the optimum to <strong>654</strong> and <strong>690</strong> just past it <br> The run-to-run spread more than doubles.</p>
+      <p data-at="3">p95 at concurrency 10 (<strong>5,339</strong>) is worse than a <em>typical</em> run at 4 (<strong>3,904</strong>) <br> 2.5&times; the processes for worse overall performance.</p>
       <aside class="notes">
-        Same table, now read the std-dev column. Over-parallelizing doesn't make
+        Step 2: same table, now read the std-dev column. Over-parallelizing doesn't make
         the suite slower on average so much as it makes it *unpredictable*, and
         unpredictable is what makes people stop trusting a suite.
       </aside>
-    </section>
-
-    <section class="slide vtable" id="variance-3">
-      <h2>The real developer experience is in the <strong>tail</strong></h2>
-      <table>
-        <thead>
-          <tr><th>Concurrency</th><th class="num">Median</th><th class="num">Std dev</th><th class="num">p95</th><th class="num">Worst run</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>1</td><td class="num">9,939</td><td class="num">363</td><td class="num">10,607</td><td class="num">10,885</td></tr>
-          <tr><td>2</td><td class="num">5,776</td><td class="num">307</td><td class="num">6,164</td><td class="num">6,876</td></tr>
-          <tr><td>3</td><td class="num">4,582</td><td class="num">365</td><td class="num">5,252</td><td class="num">5,729</td></tr>
-          <tr><td>4</td><td class="num hi-cmp">3,904</td><td class="num">368</td><td class="num">4,648</td><td class="num">5,238</td></tr>
-          <tr><td>5</td><td class="num">3,759</td><td class="num">332</td><td class="num">4,264</td><td class="num">4,739</td></tr>
-          <tr><td>6</td><td class="num">3,597</td><td class="num">459</td><td class="num">4,751</td><td class="num">4,874</td></tr>
-          <tr><td>7</td><td class="num">3,468</td><td class="num">294</td><td class="num">3,990</td><td class="num">4,520</td></tr>
-          <tr><td>8</td><td class="num">3,671</td><td class="num">472</td><td class="num">4,575</td><td class="num">5,106</td></tr>
-          <tr><td>9</td><td class="num">3,601</td><td class="num">473</td><td class="num">4,804</td><td class="num">5,177</td></tr>
-          <tr><td>10</td><td class="num">3,534</td><td class="num">654</td><td class="num hi-bad">5,339</td><td class="num">5,466</td></tr>
-          <tr><td>11</td><td class="num">3,724</td><td class="num">690</td><td class="num">5,096</td><td class="num">5,717</td></tr>
-          <tr><td>12</td><td class="num">3,952</td><td class="num">488</td><td class="num">4,792</td><td class="num">5,055</td></tr>
-        </tbody>
-      </table>
-      <p>p95 at concurrency 10 (<strong>5,339</strong>) is worse than a <em>typical</em> run at 4 (<strong>3,904</strong>) <br> 2.5&times; the processes for worse overall performance.</p>
-      <aside class="notes"></aside>
     </section>
 
     <section class="slide" id="the-default-that-shipped">
