@@ -117,7 +117,9 @@ export class LeafPile {
 	#peek = 0;
 	/** Seconds to wait before the ghost starts floating back into view. */
 	#peekDelay = 0;
-	#leaning = false;
+	#hovered = false;
+	/** Keyboard focus on the ghost button; drawn as a brighter glow. */
+	#focusVisible = false;
 	/** Whether the ghost button had focus when the ghost left to rake. */
 	#refocus = false;
 	#wantsRake = false;
@@ -140,11 +142,13 @@ export class LeafPile {
 		this.#settled = load();
 
 		button.addEventListener("click", () => this.rake());
-		const lean = (leaning: boolean) => () => (this.#leaning = leaning);
-		button.addEventListener("pointerenter", lean(true));
-		button.addEventListener("pointerleave", lean(false));
-		button.addEventListener("focus", lean(true));
-		button.addEventListener("blur", lean(false));
+		button.addEventListener("pointerenter", () => (this.#hovered = true));
+		button.addEventListener("pointerleave", () => (this.#hovered = false));
+		button.addEventListener(
+			"focus",
+			() => (this.#focusVisible = button.matches(":focus-visible")),
+		);
+		button.addEventListener("blur", () => (this.#focusVisible = false));
 	}
 
 	get running() {
@@ -336,7 +340,10 @@ export class LeafPile {
 
 	/** Where the ghost floats while peeking, easing in as it arrives. */
 	#peekX() {
-		const lean = this.#leaning ? PEEK_LEAN : Math.sin(this.#time * 0.7) * 3;
+		const lean =
+			this.#hovered || this.#focusVisible
+				? PEEK_LEAN
+				: Math.sin(this.#time * 0.7) * 3;
 		return -40 + (PEEK_X + 40 + lean) * easeOut(this.#peek);
 	}
 
@@ -350,8 +357,10 @@ export class LeafPile {
 		this.#wantsRake = false;
 		this.#peek = 0;
 		this.#peekDelay = RETURN_DELAY;
-		this.#leaning = false;
-		this.#refocus = document.activeElement === this.#button;
+		this.#hovered = false;
+		// Only hand focus back to keyboard users; a mouse click shouldn't leave
+		// the ghost focused.
+		this.#refocus = this.#focusVisible;
 		this.#button.hidden = true;
 	}
 
@@ -512,7 +521,11 @@ export class LeafPile {
 		if (this.#rake) this.#paintRake(this.#rake, floor);
 		else if (this.#peek > 0) {
 			const bob = Math.sin(this.#time * 2) * 3;
-			this.#paintGhost(this.#peekX(), floor - PEEK_LIFT + bob);
+			this.#paintGhost(
+				this.#peekX(),
+				floor - PEEK_LIFT + bob,
+				this.#focusVisible,
+			);
 		}
 
 		this.#frame = requestAnimationFrame(this.#tick);
@@ -572,7 +585,7 @@ export class LeafPile {
 	}
 
 	/** A small sheet ghost facing right, centered at x with its hem at y. */
-	#paintGhost(x: number, y: number) {
+	#paintGhost(x: number, y: number, glow = false) {
 		const ctx = this.#front;
 		const w = 22;
 		const wave = this.#time * 8;
@@ -581,8 +594,11 @@ export class LeafPile {
 		ctx.translate(x, y);
 
 		// Body: round head, straight sides, wavy hem.
-		ctx.shadowColor = "rgba(255, 240, 220, 0.6)";
-		ctx.shadowBlur = 14;
+		// A brighter glow doubles as the keyboard focus indicator.
+		ctx.shadowColor = glow
+			? "rgba(255, 252, 245, 1)"
+			: "rgba(255, 240, 220, 0.6)";
+		ctx.shadowBlur = glow ? 28 : 14;
 		ctx.fillStyle = "#f6efe3";
 		ctx.beginPath();
 		ctx.moveTo(-w, 0);
@@ -597,6 +613,8 @@ export class LeafPile {
 		}
 		ctx.closePath();
 		ctx.fill();
+		// A second pass stacks the shadow so the focus glow is clearly visible.
+		if (glow) ctx.fill();
 		ctx.shadowBlur = 0;
 
 		// Little arm.
