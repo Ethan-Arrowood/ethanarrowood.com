@@ -10,6 +10,9 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
 export default defineConfig({
 	site: "https://ethanarrowood.com",
+	// Astro 7 defaults to JSX whitespace rules, which drop spaces between inline
+	// elements written on separate lines. Keep HTML whitespace semantics.
+	compressHTML: true,
 	integrations: [mdx()],
 	markdown: {
 		processor: unified({
