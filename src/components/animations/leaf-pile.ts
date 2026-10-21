@@ -1,9 +1,9 @@
-// Falling leaves that collect into a pile at the bottom of the page.
+// Falling leaves that collect into a pile along the bottom of the viewport,
+// until a little ghost comes by and rakes it away.
 //
-// Leaves fall through the viewport. The pile sits at the end of the document,
-// behind the footer, so it never covers content. While the end of the page is
-// off screen, leaves that fall past the bottom of the viewport still land on the
-// pile, so it keeps growing and is there when the visitor scrolls down.
+// Two canvases: falling leaves draw on one behind the content, so they never
+// cross text, and the pile and ghost draw on one in front of the content,
+// along the bottom edge of the screen.
 //
 // Falling leaves are simulated and drawn every frame. Once a leaf lands it is
 // painted onto an offscreen "pile" canvas and removed from the simulation, so
@@ -11,6 +11,10 @@
 // size of the pile. A height map (one value per few pixels of width) tracks the
 // pile surface so new leaves land on top of earlier ones and slide off steep
 // spots, which shapes the pile into mounds.
+//
+// When the pile averages 10% of the viewport height, or peaks at 15%, a ghost
+// floats across the bottom of the screen and rakes the leaves off the other
+// side.
 //
 // The pile is saved to sessionStorage so it carries across page navigations.
 
@@ -20,12 +24,18 @@ const COLUMN_WIDTH = 4;
 const STORAGE_KEY = "leaf-pile";
 const MAX_SETTLED = 900;
 const FALLING_ALPHA = 0.6;
-const PILE_ALPHA = 0.75;
+const PILE_ALPHA = 0.85;
 const FADE_SECONDS = 2;
-/** Tallest the pile grows; leaves that land above it fade out instead. */
-const MAX_PILE_HEIGHT = 90;
-/** Height of the offscreen pile canvas, with room for leaves on top. */
-const PILE_CANVAS_HEIGHT = MAX_PILE_HEIGHT + 40;
+/** Rake when the pile's average height reaches this fraction of the viewport. */
+const RAKE_AVERAGE = 0.1;
+/** Rake when the pile's tallest point reaches this fraction of the viewport. */
+const RAKE_PEAK = 0.15;
+/** Room above the tallest pile for leaves resting on top. */
+const PILE_CANVAS_MARGIN = 40;
+/** How far ahead of the ghost the rake reaches. */
+const RAKE_REACH = 46;
+/** Most raked leaves drawn in the heap in front of the rake. */
+const MAX_HEAP_LEAVES = 80;
 
 interface FallingLeaf {
 	x: number;
@@ -57,18 +67,42 @@ interface SettledLeaf {
 	shape: number;
 }
 
+/** A raked leaf, carried in the heap in front of the rake. */
+interface HeapLeaf {
+	/** Distance ahead of the rake, as a fraction of the heap width. */
+	ahead: number;
+	/** Height above the floor, as a fraction of the heap height. */
+	up: number;
+	size: number;
+	rotation: number;
+	color: number;
+	shape: number;
+}
+
+interface Rake {
+	/** Ghost center, in CSS pixels. */
+	x: number;
+	/** 1 when moving right, -1 when moving left. */
+	direction: 1 | -1;
+	speed: number;
+	time: number;
+	heap: HeapLeaf[];
+	raked: number;
+}
+
 const random = (min: number, max: number) => min + Math.random() * (max - min);
 const randomIndex = (length: number) => Math.floor(Math.random() * length);
 
 export class LeafPile {
-	#canvas: HTMLCanvasElement;
-	#ctx: CanvasRenderingContext2D;
+	#back: CanvasRenderingContext2D;
+	#front: CanvasRenderingContext2D;
 	#pile = document.createElement("canvas");
 	#pileCtx = this.#pile.getContext("2d")!;
 	#shapes = LEAF_SHAPE_NAMES.map((name) => new Path2D(LEAF_SHAPES[name]));
 	#falling: FallingLeaf[] = [];
 	#settled: SettledLeaf[] = [];
 	#heights = new Float32Array(0);
+	#rake: Rake | undefined;
 	#width = 0;
 	#height = 0;
 	#dpr = 1;
@@ -76,9 +110,9 @@ export class LeafPile {
 	#lastTime = 0;
 	#dirty = false;
 
-	constructor(canvas: HTMLCanvasElement) {
-		this.#canvas = canvas;
-		this.#ctx = canvas.getContext("2d")!;
+	constructor(back: HTMLCanvasElement, front: HTMLCanvasElement) {
+		this.#back = back.getContext("2d")!;
+		this.#front = front.getContext("2d")!;
 		this.#settled = load();
 	}
 
@@ -96,6 +130,8 @@ export class LeafPile {
 		this.#falling = Array.from({ length: target }, () =>
 			this.#spawn(random(-this.#height, this.#height * 0.8)),
 		);
+		// A pile carried over from another page may already be full.
+		if (!this.#rake && this.#isFull()) this.#startRake();
 		this.#lastTime = performance.now();
 		this.#frame = requestAnimationFrame(this.#tick);
 	}
@@ -107,11 +143,18 @@ export class LeafPile {
 		removeEventListener("resize", this.#resize);
 		removeEventListener("pagehide", this.#save);
 		this.#save();
-		this.#ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
+		for (const ctx of [this.#back, this.#front]) {
+			ctx.setTransform(1, 0, 0, 1, 0, 0);
+			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+		}
 	}
 
 	#targetCount() {
 		return Math.round(Math.min(40, Math.max(12, this.#width / 45)));
+	}
+
+	#pileCanvasHeight() {
+		return Math.ceil(this.#height * RAKE_PEAK + PILE_CANVAS_MARGIN);
 	}
 
 	#spawn(y = random(-80, -20)): FallingLeaf {
@@ -141,10 +184,12 @@ export class LeafPile {
 		this.#width = width;
 		this.#height = height;
 		this.#dpr = dpr;
-		this.#canvas.width = Math.round(width * dpr);
-		this.#canvas.height = Math.round(height * dpr);
+		for (const canvas of [this.#back.canvas, this.#front.canvas]) {
+			canvas.width = Math.round(width * dpr);
+			canvas.height = Math.round(height * dpr);
+		}
 		this.#pile.width = Math.round(width * dpr);
-		this.#pile.height = Math.round(PILE_CANVAS_HEIGHT * dpr);
+		this.#pile.height = Math.round(this.#pileCanvasHeight() * dpr);
 		this.#rebuildPile();
 	};
 
@@ -207,8 +252,12 @@ export class LeafPile {
 	#land(leaf: FallingLeaf) {
 		const x = this.#findRestingSpot(leaf.x, leaf.size);
 		const surface = this.#surface(x, leaf.size);
-		if (surface >= MAX_PILE_HEIGHT || this.#settled.length >= MAX_SETTLED) {
-			// The pile is full; let this leaf rest briefly, then fade away.
+		if (
+			surface >= this.#height * RAKE_PEAK ||
+			this.#settled.length >= MAX_SETTLED
+		) {
+			// The pile is full and the ghost is on its way; let this leaf rest
+			// briefly, then fade away.
 			leaf.fading = FADE_SECONDS;
 			return;
 		}
@@ -226,33 +275,134 @@ export class LeafPile {
 		this.#paintSettled(settled);
 		this.#dirty = true;
 		Object.assign(leaf, this.#spawn());
+		if (!this.#rake && this.#isFull()) this.#startRake();
+	}
+
+	#isFull() {
+		let sum = 0;
+		let peak = 0;
+		for (const height of this.#heights) {
+			sum += height;
+			peak = Math.max(peak, height);
+		}
+		return (
+			sum / this.#heights.length >= this.#height * RAKE_AVERAGE ||
+			peak >= this.#height * RAKE_PEAK
+		);
+	}
+
+	#startRake() {
+		const direction = Math.random() < 0.5 ? 1 : -1;
+		this.#rake = {
+			x: direction === 1 ? -RAKE_REACH - 40 : this.#width + RAKE_REACH + 40,
+			direction,
+			speed: Math.min(220, Math.max(110, this.#width / 7)),
+			time: 0,
+			heap: [],
+			raked: 0,
+		};
+	}
+
+	/** Move the ghost and sweep up every leaf behind the rake. */
+	#updateRake(rake: Rake, dt: number) {
+		rake.time += dt;
+		rake.x += rake.direction * rake.speed * dt;
+		const rakeX = rake.x + rake.direction * RAKE_REACH;
+		const behind = (x: number) =>
+			rake.direction === 1 ? x <= rakeX : x >= rakeX;
+
+		const remaining: SettledLeaf[] = [];
+		for (const leaf of this.#settled) {
+			if (!behind(leaf.x * this.#width)) {
+				remaining.push(leaf);
+				continue;
+			}
+			rake.raked++;
+			rake.heap.push({
+				ahead: Math.random(),
+				up: Math.random() * Math.random(),
+				size: leaf.size,
+				rotation: random(0, Math.PI * 2),
+				color: leaf.color,
+				shape: leaf.shape,
+			});
+			if (rake.heap.length > MAX_HEAP_LEAVES) rake.heap.shift();
+		}
+		if (remaining.length !== this.#settled.length) {
+			this.#settled = remaining;
+			this.#dirty = true;
+		}
+
+		// Clear the swept ground: the height map and the painted pile.
+		const column = Math.floor(rakeX / COLUMN_WIDTH);
+		if (rake.direction === 1) {
+			this.#heights.fill(0, 0, Math.max(0, column + 1));
+		} else {
+			this.#heights.fill(0, Math.max(0, column));
+		}
+		const clearFrom = rake.direction === 1 ? 0 : Math.max(0, rakeX);
+		const clearTo = rake.direction === 1 ? Math.max(0, rakeX) : this.#width;
+		const ctx = this.#pileCtx;
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
+		ctx.clearRect(
+			clearFrom * this.#dpr,
+			0,
+			(clearTo - clearFrom) * this.#dpr,
+			this.#pile.height,
+		);
+
+		const offscreen =
+			rake.direction === 1 ? rake.x > this.#width + 160 : rake.x < -160;
+		if (offscreen) this.#rake = undefined;
+	}
+
+	#paintLeaf(
+		ctx: CanvasRenderingContext2D,
+		x: number,
+		y: number,
+		size: number,
+		rotation: number,
+		scaleX: number,
+		scaleY: number,
+		alpha: number,
+		color: number,
+		shape: number,
+	) {
+		const scale = size / 100;
+		ctx.setTransform(this.#dpr, 0, 0, this.#dpr, 0, 0);
+		ctx.translate(x, y);
+		ctx.rotate(rotation);
+		ctx.scale(scale * scaleX, scale * scaleY);
+		ctx.translate(-50, -50);
+		ctx.globalAlpha = alpha;
+		ctx.fillStyle = LEAF_COLORS[color]!;
+		ctx.fill(this.#shapes[shape]!);
 	}
 
 	#paintSettled(leaf: SettledLeaf) {
-		const ctx = this.#pileCtx;
-		const scale = leaf.size / 100;
-		ctx.setTransform(this.#dpr, 0, 0, this.#dpr, 0, 0);
-		ctx.translate(leaf.x * this.#width, PILE_CANVAS_HEIGHT - leaf.h);
-		ctx.rotate(leaf.rotation);
-		ctx.scale(scale, scale * leaf.squash);
-		ctx.translate(-50, -50);
-		ctx.globalAlpha = PILE_ALPHA;
-		ctx.fillStyle = LEAF_COLORS[leaf.color]!;
-		ctx.fill(this.#shapes[leaf.shape]!);
+		this.#paintLeaf(
+			this.#pileCtx,
+			leaf.x * this.#width,
+			this.#pileCanvasHeight() - leaf.h,
+			leaf.size,
+			leaf.rotation,
+			1,
+			leaf.squash,
+			PILE_ALPHA,
+			leaf.color,
+			leaf.shape,
+		);
 	}
 
 	#tick = (now: number) => {
 		// Clamp so a background tab doesn't teleport every leaf on return.
 		const dt = Math.min((now - this.#lastTime) / 1000, 0.05);
 		this.#lastTime = now;
-		const ctx = this.#ctx;
-		// The end of the page, in viewport coordinates.
-		const floor = document.documentElement.scrollHeight - scrollY;
-		ctx.setTransform(1, 0, 0, 1, 0, 0);
-		ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
-		if (floor - PILE_CANVAS_HEIGHT < this.#height) {
-			ctx.drawImage(this.#pile, 0, (floor - PILE_CANVAS_HEIGHT) * this.#dpr);
-		}
+		const floor = this.#height;
+
+		const back = this.#back;
+		back.setTransform(1, 0, 0, 1, 0, 0);
+		back.clearRect(0, 0, back.canvas.width, back.canvas.height);
 
 		for (const leaf of this.#falling) {
 			if (leaf.fading !== undefined) {
@@ -264,15 +414,26 @@ export class LeafPile {
 				leaf.y += leaf.fallSpeed * dt;
 				leaf.rotation += leaf.spin * dt;
 				const surface = floor - this.#surface(leaf.x, leaf.size);
-				// Past the bottom of the viewport means the end of the page is
-				// further down; land there without drawing the rest of the fall.
-				if (leaf.y + leaf.size * 0.3 >= surface || leaf.y > this.#height + 40) {
-					this.#land(leaf);
-				} else if (leaf.x < -40 || leaf.x > this.#width + 40) {
+				if (leaf.y + leaf.size * 0.3 >= surface) this.#land(leaf);
+				else if (leaf.x < -40 || leaf.x > this.#width + 40) {
 					Object.assign(leaf, this.#spawn());
 				}
 			}
-			this.#paintFalling(leaf);
+			// Flipping the x scale makes the leaf look like it tumbles in 3D.
+			this.#paintLeaf(
+				back,
+				leaf.x,
+				leaf.y,
+				leaf.size,
+				leaf.rotation,
+				Math.cos(leaf.phase * 1.7),
+				1,
+				leaf.fading === undefined
+					? FALLING_ALPHA
+					: (FALLING_ALPHA * leaf.fading) / FADE_SECONDS,
+				leaf.color,
+				leaf.shape,
+			);
 		}
 
 		// Adjust the count after resizes.
@@ -280,25 +441,123 @@ export class LeafPile {
 		while (this.#falling.length < target) this.#falling.push(this.#spawn());
 		if (this.#falling.length > target) this.#falling.length = target;
 
+		if (this.#rake) this.#updateRake(this.#rake, dt);
+
+		const front = this.#front;
+		front.setTransform(1, 0, 0, 1, 0, 0);
+		front.globalAlpha = 1;
+		front.clearRect(0, 0, front.canvas.width, front.canvas.height);
+		front.drawImage(
+			this.#pile,
+			0,
+			(floor - this.#pileCanvasHeight()) * this.#dpr,
+		);
+		if (this.#rake) this.#paintRake(this.#rake, floor);
+
 		this.#frame = requestAnimationFrame(this.#tick);
 	};
 
-	#paintFalling(leaf: FallingLeaf) {
-		const ctx = this.#ctx;
-		const scale = leaf.size / 100;
-		// Flipping the x scale makes the leaf look like it tumbles in 3D.
-		const flip = Math.cos(leaf.phase * 1.7);
+	#paintRake(rake: Rake, floor: number) {
+		const ctx = this.#front;
+		const { direction: dir, time } = rake;
+		const rakeX = rake.x + dir * RAKE_REACH;
+
+		// The heap of raked leaves, pushed along in front of the rake.
+		const heapWidth = Math.min(90, 10 + Math.sqrt(rake.raked) * 5);
+		const heapHeight = Math.min(46, 6 + Math.sqrt(rake.raked) * 2.5);
+		for (const leaf of rake.heap) {
+			this.#paintLeaf(
+				ctx,
+				rakeX + dir * (4 + leaf.ahead * heapWidth),
+				floor - 4 - leaf.up * heapHeight * (1 - leaf.ahead * 0.6),
+				leaf.size,
+				leaf.rotation + time * dir * 0.6,
+				1,
+				0.7,
+				PILE_ALPHA,
+				leaf.color,
+				leaf.shape,
+			);
+		}
+
+		// Ghost, floating and bobbing just above the floor.
+		const bob = Math.sin(time * 3) * 4;
+		const baseY = floor - 14 + bob;
 		ctx.setTransform(this.#dpr, 0, 0, this.#dpr, 0, 0);
-		ctx.translate(leaf.x, leaf.y);
-		ctx.rotate(leaf.rotation);
-		ctx.scale(scale * flip, scale);
-		ctx.translate(-50, -50);
-		ctx.globalAlpha =
-			leaf.fading === undefined
-				? FALLING_ALPHA
-				: (FALLING_ALPHA * leaf.fading) / FADE_SECONDS;
-		ctx.fillStyle = LEAF_COLORS[leaf.color]!;
-		ctx.fill(this.#shapes[leaf.shape]!);
+		ctx.globalAlpha = 1;
+
+		// Rake: handle from the ghost's hand down to a toothed head on the ground.
+		const sweep = Math.sin(time * 9) * 3;
+		const handX = rake.x + dir * 20;
+		const handY = baseY - 26;
+		const headX = rakeX + sweep * dir;
+		ctx.lineCap = "round";
+		ctx.strokeStyle = "#8b5a2b";
+		ctx.lineWidth = 3;
+		ctx.beginPath();
+		ctx.moveTo(handX, handY);
+		ctx.lineTo(headX, floor - 6);
+		ctx.stroke();
+		ctx.lineWidth = 3;
+		ctx.beginPath();
+		ctx.moveTo(headX, floor - 16);
+		ctx.lineTo(headX, floor - 1);
+		ctx.stroke();
+		ctx.lineWidth = 1.5;
+		for (let tooth = 0; tooth < 5; tooth++) {
+			const y = floor - 15 + tooth * 3.5;
+			ctx.beginPath();
+			ctx.moveTo(headX, y);
+			ctx.lineTo(headX + dir * 5, y + 1);
+			ctx.stroke();
+		}
+
+		// Body: round head, straight sides, wavy hem.
+		const w = 22;
+		const wave = time * 8;
+		ctx.save();
+		ctx.translate(rake.x, baseY);
+		ctx.shadowColor = "rgba(255, 240, 220, 0.6)";
+		ctx.shadowBlur = 14;
+		ctx.fillStyle = "#f6efe3";
+		ctx.beginPath();
+		ctx.moveTo(-w, 0);
+		ctx.lineTo(-w, -34);
+		ctx.arc(0, -34, w, Math.PI, 0);
+		ctx.lineTo(w, 0);
+		for (let i = 0; i < 4; i++) {
+			const x0 = w - i * ((2 * w) / 4);
+			const x1 = x0 - (2 * w) / 4;
+			const dip = 6 + Math.sin(wave + i) * 2;
+			ctx.quadraticCurveTo((x0 + x1) / 2, dip, x1, 0);
+		}
+		ctx.closePath();
+		ctx.fill();
+		ctx.shadowBlur = 0;
+
+		// Little arm reaching for the rake.
+		ctx.beginPath();
+		ctx.ellipse(dir * (w - 2), -26, 7, 4, dir * -0.5, 0, Math.PI * 2);
+		ctx.fill();
+
+		// Face, looking where it's going.
+		const look = dir * 3;
+		ctx.fillStyle = "#1a1310";
+		for (const side of [-1, 1]) {
+			ctx.beginPath();
+			ctx.ellipse(look + side * 7, -36, 3, 4.5, 0, 0, Math.PI * 2);
+			ctx.fill();
+		}
+		ctx.beginPath();
+		ctx.ellipse(look, -25, 2.5, 3.2, 0, 0, Math.PI * 2);
+		ctx.fill();
+		ctx.fillStyle = "rgba(255, 138, 140, 0.45)";
+		for (const side of [-1, 1]) {
+			ctx.beginPath();
+			ctx.ellipse(look + side * 12, -29, 3.5, 2.2, 0, 0, Math.PI * 2);
+			ctx.fill();
+		}
+		ctx.restore();
 	}
 
 	#save = () => {
