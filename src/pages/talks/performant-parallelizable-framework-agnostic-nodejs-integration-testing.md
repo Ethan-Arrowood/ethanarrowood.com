@@ -8,7 +8,7 @@ events:
   - name: "Node.js Interactive @ Render ATL 2026"
     date: "August 13, 2026"
     eventUrl: "https://renderatl.com"
-    slidesUrl: "/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/slides/"
+    slidesUrl: "/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/nodejs-interactive-render-atl-2026/slides/"
 ---
 
 ## Description

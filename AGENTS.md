@@ -102,7 +102,13 @@ Content here.
 
   `videoid` is the `v=` value from a watch URL. For a playlist (e.g. the homepage embed in `index.astro`), add `playlistid` (the `list=` value from a playlist URL).
 
-Some talks slides are stored as static assets within the `public/talks/` directory. That directory copies the expected output path for talk pages. For example, the talk "Performant, Parallelizable, Framework Agnostic Node.js Integration Testing" has its talk page located at `ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing` sourced from `src/pages/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing.md`. The slides for this talk can be found at `public/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/slides`. Thus, the slides are available at `ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/slides`.
+Some talks slides are stored as static assets within the `public/talks/` directory. That directory copies the expected output path for talk pages, with one folder per event so each delivery of a talk keeps its own deck: `public/talks/<talk-slug>/<event-slug>/slides/`. The event slug is the event's `name` lowercased, with punctuation dropped and spaces turned into hyphens.
+
+For example, the talk "Performant, Parallelizable, Framework Agnostic Node.js Integration Testing" has its talk page at `ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing`, sourced from `src/pages/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing.md`. Its deck for "Node.js Interactive @ Render ATL 2026" lives in `public/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/nodejs-interactive-render-atl-2026/slides/` and is served at `ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/nodejs-interactive-render-atl-2026/slides/`. Point that event's `slidesUrl` at the same path.
+
+That deck used to live at `.../performant-parallelizable-framework-agnostic-nodejs-integration-testing/slides/`. A small redirect page stays there (keeping the `#slide` hash) because the old URL was shared. Keep redirects like it when moving a deck that has been shared.
+
+`public/talks/nodejs-code-and-learn-2026/slides/` is a draft deck that predates this convention and has no talk page yet; move it under `<talk-slug>/<event-slug>/` once it does.
 
 These slide decks may use Ethan's personal HTML+CSS based presentation framework, Dais. The framework is individually vendored into each slide directory in order to avoid existing/past presentations breaking whenever the framework is updated.
 
