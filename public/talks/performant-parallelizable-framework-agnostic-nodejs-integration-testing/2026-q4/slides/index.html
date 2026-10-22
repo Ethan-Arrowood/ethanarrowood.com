@@ -626,6 +626,9 @@
     #failure-history .bars .hot i { background: var(--dais-accent-2); }
 
     #isolation h2 { font-size: 5cqi; }
+
+    /* The alias-to-network mapping reads larger than default code. */
+    #netmask pre { --dais-code-size: 0.9em; }
     #ci-usage .compare .n { font-size: 5cqi; }
 
     /* Persistent deck footer: GitHub handle on the left, talk title and
@@ -1121,18 +1124,61 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
     </section>
 
     <section class="slide" id="netmask">
-      <h2>Why the <code>/32</code>? The default pinned a CPU core.</h2>
-      <div class="hbars">
-        <b>254 aliases, <code>/8</code></b> <span><i class="bad" style="--pct: 78"></i><em>~65% CPU</em></span>
-        <b>254 aliases, <code>/32</code></b> <span><i class="good" style="--pct: 0"></i><em>~0% CPU</em></span>
+      <h2>Every alias claims the same network</h2>
+      <p>No explicit netmask? macOS assigns <code>/8</code>.</p>
+      <pre><code><span class="tok-comment"># address     claimed network</span>
+127.0.0.2  →  <span class="tok-string">127.0.0.0/8</span>
+127.0.0.3  →  <span class="tok-string">127.0.0.0/8</span>
+127.0.0.4  →  <span class="tok-string">127.0.0.0/8</span></code></pre>
+      <ul class="lines">
+        <li class="step" data-step="1">Each address conflicts with every other.</li>
+        <li class="step" data-step="2">mDNSResponder keeps defending them.<br><span class="accent-2">O(n²) work. A storm of announcements.</span></li>
+      </ul>
+      <aside class="notes">
+        That netmask in the setup command matters. Without it, macOS assigns 255.0.0.0,
+        or /8. These are different addresses, but every alias claims the whole
+        127.0.0.0/8 network.
+        [Step 1] This was diagnosed on a developer machine configured with about 254
+        aliases. The overlapping interface addresses trigger mDNSResponder's
+        address-conflict defense, PacketRRConflict.
+        [Step 2] Each address conflicts with every other, so the defense work grows
+        quadratically. It floods loopback with mDNS announcements on UDP port 5353 and
+        can pin a CPU core. The busy process is mDNSResponder, not a test worker.
+        Source: HarperFast/integration-testing PR #21, Kris Zyp, July 2026.
+      </aside>
+    </section>
+
+    <section class="slide" id="netmask-fix">
+      <h2><code>/32</code> removes the overlap</h2>
+      <ul class="lines">
+        <li><code>255.255.255.255</code>: each alias claims only itself.</li>
+        <li>Same pool capacity. Same test isolation.</li>
+      </ul>
+      <div class="stack step" data-step="1">
+        <p class="muted">254 aliases. One macOS box. One paired measurement.</p>
+        <table>
+          <thead>
+            <tr><th scope="col">Netmask</th><th scope="col" class="num">mDNSResponder CPU</th><th scope="col" class="num">UDP 5353 packets / 8 s</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row"><code>/8</code></th><td class="num">~65%</td><td class="num">85</td></tr>
+            <tr><th scope="row"><code>/32</code></th><td class="num">~0%</td><td class="num">5</td></tr>
+          </tbody>
+        </table>
       </div>
       <aside class="notes">
-        Without a netmask, macOS gives each alias 255.0.0.0, so every alias claims the
-        whole 127.0.0.0/8 network. Hundreds of addresses asserting the same subnet drive
-        mDNSResponder's address-conflict defense into an O(n^2) storm of announcements on
-        port 5353. A /32 makes each alias an isolated host. Measured in the
-        integration-testing setup script (Jul 2026). Re-running the script converts old
-        /8 aliases.
+        A /32 is a host netmask. Each alias claims one address, so the subnet claims no
+        longer overlap. The addresses still loop back. Same number of aliases, same
+        isolation.
+        [Step 1] This comparison used 254 aliases on the same macOS machine in the same
+        run. With /8, mDNSResponder measured about 65% CPU and 85 packets over eight
+        seconds on UDP 5353. With /32, about zero CPU and five packets, the observed
+        floor. One measurement, not a cross-machine benchmark.
+        The setup script removes each existing alias before adding it, so re-running it
+        converts old /8 setups to /32.
+        Next: the addresses are configured. How do we assign them to test processes
+        without handing out the same address twice?
+        Source: HarperFast/integration-testing PR #21, Kris Zyp, July 2026.
       </aside>
     </section>
 
