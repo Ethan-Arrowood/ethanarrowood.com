@@ -1390,12 +1390,13 @@ steps:
       <h2>The port used small, independent files</h2>
       <ul class="lines reveal">
         <li>14 PRs, one legacy file or group each</li>
-        <li>24 self-contained files, each with its own Harper</li>
+        <li>17 self-contained files, each with its own Harper</li>
         <li>19,977 lines of legacy suite and infrastructure deleted</li>
       </ul>
       <aside class="notes">
         Independent, hermetic files are small units an agent can port one at a time.
-        The port PRs ran on claude/api-tests-* branches.
+        The port PRs ran on claude/api-tests-* branches. 17 apiTests files existed
+        when the legacy suite was removed (Jun 8); 7 more were added there later.
       </aside>
     </section>
 
