@@ -1081,28 +1081,59 @@ test/application 3 → <span class="tok-string">http://127.0.0.4:9925</span></co
         <li>Every instance can use port 9925 without conflict</li>
         <li>Isolation is by <strong>address</strong></li>
       </ul>
-      <aside class="notes"></aside>
+      <aside class="notes">
+        Each node binds several fixed ports on its address: 9925 (operations), 9926
+        (HTTP), 1883 and 8883 (MQTT), and 9927 (HTTPS) when TLS is configured. The
+        harness passes them as address:port, e.g. --HTTP_PORT=127.0.0.2:9926.
+      </aside>
     </section>
 
     <section class="slide" id="platform">
-      <h2>One caveat: only Linux enables by default</h2>
+      <h2>One caveat: macOS needs setup</h2>
       <table>
         <thead><tr><th>Platform</th><th><code>127.0.0.1</code></th><th><code>127.0.0.2</code>-<code>127.255.255.255</code></th></tr></thead>
         <tbody>
           <tr><td>Linux (Ubuntu)</td><td>Enabled by default</td><td>Enabled by default</td></tr>
           <tr><td>macOS</td><td>Enabled by default</td><td>Must be added per address</td></tr>
-          <tr><td>Windows</td><td>Enabled by default</td><td>Must be added per address</td></tr>
+          <tr><td>Windows</td><td>Enabled by default</td><td>Enabled by default</td></tr>
         </tbody>
       </table>
-      <aside class="notes"></aside>
+      <aside class="notes">
+        Windows routes all of 127.0.0.0/8 to loopback already: harper's Windows CI shards
+        run with no alias setup. The integration-testing README still says Windows needs
+        setup; that's worth fixing upstream.
+      </aside>
     </section>
 
     <section class="slide" id="platform-macos">
       <h2>macOS: register each address</h2>
-      <pre><code><span class="tok-comment"># macOS: register each address as a loopback alias (once per machine)</span>
-sudo ifconfig lo0 alias 127.0.0.2 up
-sudo ifconfig lo0 alias 127.0.0.3 up</code></pre>
-      <aside class="notes"></aside>
+      <pre><code><span class="tok-comment"># once per boot, or install the provided launchd daemon</span>
+npx harper-integration-test-setup-loopback
+
+<span class="tok-comment"># what it runs for each address in the pool</span>
+sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
+      <aside class="notes">
+        The script configures 32 addresses by default (127.0.0.2 to 127.0.0.33; set
+        HARPER_INTEGRATION_TEST_LOOPBACK_POOL_COUNT for more, up to 254), verifies every
+        alias landed, and ships scripts/io.harperdb.loopback-setup.plist so the aliases
+        survive a reboot. macOS drops lo0 aliases on every restart.
+      </aside>
+    </section>
+
+    <section class="slide" id="netmask">
+      <h2>Why the <code>/32</code>? The default pinned a CPU core.</h2>
+      <div class="hbars">
+        <b>254 aliases, <code>/8</code></b> <span><i class="bad" style="--pct: 78"></i><em>~65% CPU</em></span>
+        <b>254 aliases, <code>/32</code></b> <span><i class="good" style="--pct: 0"></i><em>~0% CPU</em></span>
+      </div>
+      <aside class="notes">
+        Without a netmask, macOS gives each alias 255.0.0.0, so every alias claims the
+        whole 127.0.0.0/8 network. Hundreds of addresses asserting the same subnet drive
+        mDNSResponder's address-conflict defense into an O(n^2) storm of announcements on
+        port 5353. A /32 makes each alias an isolated host. Measured in the
+        integration-testing setup script (Jul 2026). Re-running the script converts old
+        /8 aliases.
+      </aside>
     </section>
 
     <section class="slide" id="pool">
@@ -1112,19 +1143,41 @@ sudo ifconfig lo0 alias 127.0.0.3 up</code></pre>
       <p class="small muted">index 0 → 127.0.0.2 (PID 42) · index 1 → 127.0.0.3 (PID 43) · …</p>
       <ul>
         <li>Index is the address; value is the owning process ID</li>
-        <li>First-available allocation; released on teardown</li>
+        <li>First-available allocation; released once its ports are free</li>
       </ul>
-      <aside class="notes"></aside>
+      <aside class="notes">
+        The PIDs are test runner processes, not Harper. Default pool: 32 addresses.
+        Pool file: $TMPDIR/harper-integration-test-loopback-pool.json.
+      </aside>
     </section>
 
     <section class="slide" id="lock">
       <h2>Cross-process mutex to avoid conflicts</h2>
       <pre><code><span class="tok-comment">// 'wx' fails if the file already exists — atomically</span>
 <span class="tok-keyword">const</span> handle = <span class="tok-keyword">await</span> <span class="tok-fn">open</span>(LOCK_PATH, <span class="tok-string">'wx'</span>);
-<span class="tok-keyword">await</span> handle.<span class="tok-fn">close</span>();   <span class="tok-comment">// we hold the lock</span></code></pre>
+<span class="tok-keyword">await</span> handle.<span class="tok-fn">writeFile</span>(token);   <span class="tok-comment">// we hold the lock</span>
+<span class="tok-keyword">await</span> handle.<span class="tok-fn">close</span>();</code></pre>
       <p>One of many options (daemon, orchestrator, atomics).</p>
       <p>File lock was simplest. Plus a stale-lock timeout for crashed processes.</p>
-      <aside class="notes"></aside>
+      <aside class="notes">
+        The stale timeout is 10 seconds. The token is pid, a counter, and random bytes,
+        so a process can tell its own lock from a successor's.
+      </aside>
+    </section>
+
+    <section class="slide" id="lock-token">
+      <h2>A slow writer can lose the lock</h2>
+      <pre><code><span class="tok-keyword">await</span> <span class="tok-fn">writeFile</span>(pendingPath, JSON.<span class="tok-fn">stringify</span>(pool));
+<span class="tok-keyword">await</span> <span class="tok-fn">assertLockHeld</span>(token);          <span class="tok-comment">// still ours?</span>
+<span class="tok-keyword">await</span> <span class="tok-fn">rename</span>(pendingPath, POOL_PATH);  <span class="tok-comment">// atomic publish</span></code></pre>
+      <p>If a write outlasts the stale timeout, another process takes the lock. The token check stops the old writer from overwriting the new claim.</p>
+      <aside class="notes">
+        Added Oct 2026 (integration-testing #32 and #33). Writes go to a temp file and
+        are published by rename, so readers never see a torn file. On a lost lock the
+        operation retries from the current pool state, up to 3 times. An unreadable pool
+        file is quarantined for 6 minutes before it's reset, so in-flight reservations
+        aren't wiped. The check narrows the race; it doesn't close it completely.
+      </aside>
     </section>
 
     <section class="slide" id="reaping">
@@ -1136,7 +1189,25 @@ sudo ifconfig lo0 alias 127.0.0.3 up</code></pre>
   loopbackPool[index] = <span class="tok-keyword">null</span>;  <span class="tok-comment">// dead — reclaim it</span>
 }</code></pre>
       <p class="small muted">A <kbd>Ctrl</kbd>+<kbd>C</kbd> mid-run doesn't break the pool</p>
-      <aside class="notes"></aside>
+      <aside class="notes">
+        Reaping runs when the pool is full: dead runner PIDs are cleared before waiting
+        for a free slot.
+      </aside>
+    </section>
+
+    <section class="slide" id="orphans">
+      <h2>Crashed runners left Harper running</h2>
+      <ul class="lines reveal">
+        <li>Each Harper starts in its own process group</li>
+        <li>A shared monitor reaps groups whose runner died</li>
+        <li>POSIX only; Windows relies on runner cleanup</li>
+      </ul>
+      <aside class="notes">
+        A SIGKILL'd runner or a cancelled CI job used to leave Harper alive, holding its
+        fixed ports. Since Sep 2026 (integration-testing #30) every instance registers in a
+        cross-process registry, and one monitor per user reaps orphaned or overdue
+        process groups with kill(-pgid).
+      </aside>
     </section>
 
     <section class="slide" id="trust-but-verify">
@@ -1147,8 +1218,41 @@ server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loo
 });</code></pre>
       <p>1. Verify the whole pool at startup (ensure setup script was run)</p>
       <p>2. Verify again per allocation to avoid collisions</p>
-      <p class="small muted">Still not immune to race condition with another app, but loopback allocation collides far less often than dynamic ports.</p>
+      <p class="small muted">Then two more checks before an address is handed out.</p>
       <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="reuseport">
+      <h2>A dying node can still hold the address</h2>
+      <p>Harper's HTTP workers bind with <code>SO_REUSEPORT</code>. A new node could share 9926 with an old node's lingering workers and split its connections.</p>
+      <pre><code><span class="tok-comment">// an exclusive bind fails with EADDRINUSE, even beside an SO_REUSEPORT socket</span>
+<span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> port <span class="tok-keyword">of</span> [<span class="tok-number">9925</span>, <span class="tok-number">9926</span>]) {
+  <span class="tok-keyword">if</span> (<span class="tok-keyword">await</span> <span class="tok-fn">isPortInUseOnAddress</span>(port, address)) skip(address);
+}</code></pre>
+      <aside class="notes">
+        The conflict canary, added Jun 2026. The common shape: after a kill, Harper's main
+        thread has exited (freeing 9925) but its HTTP workers still hold 9926. The pool
+        releases the poisoned address, skips it for this attempt, and re-probes it later.
+        This detection is Linux-effective; macOS SO_REUSEPORT semantics differ, but macOS
+        doesn't show the silent co-bind, and CI runs on Linux. Teardown also waits up to
+        5 s for all ports to free before releasing an address.
+      </aside>
+    </section>
+
+    <section class="slide" id="foreign-listener">
+      <h2>Some listeners cover every address</h2>
+      <p>A process on <code>0.0.0.0:9926</code>, like a local Harper, overlaps the whole pool. On macOS and Windows it quietly takes a node's connections.</p>
+      <pre><code><span class="tok-comment">// an exclusive bind succeeds beside it there, so connect instead</span>
+<span class="tok-keyword">const</span> port = <span class="tok-keyword">await</span> <span class="tok-fn">findAcceptingPort</span>(address, [<span class="tok-number">9925</span>, <span class="tok-number">9926</span>]);
+<span class="tok-keyword">if</span> (port) <span class="tok-keyword">throw new</span> <span class="tok-type">ForeignListenerError</span>(address, port);</code></pre>
+      <aside class="notes">
+        Added Sep 2026. The foreign process gets the node's connections whenever the node
+        has no listener of its own: while it starts, while HTTP workers restart, and after
+        teardown. Keep-alive connections then stay with it, so a suite fails, or passes,
+        against the wrong server. Linux refuses the exclusive bind, so it skips this probe.
+        Set HARPER_INTEGRATION_TEST_ALLOW_FOREIGN_LISTENERS=1 to turn the error into a
+        warning.
+      </aside>
     </section>
 
     <section class="slide" id="lifecycle">
@@ -1156,24 +1260,35 @@ server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loo
       <pre><code><span class="tok-comment">// ctx is a general options object</span>
 
 <span class="tok-keyword">await</span> <span class="tok-fn">startHarper</span>(ctx);
-<span class="tok-comment">// 1. allocate a loopback address from the pool</span>
-<span class="tok-comment">// 2. create a temporary install directory</span>
+<span class="tok-comment">// 1. create a temporary install directory</span>
+<span class="tok-comment">// 2. allocate a loopback address from the pool</span>
 <span class="tok-comment">// 3. spawn Harper, wait until it is actually ready</span>
 <span class="tok-comment">// 4. populate ctx.harper</span></code></pre>
-      <aside class="notes"></aside>
+      <aside class="notes">
+        If ctx.harper already names a dataRootDir and hostname, startHarper reuses them.
+        That's how a test restarts the same node.
+      </aside>
     </section>
 
     <section class="slide" id="lifecycle-context">
       <h2><code>ctx.harper</code></h2>
       <pre><code>ctx.harper.httpURL            <span class="tok-comment">// 'http://127.0.0.3:9926'</span>
 ctx.harper.operationsAPIURL   <span class="tok-comment">// 'http://127.0.0.3:9925'</span>
-ctx.harper.rootpath           <span class="tok-comment">// '/var/folders/js/abc123_def456/T/harper-test-789'</span></code></pre>
-      <aside class="notes"></aside>
+ctx.harper.hostname           <span class="tok-comment">// '127.0.0.3'</span>
+ctx.harper.dataRootDir        <span class="tok-comment">// '/tmp/harper-integration-test-Xk3pQz'</span></code></pre>
+      <aside class="notes">
+        Also on ctx.harper: admin credentials, the child process, logDir when
+        HARPER_INTEGRATION_TEST_LOG_DIR is set, and startupOutput.
+      </aside>
     </section>
 
     <section class="slide" id="lifecycle-teardown">
       <h2><code>teardownHarper(ctx)</code></h2>
-      <pre><code><span class="tok-keyword">await</span> <span class="tok-fn">teardownHarper</span>(ctx);    <span class="tok-comment">// kill, release the address, remove the directory</span></code></pre>
+      <pre><code><span class="tok-keyword">await</span> <span class="tok-fn">teardownHarper</span>(ctx);
+<span class="tok-comment">// 1. stop Harper's whole process group</span>
+<span class="tok-comment">// 2. wait for its ports to be free</span>
+<span class="tok-comment">// 3. release the address, remove the directory</span>
+<span class="tok-comment">//    (if a port stays held, keep both)</span></code></pre>
       <aside class="notes"></aside>
     </section>
 
@@ -1197,7 +1312,7 @@ ctx.harper.rootpath           <span class="tok-comment">// '/var/folders/js/abc1
 
     <section class="slide" id="not-required">
       <h2>Keep it flexible</h2>
-      <pre><code><span class="tok-comment">// src/run.ts, line 1:</span>
+      <pre><code><span class="tok-comment">// src/run.ts:</span>
 <span class="tok-comment">// Important! This script should not be required</span>
 <span class="tok-comment">// to execute integration tests.</span></code></pre>
       <p class="small muted"><a href="https://github.com/HarperFast/integration-testing/blob/main/src/run.ts">https://github.com/HarperFast/integration-testing/blob/main/src/run.ts</a></p>

@@ -174,7 +174,8 @@ a few HTTP requests.
 ## Everything wants port 9925
 
 Once files could run in parallel, they immediately competed for Harper's default
-ports. Every instance wanted its operations API on port 9925.
+ports. Every instance wanted its operations API on port 9925, its HTTP server on
+9926, and MQTT on 1883 and 8883. With TLS configured, HTTPS adds 9927.
 
 Letting the operating system choose an available port is easy when the server
 supports it:
@@ -226,18 +227,38 @@ test/application 2 → http://127.0.0.3:9925
 test/application 3 → http://127.0.0.4:9925
 ```
 
-Each instance keeps its default ports and binds to its assigned address. The
-address separates the listeners. This depends on binding to that specific
-address; a listener on all interfaces would defeat the separation.
+Each instance keeps its default ports and binds them to its assigned address.
+The harness passes each port with its address, as in
+`--HTTP_PORT=127.0.0.2:9926`. The address separates the listeners. This depends
+on every listener binding that specific address; a process listening on all
+interfaces is a separate problem, covered below.
 
-Platform setup is part of the design. Linux enables the additional loopback
-addresses by default. The macOS and Windows setup described in the talk requires
-adding addresses individually. On macOS, the commands look like this:
+Platform setup is part of the design. Linux and Windows route all of
+`127.0.0.0/8` to loopback by default. macOS only enables `127.0.0.1`, so each
+additional address has to be added as an alias on `lo0`. The package ships a
+script that does it:
 
 ```bash
-sudo ifconfig lo0 alias 127.0.0.2 up
-sudo ifconfig lo0 alias 127.0.0.3 up
+# once per boot, or install the provided launchd daemon
+npx harper-integration-test-setup-loopback
+
+# what it runs for each address in the pool
+sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up
 ```
+
+It configures 32 addresses by default, `127.0.0.2` through `127.0.0.33`, and
+verifies each one landed. macOS drops these aliases on every reboot, so the
+package also includes a `launchd` daemon that reruns the script at boot.
+
+### Why the netmask matters
+
+The first version of the script left out the netmask. macOS then gives each
+alias `255.0.0.0`, so every alias claims the entire `127.0.0.0/8` network. With
+a large pool, hundreds of interface addresses assert the same subnet.
+`mDNSResponder` treats that as an address conflict and answers with a storm of
+announcements on port 5353. With 254 aliases on `/8`, it held about 65% of a CPU
+core. With `/32`, each alias is an isolated host, and the same 254 aliases cost
+about 0%.
 
 The framework checks that the configured addresses are usable. A missing setup
 step should fail before hundreds of application startups produce confusing
@@ -255,8 +276,8 @@ The pool uses a JSON file containing an array of process IDs:
 ```
 
 Index zero represents `127.0.0.2`, index one represents `127.0.0.3`, and so on. A
-PID marks ownership; `null` marks a free slot. Allocation takes the first available
-slot. Teardown releases it.
+test runner's PID marks ownership; `null` marks a free slot. Allocation takes the
+first available slot. Teardown releases it once the node's ports are free.
 
 ### Lock the read-modify-write operation
 
@@ -268,6 +289,7 @@ The file-lock primitive is small:
 
 ```javascript
 const handle = await open(LOCK_PATH, 'wx');
+await handle.writeFile(token);
 await handle.close();
 ```
 
@@ -278,7 +300,30 @@ lock after updating the pool.
 
 A daemon or orchestrator could coordinate allocation too. A file lock was enough
 for this local shared resource. It also needed a stale-lock timeout so a crashed
-process couldn't block all future allocations.
+process couldn't block all future allocations. The timeout is 10 seconds.
+
+### A slow writer can lose the lock
+
+The stale timeout creates its own problem. If a holder stalls past 10 seconds,
+another process treats its lock as stale and takes over. When the first process
+wakes up, it still believes it holds the lock and writes its old view of the
+pool over the new claim.
+
+That's what the token is for. It combines the PID, a counter, and random bytes.
+Before publishing, the writer checks that the lock file still holds its token:
+
+```javascript
+await writeFile(pendingPath, JSON.stringify(pool));
+await assertLockHeld(token);          // still ours?
+await rename(pendingPath, POOL_PATH); // atomic publish
+```
+
+The pool is written to a temporary file and published with a rename, so readers
+see either the old file or the new one, never a torn write. If the token check
+fails, the operation retries from the current pool state. The check narrows the
+race; it doesn't close it completely. A pool file that can't be parsed is
+quarantined for six minutes before it's reset, so reservations whose nodes
+haven't bound yet aren't wiped.
 
 ### Reclaim crashed owners and verify addresses
 
@@ -286,10 +331,18 @@ Normal teardown isn't sufficient. Interrupting the runner can leave PIDs in the
 pool after their processes have exited.
 
 The pool checks ownership with `process.kill(pid, 0)`. Signal zero checks whether
-the process exists without sending a terminating signal. Dead owners can have
-their slots reclaimed. The deck abbreviates this as a try/catch; when adapting
-the pattern, distinguish a missing process from a permission error. Failure to
-check a PID doesn't always mean it is dead.
+the process exists without sending a terminating signal. When the pool is full,
+dead owners have their slots reclaimed before the allocator waits for a free one.
+The deck abbreviates this as a try/catch; when adapting the pattern, distinguish
+a missing process from a permission error. Failure to check a PID doesn't always
+mean it is dead.
+
+The pool only tracks test runners. A runner killed with `SIGKILL`, or a cancelled
+CI job, could still leave Harper itself running and holding its fixed ports. Each
+Harper instance now starts in its own process group and registers itself in a
+shared registry. A single monitor per user reaps the groups whose runner died.
+That relies on process groups, so it is POSIX only; on Windows the runner's own
+cleanup handlers are the only protection.
 
 Allocation also doesn't prove that the operating system will accept the address.
 The framework verifies the pool at startup and checks again when allocating.
@@ -302,11 +355,63 @@ server.listen(0, loopbackAddress, () => {
 });
 ```
 
-This answers whether the address is usable. Binding port zero doesn't reserve
-Harper's fixed ports. The shared pool prevents cooperating test processes from
-choosing the same address, but it cannot stop an unrelated application from
-binding there. The approach reduces collisions; it doesn't create an operating
-system reservation for every port on the address.
+This answers whether the address is usable. It doesn't say whether anything
+already holds Harper's fixed ports there. The shared pool keeps cooperating test
+processes from choosing the same address at the same time. Two more checks run
+before an address is handed out.
+
+### A dying node can still hold the address
+
+Harper's HTTP workers bind their port with `SO_REUSEPORT`. That option lets
+several sockets share one address and port. The common failure looked like this:
+a test killed its node, the main thread exited and freed 9925, but the HTTP
+workers lingered on 9926. Teardown released the address, the next suite claimed
+it, and its new node silently co-bound 9926 beside the old workers. Connections
+were split between two nodes, and both suites failed in confusing ways.
+
+The fix is a conflict canary. Before returning an address, the pool tries an
+exclusive bind on the operations and HTTP ports:
+
+```javascript
+// an exclusive bind fails with EADDRINUSE, even beside an SO_REUSEPORT socket
+for (const port of [9925, 9926]) {
+  if (await isPortInUseOnAddress(port, address)) skip(address);
+}
+```
+
+Node's `net` server doesn't set `SO_REUSEPORT`, and Linux refuses to mix a
+reuse-port socket with a plain one on the same address and port. A held port
+means a node still owns the address. The pool releases it, skips it for this
+attempt, and probes it again later. macOS handles `SO_REUSEPORT` differently, but
+it doesn't show the silent co-bind, and CI runs on Linux.
+
+Teardown closes the same gap from the other side. `teardownHarper` waits up to
+five seconds for all of the node's ports to be free. Only then does it release
+the address and remove the directory. If a port stays held, it keeps both, and
+the slot is reclaimed when the runner exits.
+
+### Some listeners cover every address
+
+A process listening on `0.0.0.0:9926` overlaps every address in the pool. A
+local Harper running with its default configuration is the usual one. On macOS
+and Windows, an exclusive bind on `127.0.0.2:9926` succeeds beside it, so the
+canary can't see it. That process then receives a node's connections whenever
+the node has no listener of its own: while it starts, while its HTTP workers
+restart, and after teardown. Keep-alive connections stay with it, so a suite
+fails, or passes, against the wrong server.
+
+On those platforms the pool connects to the ports instead of binding them:
+
+```javascript
+// an exclusive bind succeeds beside it there, so connect instead
+const port = await findAcceptingPort(address, [9925, 9926]);
+if (port) throw new ForeignListenerError(address, port);
+```
+
+The error names the port, so the fix is to stop that process or bind it to a
+specific address. Setting `HARPER_INTEGRATION_TEST_ALLOW_FOREIGN_LISTENERS=1`
+turns the error into a warning. Linux refuses the exclusive bind on its own, so
+it skips this probe.
 
 ## A lifecycle API that works with different runners
 
@@ -317,8 +422,8 @@ Starting an instance takes a context object:
 // ctx is a general options object
 
 await startHarper(ctx);
-// 1. allocate a loopback address from the pool
-// 2. create a temporary install directory
+// 1. create a temporary install directory
+// 2. allocate a loopback address from the pool
 // 3. spawn Harper, wait until it is actually ready
 // 4. populate ctx.harper
 ```
@@ -328,11 +433,15 @@ The resulting context exposes the resources the test needs:
 ```javascript
 ctx.harper.httpURL            // 'http://127.0.0.3:9926'
 ctx.harper.operationsAPIURL   // 'http://127.0.0.3:9925'
-ctx.harper.rootpath           // '/var/folders/js/abc123_def456/T/harper-test-789'
+ctx.harper.hostname           // '127.0.0.3'
+ctx.harper.dataRootDir        // '/tmp/harper-integration-test-Xk3pQz'
 ```
 
-`teardownHarper(ctx)` stops the application, releases the address, and removes the
-temporary directory. `killHarper(ctx)` supports stopping the process separately
+If `ctx.harper` already names a `dataRootDir` and `hostname`, `startHarper`
+reuses them. That's how a test restarts the same node.
+
+`teardownHarper(ctx)` stops Harper's whole process group, waits for its ports to
+be free, then releases the address and removes the temporary directory. `killHarper(ctx)` supports stopping the process separately
 from full teardown. `setupHarperWithFixture(ctx, fixturePath, options)` prepares
 an application fixture, and `createHarperContext(name)` creates a context for
 runners that don't already provide a suitable object.
