@@ -435,44 +435,6 @@
     #thanks .links { font-size: 2cqi; line-height: 1.8; margin: 0; }
     #thanks .links a { white-space: nowrap; }
 
-    /* Code & Learn CTA: text column on the left, mascot sticker on the right. */
-    #code-and-learn .cnl {
-      display: flex;
-      align-items: center;
-      gap: 5cqi;
-      flex: 1;
-      min-height: 0;
-    }
-
-    #code-and-learn .cnl-text { flex: 1; min-width: 0; }
-    #code-and-learn .node-logo { width: 22cqi; height: auto; display: block; margin-block-end: 2cqi; }
-    #code-and-learn h2 { font-size: 5cqi; margin-block-end: 0.3em; }
-    #code-and-learn .welcome { font-size: 2.4cqi; color: var(--dais-muted); margin-block: 0 2.4cqi; }
-
-    #code-and-learn .details {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 1.8cqi;
-      font-size: 2.2cqi;
-      line-height: 1.3;
-    }
-
-    #code-and-learn .details strong { color: var(--dais-accent); }
-    #code-and-learn .details code { font-size: 0.9em; }
-
-    /* The mascot art sits on white; frame it as a rounded sticker so the white
-       reads as intentional against the dark slide. */
-    #code-and-learn .turtle {
-      height: 42cqi;
-      width: auto;
-      flex-shrink: 0;
-      border-radius: 2.5cqi;
-      box-shadow: 0 1cqi 3cqi color-mix(in srgb, #000 35%, transparent);
-    }
-
     /* The shipped-default takeaway sits above the equation as a lead line. */
     #the-default-that-shipped .lead { font-size: 2.6cqi; margin-block-end: 1.4cqi; }
 
@@ -540,8 +502,7 @@
       pointer-events: none;
     }
 
-    .deck-footer .id,
-    .deck-footer .event {
+    .deck-footer .id {
       display: flex;
       flex-direction: column;
       gap: 0.35em;
@@ -553,7 +514,6 @@
     }
 
     .deck-footer .id { padding-inline-start: 2.6cqi; align-items: start; }
-    .deck-footer .event { padding-inline-end: 2.6cqi; align-items: end; text-align: end; }
 
     /* Both footer lines can carry a leading icon. */
     .deck-footer .line1,
@@ -561,13 +521,6 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4em;
-    }
-
-    /* Both social links (GitHub, Bluesky) match in size and color; only the
-       date under the event stays subtle. */
-    .deck-footer .event .line2 {
-      font-size: 0.82em;
-      opacity: 0.8;
     }
 
     .deck-footer .bsky,
@@ -612,7 +565,7 @@
 
     <section class="slide title" id="intro">
       <h1>Performant, Parallelizable, Framework&nbsp;Agnostic Node.js Integration Testing</h1>
-      <p>Ethan Arrowood · Node.js Interactive @ Render ATL 2026</p>
+      <p>Ethan Arrowood</p>
       <aside class="notes"></aside>
     </section>
 
@@ -1152,23 +1105,6 @@ steps:
       <aside class="notes"></aside>
     </section>
 
-    <section class="slide" id="code-and-learn">
-      <div class="cnl">
-        <div class="cnl-text">
-          <img class="node-logo" src="nodejs-logo.png" alt="Node.js" width="534" height="160">
-          <h2>Contribute to Node.js!</h2>
-          <p class="welcome">Everyone of any coding ability is welcome.</p>
-          <ul class="details">
-            <li>(Tomorrow) <strong>Aug 13</strong> · 2:00&ndash;5:00&nbsp;PM</li>
-            <li>Join <code>renderatl.com/discord</code> &rarr; <strong>#nodejs-interactive-code-and-learn</strong></li>
-            <li>Complete the <strong>mandatory prerequisite steps</strong> beforehand!</li>
-          </ul>
-        </div>
-        <img class="turtle" src="render-rocket-turtle.jpg" alt="RenderATL rocket-turtle mascot riding a Node.js and OpenJS Foundation rocket" width="1080" height="1350">
-      </div>
-      <aside class="notes"></aside>
-    </section>
-
   </main>
 
   <footer class="deck-footer" aria-hidden="true">
@@ -1183,10 +1119,6 @@ steps:
           <path d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.209C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.749 114.875 19.53 144.097 84.29 80.986 149.05-119.859 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.843 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.05-65.72 11.184-139.6-7.296-159.875-79.749C9.945 203.66 0 75.293 0 57.947 0-28.906 76.135-1.611 123.121 33.664Z"/>
         </svg>
         @arrowood.dev</span>
-    </span>
-    <span class="event">
-      <span class="line1">Node.js Interactive · RenderATL</span>
-      <span class="line2">August 13, 2026</span>
     </span>
   </footer>
 
