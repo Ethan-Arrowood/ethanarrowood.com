@@ -578,7 +578,26 @@ of the old framework against the new one.
 
 ### The legacy suite and its port
 
-The legacy suite ran 28 ordered modules inside one `describe`, against one Harper
+The legacy suite predates the open-source split. It was written in the private
+`harperdb` repository for Harper v4, starting in December 2024, with converted
+Postman tests added in February 2025. It came into the public `harper`
+repository in October 2025 and stayed there until June 2026. You can still read
+its entry point at
+[HarperFast/harper@fb098c0](https://github.com/HarperFast/harper/blob/fb098c0f54f4321848bc2ae7c9cca05aee709a2c/integrationTests/apiTests/tests/testSuite.mjs),
+the commit just before the new framework landed:
+
+```javascript
+describe('Main Test Suite', async () => {
+  await import('./0_envCleanup.mjs');
+  await import('./1_environmentSetup.mjs');
+  await import('./2_dataLoad.mjs');
+  await import('./3_sqlTests.mjs');
+  // … 23 more, in exactly this order
+  await import('./26_crlVerification.mjs');
+});
+```
+
+It ran 28 ordered modules inside one `describe`, against one Harper
 instance configured with `THREADS_COUNT: 1`. It had 974 test calls, about 929
 active after static skips. Files depended on state left by earlier files, so the
 suite couldn't be sharded.
