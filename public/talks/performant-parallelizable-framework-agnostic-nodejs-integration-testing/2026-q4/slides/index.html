@@ -1504,11 +1504,11 @@ steps:
     </section>
 
     <section class="slide" id="legacy-shared">
-      <h2>Every test shared one Harper</h2>
+      <h2>Every test shared one Harper instance</h2>
       <div class="hero">
         <span class="n">~930 tests</span>
-        <p>Each file depends on the state the last one left.</p>
-        <p class="muted">So the suite could not be sharded.</p>
+        <p>Each file depends on the state of the previous.</p>
+        <p class="muted">No isolating test failures, no sharding, no parallelism, no running one file on its own.</p>
       </div>
       <aside class="notes">
         974 it() calls; 45 statically skipped (19 it.skip plus a describe.skip holding
