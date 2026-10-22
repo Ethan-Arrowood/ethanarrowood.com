@@ -482,6 +482,172 @@
       font-size: 3.6cqi;
     }
 
+    /* Impact section. Numbers come from harper's git history and GitHub
+       Actions run data, Oct 2025 to Oct 2026; sources are in each slide's
+       notes. */
+
+    /* A stat card: one big number with a short label under it. */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.6cqi;
+    }
+
+    .stats .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6cqi;
+      padding: 1.6cqi 2cqi;
+      border-radius: var(--dais-radius);
+      background: var(--dais-surface);
+    }
+
+    .stats .n {
+      font-family: var(--dais-font-display);
+      font-weight: 700;
+      font-size: 4.4cqi;
+      line-height: 1;
+      color: var(--dais-accent);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stats .l { font-size: 1.8cqi; line-height: 1.3; color: var(--dais-muted); }
+
+    #legacy-suite .cols { gap: 3cqi; align-items: center; }
+    #legacy-suite pre { --dais-code-size: 0.56em; }
+    #legacy-suite .stats { grid-template-columns: 1fr; gap: 1.2cqi; }
+    #legacy-suite .stat { padding: 1.2cqi 1.8cqi; }
+    #legacy-suite .n { font-size: 3.6cqi; }
+    #legacy-suite .n.bad { color: var(--dais-accent-2); }
+
+    /* Center the content in the body instead of hugging the title. */
+    #agent-port .lead { font-size: 2.6cqi; margin-block: auto 2.4cqi; }
+    #agent-port > p.small { margin-block: 1.6cqi auto; }
+    #agent-port .stats { grid-template-columns: repeat(3, 1fr); }
+
+    /* Test growth: one column per month, legacy and framework bars side by
+       side. Heights are proportional to test count (max 2,435). */
+    #growth .legend {
+      display: flex;
+      gap: 2.4cqi;
+      font-size: 1.6cqi;
+      color: var(--dais-muted);
+      margin-block: 0 1.4cqi;
+    }
+
+    #growth .legend span::before {
+      content: "";
+      display: inline-block;
+      width: 1.2em;
+      height: 0.8em;
+      margin-inline-end: 0.5em;
+      border-radius: 0.2cqi;
+      background: var(--swatch);
+    }
+
+    #growth .chart {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.2cqi;
+      height: 28cqi;
+      border-block-end: 1px solid color-mix(in srgb, var(--dais-text) 20%, transparent);
+    }
+
+    #growth .chart > div {
+      display: flex;
+      align-items: end;
+      gap: 0.3cqi;
+      height: 100%;
+    }
+
+    #growth .chart i {
+      position: relative;
+      flex: 1;
+      height: calc(var(--v) / 2435 * 100%);
+      border-radius: 0.2cqi 0.2cqi 0 0;
+      background: var(--dais-muted);
+    }
+
+    #growth .chart i.new { background: var(--dais-accent); }
+
+    /* Value labels sit just above their bar. */
+    #growth .chart i span {
+      position: absolute;
+      inset-block-end: 100%;
+      inset-inline-start: 50%;
+      translate: -50% -0.4em;
+      font-size: 1.4cqi;
+      font-style: normal;
+      white-space: nowrap;
+      color: var(--dais-text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    #growth .months {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.2cqi;
+      margin-block-start: 0.6cqi;
+      font-size: 1.4cqi;
+      text-align: center;
+      color: var(--dais-muted);
+    }
+
+    #growth > p.small { margin-block: 1.2cqi 0; }
+
+    #today .stats .l { font-size: 1.7cqi; }
+
+    #harper-pro .cols { gap: 3cqi; }
+    #harper-pro h3 { font-size: 2.2cqi; margin-block-end: 0.5em; }
+    #harper-pro .steps { font-size: 1.9cqi; display: flex; flex-direction: column; gap: 1cqi; margin: 0; }
+    #harper-pro pre { --dais-code-size: 0.56em; }
+    #harper-pro .stats { margin-block-start: 1.4cqi; gap: 1.2cqi; }
+    #harper-pro .n { font-size: 3.2cqi; }
+    #harper-pro .l { font-size: 1.5cqi; }
+
+    #nextjs-plugin .stats { margin-block-start: 1cqi; }
+    #nextjs-plugin > p.small { margin-block: 1.6cqi 0; }
+
+    #velocity table { font-size: 0.66em; }
+    #velocity :is(th, td) { padding: 0.45em 0.9em; }
+    #velocity td.num:last-child { color: var(--dais-accent); font-weight: 700; }
+    #velocity > p.small { margin-block: 1.4cqi 0; }
+
+    /* Main-branch failure rate by month. The whole bar is "any job failed";
+       the inner segment is the share where a Linux Node shard failed. */
+    #stability .cols { gap: 3cqi; align-items: center; }
+    #stability .bars { font-size: 0.56em; gap: 0.2em 0.6em; }
+    #stability .bars i { position: relative; width: calc(var(--pct) * 1.4%); }
+
+    #stability .bars u {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: calc(var(--in) / var(--pct) * 100%);
+      border-radius: inherit;
+      background: var(--dais-accent);
+    }
+
+    #stability .legend {
+      display: flex;
+      gap: 2cqi;
+      font-size: 1.3cqi;
+      color: var(--dais-muted);
+      margin-block: 0 0.8cqi;
+    }
+
+    #stability .legend span::before {
+      content: "";
+      display: inline-block;
+      width: 1.2em;
+      height: 0.8em;
+      margin-inline-end: 0.5em;
+      border-radius: 0.2cqi;
+      background: var(--swatch);
+    }
+
+    #stability ul { font-size: 2cqi; display: flex; flex-direction: column; gap: 1.4cqi; }
+
     /* Persistent deck footer: identity on the left, event on the right, with
        the framework's nav dots centered between them. Anchored to the deck box
        (--dais) so it tracks the letterboxed deck, not the viewport. The footer
@@ -1090,6 +1256,218 @@ steps:
         node:test also exposes this programmatically: run({ shard: { index, total } }).
         The groupings are deterministic — shard 1/3 is the same set of files on
         every machine — so a flake on one shard is reproducible.
+      </aside>
+    </section>
+
+    <section class="slide divider" id="part-impact">
+      <h2>5. Did it work?</h2>
+      <p>Eleven months of Harper CI data</p>
+    </section>
+
+    <section class="slide" id="legacy-suite">
+      <h2>Before: one long, ordered suite</h2>
+      <div class="cols">
+        <pre><code><span class="tok-comment">// integrationTests/apiTests/tests/testSuite.mjs</span>
+<span class="tok-fn">describe</span>(<span class="tok-string">'Main Test Suite'</span>, <span class="tok-keyword">async</span> () =&gt; {
+  <span class="tok-keyword">await import</span>(<span class="tok-string">'./0_envCleanup.mjs'</span>);
+  <span class="tok-keyword">await import</span>(<span class="tok-string">'./1_environmentSetup.mjs'</span>);
+  <span class="tok-keyword">await import</span>(<span class="tok-string">'./2_dataLoad.mjs'</span>);
+  <span class="tok-keyword">await import</span>(<span class="tok-string">'./3_sqlTests.mjs'</span>);
+  <span class="tok-comment">// &hellip; 23 more, in exactly this order</span>
+  <span class="tok-keyword">await import</span>(<span class="tok-string">'./26_crlVerification.mjs'</span>);
+});</code></pre>
+        <div class="stats reveal">
+          <div class="stat"><span class="n">~930 tests</span><span class="l">against one shared Harper instance; each file depends on the last</span></div>
+          <div class="stat"><span class="n">7.4 min</span><span class="l">per run, about 5.3 min of it hard-coded waits</span></div>
+          <div class="stat"><span class="n bad">11.5%</span><span class="l">of main pushes failed on at least one Node version</span></div>
+        </div>
+      </div>
+      <aside class="notes">
+        Legacy apiTests at bd0424bc7^: 28 ordered files, 974 it() calls, 45 statically skipped.
+        The suite's own README said the tests were "not currently independent or idempotent".
+        7.4 min = median test step, n=1,040 jobs (May to Jun 2026). Waits: 191 s of setTimeout
+        plus 124 s of fixed restart waits. 11.5% = 35 of 305 main push runs, first attempt,
+        Dec 2025 to Jun 2026. In 75% of failing attempts another Node version passed on the
+        same commit. It could not be sharded, and it never grew: 974 to 993 tests in 7 months.
+      </aside>
+    </section>
+
+    <section class="slide" id="agent-port">
+      <h2>Porting it took 3.5 weeks</h2>
+      <p class="lead">Independent, hermetic test files are small units an agent can port one at a time.</p>
+      <div class="stats reveal">
+        <div class="stat"><span class="n">14 PRs</span><span class="l">one legacy file or group per PR, on <code>claude/api-tests-*</code> branches</span></div>
+        <div class="stat"><span class="n">24 files</span><span class="l">self-contained replacements, each with its own Harper instance</span></div>
+        <div class="stat"><span class="n">&minus;19,977</span><span class="l">lines of legacy suite and infrastructure deleted</span></div>
+      </div>
+      <p class="small muted">Kris Zyp, working with coding agents · May 15 to Jun 9, 2026</p>
+      <aside class="notes">
+        Port PRs: #555, #597, #627, #634, #645, #646, #647, #648, #730, #731, #732, #759,
+        #761, #778. Cleanup: #1173 (b4f83887f) removed the legacy suite on Jun 8.
+        The framework itself landed in PR #27 (opened Nov 4, merged Dec 3, 2025) and was
+        extracted into @harperfast/integration-testing in April 2026.
+      </aside>
+    </section>
+
+    <section class="slide" id="growth">
+      <h2>Tests grew once they were cheap to add</h2>
+      <p class="legend"><span style="--swatch: var(--dais-muted)">Legacy suite</span><span style="--swatch: var(--dais-accent)">Framework tests</span></p>
+      <div class="chart" role="img" aria-label="Test cases on main by month. The legacy suite stays near 990 from December to June, then is removed. Framework tests grow from 7 in December to 117 in May, 1,378 in July, and 2,435 in late October.">
+        <div><i style="--v: 985"><span>985</span></i><i class="new" style="--v: 7"></i></div>
+        <div><i style="--v: 985"></i><i class="new" style="--v: 7"></i></div>
+        <div><i style="--v: 985"></i><i class="new" style="--v: 28"></i></div>
+        <div><i style="--v: 985"></i><i class="new" style="--v: 59"></i></div>
+        <div><i style="--v: 985"></i><i class="new" style="--v: 60"></i></div>
+        <div><i style="--v: 993"></i><i class="new" style="--v: 117"><span>117</span></i></div>
+        <div><i style="--v: 993"></i><i class="new" style="--v: 372"><span>372</span></i></div>
+        <div><i style="--v: 0"></i><i class="new" style="--v: 1378"><span>1,378</span></i></div>
+        <div><i style="--v: 0"></i><i class="new" style="--v: 1699"><span>1,699</span></i></div>
+        <div><i style="--v: 0"></i><i class="new" style="--v: 2018"><span>2,018</span></i></div>
+        <div><i style="--v: 0"></i><i class="new" style="--v: 2304"><span>2,304</span></i></div>
+        <div><i style="--v: 0"></i><i class="new" style="--v: 2435"><span>2,435</span></i></div>
+      </div>
+      <div class="months" aria-hidden="true">
+        <span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Now</span>
+      </div>
+      <p class="small muted">Test cases on harper's main branch at the start of each month, counted from source. Legacy suite removed Jun 8.</p>
+      <aside class="notes">
+        Counted as it()/test() calls in integrationTests at the last main commit before
+        each month boundary (Dec = Dec 4, after PR #27 merged; Now = Oct 22, 2026).
+        The legacy suite never grew past ~990. The framework passed it the day the port
+        finished and has added 1,339 tests since. A CI run executes 2,652 tests because
+        some are generated in loops.
+      </aside>
+    </section>
+
+    <section class="slide" id="today">
+      <h2>Today: 2,652 tests in about 12 minutes</h2>
+      <div class="stats reveal">
+        <div class="stat"><span class="n">2,652</span><span class="l">tests per run, starting 423 Harper instances</span></div>
+        <div class="stat"><span class="n">82 &rarr; 5.6 min</span><span class="l">summed suite time vs. the slowest shard (about 15&times;)</span></div>
+        <div class="stat"><span class="n">36 jobs</span><span class="l">Node 22, 24, 26, Bun, Windows, and uWS, 6 shards each</span></div>
+        <div class="stat"><span class="n">12.1 min</span><span class="l">median time to a result for the full matrix</span></div>
+      </div>
+      <aside class="notes">
+        From main push runs in the last 30 days (Sep 23 to Oct 22, 2026). 2,652 tests and
+        423 instances: run 39774245654, summed over the six Linux Node 24 shards. 82 min is
+        the sum of top-level suite durations; it slightly overstates true serial time.
+        About 3x comes from the runner's concurrency default (floor(4/2)+1 = 3 on a hosted
+        runner) and 6x from sharding. 12.1 min median, p90 13.1. PRs run 24 jobs in 11.5 min.
+      </aside>
+    </section>
+
+    <section class="slide" id="harper-pro">
+      <h2>Cluster tests used to need EC2</h2>
+      <div class="cols">
+        <div class="stack">
+          <h3>Before: harperdb cluster tests</h3>
+          <ol class="steps">
+            <li>Terraform an EC2 instance</li>
+            <li>Load a Docker image, start 5 containers</li>
+            <li><code>sleep 30s</code></li>
+            <li>Run Postman collections over SSH</li>
+            <li><code>scp</code> the logs back, destroy the instance</li>
+          </ol>
+        </div>
+        <div class="stack">
+          <h3>Now: harper-pro, one test file</h3>
+          <pre><code><span class="tok-keyword">await</span> Promise.<span class="tok-fn">all</span>([
+  <span class="tok-fn">startHarper</span>(ctxA, <span class="tok-fn">config</span>(hostnameA)),
+  <span class="tok-fn">startHarper</span>(ctxB, <span class="tok-fn">config</span>(hostnameB)),
+]);
+<span class="tok-comment">// two nodes, two loopback addresses</span></code></pre>
+          <div class="stats">
+            <div class="stat"><span class="n">1 &rarr; 105</span><span class="l">cluster test files, Mar to Oct 2026</span></div>
+            <div class="stat"><span class="n">2&ndash;4 nodes</span><span class="l">per test, all on one runner</span></div>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">
+        Before: harperdb's docker-cluster-test workflows provisioned a c7g.2xlarge with
+        Terraform, ran five HarperDB containers, slept 30 s, ran Newman (Postman) suites,
+        and had a 40 minute timeout. harper-pro today: 124 integration test files and 300
+        tests; 105 files in integrationTests/cluster, most built on startHarper plus
+        getNextAvailableLoopbackAddress. NODE_COUNT is 2 in 11 files, 3 in 4, 4 in 3.
+        Its integration workflow runs about 400 times a month (Jun to Oct 2026).
+      </aside>
+    </section>
+
+    <section class="slide" id="nextjs-plugin">
+      <h2>One suite, every Next.js, every Harper PR</h2>
+      <div class="stats reveal">
+        <div class="stat"><span class="n">10 fixtures</span><span class="l">Next.js 14, 15, and 16: webpack, Turbopack, ISR, <code>use cache</code>, cluster</span></div>
+        <div class="stat"><span class="n">53 tests</span><span class="l">Playwright specs, each fixture on its own Harper and loopback address</span></div>
+        <div class="stat"><span class="n">3,336 runs</span><span class="l">of a harper PR check that runs this suite against the PR's build (since Jul 15)</span></div>
+        <div class="stat"><span class="n">~6%</span><span class="l">of those suite runs failed: possible Next.js breaks, caught in review</span></div>
+      </div>
+      <p class="small muted">Before: one shared <code>npx harperdb start</code> in a Playwright global setup, then <code>setTimeout(2000)</code>.</p>
+      <aside class="notes">
+        @harperfast/nextjs v2 (Apr 2026) moved to makeHarperFixture, a worker-scoped
+        Playwright fixture. harper's "Next.js Integration Tests (downstream)" workflow
+        (added Jul 2026) builds the PR's harper and runs the adapter's suite on Node 20,
+        22, and 24. It is advisory and path-filtered: in a sample of 250 runs, the suite ran
+        in 212 (85%) and at least one Node version failed in 13 of those (6%). Some of those
+        failures could come from nextjs main, since the check tracks it.
+      </aside>
+    </section>
+
+    <section class="slide" id="velocity">
+      <h2>More tests, in more of the work</h2>
+      <table>
+        <thead>
+          <tr><th>harper, per month</th><th class="num">Feb&ndash;Apr 2026</th><th class="num">Jun&ndash;Sep 2026</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>PRs that touch integration tests</td><td class="num">10&ndash;13</td><td class="num">80&ndash;94</td></tr>
+          <tr><td>Share of all merged PRs</td><td class="num">6&ndash;13%</td><td class="num">18&ndash;30%</td></tr>
+          <tr><td>Fix PRs that ship an integration test</td><td class="num">0&ndash;12%</td><td class="num">14&ndash;46%</td></tr>
+          <tr><td>Integration test CI runs</td><td class="num">213&ndash;493</td><td class="num">1,186&ndash;1,623</td></tr>
+        </tbody>
+      </table>
+      <p class="small muted">Beyond harper: 31 HarperFast repos import <code>@harperfast/integration-testing</code> in tests. Heaviest: harper-pro (123 files), harper-reflex (37), oauth (8).</p>
+      <aside class="notes">
+        Counts are first-parent commits on main. "Fix PRs" = subjects starting with "fix";
+        a heuristic. The share row controls for overall PR volume, which also grew as the
+        team adopted coding agents. September alone: 46% of fixes shipped with an
+        integration test. Package: 23 versions, 56.7k npm downloads Sep 19 to Oct 18.
+        Adoption: test files importing the package, excluding harper and a private
+        advisory fork. Most templates and examples carry one smoke test.
+      </aside>
+    </section>
+
+    <section class="slide" id="stability">
+      <h2>Stability is the next frontier</h2>
+      <div class="cols">
+        <div>
+          <p class="legend"><span style="--swatch: var(--dais-accent)">Linux Node shard failed</span><span style="--swatch: var(--dais-muted)">Any job failed</span></p>
+          <div class="bars" role="img" aria-label="Share of main branch CI runs that failed, by month. December 0%, January 8%, February 7%, March 16%, April 19%, May 41%, June 66%, July 52%, August 62%, September 19%, October 27%.">
+            <b>Dec</b> <i style="--pct: 0; --in: 0"></i> <b>0%</b>
+            <b>Jan</b> <i style="--pct: 8; --in: 0"></i> <b>8%</b>
+            <b>Feb</b> <i style="--pct: 7; --in: 0"></i> <b>7%</b>
+            <b>Mar</b> <i style="--pct: 16; --in: 4"><u></u></i> <b>16%</b>
+            <b>Apr</b> <i style="--pct: 19; --in: 0"></i> <b>19%</b>
+            <b>May</b> <i style="--pct: 41; --in: 12"><u></u></i> <b>41%</b>
+            <b class="accent-2">Jun</b> <i style="--pct: 66; --in: 40"><u></u></i> <b class="accent-2">66%</b>
+            <b class="accent-2">Jul</b> <i style="--pct: 52; --in: 30"><u></u></i> <b class="accent-2">52%</b>
+            <b class="accent-2">Aug</b> <i style="--pct: 62; --in: 34"><u></u></i> <b class="accent-2">62%</b>
+            <b>Sep</b> <i style="--pct: 19; --in: 10"><u></u></i> <b>19%</b>
+            <b>Oct</b> <i style="--pct: 27; --in: 16"><u></u></i> <b>27%</b>
+          </div>
+        </div>
+        <ul class="reveal">
+          <li>Failures include real regressions the suite caught, like Node 26</li>
+          <li>Half of today's failures are only on Windows, Bun, or uWS</li>
+          <li>Each failure points to one file, one instance, one log</li>
+          <li>Re-runs that turned green: 12.9% in July, 3.5% in October</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        Share of main push runs of integration-tests.yml with a failed conclusion. Dec to Apr
+        failures were almost all the legacy suite. Jun to Aug: more platforms (Windows, Bun,
+        Node 26, uWS) and Windows tail latency. Node 26 alone failed 11 to 32 main runs a
+        month and was pinned to 26.5.0 from Aug 3 to Sep 1. Last 30 days: 22% of runs failed,
+        11% had a Linux Node shard failure. Don't claim CI is less flaky than before; the
+        suites and the matrix are different.
       </aside>
     </section>
 
