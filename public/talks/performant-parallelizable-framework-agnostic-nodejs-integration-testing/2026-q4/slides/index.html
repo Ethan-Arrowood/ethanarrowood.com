@@ -545,7 +545,7 @@
     .dais .hbars i.bad { background: var(--dais-accent-2); }
 
     #legacy-suite pre { --dais-code-size: 0.8em; }
-    #legacy-suite .body { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+    #legacy-suite .body { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 1.2cqi; }
 
     #cluster-local pre { --dais-code-size: 0.9em; }
     #cluster-local .body { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 2cqi; }
@@ -1491,10 +1491,14 @@ steps:
   <span class="tok-comment">// &hellip; 23 more, in exactly this order</span>
   <span class="tok-keyword">await import</span>(<span class="tok-string">'./26_crlVerification.mjs'</span>);
 });</code></pre>
+        <p class="small muted">Inherited from <code>harperdb</code> v4, before the open-source split. Public copy: <a href="https://github.com/HarperFast/harper/blob/fb098c0f54f4321848bc2ae7c9cca05aee709a2c/integrationTests/apiTests/tests/testSuite.mjs">HarperFast/harper@fb098c0</a></p>
       </div>
       <aside class="notes">
-        Legacy apiTests at bd0424bc7^ (the commit before PR #27): 28 ordered files run
-        by one node --test process. The suite's own README said the tests were "not
+        The suite was written in the private harperdb repo (Harper v4): first API tests in
+        Dec 2024, converted Postman tests added Feb 2025, renamed to .mjs Aug 2025. It came
+        into the public harper repo on Oct 25, 2025 and was removed there on Jun 8, 2026
+        (b4f83887f). The snippet is from fb098c0, the commit before PR #27.
+        Legacy apiTests at that commit: 28 ordered files run by one node --test process. The suite's own README said the tests were "not
         currently independent or idempotent".
       </aside>
     </section>
