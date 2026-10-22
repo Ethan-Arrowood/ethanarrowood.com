@@ -154,9 +154,11 @@ def main():
     write(out, "harper-pro-integration-runs.csv", ["run_id", "created_at", "event", "head_branch", "conclusion"],
           [[r["id"], r["created_at"], r["event"], r["head_branch"], r["conclusion"]] for r in pro])
 
-    # 7. Adoption across HarperFast.
+    # 7. Adoption across HarperFast. Only public repositories are named.
     rows = [l.rstrip("\n").split("\t") for l in list(open(f"{raw}/adoption.tsv"))[1:] if l.strip()]
-    write(out, "org-adoption.csv", ["repo", "test_files_importing"], rows)
+    write(out, "org-adoption.csv", ["repo", "files_importing"], [[r, n] for r, v, n in rows if v == "public"])
+    write(out, "org-adoption-summary.csv", ["public_repos", "non_public_repos"],
+          [[sum(v == "public" for _, v, _ in rows), sum(v != "public" for _, v, _ in rows)]])
 
     # 8. Git-history CSVs, written by collect_git.py into the raw directory.
     for name in ("harper-test-growth.csv", "harper-pr-activity.csv", "harper-pro-test-growth.csv", "git-refs.csv"):

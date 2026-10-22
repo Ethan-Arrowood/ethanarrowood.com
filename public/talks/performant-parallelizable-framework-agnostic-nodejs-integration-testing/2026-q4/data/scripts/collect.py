@@ -224,28 +224,41 @@ def fetch_green_run_logs(raw, as_of_end, green_run):
     print(f"green run {green_run}: {len(lines)} shard logs")
 
 
+IMPORT_RE = r"(from|require\(|import\()[[:space:]]*['\"]@harperfast/integration-testing"
+
+
 def adoption(raw):
-    r = gh("search", "code", '"@harperfast/integration-testing"', "--owner", "HarperFast", "--limit", "200",
+    """Repositories whose code imports the package.
+
+    Code search runs with your token, so it also finds private repositories.
+    Only public repositories are named; the rest are counted. A file counts
+    when it imports or requires the package, not when it only mentions it.
+    """
+    r = gh("search", "code", '"@harperfast/integration-testing"', "--owner", "HarperFast", "--limit", "1000",
            "--json", "repository", "-q", ".[].repository.nameWithOwner")
-    repos = sorted({x.split("/", 1)[1] for x in r.stdout.split() if x.startswith("HarperFast/")} )
-    repos = sorted({x for x in repos if x not in EXCLUDED_ADOPTERS and not x.startswith(EXCLUDED_ADOPTER_PREFIX)})
+    repos = sorted({x.split("/", 1)[1] for x in r.stdout.split() if x.startswith("HarperFast/")})
+    repos = [x for x in repos if x not in EXCLUDED_ADOPTERS and not x.startswith(EXCLUDED_ADOPTER_PREFIX)]
     clones = f"{raw}/adoption-clones"
     os.makedirs(clones, exist_ok=True)
     rows = []
     for repo in repos:
+        visibility = gh("api", f"repos/HarperFast/{repo}", "-q", ".visibility").stdout.strip()
         d = f"{clones}/{repo}"
-        if not os.path.exists(d):
+        if os.path.exists(d):
+            subprocess.run(["git", "-C", d, "fetch", "-q", "--depth", "1", "origin", "HEAD"], check=True)
+            subprocess.run(["git", "-C", d, "reset", "-q", "--hard", "FETCH_HEAD"], check=True)
+        else:
             subprocess.run(["git", "clone", "-q", "--depth", "1", f"https://github.com/HarperFast/{repo}.git", d], check=True)
-        g = subprocess.run(["git", "-C", d, "grep", "-l", "@harperfast/integration-testing", "HEAD", "--",
-                            ":!*package.json", ":!*package-lock.json"], capture_output=True, text=True)
+        g = subprocess.run(["git", "-C", d, "grep", "-lE", IMPORT_RE, "HEAD", "--", ":!*.md", ":!*package.json", ":!*package-lock.json"],
+                           capture_output=True, text=True)
         n = len([l for l in g.stdout.splitlines() if l.strip()])
         if n:
-            rows.append((repo, n))
+            rows.append((repo, visibility, n))
     with open(f"{raw}/adoption.tsv", "w") as f:
-        f.write("repo\ttest_files_importing\n")
-        for repo, n in rows:
-            f.write(f"{repo}\t{n}\n")
-    print(f"adoption: {len(rows)} repos")
+        f.write("repo\tvisibility\tfiles_importing\n")
+        for repo, visibility, n in rows:
+            f.write(f"{repo}\t{visibility}\t{n}\n")
+    print(f"adoption: {sum(v == 'public' for _, v, _ in rows)} public, {sum(v != 'public' for _, v, _ in rows)} not public")
 
 
 def main():

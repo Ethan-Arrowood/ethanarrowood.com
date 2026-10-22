@@ -1806,13 +1806,13 @@ steps:
     <section class="slide" id="package-adoption">
       <h2>Adopted across HarperFast</h2>
       <div class="hero">
-        <span class="n">32 repos</span>
-        <p>import <code>@harperfast/integration-testing</code> in tests</p>
-        <p class="muted">Heaviest: harper-pro (127 files), harper-reflex (37), oauth (8)</p>
+        <span class="n">26 public repos</span>
+        <p>import <code>@harperfast/integration-testing</code></p>
+        <p class="muted">Heaviest: harper-pro (126 files), oauth (6), symphony (4). Plus 6 private repos.</p>
       </div>
       <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#repos-importing-the-package">Data and method</a></p>
       <aside class="notes">
-        HarperFast repos with test files importing the package, excluding harper itself and a private advisory fork. Most templates and examples carry one smoke test. Also: Developer-Relations-Agents (13), dispatch (7), nextjs. harper-pro's 127 importing files are 123 integration tests, 3 smoke tests, and a benchmark. Package: 23 versions, 56.7k npm downloads Sep 19 to Oct 18, 2026, mostly CI.
+        Public HarperFast repos with code that imports the package (an import or require of it, not a mention in docs), excluding harper itself. Six more private or internal repos import it; they're counted but not named. Most templates and examples carry one smoke test. harper-pro's 126 importing files are 123 integration tests, 2 smoke tests, and a benchmark. Package: 23 versions, 56.7k npm downloads Sep 19 to Oct 18, 2026.
       </aside>
     </section>
 
