@@ -1318,13 +1318,21 @@ server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loo
 
     <section class="slide" id="lifecycle-context">
       <h2><code>ctx.harper</code></h2>
-      <pre><code>ctx.harper.httpURL            <span class="tok-comment">// 'http://127.0.0.3:9926'</span>
-ctx.harper.operationsAPIURL   <span class="tok-comment">// 'http://127.0.0.3:9925'</span>
-ctx.harper.hostname           <span class="tok-comment">// '127.0.0.3'</span>
-ctx.harper.dataRootDir        <span class="tok-comment">// '/tmp/harper-integration-test-Xk3pQz'</span></code></pre>
+      <pre><code><span class="tok-keyword">interface</span> <span class="tok-type">HarperContext</span> {
+  httpURL: <span class="tok-type">string</span>;            <span class="tok-comment">// 'http://127.0.0.3:9926'</span>
+  operationsAPIURL: <span class="tok-type">string</span>;   <span class="tok-comment">// 'http://127.0.0.3:9925'</span>
+  hostname: <span class="tok-type">string</span>;           <span class="tok-comment">// '127.0.0.3'</span>
+  dataRootDir: <span class="tok-type">string</span>;        <span class="tok-comment">// '/tmp/harper-integration-test-Xk3pQz'</span>
+  admin: { username: <span class="tok-type">string</span>; password: <span class="tok-type">string</span> };
+  process: <span class="tok-type">ChildProcess</span>;
+  logDir?: <span class="tok-type">string</span>;
+  startupOutput?: { stdout: <span class="tok-type">string</span>; stderr: <span class="tok-type">string</span> };
+}</code></pre>
       <aside class="notes">
-        Also on ctx.harper: admin credentials, the child process, logDir when
-        HARPER_INTEGRATION_TEST_LOG_DIR is set, and startupOutput.
+        The real interface from integration-testing src/harperLifecycle.ts, exported as
+        HarperContext. startHarper(ctx) populates it on ctx.harper. logDir is set only
+        when HARPER_INTEGRATION_TEST_LOG_DIR is configured; startupOutput is Harper's
+        stdout and stderr up to the point it reported ready.
       </aside>
     </section>
 
