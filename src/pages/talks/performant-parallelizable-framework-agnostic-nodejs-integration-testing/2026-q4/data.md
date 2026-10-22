@@ -165,7 +165,7 @@ The check is advisory and path-filtered, so not every run executes the suite. In
 
 ### PRs touching integration tests
 
-Counted as first-parent commits on harper's main branch, which is one per merged PR. A fix PR is one whose subject starts with "fix"; it ships a test if its diff adds or changes an `integrationTests/**/*.test.*` file. October is through the 22nd. Source: `harper-pr-activity.csv`.
+Counted as first-parent commits on harper's main branch, which is one per merged PR. A fix PR is one whose subject starts with "fix"; it ships a test if its diff adds or changes an `integrationTests/**/*.test.*` file. October 2026 is left out because the month isn't over. Source: `harper-pr-activity.csv`.
 
 | Month | Merged | Touching integration tests | Share | Fix PRs | Fixes with a test | Share |
 | --- | --: | --: | --: | --: | --: | --: |
@@ -179,7 +179,6 @@ Counted as first-parent commits on harper's main branch, which is one per merged
 | Jul 2026 | 452 | 80 | 18% | 218 | 31 | 14% |
 | Aug 2026 | 351 | 84 | 24% | 151 | 35 | 23% |
 | Sep 2026 | 315 | 94 | 30% | 58 | 27 | 47% |
-| Oct 2026 | 191 | 55 | 29% | 39 | 14 | 36% |
 
 December and January are high on very few PRs. From February to April, PR volume jumped as the team adopted coding agents, and **6 to 13%** of merged PRs touched integration tests (10 to 13 a month). From June to September it held at **18 to 30%** (80 to 94 a month) at the higher volume. The share controls for overall volume, but it doesn't prove the framework caused the change or measure delivery speed.
 
@@ -189,21 +188,20 @@ From February to April, **0 to 13%** of fix PRs shipped an integration test each
 
 ### CI runs per month
 
-Runs of `integration-tests.yml`, by month. Source: `harper-integration-runs.csv`.
+Runs of `integration-tests.yml`, by month. October 2026 is left out because the month isn't over. Source: `harper-integration-runs.csv`.
 
-| Month                  |  Runs | PR branches (not Renovate) |
-| ---------------------- | ----: | -------------------------: |
-| Dec 2025               |    68 |                         14 |
-| Jan 2026               |   132 |                         21 |
-| Feb 2026               |   213 |                         39 |
-| Mar 2026               |   446 |                        105 |
-| Apr 2026               |   493 |                        104 |
-| May 2026               | 1,042 |                        196 |
-| Jun 2026               | 1,356 |                        297 |
-| Jul 2026               | 1,374 |                        265 |
-| Aug 2026               | 1,186 |                        190 |
-| Sep 2026               | 1,623 |                        311 |
-| Oct 2026 (to the 22nd) |   953 |                        241 |
+| Month    |  Runs | PR branches (not Renovate) |
+| -------- | ----: | -------------------------: |
+| Dec 2025 |    68 |                         14 |
+| Jan 2026 |   132 |                         21 |
+| Feb 2026 |   213 |                         39 |
+| Mar 2026 |   446 |                        105 |
+| Apr 2026 |   493 |                        104 |
+| May 2026 | 1,042 |                        196 |
+| Jun 2026 | 1,356 |                        297 |
+| Jul 2026 | 1,374 |                        265 |
+| Aug 2026 | 1,186 |                        190 |
+| Sep 2026 | 1,623 |                        311 |
 
 In the last 30 days there were 1,428 runs from 347 PR branches, not counting Renovate. More runs show use; on their own they don't show faster engineering or better reliability.
 
@@ -219,7 +217,7 @@ The heaviest users are harper-pro (127 files: 123 integration tests, 3 smoke tes
 
 ### Main-branch failures by month
 
-The share of main push runs of `integration-tests.yml` that ended in failure, and the share where a Linux Node.js shard was among the failed jobs. Source: `harper-integration-runs.csv` and `harper-main-failed-runs.csv`.
+The share of main push runs of `integration-tests.yml` that ended in failure, and the share where a Linux Node.js shard was among the failed jobs. October 2026 is left out because the month isn't over; see [Last 30 days](#last-30-days) for the most recent window. Source: `harper-integration-runs.csv` and `harper-main-failed-runs.csv`.
 
 | Month    | Main runs | Any job failed | Linux Node.js shard failed |
 | -------- | --------: | -------------: | -------------------------: |
@@ -233,7 +231,6 @@ The share of main push runs of `integration-tests.yml` that ended in failure, an
 | Jul 2026 |       225 |            52% |                        30% |
 | Aug 2026 |       154 |            62% |                        34% |
 | Sep 2026 |       244 |            19% |                        10% |
-| Oct 2026 |       166 |            27% |                        16% |
 
 December and January had only 13 main pushes each: the workflow started running on main when PR #27 merged on December 3. December's 0% is all 13 passing, too few to mean much, so the deck leaves it out. Through April, almost every main failure came from the legacy suite. From June to August the matrix grew (Windows, Bun, Node.js 26, uWS) and Windows shards had long tail latency. A failed run means any of up to 36 jobs failed, so this counts real regressions the suite caught as well as flakes. **Failure rate is not flake rate.**
 
@@ -246,4 +243,4 @@ December and January had only 13 main pushes each: the workflow started running 
 
 ### Re-runs that turned green
 
-Runs re-run at least once whose final attempt succeeded, as a share of all completed runs: **12.9% in July 2026 and 3.4% in October**. It was below 3% from December through April, then 3.6% in May, 7.4% in June, 12.6% in August, and 4.3% in September. This is the closest proxy for flakiness that run metadata allows, and it is still only a proxy. The old and new suites and their matrices differ, so none of this shows that CI became less flaky.
+Runs re-run at least once whose final attempt succeeded, as a share of all completed runs: **12.9% in July 2026, down to 4.3% in September**. It was below 3% from December through April, then 3.6% in May, 7.4% in June, and 12.6% in August. October is left out because the month isn't over. This is the closest proxy for flakiness that run metadata allows, and it is still only a proxy. The old and new suites and their matrices differ, so none of this shows that CI became less flaky.

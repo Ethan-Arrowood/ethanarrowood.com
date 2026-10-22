@@ -18,6 +18,8 @@ from decimal import ROUND_HALF_UP, Decimal
 
 DATA = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(__file__), "..")
 NOW = datetime(2026, 10, 22, 23, 59, 59, tzinfo=timezone.utc)
+# Monthly series stop before the month still in progress on NOW.
+PARTIAL_MONTH = NOW.strftime("%Y-%m")
 
 
 def rows(name):
@@ -115,7 +117,8 @@ done = [r for r in runs if r["status"] == "completed"]
 
 by_month = defaultdict(list)
 for r in done:
-    by_month[r["created_at"][:7]].append(r)
+    if r["created_at"][:7] != PARTIAL_MONTH:
+        by_month[r["created_at"][:7]].append(r)
     if last30(r["created_at"]):
         by_month["last30"].append(r)
 
@@ -185,7 +188,7 @@ pro = rows("harper-pro-test-growth.csv")
 show("cluster-test-files", f"{pro[0]['cluster_test_files']} ({pro[0]['date']}) to {pro[-1]['cluster_test_files']} ({pro[-1]['date']})")
 show("integration-test-files", f"{pro[0]['integration_test_files']} to {pro[-1]['integration_test_files']}")
 pro_runs = Counter(r["created_at"][:7] for r in rows("harper-pro-integration-runs.csv"))
-show("integration-runs-per-month", ", ".join(f"{m} {n}" for m, n in sorted(pro_runs.items()) if m >= "2026-06"))
+show("integration-runs-per-month", ", ".join(f"{m} {n}" for m, n in sorted(pro_runs.items()) if "2026-06" <= m < PARTIAL_MONTH))
 
 # --- Next.js downstream check ----------------------------------------------------
 section("Next.js downstream check in harper")

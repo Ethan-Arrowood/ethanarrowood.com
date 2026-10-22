@@ -1433,7 +1433,7 @@ server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loo
     <span class="tok-keyword">await</span> <span class="tok-fn">teardownHarper</span>(started);
   };
 }</code></pre>
-      <p class="small muted"><a href="https://github.com/HarperFast/nextjs/blob/main/integrationTests/fixtures.ts">https://github.com/HarperFast/nextjs/blob/main/integrationTests/fixtures.ts</a></p>
+      <p class="small muted"><a href="https://github.com/HarperFast/nextjs/blob/main/integrationTests/fixture.ts">https://github.com/HarperFast/nextjs/blob/main/integrationTests/fixture.ts</a></p>
       <aside class="notes"></aside>
     </section>
 
@@ -1666,11 +1666,11 @@ steps:
       <div class="compare">
         <div><span class="when">Mar 2026</span><span class="n">1</span><span class="muted">cluster test file</span></div>
         <span class="arrow" aria-hidden="true">&rarr;</span>
-        <div class="after"><span class="when">Oct 2026</span><span class="n">105</span><span class="muted">cluster test files</span></div>
+        <div class="after"><span class="when">Today</span><span class="n">105</span><span class="muted">cluster test files</span></div>
       </div>
       <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#cluster-test-growth">Data and method</a></p>
       <aside class="notes">
-        harper-pro today: 124 integration test files (4 on Mar 1), 300 tests. 105 of the files are in integrationTests/cluster. Its integration workflow runs about 400 times a month, Jun to Oct 2026.
+        harper-pro today: 124 integration test files (4 on Mar 1), 300 tests. 105 of the files are in integrationTests/cluster. Its integration workflow ran 580 times in June 2026, then 409 to 428 times a month from July to September.
       </aside>
     </section>
 
@@ -1717,7 +1717,7 @@ steps:
       <h2>More PRs come with integration tests</h2>
       <p class="small muted">Share of merged harper PRs that touch integration tests, by month</p>
       <p class="legend"><span style="--swatch: var(--dais-muted)">Before the port finished (Jun 9)</span><span style="--swatch: var(--dais-accent)">After</span></p>
-      <div class="colchart" style="--max: 50" role="img" aria-label="Share of merged PRs that touch integration tests by month: Dec 21%, Jan 44%, Feb 13%, Mar 6%, Apr 7%, May 21%, Jun 25%, Jul 18%, Aug 24%, Sep 30%, Oct 29%">
+      <div class="colchart" style="--max: 50" role="img" aria-label="Share of merged PRs that touch integration tests by month: Dec 21%, Jan 44%, Feb 13%, Mar 6%, Apr 7%, May 21%, Jun 25%, Jul 18%, Aug 24%, Sep 30%">
         <div><i style="--v: 21.4"><span>21%</span></i></div>
         <div><i style="--v: 44.4"><span>44%</span></i></div>
         <div><i style="--v: 13.1"><span>13%</span></i></div>
@@ -1728,10 +1728,9 @@ steps:
         <div><i class="after" style="--v: 17.7"><span>18%</span></i></div>
         <div><i class="after" style="--v: 23.9"><span>24%</span></i></div>
         <div><i class="after" style="--v: 29.8"><span>30%</span></i></div>
-        <div><i class="after" style="--v: 28.8"><span>29%</span></i></div>
       </div>
-      <div class="colchart-x" aria-hidden="true"><span>Dec<small>14</small></span><span>Jan<small>18</small></span><span>Feb<small>84</small></span><span>Mar<small>236</small></span><span>Apr<small>134</small></span><span>May<small>283</small></span><span>Jun<small>338</small></span><span>Jul<small>452</small></span><span>Aug<small>351</small></span><span>Sep<small>315</small></span><span>Oct<small>191</small></span></div>
-      <p class="colchart-note">Under each month: PRs merged. Oct is through the 22nd.</p>
+      <div class="colchart-x" aria-hidden="true"><span>Dec<small>14</small></span><span>Jan<small>18</small></span><span>Feb<small>84</small></span><span>Mar<small>236</small></span><span>Apr<small>134</small></span><span>May<small>283</small></span><span>Jun<small>338</small></span><span>Jul<small>452</small></span><span>Aug<small>351</small></span><span>Sep<small>315</small></span></div>
+      <p class="colchart-note">Under each month: PRs merged. October is left out because the month isn't over.</p>
       <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#prs-touching-integration-tests">Data and method</a></p>
       <aside class="notes">
         Share of merged PRs that touch integration tests, per month. Dec and Jan are high on very few PRs (14 and 18). Feb to Apr, PR volume jumped as the team adopted coding agents, and the share fell to 6 to 13% (10 to 13 PRs a month). After the port it held at 18 to 30% (80 to 94 a month, Jun to Sep) at the higher volume. Counts are first-parent commits on main. The share doesn't prove causation or measure delivery speed.
@@ -1742,7 +1741,7 @@ steps:
       <h2>More fixes ship with a test</h2>
       <p class="small muted">Share of fix PRs that add or change an integration test, by month</p>
       <p class="legend"><span style="--swatch: var(--dais-muted)">Before the port finished (Jun 9)</span><span style="--swatch: var(--dais-accent)">After</span></p>
-      <div class="colchart" style="--max: 50" role="img" aria-label="Share of fix PRs that ship an integration test by month: Dec 0%, Jan 0%, Feb 13%, Mar 0%, Apr 3%, May 8%, Jun 18%, Jul 14%, Aug 23%, Sep 47%, Oct 36%">
+      <div class="colchart" style="--max: 50" role="img" aria-label="Share of fix PRs that ship an integration test by month: Dec 0%, Jan 0%, Feb 13%, Mar 0%, Apr 3%, May 8%, Jun 18%, Jul 14%, Aug 23%, Sep 47%">
         <div><i style="--v: 0.0"><span>0%</span></i></div>
         <div><i style="--v: 0.0"><span>0%</span></i></div>
         <div><i style="--v: 12.5"><span>13%</span></i></div>
@@ -1753,13 +1752,12 @@ steps:
         <div><i class="after" style="--v: 14.2"><span>14%</span></i></div>
         <div><i class="after" style="--v: 23.2"><span>23%</span></i></div>
         <div><i class="after" style="--v: 46.6"><span>47%</span></i></div>
-        <div><i class="after" style="--v: 35.9"><span>36%</span></i></div>
       </div>
-      <div class="colchart-x" aria-hidden="true"><span>Dec<small>5</small></span><span>Jan<small>2</small></span><span>Feb<small>16</small></span><span>Mar<small>46</small></span><span>Apr<small>29</small></span><span>May<small>106</small></span><span>Jun<small>135</small></span><span>Jul<small>218</small></span><span>Aug<small>151</small></span><span>Sep<small>58</small></span><span>Oct<small>39</small></span></div>
-      <p class="colchart-note">Under each month: fix PRs merged. Oct is through the 22nd.</p>
+      <div class="colchart-x" aria-hidden="true"><span>Dec<small>5</small></span><span>Jan<small>2</small></span><span>Feb<small>16</small></span><span>Mar<small>46</small></span><span>Apr<small>29</small></span><span>May<small>106</small></span><span>Jun<small>135</small></span><span>Jul<small>218</small></span><span>Aug<small>151</small></span><span>Sep<small>58</small></span></div>
+      <p class="colchart-note">Under each month: fix PRs merged. October is left out because the month isn't over.</p>
       <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#fixes-that-ship-an-integration-test">Data and method</a></p>
       <aside class="notes">
-        "Fix PRs" = first-parent commits whose subject starts with "fix"; a heuristic that misses fixes titled differently. September: 27 of 58 (47%). October through the 22nd: 14 of 39 (36%). Dec and Jan had only 5 and 2 fix PRs.
+        "Fix PRs" = first-parent commits whose subject starts with "fix"; a heuristic that misses fixes titled differently. September: 27 of 58 (47%). Dec and Jan had only 5 and 2 fix PRs.
       </aside>
     </section>
 
@@ -1767,7 +1765,7 @@ steps:
       <h2>And CI runs them all the time</h2>
       <p class="small muted">Runs of harper's integration test workflow, by month</p>
       <p class="legend"><span style="--swatch: var(--dais-muted)">Before the port finished (Jun 9)</span><span style="--swatch: var(--dais-accent)">After</span></p>
-      <div class="colchart" style="--max: 1700" role="img" aria-label="Integration test CI runs per month: Dec 68, Jan 132, Feb 213, Mar 446, Apr 493, May 1,042, Jun 1,356, Jul 1,374, Aug 1,186, Sep 1,623, Oct 953">
+      <div class="colchart" style="--max: 1700" role="img" aria-label="Integration test CI runs per month: Dec 68, Jan 132, Feb 213, Mar 446, Apr 493, May 1,042, Jun 1,356, Jul 1,374, Aug 1,186, Sep 1,623">
         <div><i style="--v: 68"><span>68</span></i></div>
         <div><i style="--v: 132"><span>132</span></i></div>
         <div><i style="--v: 213"><span>213</span></i></div>
@@ -1778,10 +1776,9 @@ steps:
         <div><i class="after" style="--v: 1374"><span>1,374</span></i></div>
         <div><i class="after" style="--v: 1186"><span>1,186</span></i></div>
         <div><i class="after" style="--v: 1623"><span>1,623</span></i></div>
-        <div><i class="after" style="--v: 953"><span>953</span></i></div>
       </div>
-      <div class="colchart-x" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span></div>
-      <p class="colchart-note">Oct is through the 22nd.</p>
+      <div class="colchart-x" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
+      <p class="colchart-note">October is left out because the month isn't over.</p>
       <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#ci-runs-per-month">Data and method</a></p>
       <aside class="notes">
         Integration test workflow runs in harper. Dec 2025: 68 runs and 20 PR branches. Last 30 days: 1,428 runs, about 347 PR branches excluding Renovate, 253 main pushes. More runs show usage; on their own they don't show faster engineering or better reliability.
@@ -1804,7 +1801,7 @@ steps:
     <section class="slide" id="failure-history">
       <h2>CI is not always green</h2>
       <p class="small muted">Main pushes with a failed job, by month. Failure rate, not flake rate.</p>
-      <div class="bars" role="img" aria-label="Share of main branch CI runs that failed, by month. January 8%, February 7%, March 16%, April 19%, May 41%, June 66%, July 52%, August 62%, September 19%, October 27%.">
+      <div class="bars" role="img" aria-label="Share of main branch CI runs that failed, by month. January 8%, February 7%, March 16%, April 19%, May 41%, June 66%, July 52%, August 62%, September 19%.">
         <b>Jan</b> <i style="--pct: 8"></i> <b>8%</b>
         <b>Feb</b> <i style="--pct: 7"></i> <b>7%</b>
         <b>Mar</b> <i style="--pct: 16"></i> <b>16%</b>
@@ -1814,11 +1811,10 @@ steps:
         <b class="accent-2">Jul</b> <span class="hot"><i style="--pct: 52"></i></span> <b class="accent-2">52%</b>
         <b class="accent-2">Aug</b> <span class="hot"><i style="--pct: 62"></i></span> <b class="accent-2">62%</b>
         <b>Sep</b> <i style="--pct: 19"></i> <b>19%</b>
-        <b>Oct</b> <i style="--pct: 27"></i> <b>27%</b>
       </div>
       <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#main-branch-failures-by-month">Data and method</a></p>
       <aside class="notes">
-        Share of main push runs of integration-tests.yml with a failed conclusion. December is left out: the workflow only started running on main when PR #27 merged on Dec 3, so it had just 13 main pushes (all passed). January also had only 13 (one failed). Jan to Apr failures were almost all the legacy suite. Jun to Aug: the matrix grew (Windows, Bun, Node 26, uWS) and Windows had long tail latency. Runs where a Linux Node shard failed: Dec 0%, Jan 0%, Feb 0%, Mar 4%, Apr 0%, May 12%, Jun 40%, Jul 30%, Aug 34%, Sep 10%, Oct 16%.
+        Share of main push runs of integration-tests.yml with a failed conclusion. December is left out: the workflow only started running on main when PR #27 merged on Dec 3, so it had just 13 main pushes (all passed). January also had only 13 (one failed). Jan to Apr failures were almost all the legacy suite. Jun to Aug: the matrix grew (Windows, Bun, Node 26, uWS) and Windows had long tail latency. Runs where a Linux Node shard failed: Dec 0%, Jan 0%, Feb 0%, Mar 4%, Apr 0%, May 12%, Jun 40%, Jul 30%, Aug 34%, Sep 10%. October is left out because the month isn't over.
       </aside>
     </section>
 
@@ -1831,7 +1827,7 @@ steps:
       </ul>
       <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#last-30-days">Data and method</a></p>
       <aside class="notes">
-        Sep 23 to Oct 22, 2026: 55 of 253 main runs failed; 11% of runs had a Linux Node shard failure. Failures include real regressions the suite caught, like Node 26: it alone failed 11 to 32 main runs a month and was pinned to 26.5.0 from Aug 3 to Sep 1. Re-runs that turned green: 12.9% in July, 3.4% in October. Re-run-to-green = runs with run_attempt > 1 whose final attempt succeeded, as a share of completed runs. The old and new suites and matrices differ, so this does not show CI became less flaky.
+        Sep 23 to Oct 22, 2026: 55 of 253 main runs failed; 11% of runs had a Linux Node shard failure. Failures include real regressions the suite caught, like Node 26: it alone failed 11 to 32 main runs a month and was pinned to 26.5.0 from Aug 3 to Sep 1. Re-runs that turned green: 12.9% in July, 4.3% in September. Re-run-to-green = runs with run_attempt > 1 whose final attempt succeeded, as a share of completed runs. The old and new suites and matrices differ, so this does not show CI became less flaky.
       </aside>
     </section>
 

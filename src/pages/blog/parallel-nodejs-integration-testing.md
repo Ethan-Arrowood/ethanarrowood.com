@@ -44,6 +44,8 @@ node --test \
   "*.test.js"
 ```
 
+See [`--test-concurrency`](https://nodejs.org/api/cli.html#--test-concurrency) in the Node.js CLI docs.
+
 Suite concurrency controls asynchronous work inside a process. The deck uses this abbreviated example, with the test bodies omitted:
 
 ```javascript
@@ -52,6 +54,8 @@ suite('x', { concurrency: true }, () => {
   test('b', async () => { … });
 });
 ```
+
+See the [`concurrency` option for `suite()`](https://nodejs.org/api/test.html#suitename-options-fn) in the `node:test` docs.
 
 Those tests can overlap while awaiting I/O. They still share a JavaScript process and whatever state the suite creates. Enabling suite concurrency doesn't give each test a separate application or make shared mutations safe.
 
@@ -105,6 +109,8 @@ concurrency = floor(availableParallelism / 2) + 1
             = 7   // the measured optimum
 ```
 
+The shipped default is one line in the runner, [`src/run.ts`](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/run.ts#L53-L57). It still accepts `--concurrency` or `HARPER_INTEGRATION_TEST_CONCURRENCY` to override it.
+
 On a four-vCPU runner, that gives three concurrent files. This is a configurable starting point based on the experiment, not a universal optimum. A file that starts four cluster nodes has a different resource profile from one that makes a few HTTP requests.
 
 ## Everything wants port 9925
@@ -139,6 +145,8 @@ const port = await getPort();
 const harper = await createHarper(port);   // ← nothing reserved it in between
 ```
 
+This is a simplified version of the approach the [`get-port`](https://github.com/sindresorhus/get-port) package takes.
+
 After the temporary server closes, another process can acquire that port. Starting Harper with the returned number doesn't transfer ownership of the temporary socket. With many tests starting at once, there are more opportunities for that race.
 
 ### Give each instance a loopback address
@@ -150,6 +158,8 @@ test/application 1 → http://127.0.0.2:9925
 test/application 2 → http://127.0.0.3:9925
 test/application 3 → http://127.0.0.4:9925
 ```
+
+Today the harness binds five ports per node: operations, HTTP, HTTPS, and two for MQTT. You can see the [port constants](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/harperLifecycle.ts#L52-L61) and the [address-qualified arguments](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/harperLifecycle.ts#L703-L722) it passes to Harper.
 
 Each instance keeps its default ports and binds them to its assigned address. The harness passes each port with its address, as in `--HTTP_PORT=127.0.0.2:9926`. The address separates the listeners. This depends on every listener binding that specific address; a process listening on all interfaces is a separate problem, covered below.
 
@@ -163,11 +173,13 @@ npx harper-integration-test-setup-loopback
 sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up
 ```
 
+The full script is [`scripts/setup-loopback.sh`](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/scripts/setup-loopback.sh), and the boot-time daemon is [`scripts/io.harperdb.loopback-setup.plist`](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/scripts/io.harperdb.loopback-setup.plist).
+
 It configures 32 addresses by default, `127.0.0.2` through `127.0.0.33`, and verifies each one landed. macOS drops these aliases on every reboot, so the package also includes a `launchd` daemon that reruns the script at boot.
 
 ### Why the netmask matters
 
-The first version of the script left out the netmask. macOS then gives each alias `255.0.0.0`, so every alias claims the entire `127.0.0.0/8` network. With a large pool, hundreds of interface addresses assert the same subnet. `mDNSResponder` treats that as an address conflict and answers with a storm of announcements on port 5353. With 254 aliases on `/8`, it held about 65% of a CPU core. With `/32`, each alias is an isolated host, and the same 254 aliases cost about 0%.
+The first version of the script left out the netmask. macOS then gives each alias `255.0.0.0`, so every alias claims the entire `127.0.0.0/8` network. With a large pool, hundreds of interface addresses assert the same subnet. `mDNSResponder` treats that as an address conflict and answers with a storm of announcements on port 5353. With 254 aliases on `/8`, it held about 65% of a CPU core. With `/32`, each alias is an isolated host, and the same 254 aliases cost about 0%. Kris found and fixed this in [integration-testing #21](https://github.com/HarperFast/integration-testing/pull/21), which has the measurements.
 
 The framework checks that the configured addresses are usable. A missing setup step should fail before hundreds of application startups produce confusing network errors.
 
@@ -180,6 +192,8 @@ The pool uses a JSON file containing an array of process IDs:
 ```json
 [42, 43, null, 45, null, null]
 ```
+
+The allocator, including a comment that walks through this array, is [`getNextAvailableLoopbackAddress()`](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/loopbackAddressPool.ts#L512-L638).
 
 Index zero represents `127.0.0.2`, index one represents `127.0.0.3`, and so on. A test runner's PID marks ownership; `null` marks a free slot. Allocation takes the first available slot. Teardown releases it once the node's ports are free.
 
@@ -194,6 +208,8 @@ const handle = await open(LOCK_PATH, 'wx');
 await handle.writeFile(token);
 await handle.close();
 ```
+
+The real version is [`acquireLock()`](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/loopbackAddressPool.ts#L165-L199), including the stale-lock check.
 
 The `wx` flag creates the file exclusively. If it already exists, the open fails. That atomic creation decides which process holds the lock. Closing the handle doesn't remove the lock file; the file remains until the holder releases the lock after updating the pool.
 
@@ -211,6 +227,8 @@ await assertLockHeld(token);          // still ours?
 await rename(pendingPath, POOL_PATH); // atomic publish
 ```
 
+This is the core of [`writePoolFile()`](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/loopbackAddressPool.ts#L317-L339). The atomic write landed in [integration-testing #32](https://github.com/HarperFast/integration-testing/pull/32) and the token check in [#33](https://github.com/HarperFast/integration-testing/pull/33).
+
 The pool is written to a temporary file and published with a rename, so readers see either the old file or the new one, never a torn write. If the token check fails, the operation retries from the current pool state. The check narrows the race; it doesn't close it completely. A pool file that can't be parsed is quarantined for six minutes before it's reset, so reservations whose nodes haven't bound yet aren't wiped.
 
 ### Reclaim crashed owners and verify addresses
@@ -219,7 +237,7 @@ Normal teardown isn't sufficient. Interrupting the runner can leave PIDs in the 
 
 The pool checks ownership with `process.kill(pid, 0)`. Signal zero checks whether the process exists without sending a terminating signal. When the pool is full, dead owners have their slots reclaimed before the allocator waits for a free one. The deck abbreviates this as a try/catch; when adapting the pattern, distinguish a missing process from a permission error. Failure to check a PID doesn't always mean it is dead.
 
-The pool only tracks test runners. A runner killed with `SIGKILL`, or a cancelled CI job, could still leave Harper itself running and holding its fixed ports. Each Harper instance now starts in its own process group and registers itself in a shared registry. A single monitor per user reaps the groups whose runner died. That relies on process groups, so it is POSIX only; on Windows the runner's own cleanup handlers are the only protection.
+The pool only tracks test runners. A runner killed with `SIGKILL`, or a cancelled CI job, could still leave Harper itself running and holding its fixed ports. Each Harper instance now starts in its own process group and registers itself in a [shared registry](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/harperInstanceRegistry.ts), added in [integration-testing #30](https://github.com/HarperFast/integration-testing/pull/30). A single monitor per user reaps the groups whose runner died. That relies on process groups, so it is POSIX only; on Windows the runner's own cleanup handlers are the only protection.
 
 Allocation also doesn't prove that the operating system will accept the address. The framework verifies the pool at startup and checks again when allocating. The deck's address probe binds a temporary server:
 
@@ -229,6 +247,8 @@ server.listen(0, loopbackAddress, () => {
   server.close(() => resolve(loopbackAddress));
 });
 ```
+
+See [`validateLoopbackAddress()`](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/loopbackAddressPool.ts#L378-L392), and the [startup check](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/run.ts#L74-L89) in the runner that validates the whole pool before any test starts.
 
 This answers whether the address is usable. It doesn't say whether anything already holds Harper's fixed ports there. The shared pool keeps cooperating test processes from choosing the same address at the same time. Two more checks run before an address is handed out.
 
@@ -245,9 +265,11 @@ for (const port of [9925, 9926]) {
 }
 ```
 
+The canary is [`isPortInUseOnAddress()`](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/loopbackAddressPool.ts#L403-L425) and [`findConflictingPort()`](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/loopbackAddressPool.ts#L442-L449). It landed in [integration-testing #17](https://github.com/HarperFast/integration-testing/pull/17), and [#20](https://github.com/HarperFast/integration-testing/pull/20) added the HTTP port.
+
 Node's `net` server doesn't set `SO_REUSEPORT`, and Linux refuses to mix a reuse-port socket with a plain one on the same address and port. A held port means a node still owns the address. The pool releases it, skips it for this attempt, and probes it again later. macOS handles `SO_REUSEPORT` differently, but it doesn't show the silent co-bind, and CI runs on Linux.
 
-Teardown closes the same gap from the other side. `teardownHarper` waits up to five seconds for all of the node's ports to be free. Only then does it release the address and remove the directory. If a port stays held, it keeps both, and the slot is reclaimed when the runner exits.
+Teardown closes the same gap from the other side. [`teardownHarper`](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/harperLifecycle.ts#L1091-L1133) uses [`waitForPortsFree()`](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/portUtils.ts#L90-L103) to wait up to five seconds for all of the node's ports to be free. Only then does it release the address and remove the directory. If a port stays held, it keeps both, and the slot is reclaimed when the runner exits.
 
 ### Some listeners cover every address
 
@@ -260,6 +282,8 @@ On those platforms the pool connects to the ports instead of binding them:
 const port = await findAcceptingPort(address, [9925, 9926]);
 if (port) throw new ForeignListenerError(address, port);
 ```
+
+See [`findAcceptingPort()`](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/portUtils.ts#L67-L75) and [where the allocator uses it](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/loopbackAddressPool.ts#L587-L621). The check landed in [integration-testing #40](https://github.com/HarperFast/integration-testing/pull/40).
 
 The error names the port, so the fix is to stop that process or bind it to a specific address. Setting `HARPER_INTEGRATION_TEST_ALLOW_FOREIGN_LISTENERS=1` turns the error into a warning. Linux refuses the exclusive bind on its own, so it skips this probe.
 
@@ -277,6 +301,8 @@ await startHarper(ctx);
 // 4. populate ctx.harper
 ```
 
+The implementation is [`launchHarper()`](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/harperLifecycle.ts#L662-L755), which both `startHarper()` and `setupHarperWithFixture()` call.
+
 The resulting `ctx.harper` exposes the resources the test needs. It's a `HarperContext`:
 
 ```typescript
@@ -291,6 +317,8 @@ interface HarperContext {
   startupOutput?: { stdout: string; stderr: string };
 }
 ```
+
+This is the [exported interface](https://github.com/HarperFast/integration-testing/blob/c20f0a3d182c6756c90f84fe77804da91f4ae416/src/harperLifecycle.ts#L199-L221), shown here without its doc comments.
 
 `logDir` is set only when `HARPER_INTEGRATION_TEST_LOG_DIR` is configured. `startupOutput` holds Harper's stdout and stderr up to the point it reported ready.
 
@@ -320,6 +348,8 @@ suite('install', (ctx: ContextWithHarper) => {
 });
 ```
 
+For a full test in Harper's own suite, see [`integrationTests/deploy/deploy-from-source.test.ts`](https://github.com/HarperFast/harper/blob/b1fb0c97649ffeb4b85e349d3db7f571bb7392a8/integrationTests/deploy/deploy-from-source.test.ts#L17-L164).
+
 The suite owns the instance. Its tests interact with a real HTTP endpoint, and the cleanup hook owns teardown. Another file can use the same pattern with a different directory and address.
 
 The package includes a convenience runner that configures the concurrency default, but that runner holds no required lifecycle state. A file still works under plain `node --test`. Running one test locally shouldn't require reproducing the entire CI entry point.
@@ -344,6 +374,8 @@ export function makeHarperFixture(fixtureName: string) {
 }
 ```
 
+The real fixture is [`makeHarperFixture()`](https://github.com/HarperFast/nextjs/blob/593a8bf4d95bb92bf1fa64cbf335ace0bb28d2d4/integrationTests/fixture.ts#L40-L78) in the Next.js plugin. It also takes environment, application, and HTTP options that this excerpt leaves out.
+
 The fixture provides the started Harper to Playwright through `use`, then tears it down when that use finishes. The startup timeout allows for the application build. It is a deadline, not a fixed two-minute sleep.
 
 The test consumes the fixture like any other Playwright resource. In this excerpt, `name` selects the application fixture:
@@ -364,6 +396,8 @@ test('home page renders',
   });
 ```
 
+In the plugin, a small [`fixture()` helper](https://github.com/HarperFast/nextjs/blob/593a8bf4d95bb92bf1fa64cbf335ace0bb28d2d4/integrationTests/fixture.ts#L80-L85) builds this `test` for a named fixture, and each spec starts with it, as in [`next-16.pw.ts`](https://github.com/HarperFast/nextjs/blob/593a8bf4d95bb92bf1fa64cbf335ace0bb28d2d4/integrationTests/next-16.pw.ts). The [Playwright config](https://github.com/HarperFast/nextjs/blob/593a8bf4d95bb92bf1fa64cbf335ace0bb28d2d4/integrationTests/playwright.config.ts#L9-L11) runs two workers on CI, each on its own loopback address.
+
 Worker scope means tests in that worker can share the instance. It doesn't automatically reset application data between tests. The fixture scope and test behavior still have to agree on ownership of mutable state.
 
 ## Sharding across CI runners
@@ -380,6 +414,8 @@ strategy:
 steps:
   - run: node --test --test-shard=${{ matrix.shard }}/4
 ```
+
+Harper's workflow has since grown to six shards per configuration. See the [shard matrix](https://github.com/HarperFast/harper/blob/b1fb0c97649ffeb4b85e349d3db7f571bb7392a8/.github/workflows/integration-tests.yml#L112-L114) and the [test command](https://github.com/HarperFast/harper/blob/b1fb0c97649ffeb4b85e349d3db7f571bb7392a8/.github/workflows/integration-tests.yml#L193) in `integration-tests.yml`.
 
 Each shard can also execute several files concurrently. These controls operate at different levels: sharding distributes files across runners; concurrency limits active files inside each runner.
 
@@ -428,9 +464,9 @@ Those full-matrix times cannot be compared directly with the legacy 7.4-minute t
 
 ### Adoption beyond the core suite
 
-In Harper Pro, cluster coverage grew from [one file in March to 105 in October](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#cluster-test-growth). The old cluster harness provisioned EC2, started five Docker containers, slept, and ran Newman/Postman tests over SSH. The new lifecycle can start multiple local instances in one test file, each with its own address.
+In Harper Pro, cluster coverage grew from [one file in March to 105 in October](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#cluster-test-growth). The old cluster harness provisioned EC2, started five Docker containers, slept, and ran Newman/Postman tests over SSH. The new lifecycle can start multiple local instances in one test file, each with its own address, as in [`addNodeFullCopy.test.mjs`](https://github.com/HarperFast/harper-pro/blob/3dc5419336044ebfeb88febd21e10d693b0e2d1f/integrationTests/cluster/addNodeFullCopy.test.mjs#L61).
 
-The Next.js adapter uses 53 Playwright tests in 12 spec files and ten fixtures covering Next.js 14, 15, and 16. Harper also runs an advisory downstream check against the adapter using the proposed Harper build.
+The Next.js adapter uses 53 Playwright tests in 12 spec files and ten fixtures covering Next.js 14, 15, and 16. Harper also runs an [advisory downstream check](https://github.com/HarperFast/harper/blob/b1fb0c97649ffeb4b85e349d3db7f571bb7392a8/.github/workflows/integration-tests-nextjs.yml) against the adapter using the proposed Harper build.
 
 That check had [3,336 workflow runs](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#downstream-check) from July 15 through October 22. In a sample of 250, only 212 executed the suite because the check is path-filtered. Thirteen of those 212, about 6%, failed on at least one Node version. Some failures may come from the adapter repository's `nextjs` main branch rather than the Harper PR. The 6% applies to sampled suite runs, not all 3,336 workflow runs or confirmed Harper regressions.
 
@@ -438,7 +474,7 @@ Across HarperFast, [31 other repositories](/talks/performant-parallelizable-fram
 
 Core CI usage reached [1,428 runs in the last 30 days](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#ci-runs-per-month), exercising about 347 PR head branches excluding Renovate. December had 68 runs and 20 PR branches. The [share of merged PRs touching integration tests](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#prs-touching-integration-tests) grew from roughly 6–13% per month in February through April to 18–30% in June through September. Overall PR volume also grew as the team adopted coding agents. These numbers show usage and participation, not proof that this framework caused faster delivery.
 
-Among commits whose subjects start with `fix`, [47%](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#fixes-that-ship-an-integration-test) added or changed an integration test in September, and 36% did so in October through the 22nd. That subject-prefix heuristic misses fixes titled differently, but it gives us a repeatable measure.
+Among commits whose subjects start with `fix`, [47%](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#fixes-that-ship-an-integration-test) added or changed an integration test in September. That subject-prefix heuristic misses fixes titled differently, but it gives us a repeatable measure.
 
 ### Failure rate is not flake rate
 
@@ -446,7 +482,7 @@ The legacy API jobs failed on at least one Node version in [52 of 450 first-atte
 
 The new workflow also fails. Main-push failure rates reached 52–66% during June through August as the suite and runtime matrix expanded. In the last 30 days, [55 of 253 main runs failed](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#last-30-days), about 22%. Linux Node shards failed in 11% of runs; roughly half the failed runs failed only on Windows, Bun, or uWS.
 
-Those failures include real regressions, including the Node 26 problems that led to temporarily pinning its version. Run metadata can't separate every regression from a flake. [Runs that eventually turned green after a retry](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#re-runs-that-turned-green) fell from 12.9% of completed runs in July to 3.4% in October, but that is still only a proxy.
+Those failures include real regressions, including the Node 26 problems that led to temporarily pinning its version. Run metadata can't separate every regression from a flake. [Runs that eventually turned green after a retry](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#re-runs-that-turned-green) fell from 12.9% of completed runs in July to 4.3% in September, but that is still only a proxy.
 
 The old and new suites and matrices differ. These measurements do not establish that CI became less flaky. They establish more coverage, broader use, and a clearer place to investigate each failure.
 

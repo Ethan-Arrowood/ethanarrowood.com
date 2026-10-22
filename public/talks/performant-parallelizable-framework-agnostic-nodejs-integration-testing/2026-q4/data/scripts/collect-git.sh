@@ -48,8 +48,9 @@ at() { git -C "$1" rev-list -1 --first-parent --before="$2 23:59" origin/main; }
 #   fix_tested: a fix commit whose diff touches an integrationTests test file
 {
   echo "month,merged,touching_integration_tests,adding_test_files,fix_commits,fix_with_integration_test"
+  # Whole months only: October 2026 was still in progress on 2026-10-22.
   for m in 2025-11 2025-12 2026-01 2026-02 2026-03 2026-04 2026-05 2026-06 \
-           2026-07 2026-08 2026-09 2026-10; do
+           2026-07 2026-08 2026-09; do
     s="$m-01"
     e=$(date -j -v+1m -f %Y-%m-%d "$s" +%Y-%m-%d 2>/dev/null || date -d "$s +1 month" +%Y-%m-%d)
     all=$(git -C "$HARPER" log --first-parent --since="$s" --until="$e" --format=%h origin/main | wc -l | tr -d ' ')
