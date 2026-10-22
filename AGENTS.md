@@ -127,7 +127,7 @@ These slide decks may use Ethan's personal HTML+CSS based presentation framework
 - **Markdown plugins**: remark (dates, math, GitHub alerts) + rehype (KaTeX, slug, autolink headings, Shiki syntax highlighting with `github-light`).
 - **Code blocks**: Copy-to-clipboard buttons injected client-side in `PostLayout.astro`; excluded for `plain-text`, `bash`, and `terminal` blocks.
 - **Table of contents**: `TableOfContents.astro` auto-generates from h2/h3 headings.
-- **Formatting**: [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) with tabs and 80 columns (`.oxfmtrc.json`). `npm run format` to fix, `npm run format:check` to verify (CI runs this on pull requests). `public/` is ignored so vendored slide decks are never touched.
+- **Formatting**: [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) with tabs and 80 columns for code (`.oxfmtrc.json`). Markdown and MDX use `proseWrap: "never"`, so each paragraph stays on one line. `npm run format` to fix, `npm run format:check` to verify (CI runs this on pull requests). `public/` is ignored so vendored slide decks are never touched.
 
 ## Themes
 
@@ -169,6 +169,7 @@ These apply to all site content (blog posts, talk descriptions, page copy):
 - No bold overuse. No sycophantic openers. No generic conclusions.
 - State facts plainly. Surface constraints and trade-offs early.
 - Keep language tight and direct.
+- Don't hard-wrap prose. In Markdown and HTML, write each paragraph or sentence block on a single line and let the editor or browser soft wrap. The 80-column limit applies to code, not prose.
 
 ## Accessibility
 
