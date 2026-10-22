@@ -1,91 +1,125 @@
+as of 2026-10-21; complete months 2025-11 to 2026-09
 
-## legacy suite (harper integration-tests.yml, legacy API job)
-  legacy-test-step                   median 7.4 min, p90 7.7 min   (n=1040 successful 'Run API Tests' steps)
-  legacy-main-failure-rate           11.6%   (52 of 450 main push runs, attempt 1)
-  legacy-same-commit-split           66%   (99 of 149 failing attempts had another Node version pass)
-  legacy-suite-size                  974 to 993 test cases   (Nov 2025 to Jun 2026, never grew past ~1,000)
+## legacy suite (frozen: harper-legacy-api-jobs.csv, legacy-waits.csv, harperdb-api-jobs.csv)
+  legacy-test-step-before-1091           median 7.5 min, p90 7.7 min, n=778   (successful 'Run API Tests' steps, 2026-05-05 to #1091)
+  legacy-test-step-after-1091            median 5.6 min, p90 5.8 min, n=262   (after #1091 replaced fixed sleeps with polls)
+  legacy-job                             median 8.2 min, p90 8.5 min, n=2336   (whole Linux job incl. setup)
+  legacy-waits-timing-window             387.7 s (6.5 min)   (67 waits at 8780c52: timers 201.7 s, restarts 186.0 s)
+  legacy-waits-before-pr-27              324.4 s (5.4 min)   (59 waits at fb098c0: timers 200.4 s, restarts 124.0 s)
+  legacy-main-failure-rate               9.3%   (42 of 450 main push runs, first attempt, Linux Node.js legacy jobs; 10 more failed in setup before any test ran)
+  legacy-main-failure Node.js v20        5.5%   (21 of 384 jobs)
+  legacy-main-failure Node.js v22        4.0%   (18 of 450 jobs)
+  legacy-main-failure Node.js v24        2.7%   (12 of 450 jobs)
+  legacy-same-commit-split               61%   (77 of 126 failing attempts had another Node version pass)
+  legacy-job-sample                      452 main push, 396 pull_request, 4 workflow_dispatch   (runs in harper-legacy-api-jobs.csv)
+  legacy-suite-size                      974 to 993 test cases   (Nov 2025 to Jun 2026)
+  harperdb-api-job-main-push             2.3% (1 of 43)   (Sep 3 to Oct 9, 2025)
+  harperdb-api-job-pr                    11.9% (16 of 135)
+  harperdb-start-to-api-result           median 13.0 min, p90 14.2 min, n=184   (successful attempts)
 
 ## test growth (harper main, counted from source)
-  2025-11-05                         framework 0 cases in 0 files; legacy 974
-  2025-12-04                         framework 7 cases in 2 files; legacy 985
-  2026-01-01                         framework 7 cases in 2 files; legacy 985
-  2026-02-01                         framework 28 cases in 5 files; legacy 985
-  2026-03-01                         framework 59 cases in 7 files; legacy 985
-  2026-04-01                         framework 60 cases in 8 files; legacy 985
-  2026-05-01                         framework 117 cases in 13 files; legacy 993
-  2026-05-15                         framework 122 cases in 14 files; legacy 993
-  2026-06-01                         framework 372 cases in 39 files; legacy 993
-  2026-06-09                         framework 1096 cases in 45 files; legacy 0
-  2026-07-01                         framework 1378 cases in 89 files; legacy 0
-  2026-08-01                         framework 1699 cases in 148 files; legacy 0
-  2026-09-01                         framework 2007 cases in 189 files; legacy 0
-  2026-10-01                         framework 2304 cases in 242 files; legacy 0
-  2026-10-22                         framework 2435 cases in 263 files; legacy 0
-  growth-since-port                  1339   (test cases added Jun 9 to 2026-10-22)
+        date  framework files  framework cases  legacy cases
+  2025-11-05                0                0           974
+  2025-12-04                2                7           985
+  2026-01-01                2                7           985
+  2026-02-01                5               28           985
+  2026-03-01                7               59           985
+  2026-04-01                8               60           985
+  2026-05-01               13              117           993
+  2026-05-15               14              122           993
+  2026-06-01               39              372           993
+  2026-06-09               45             1096             0
+  2026-07-01               89             1378             0
+  2026-08-01              148             1699             0
+  2026-09-01              189             2007             0
+  2026-10-01              242             2304             0
+  2026-10-21              261             2422             0
+  growth-since-port                      1326   (test cases added Jun 9 to 2026-10-21)
 
-## green main run 39774245654, Linux Node 24 shards
-  tests-per-run                      2652   (pass 2630, fail 0, 6 shards)
-  harper-instances-per-run           423
-  summed-suite-time                  82.0 min
-  slowest-shard                      5.6 min   (14.8x)
+## green main run 39696281381
+  tests-per-run                          2632   (Linux Node.js 24, 6 shards: pass 2610, fail 0, skipped 21, todo 1)
+  harper-instances-per-run               421
+  summed-suite-time                      74.4 min
+  slowest-shard                          5.4 min   (ratio 13.8x)
+  windows-tests                          871
+  shard-jobs-in-run                      36   (bun 6, linux-node22 6, linux-node24 6, linux-node26 6, uws 6, windows 6)
 
 ## harper integration-tests.yml runs
-  month      runs  main  main fail linux fail  rerun green  PR branches
-  2025-11      25     0          -          -         0.0%     2 (2)
-  2025-12      68    13         0%         0%         1.5%    20 (14)
-  2026-01     132    13         8%         0%         0.0%    28 (21)
-  2026-02     213    30         7%         0%         0.9%    41 (39)
-  2026-03     446   109        16%         4%         2.5%   107 (105)
-  2026-04     493    74        19%         0%         2.8%   108 (104)
-  2026-05    1042   160        41%        12%         3.6%   200 (196)
-  2026-06    1356   245        66%        40%         7.4%   300 (297)
-  2026-07    1374   225        52%        30%        12.9%   270 (265)
-  2026-08    1186   154        62%        34%        12.6%   196 (190)
-  2026-09    1623   244        19%        10%         4.3%   317 (311)
-  last30     1428   253        22%        11%         3.2%   358 (347)
-  main-failure-rate-last30           22%   (55 of 253 main pushes)
-  failures-only-off-linux-last30     47%   (26 of 55 failed runs had no Linux Node shard failure)
+  runs-total                             8896   (2025-11-04 to 2026-10-21)
+         month  runs  main pushes  main failed  linux shard failed  re-run then succeeded  PR branches (not renovate)
+       2025-11    25            0            -                   -                   0.0%                           2
+       2025-12    68           13           0%                  0%                   1.5%                          14
+       2026-01   132           13           8%                  0%                   0.0%                          21
+       2026-02   213           30           7%                  0%                   0.9%                          39
+       2026-03   446          109          16%                  4%                   2.5%                         105
+       2026-04   493           74          19%                  0%                   2.8%                         104
+       2026-05  1042          160          41%                 12%                   3.6%                         196
+       2026-06  1356          245          66%                 40%                   7.4%                         297
+       2026-07  1374          225          52%                 30%                  12.9%                         265
+       2026-08  1186          154          62%                 34%                  12.6%                         190
+       2026-09  1622          244          19%                 10%                   4.3%                         311
+  last 30 days  1461          258          20%                 11%                   3.1%                         355
+  node26-failed-main-runs                2026-06 44, 2026-07 37, 2026-08 17, 2026-09 15   (main runs with a failed Linux Node.js 26 job)
+  main-failure-rate-last30               20%   (52 of 258 main pushes, final attempt)
+  linux-failure-rate-last30              11%   (29 of 258)
+  failed-without-linux-node-last30       23 of 52   (20 failed only in Windows, Bun, or uWS jobs)
+  main-failure-rate-attempt1-last30      19%   (258 main pushes, first attempt)
+  linux-failure-rate-attempt1-last30     11%   (29 of 258, first attempt)
 
-## time to a full result (timing sample, successful attempt-1 runs)
-  wall-main-last30                   median 12.1 min, p90 13.1 min   (n=30)
-  wall-pr-last30                     median 11.5 min, p90 13.1 min   (n=27)
+## time to a full result (first job start to last job end, first attempt)
+  wall-main-last30                       median 11.9 min, p90 13.1 min, n=205   (every successful first-attempt main push in the window)
+  wall-pr-last30                         median 10.5 min, p90 12.9 min, n=198   (25% hash sample of successful first-attempt PR runs)
+    month  main median (min)   n
+  2025-12                8.6  13
+  2026-01                8.7  12
+  2026-02                9.0  28
+  2026-03               10.3  26
+  2026-04                9.7  27
+  2026-05               10.0  15
+  2026-06               15.9   9
+  2026-07               14.1  12
+  2026-08               11.3   9
+  2026-09                9.2  26
 
-## harper PR activity (first-parent commits on main)
-  month    merged touching  share  fixes tested  share
-  2025-11      11        0     0%      2      0     0%
-  2025-12      14        3    21%      5      0     0%
-  2026-01      18        8    44%      2      0     0%
-  2026-02      84       11    13%     16      2    13%
-  2026-03     233       13     6%     46      0     0%
-  2026-04     133       10     8%     27      1     4%
-  2026-05     287       59    21%    108      9     8%
-  2026-06     329       82    25%    130     24    18%
-  2026-07     456       82    18%    223     31    14%
-  2026-08     351       83    24%    150     35    23%
-  2026-09     311       94    30%     59     27    46%
-  prs-touching Feb-Apr 2026          10-13 a month
-  share-of-merged Feb-Apr 2026       6-13%
-  fixes-with-test Feb-Apr 2026       0-13%
-  ci-runs Feb-Apr 2026               213-493 a month
-  prs-touching 2026-06 to 2026-09    82-94 a month
-  share-of-merged 2026-06 to 2026-09 18-30%
-  fixes-with-test 2026-06 to 2026-09 14-46%
-  ci-runs 2026-06 to 2026-09         1,186-1,623 a month
+## merged PRs to harper main (harper-prs.csv)
+    month  merged PRs  touching int. tests  share  code PRs  code PRs with int. test  share  file lists truncated
+  2025-11          12                    0     0%         5                        0     0%                     0
+  2025-12          14                    3    21%         7                        1    14%                     0
+  2026-01          13                    3    23%         8                        2    25%                     1
+  2026-02          30                    5    17%        23                        3    13%                     1
+  2026-03          96                   10    10%        60                        2     3%                     0
+  2026-04          67                    8    12%        42                        2     5%                     0
+  2026-05         151                   29    19%        97                       15    15%                     1
+  2026-06         229                   59    26%       151                       26    17%                     0
+  2026-07         215                   54    25%       161                       35    22%                     1
+  2026-08         148                   48    32%       102                       33    32%                     0
+  2026-09         238                   74    31%       144                       47    33%                     0
 
 ## harper-pro
-  cluster-test-files                 1 (2026-03-01) to 105 (2026-10-22)
-  integration-test-files             4 to 124
-  integration-runs-per-month         2026-06 580, 2026-07 427, 2026-08 409, 2026-09 428
+  cluster-test-files                     1 (2026-03-01) to 104 (2026-10-21)
+  integration-test-files                 4 to 123   (295 test cases)
+  node-counts                            NODE_COUNT 2 in 11, NODE_COUNT 3 in 3, NODE_COUNT 4 in 2
+  integration-runs-per-month             2026-06 579, 2026-07 427, 2026-08 409, 2026-09 428
 
-## Next.js downstream check in harper
-  downstream-runs                    3336   (2026-07-15 to 2026-10-22)
-  downstream-sample                  250 sampled: 212 ran, 32 skipped, 6 without adapter jobs
-  downstream-failure-rate            6%   (13 of 212 suite runs had a Node version fail)
+## Next.js plugin and downstream check
+  nextjs-suite                           10 fixtures, 12 spec files, 53 tests   (commit 593a8bf)
+  downstream-runs                        3325   (2026-07-15 to 2026-10-21)
+  downstream-sample                      254 sampled: 208 ran (82%), 41 skipped, 5 without adapter jobs
+  downstream-failure-rate                5%   (10 of 208 suite runs had a Node.js version fail)
 
-## adoption across HarperFast
-  repos-importing                    32   (26 public, 6 private or internal)
-  harper-pro                         126 files
-  harper-reflex                      33 files
-  Developer-Relations-Agents         7 files
-  oauth                              6 files
-  agent-memory                       4 files
+## adoption and npm
+  repos-importing                        32   (26 public, 6 private or internal)
+    harper-pro                           126 files   (public)
+    harper-reflex                        35 files   (private)
+    Developer-Relations-Agents           7 files   (private)
+    oauth                                6 files   (public)
+    agent-memory                         4 files   (private)
+    symphony                             4 files   (public)
+  npm                                    23 versions, 49,736 downloads 2026-09-22 to 2026-10-21
+
+## static (facts about history, not re-measured)
+  legacy-active-tests                    ~930: 974 it() calls minus 45 static skips (19 it.skip, 26 in describe.skip('S3 Operations')), counted by hand at fb098c0
+  port                                   14 PRs, May 15 to Jun 9, 2026 (#555 #597 #627 #634 #645 #646 #647 #648 #730 #731 #732 #759 #761 #778)
+  port-files                             17 files in integrationTests/apiTests/ at b4f83887f, when the legacy suite was removed
+  port-cleanup                           19,977 lines deleted in harper PR #1173
+  node26-pin                             Node.js 26 pinned to 26.5.0 from 2026-08-03 to 2026-09-01
