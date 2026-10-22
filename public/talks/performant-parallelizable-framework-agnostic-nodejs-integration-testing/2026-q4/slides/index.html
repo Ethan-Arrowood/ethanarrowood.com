@@ -398,15 +398,26 @@
        (not side-by-side) so the full URLs get the slide's whole width and the
        text can be large. */
     #thanks .me {
-      width: 24cqi;
+      width: 16cqi;
       height: auto;
       border-radius: 2cqi;
       margin-block-end: 1.5cqi;
     }
 
-    #thanks h2 { font-size: 6cqi; margin-block-end: 0.8cqi; }
+    #thanks h2 { font-size: 5cqi; margin-block-end: 0.6cqi; }
     #thanks .muted { font-size: 2cqi; margin-block: 0 1.4cqi; }
-    #thanks .links { font-size: 2cqi; line-height: 1.8; margin: 0; }
+    /* Links as a left-aligned two-column list (label, URL), centered as a
+       block under the sign-off. */
+    #thanks .links {
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 0.3em 1.2em;
+      margin: 0;
+      font-size: 1.5cqi;
+      text-align: start;
+    }
+    #thanks .links dt { color: var(--dais-muted); }
+    #thanks .links dd { margin: 0; }
     #thanks .links a { white-space: nowrap; }
 
     /* The shipped-default takeaway sits above the equation as a lead line. */
@@ -620,6 +631,71 @@
       color: var(--dais-muted);
     }
 
+    /* "Data and method" link on data slides, pinned to the bottom right of
+       the content box and kept quiet. It points at the edition's data page. */
+    .dais > section > .src { margin: auto 0 0; align-self: flex-end; font-size: 1.3cqi; }
+    .dais > section > .src a { color: var(--dais-muted); }
+
+    /* Monthly column chart: one bar per month, height = --v / --max. Bars
+       from June on (after the legacy port) carry the accent. Value labels sit
+       above each bar; the x axis can carry a small count under each month. */
+    .dais .colchart {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: 1.4cqi;
+      align-items: end;
+      height: 24cqi;
+      margin-block-start: 3cqi;
+      border-block-end: 1px solid color-mix(in srgb, var(--dais-text) 20%, transparent);
+    }
+
+    .dais .colchart > div { display: flex; align-items: end; height: 100%; }
+
+    .dais .colchart i {
+      position: relative;
+      width: 100%;
+      height: calc(var(--v) / var(--max) * 100%);
+      border-radius: 0.2cqi 0.2cqi 0 0;
+      background: var(--dais-muted);
+    }
+
+    .dais .colchart i.after { background: var(--dais-accent); }
+
+    .dais .colchart i span {
+      position: absolute;
+      inset-block-end: 100%;
+      inset-inline-start: 50%;
+      translate: -50% -0.4em;
+      font-size: 1.6cqi;
+      font-style: normal;
+      white-space: nowrap;
+      color: var(--dais-text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dais .colchart-x {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: 1.4cqi;
+      margin-block-start: 0.6cqi;
+      font-size: 1.5cqi;
+      text-align: center;
+      color: var(--dais-muted);
+    }
+
+    .dais .colchart-x small {
+      display: block;
+      font-size: 0.8em;
+      opacity: 0.8;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dais .colchart-note { font-size: 1.3cqi; color: var(--dais-muted); margin: 0.8cqi 0 0; }
+
+    :is(#velocity, #fix-coverage, #ci-usage) .legend { margin: 0; }
+
     /* Main-branch failure rate by month: one series, full width. */
     #failure-history .bars { font-size: 0.62em; gap: 0.25em 0.8em; margin-block-start: 1cqi; }
     #failure-history .bars i { width: calc(var(--pct) * 1.4%); }
@@ -806,8 +882,7 @@
           </ul>
         </div>
       </div>
-      <p class="small muted">No mocking, no stubbing, no reaching inside. Assert on
-      behavior, never on implementation.</p>
+      <p class="small muted">No mocking, no stubbing, no reaching inside. Assert on behavior, never on implementation.</p>
       <aside class="notes"></aside>
     </section>
 
@@ -917,8 +992,7 @@
     <section class="slide" id="the-experiment">
       <h2>The experiment</h2>
       <ul>
-        <li><strong>20 generated test files</strong>, each starting an
-        application process</li>
+        <li><strong>20 generated test files</strong>, each starting an application process</li>
         <li>Concurrency <strong>1 → 12</strong> (sequential to max parallelism)</li>
         <li><strong>25 samples</strong> per level, on a normal developer laptop</li>
       </ul>
@@ -980,23 +1054,7 @@
       </table>
       <p class="step" data-step="2">Std&nbsp;dev jumps from <strong>294</strong> at the optimum to <strong>654</strong> and <strong>690</strong> just past it <br> The run-to-run spread more than doubles.</p>
       <aside class="notes">
-        All the data (concurrency: median, std dev, p95, worst run, in ms):
-        1: 9,939, 363, 10,607, 10,885.
-        2: 5,776, 307, 6,164, 6,876.
-        3: 4,582, 365, 5,252, 5,729.
-        4: 3,904, 368, 4,648, 5,238.
-        5: 3,759, 332, 4,264, 4,739.
-        6: 3,597, 459, 4,751, 4,874.
-        7: 3,468, 294, 3,990, 4,520.
-        8: 3,671, 472, 4,575, 5,106.
-        9: 3,601, 473, 4,804, 5,177.
-        10: 3,534, 654, 5,339, 5,466.
-        11: 3,724, 690, 5,096, 5,717.
-        12: 3,952, 488, 4,792, 5,055.
-        The median flattens after 7. The real story is in the tail: std dev, p95, worst run.
-        Step 2: now read the std-dev column. Over-parallelizing doesn't make
-        the suite slower on average so much as it makes it *unpredictable*, and
-        unpredictable is what makes people stop trusting a suite.
+        All the data (concurrency: median, std dev, p95, worst run, in ms): 1: 9,939, 363, 10,607, 10,885. 2: 5,776, 307, 6,164, 6,876. 3: 4,582, 365, 5,252, 5,729. 4: 3,904, 368, 4,648, 5,238. 5: 3,759, 332, 4,264, 4,739. 6: 3,597, 459, 4,751, 4,874. 7: 3,468, 294, 3,990, 4,520. 8: 3,671, 472, 4,575, 5,106. 9: 3,601, 473, 4,804, 5,177. 10: 3,534, 654, 5,339, 5,466. 11: 3,724, 690, 5,096, 5,717. 12: 3,952, 488, 4,792, 5,055. The median flattens after 7. The real story is in the tail: std dev, p95, worst run. Step 2: now read the std-dev column. Over-parallelizing doesn't make the suite slower on average so much as it makes it *unpredictable*, and unpredictable is what makes people stop trusting a suite.
       </aside>
     </section>
 
@@ -1018,8 +1076,7 @@
 
     <section class="slide" id="the-default-that-shipped">
       <h2>Calculated default</h2>
-      <p class="lead">When each test spawns its own application process, the ideal
-      concurrency is <br><strong>half the available parallelism, plus one</strong></p>
+      <p class="lead">When each test spawns its own application process, the ideal concurrency is <br><strong>half the available parallelism, plus one</strong></p>
       <pre><code>concurrency = <span class="tok-fn">floor</span>(availableParallelism / <span class="tok-number">2</span>) + <span class="tok-number">1</span>
             = <span class="tok-fn">floor</span>(<span class="tok-number">12</span> / <span class="tok-number">2</span>) + <span class="tok-number">1</span>
             = <span class="tok-number">7</span>   <span class="tok-comment">// the measured optimum</span></code></pre>
@@ -1061,9 +1118,7 @@
 
 <span class="tok-keyword">const</span> port = <span class="tok-keyword">await</span> <span class="tok-fn">getPort</span>();
 <span class="tok-keyword">const</span> harper = <span class="tok-keyword">await</span> <span class="tok-fn">createHarper</span>(port);   <span class="tok-comment">// ← nothing reserved it in between</span></code></pre>
-      <p>Between the <strong>release</strong> and the <strong>reuse</strong>, the OS
-      can hand that port to any other process &mdash; especially with many test
-      processes racing at once.</p>
+      <p>Between the <strong>release</strong> and the <strong>reuse</strong>, the OS can hand that port to any other process &mdash; especially with many test processes racing at once.</p>
       <aside class="notes"></aside>
     </section>
 
@@ -1074,8 +1129,7 @@
 
     <section class="slide" id="loopback">
       <h2>Introducing loopback addresses</h2>
-      <p>All of <code>127.0.0.0/8</code> (<code>127.0.0.1</code> through
-      <code>127.255.255.255</code>) loops back to localhost</p>
+      <p>All of <code>127.0.0.0/8</code> (<code>127.0.0.1</code> through <code>127.255.255.255</code>) loops back to localhost</p>
       <pre><code><span class="tok-comment">// every instance keeps its default ports</span>
 test/application 1 → <span class="tok-string">http://127.0.0.2:9925</span>
 test/application 2 → <span class="tok-string">http://127.0.0.3:9925</span>
@@ -1085,9 +1139,7 @@ test/application 3 → <span class="tok-string">http://127.0.0.4:9925</span></co
         <li>Isolation is by <strong>address</strong></li>
       </ul>
       <aside class="notes">
-        Each node binds several fixed ports on its address: 9925 (operations), 9926
-        (HTTP), 1883 and 8883 (MQTT), and 9927 (HTTPS) when TLS is configured. The
-        harness passes them as address:port, e.g. --HTTP_PORT=127.0.0.2:9926.
+        Each node binds several fixed ports on its address: 9925 (operations), 9926 (HTTP), 1883 and 8883 (MQTT), and 9927 (HTTPS) when TLS is configured. The harness passes them as address:port, e.g. --HTTP_PORT=127.0.0.2:9926.
       </aside>
     </section>
 
@@ -1102,9 +1154,7 @@ test/application 3 → <span class="tok-string">http://127.0.0.4:9925</span></co
         </tbody>
       </table>
       <aside class="notes">
-        Windows routes all of 127.0.0.0/8 to loopback already: harper's Windows CI shards
-        run with no alias setup. The integration-testing README still says Windows needs
-        setup; that's worth fixing upstream.
+        Windows routes all of 127.0.0.0/8 to loopback already: harper's Windows CI shards run with no alias setup. The integration-testing README still says Windows needs setup; that's worth fixing upstream.
       </aside>
     </section>
 
@@ -1116,10 +1166,7 @@ npx harper-integration-test-setup-loopback
 <span class="tok-comment"># what it runs for each address in the pool</span>
 sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
       <aside class="notes">
-        The script configures 32 addresses by default (127.0.0.2 to 127.0.0.33; set
-        HARPER_INTEGRATION_TEST_LOOPBACK_POOL_COUNT for more, up to 254), verifies every
-        alias landed, and ships scripts/io.harperdb.loopback-setup.plist so the aliases
-        survive a reboot. macOS drops lo0 aliases on every restart.
+        The script configures 32 addresses by default (127.0.0.2 to 127.0.0.33; set HARPER_INTEGRATION_TEST_LOOPBACK_POOL_COUNT for more, up to 254), verifies every alias landed, and ships scripts/io.harperdb.loopback-setup.plist so the aliases survive a reboot. macOS drops lo0 aliases on every restart.
       </aside>
     </section>
 
@@ -1135,16 +1182,7 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
         <li class="step" data-step="2">mDNSResponder keeps defending them.<br><span class="accent-2">O(n²) work. A storm of announcements.</span></li>
       </ul>
       <aside class="notes">
-        That netmask in the setup command matters. Without it, macOS assigns 255.0.0.0,
-        or /8. These are different addresses, but every alias claims the whole
-        127.0.0.0/8 network.
-        [Step 1] This was diagnosed on a developer machine configured with about 254
-        aliases. The overlapping interface addresses trigger mDNSResponder's
-        address-conflict defense, PacketRRConflict.
-        [Step 2] Each address conflicts with every other, so the defense work grows
-        quadratically. It floods loopback with mDNS announcements on UDP port 5353 and
-        can pin a CPU core. The busy process is mDNSResponder, not a test worker.
-        Source: HarperFast/integration-testing PR #21, Kris Zyp, July 2026.
+        That netmask in the setup command matters. Without it, macOS assigns 255.0.0.0, or /8. These are different addresses, but every alias claims the whole 127.0.0.0/8 network. [Step 1] This was diagnosed on a developer machine configured with about 254 aliases. The overlapping interface addresses trigger mDNSResponder's address-conflict defense, PacketRRConflict. [Step 2] Each address conflicts with every other, so the defense work grows quadratically. It floods loopback with mDNS announcements on UDP port 5353 and can pin a CPU core. The busy process is mDNSResponder, not a test worker. Source: HarperFast/integration-testing PR #21, Kris Zyp, July 2026.
       </aside>
     </section>
 
@@ -1167,18 +1205,7 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
         </table>
       </div>
       <aside class="notes">
-        A /32 is a host netmask. Each alias claims one address, so the subnet claims no
-        longer overlap. The addresses still loop back. Same number of aliases, same
-        isolation.
-        [Step 1] This comparison used 254 aliases on the same macOS machine in the same
-        run. With /8, mDNSResponder measured about 65% CPU and 85 packets over eight
-        seconds on UDP 5353. With /32, about zero CPU and five packets, the observed
-        floor. One measurement, not a cross-machine benchmark.
-        The setup script removes each existing alias before adding it, so re-running it
-        converts old /8 setups to /32.
-        Next: the addresses are configured. How do we assign them to test processes
-        without handing out the same address twice?
-        Source: HarperFast/integration-testing PR #21, Kris Zyp, July 2026.
+        A /32 is a host netmask. Each alias claims one address, so the subnet claims no longer overlap. The addresses still loop back. Same number of aliases, same isolation. [Step 1] This comparison used 254 aliases on the same macOS machine in the same run. With /8, mDNSResponder measured about 65% CPU and 85 packets over eight seconds on UDP 5353. With /32, about zero CPU and five packets, the observed floor. One measurement, not a cross-machine benchmark. The setup script removes each existing alias before adding it, so re-running it converts old /8 setups to /32. Next: the addresses are configured. How do we assign them to test processes without handing out the same address twice? Source: HarperFast/integration-testing PR #21, Kris Zyp, July 2026.
       </aside>
     </section>
 
@@ -1192,8 +1219,7 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
         <li>First-available allocation; released once its ports are free</li>
       </ul>
       <aside class="notes">
-        The PIDs are test runner processes, not Harper. Default pool: 32 addresses.
-        Pool file: $TMPDIR/harper-integration-test-loopback-pool.json.
+        The PIDs are test runner processes, not Harper. Default pool: 32 addresses. Pool file: $TMPDIR/harper-integration-test-loopback-pool.json.
       </aside>
     </section>
 
@@ -1206,8 +1232,7 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
       <p>One of many options (daemon, orchestrator, atomics).</p>
       <p>File lock was simplest. Plus a stale-lock timeout for crashed processes.</p>
       <aside class="notes">
-        The stale timeout is 10 seconds. The token is pid, a counter, and random bytes,
-        so a process can tell its own lock from a successor's.
+        The stale timeout is 10 seconds. The token is pid, a counter, and random bytes, so a process can tell its own lock from a successor's.
       </aside>
     </section>
 
@@ -1218,11 +1243,7 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
 <span class="tok-keyword">await</span> <span class="tok-fn">rename</span>(pendingPath, POOL_PATH);  <span class="tok-comment">// atomic publish</span></code></pre>
       <p>If a write outlasts the stale timeout, another process takes the lock. The token check stops the old writer from overwriting the new claim.</p>
       <aside class="notes">
-        Added Oct 2026 (integration-testing #32 and #33). Writes go to a temp file and
-        are published by rename, so readers never see a torn file. On a lost lock the
-        operation retries from the current pool state, up to 3 times. An unreadable pool
-        file is quarantined for 6 minutes before it's reset, so in-flight reservations
-        aren't wiped. The check narrows the race; it doesn't close it completely.
+        Added Oct 2026 (integration-testing #32 and #33). Writes go to a temp file and are published by rename, so readers never see a torn file. On a lost lock the operation retries from the current pool state, up to 3 times. An unreadable pool file is quarantined for 6 minutes before it's reset, so in-flight reservations aren't wiped. The check narrows the race; it doesn't close it completely.
       </aside>
     </section>
 
@@ -1236,8 +1257,7 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
 }</code></pre>
       <p class="small muted">A <kbd>Ctrl</kbd>+<kbd>C</kbd> mid-run doesn't break the pool</p>
       <aside class="notes">
-        Reaping runs when the pool is full: dead runner PIDs are cleared before waiting
-        for a free slot.
+        Reaping runs when the pool is full: dead runner PIDs are cleared before waiting for a free slot.
       </aside>
     </section>
 
@@ -1249,10 +1269,7 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
         <li>POSIX only; Windows relies on runner cleanup</li>
       </ul>
       <aside class="notes">
-        A SIGKILL'd runner or a cancelled CI job used to leave Harper alive, holding its
-        fixed ports. Since Sep 2026 (integration-testing #30) every instance registers in a
-        cross-process registry, and one monitor per user reaps orphaned or overdue
-        process groups with kill(-pgid).
+        A SIGKILL'd runner or a cancelled CI job used to leave Harper alive, holding its fixed ports. Since Sep 2026 (integration-testing #30) every instance registers in a cross-process registry, and one monitor per user reaps orphaned or overdue process groups with kill(-pgid).
       </aside>
     </section>
 
@@ -1276,12 +1293,7 @@ server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loo
   <span class="tok-keyword">if</span> (<span class="tok-keyword">await</span> <span class="tok-fn">isPortInUseOnAddress</span>(port, address)) skip(address);
 }</code></pre>
       <aside class="notes">
-        The conflict canary, added Jun 2026. The common shape: after a kill, Harper's main
-        thread has exited (freeing 9925) but its HTTP workers still hold 9926. The pool
-        releases the poisoned address, skips it for this attempt, and re-probes it later.
-        This detection is Linux-effective; macOS SO_REUSEPORT semantics differ, but macOS
-        doesn't show the silent co-bind, and CI runs on Linux. Teardown also waits up to
-        5 s for all ports to free before releasing an address.
+        The conflict canary, added Jun 2026. The common shape: after a kill, Harper's main thread has exited (freeing 9925) but its HTTP workers still hold 9926. The pool releases the poisoned address, skips it for this attempt, and re-probes it later. This detection is Linux-effective; macOS SO_REUSEPORT semantics differ, but macOS doesn't show the silent co-bind, and CI runs on Linux. Teardown also waits up to 5 s for all ports to free before releasing an address.
       </aside>
     </section>
 
@@ -1292,12 +1304,7 @@ server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loo
 <span class="tok-keyword">const</span> port = <span class="tok-keyword">await</span> <span class="tok-fn">findAcceptingPort</span>(address, [<span class="tok-number">9925</span>, <span class="tok-number">9926</span>]);
 <span class="tok-keyword">if</span> (port) <span class="tok-keyword">throw new</span> <span class="tok-type">ForeignListenerError</span>(address, port);</code></pre>
       <aside class="notes">
-        Added Sep 2026. The foreign process gets the node's connections whenever the node
-        has no listener of its own: while it starts, while HTTP workers restart, and after
-        teardown. Keep-alive connections then stay with it, so a suite fails, or passes,
-        against the wrong server. Linux refuses the exclusive bind, so it skips this probe.
-        Set HARPER_INTEGRATION_TEST_ALLOW_FOREIGN_LISTENERS=1 to turn the error into a
-        warning.
+        Added Sep 2026. The foreign process gets the node's connections whenever the node has no listener of its own: while it starts, while HTTP workers restart, and after teardown. Keep-alive connections then stay with it, so a suite fails, or passes, against the wrong server. Linux refuses the exclusive bind, so it skips this probe. Set HARPER_INTEGRATION_TEST_ALLOW_FOREIGN_LISTENERS=1 to turn the error into a warning.
       </aside>
     </section>
 
@@ -1311,8 +1318,7 @@ server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loo
 <span class="tok-comment">// 3. spawn Harper, wait until it is actually ready</span>
 <span class="tok-comment">// 4. populate ctx.harper</span></code></pre>
       <aside class="notes">
-        If ctx.harper already names a dataRootDir and hostname, startHarper reuses them.
-        That's how a test restarts the same node.
+        If ctx.harper already names a dataRootDir and hostname, startHarper reuses them. That's how a test restarts the same node.
       </aside>
     </section>
 
@@ -1329,10 +1335,7 @@ server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loo
   startupOutput?: { stdout: <span class="tok-type">string</span>; stderr: <span class="tok-type">string</span> };
 }</code></pre>
       <aside class="notes">
-        The real interface from integration-testing src/harperLifecycle.ts, exported as
-        HarperContext. startHarper(ctx) populates it on ctx.harper. logDir is set only
-        when HARPER_INTEGRATION_TEST_LOG_DIR is configured; startupOutput is Harper's
-        stdout and stderr up to the point it reported ready.
+        The real interface from integration-testing src/harperLifecycle.ts, exported as HarperContext. startHarper(ctx) populates it on ctx.harper. logDir is set only when HARPER_INTEGRATION_TEST_LOG_DIR is configured; startupOutput is Harper's stdout and stderr up to the point it reported ready.
       </aside>
     </section>
 
@@ -1357,10 +1360,8 @@ server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loo
 <span class="tok-fn">killHarper</span>(ctx)
 <span class="tok-fn">teardownHarper</span>(ctx)
 <span class="tok-fn">createHarperContext</span>(name?)   <span class="tok-comment">// for non-node:test frameworks</span></code></pre>
-      <p><code>ctx</code> is <strong>any object</strong> with an optional
-      <code>name</code> and a <code>harper</code> property to write to.</p>
-      <p class="small muted">Deliberately loose, so a <code>node:test</code>
-      context and a plain object both satisfy it.</p>
+      <p><code>ctx</code> is <strong>any object</strong> with an optional <code>name</code> and a <code>harper</code> property to write to.</p>
+      <p class="small muted">Deliberately loose, so a <code>node:test</code> context and a plain object both satisfy it.</p>
       <aside class="notes"></aside>
     </section>
 
@@ -1463,9 +1464,7 @@ steps:
   - run: node --test --test-shard=${{ matrix.shard }}/<span class="tok-number">4</span></code></pre>
       <p class="small muted"><code>--test-shard=1/3</code> always runs the same group of tests, on any machine <br><a href="https://github.com/HarperFast/harper/blob/main/.github/workflows/integration-tests.yml">https://github.com/HarperFast/harper/blob/main/.github/workflows/integration-tests.yml</a></p>
       <aside class="notes">
-        node:test also exposes this programmatically: run({ shard: { index, total } }).
-        The groupings are deterministic — shard 1/3 is the same set of files on
-        every machine — so a flake on one shard is reproducible.
+        node:test also exposes this programmatically: run({ shard: { index, total } }). The groupings are deterministic — shard 1/3 is the same set of files on every machine — so a flake on one shard is reproducible.
       </aside>
     </section>
 
@@ -1473,9 +1472,7 @@ steps:
       <h2>5. Did it work?</h2>
       <p>Eleven months of Harper CI data</p>
       <aside class="notes">
-        This section combines source counts and CI measurements with different
-        windows. They are observations, not a controlled experiment. Data covers
-        HarperFast/harper from Oct 2025 to Oct 22, 2026, plus harper-pro and nextjs.
+        This section combines source counts and CI measurements with different windows. They are observations, not a controlled experiment. Data covers HarperFast/harper from Oct 2025 to Oct 22, 2026, plus harper-pro and nextjs.
       </aside>
     </section>
 
@@ -1494,12 +1491,7 @@ steps:
         <p class="small muted">Inherited from <code>harperdb</code> v4, before the open-source split. Public copy: <a href="https://github.com/HarperFast/harper/blob/fb098c0f54f4321848bc2ae7c9cca05aee709a2c/integrationTests/apiTests/tests/testSuite.mjs">HarperFast/harper@fb098c0</a></p>
       </div>
       <aside class="notes">
-        The suite was written in the private harperdb repo (Harper v4): first API tests in
-        Dec 2024, converted Postman tests added Feb 2025, renamed to .mjs Aug 2025. It came
-        into the public harper repo on Oct 25, 2025 and was removed there on Jun 8, 2026
-        (b4f83887f). The snippet is from fb098c0, the commit before PR #27.
-        Legacy apiTests at that commit: 28 ordered files run by one node --test process. The suite's own README said the tests were "not
-        currently independent or idempotent".
+        The suite was written in the private harperdb repo (Harper v4): first API tests in Dec 2024, converted Postman tests added Feb 2025, renamed to .mjs Aug 2025. It came into the public harper repo on Oct 25, 2025 and was removed there on Jun 8, 2026 (b4f83887f). The snippet is from fb098c0, the commit before PR #27. Legacy apiTests at that commit: 28 ordered files run by one node --test process. The suite's own README said the tests were "not currently independent or idempotent".
       </aside>
     </section>
 
@@ -1510,10 +1502,9 @@ steps:
         <p>Each file depends on the state of the previous.</p>
         <p class="muted">No isolating test failures, no sharding, no parallelism, no running one file on its own.</p>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-suite-size">Data and method</a></p>
       <aside class="notes">
-        974 it() calls; 45 statically skipped (19 it.skip plus a describe.skip holding
-        26 S3 tests), so about 929 active. One Harper instance with THREADS_COUNT 1.
-        The suite never grew: 974 to 993 tests in 7 months (Nov 2025 to Jun 2026).
+        974 it() calls; 45 statically skipped (19 it.skip plus a describe.skip holding 26 S3 tests), so about 929 active. One Harper instance with THREADS_COUNT 1. The suite never grew: 974 to 993 tests in 7 months (Nov 2025 to Jun 2026).
       </aside>
     </section>
 
@@ -1523,24 +1514,22 @@ steps:
         <b>Test step</b> <span><i style="--pct: 100"></i><em>7.4 min</em></span>
         <b>Hard-coded waits</b> <span><i class="bad" style="--pct: 72"></i><em>5.3 min</em></span>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-test-step-time">Data and method</a></p>
       <aside class="notes">
-        7.4 min = median test step, p90 7.7, n=1,040 jobs (May to Jun 2026; GitHub
-        purged older step timings). Waits: 191 s of setTimeout in test files plus
-        124 s of fixed waits around restarts, about 315 s per run.
+        7.4 min = median test step, p90 7.7, n=1,040 jobs (May to Jun 2026; GitHub purged older step timings). Waits: 191 s of setTimeout in test files plus 124 s of fixed waits around restarts, about 315 s per run.
       </aside>
     </section>
 
     <section class="slide" id="legacy-failures">
       <h2>And it failed often</h2>
       <div class="hero">
-        <span class="n bad">11.5%</span>
+        <span class="n bad">11.6%</span>
         <p>of main pushes failed on at least one Node version</p>
         <p class="muted">Dec 2025 to Jun 2026</p>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-main-branch-failures">Data and method</a></p>
       <aside class="notes">
-        35 of 305 main push runs, first attempt. In 75% of failing attempts another Node
-        version (20, 22, or 24) passed on the same commit. This is a failure rate, not a
-        measured flake rate.
+        52 of 450 main push runs, first attempt, counting the Linux Node.js legacy jobs. In 66% of failing attempts (99 of 149) another Node version (20, 22, or 24) passed on the same commit. This is a failure rate, not a measured flake rate.
       </aside>
     </section>
 
@@ -1551,11 +1540,9 @@ steps:
         <p>Kris Zyp, working with coding agents</p>
         <p class="muted">May 15 to Jun 9, 2026</p>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#port-timeline">Data and method</a></p>
       <aside class="notes">
-        The framework landed in PR #27 (opened Nov 4, merged Dec 3, 2025) and was
-        extracted into @harperfast/integration-testing in April 2026. Port PRs: #555,
-        #597, #627, #634, #645, #646, #647, #648, #730, #731, #732, #759, #761, #778.
-        Cleanup: #1173 (b4f83887f) removed the legacy suite on Jun 8.
+        The framework landed in PR #27 (opened Nov 4, merged Dec 3, 2025) and was extracted into @harperfast/integration-testing in April 2026. Port PRs: #555, #597, #627, #634, #645, #646, #647, #648, #730, #731, #732, #759, #761, #778. Cleanup: #1173 (b4f83887f) removed the legacy suite on Jun 8.
       </aside>
     </section>
 
@@ -1566,10 +1553,9 @@ steps:
         <li>17 self-contained files, each with its own Harper</li>
         <li>19,977 lines of legacy suite and infrastructure deleted</li>
       </ul>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#port-timeline">Data and method</a></p>
       <aside class="notes">
-        Independent, hermetic files are small units an agent can port one at a time.
-        The port PRs ran on claude/api-tests-* branches. 17 apiTests files existed
-        when the legacy suite was removed (Jun 8); 7 more were added there later.
+        Independent, hermetic files are small units an agent can port one at a time. The port PRs ran on claude/api-tests-* branches. 17 apiTests files existed when the legacy suite was removed (Jun 8); 7 more were added there later.
       </aside>
     </section>
 
@@ -1593,15 +1579,9 @@ steps:
       <div class="months" aria-hidden="true">
         <span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Now</span>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#test-cases-over-time">Data and method</a></p>
       <aside class="notes">
-        Test cases on harper's main branch, counted as it()/test() calls in
-        integrationTests at the last main commit before each month boundary (Dec = Dec 4,
-        after PR #27 merged; Now = Oct 22, 2026). Legacy suite removed Jun 8.
-        Legacy: 985 Dec to Apr, 993 May and Jun.
-        Framework: Dec 7, Jan 7, Feb 28, Mar 59, Apr 60, May 117, Jun 372, Jul 1,378,
-        Aug 1,699, Sep 2,018, Oct 2,304, Now 2,435.
-        The framework passed the legacy suite the day the port finished and has added
-        1,339 tests since.
+        Test cases on harper's main branch, counted as it()/test() calls in integrationTests at the last main commit before each month boundary (Dec = Dec 4, after PR #27 merged; Now = Oct 22, 2026). Legacy suite removed Jun 8. Legacy: 985 Dec to Apr, 993 May and Jun. Framework: Dec 7, Jan 7, Feb 28, Mar 59, Apr 60, May 117, Jun 372, Jul 1,378, Aug 1,699, Sep 2,018, Oct 2,304, Now 2,435. The framework passed the legacy suite the day the port finished and has added 1,339 tests since.
       </aside>
     </section>
 
@@ -1611,11 +1591,9 @@ steps:
         <span class="n">2,652 tests</span>
         <p>starting 423 Harper instances</p>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#tests-and-instances-per-run">Data and method</a></p>
       <aside class="notes">
-        Run 39774245654 (main, Oct 22, 2026), summed over the six Linux Node 24 shards:
-        2,652 tests, 2,630 pass, 0 fail. This is more than the 2,435 test() calls in
-        source because some tests are generated in loops. This slide and the next three
-        use main push runs from the last 30 days (Sep 23 to Oct 22, 2026).
+        Run 39774245654 (main, Oct 22, 2026), summed over the six Linux Node 24 shards: 2,652 tests, 2,630 pass, 0 fail. This is more than the 2,435 test() calls in source because some tests are generated in loops. This slide and the next three use main push runs from the last 30 days (Sep 23 to Oct 22, 2026).
       </aside>
     </section>
 
@@ -1625,11 +1603,9 @@ steps:
         <b>Summed suite time</b> <span><i style="--pct: 100"></i><em>82 min</em></span>
         <b>Slowest shard</b> <span><i class="good" style="--pct: 6.8"></i><em>5.6 min</em></span>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#summed-suite-time-vs-slowest-shard">Data and method</a></p>
       <aside class="notes">
-        About 15x. 82 min is the sum of top-level suite durations in that run; concurrent
-        files compete for CPU, so it slightly overstates true serial time. About 3x comes
-        from the runner's concurrency default, floor(4 / 2) + 1 = 3 on a 4-vCPU hosted
-        runner, and 6x from sharding.
+        About 15x. 82 min is the sum of top-level suite durations in that run; concurrent files compete for CPU, so it slightly overstates true serial time. About 3x comes from the runner's concurrency default, floor(4 / 2) + 1 = 3 on a 4-vCPU hosted runner, and 6x from sharding.
       </aside>
     </section>
 
@@ -1640,10 +1616,9 @@ steps:
         <p>Node 22, 24, 26, Bun, Windows, and uWS</p>
         <p class="muted">six shards each</p>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#ci-matrix">Data and method</a></p>
       <aside class="notes">
-        Main, release branches, and a nightly run all 36 shard jobs. PRs run 24: Node 24
-        plus Windows, Bun, and uWS. Windows and Bun were added in May 2026, Node 26 on
-        May 29, uWS on Jul 9. Windows runs 871 tests; the rest skip on that platform.
+        Main, release branches, and a nightly run all 36 shard jobs. PRs run 24: Node 24 plus Windows, Bun, and uWS. Windows and Bun were added in May 2026, Node 26 on May 29, uWS on Jul 9. Windows runs 871 tests; the rest skip on that platform.
       </aside>
     </section>
 
@@ -1653,10 +1628,9 @@ steps:
         <span class="n">12.1 min</span>
         <p>median time to a full-matrix result</p>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#time-to-a-full-result">Data and method</a></p>
       <aside class="notes">
-        Main push runs, p90 13.1 min. PRs (24 jobs) take 11.5 min median. This is
-        full-matrix elapsed time; the legacy 7.4 min was a single test step. Don't
-        present them as a direct speed comparison.
+        Main push runs, p90 13.1 min. PRs (24 jobs) take 11.5 min median. This is full-matrix elapsed time; the legacy 7.4 min was a single test step. Don't present them as a direct speed comparison.
       </aside>
     </section>
 
@@ -1667,10 +1641,9 @@ steps:
         <li>Start Docker containers; run Postman over SSH</li>
         <li>Copy the logs back; destroy the instance</li>
       </ol>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#old-cluster-harness">Data and method</a></p>
       <aside class="notes">
-        harperdb's docker-cluster-test workflows: Terraform a c7g.2xlarge, load a Docker
-        image, start 5 HarperDB containers, sleep 30s, run Newman (Postman) suites, scp
-        the logs back, destroy the instance. 40 minute job timeout.
+        harperdb's docker-cluster-test workflows: Terraform a c7g.2xlarge, load a Docker image, start 5 HarperDB containers, sleep 30s, run Newman (Postman) suites, scp the logs back, destroy the instance. 40 minute job timeout.
       </aside>
     </section>
 
@@ -1684,9 +1657,7 @@ steps:
 <span class="tok-comment">// two nodes, two loopback addresses, one runner</span></code></pre>
       </div>
       <aside class="notes">
-        From harper-pro integrationTests/cluster/addNodeFullCopy.test.mjs. Most cluster
-        tests use startHarper plus getNextAvailableLoopbackAddress. Tests use 2 to 4
-        nodes: NODE_COUNT is 2 in 11 files, 3 in 4, 4 in 3.
+        From harper-pro integrationTests/cluster/addNodeFullCopy.test.mjs. Most cluster tests use startHarper plus getNextAvailableLoopbackAddress. Tests use 2 to 4 nodes: NODE_COUNT is 2 in 11 files, 3 in 4, 4 in 3.
       </aside>
     </section>
 
@@ -1697,10 +1668,9 @@ steps:
         <span class="arrow" aria-hidden="true">&rarr;</span>
         <div class="after"><span class="when">Oct 2026</span><span class="n">105</span><span class="muted">cluster test files</span></div>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#cluster-test-growth">Data and method</a></p>
       <aside class="notes">
-        harper-pro today: 124 integration test files (4 on Mar 1), 300 tests. 105 of the
-        files are in integrationTests/cluster. Its integration workflow runs about 400
-        times a month, Jun to Oct 2026.
+        harper-pro today: 124 integration test files (4 on Mar 1), 300 tests. 105 of the files are in integrationTests/cluster. Its integration workflow runs about 400 times a month, Jun to Oct 2026.
       </aside>
     </section>
 
@@ -1711,11 +1681,9 @@ steps:
         <p>Next.js 14, 15, and 16</p>
         <p class="muted">webpack, Turbopack, ISR, <code>use cache</code>, cluster</p>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#nextjs-fixtures-and-tests">Data and method</a></p>
       <aside class="notes">
-        @harperfast/nextjs: 53 Playwright tests in 12 spec files, each fixture on its own
-        Harper and loopback address. v2 (Apr 2026) moved to makeHarperFixture, a
-        worker-scoped Playwright fixture. Before (Dec 2024): a Playwright global setup
-        ran one shared `npx harperdb start`, then setTimeout(2000).
+        @harperfast/nextjs: 53 Playwright tests in 12 spec files, each fixture on its own Harper and loopback address. v2 (Apr 2026) moved to makeHarperFixture, a worker-scoped Playwright fixture. Before (Dec 2024): a Playwright global setup ran one shared `npx harperdb start`, then setTimeout(2000).
       </aside>
     </section>
 
@@ -1726,10 +1694,9 @@ steps:
         <p>runs of the check since Jul 15, 2026</p>
         <p class="muted">It builds the PR's Harper and tests the adapter against it.</p>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#downstream-check">Data and method</a></p>
       <aside class="notes">
-        Workflow: "Next.js Integration Tests (downstream)" in harper, added Jul 2026, Node
-        20, 22, and 24. It is advisory and path-filtered, so not every run executes the
-        suite: in a sample of 250 runs, 212 (85%) did.
+        Workflow: "Next.js Integration Tests (downstream)" in harper, added Jul 2026, Node 20, 22, and 24. It is advisory and path-filtered, so not every run executes the suite: in a sample of 250 runs, 212 (85%) did.
       </aside>
     </section>
 
@@ -1740,54 +1707,84 @@ steps:
         <p>13 of 212 sampled suite runs failed on a Node version</p>
         <p class="muted">Some may come from Next.js main, not the Harper PR.</p>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#downstream-check">Data and method</a></p>
       <aside class="notes">
-        Of 250 sampled runs, 212 executed the suite and 13 of those had at least one
-        Node version fail. Don't apply 6% to all 3,336 runs, and don't call every failure
-        a Harper regression: the check tracks nextjs main.
+        Of 250 sampled runs, 212 executed the suite and 13 of those had at least one Node version fail. Don't apply 6% to all 3,336 runs, and don't call every failure a Harper regression: the check tracks nextjs main.
       </aside>
     </section>
 
     <section class="slide" id="velocity">
       <h2>More PRs come with integration tests</h2>
-      <div class="compare">
-        <div><span class="when">Feb&ndash;Apr 2026</span><span class="n">6&ndash;13%</span><span class="muted">of merged PRs</span></div>
-        <span class="arrow" aria-hidden="true">&rarr;</span>
-        <div class="after"><span class="when">Jun&ndash;Sep 2026</span><span class="n">18&ndash;30%</span><span class="muted">of merged PRs</span></div>
+      <p class="small muted">Share of merged harper PRs that touch integration tests, by month</p>
+      <p class="legend"><span style="--swatch: var(--dais-muted)">Before the port finished (Jun 9)</span><span style="--swatch: var(--dais-accent)">After</span></p>
+      <div class="colchart" style="--max: 50" role="img" aria-label="Share of merged PRs that touch integration tests by month: Dec 21%, Jan 44%, Feb 13%, Mar 6%, Apr 7%, May 21%, Jun 25%, Jul 18%, Aug 24%, Sep 30%, Oct 29%">
+        <div><i style="--v: 21.4"><span>21%</span></i></div>
+        <div><i style="--v: 44.4"><span>44%</span></i></div>
+        <div><i style="--v: 13.1"><span>13%</span></i></div>
+        <div><i style="--v: 5.5"><span>6%</span></i></div>
+        <div><i style="--v: 7.5"><span>7%</span></i></div>
+        <div><i style="--v: 20.8"><span>21%</span></i></div>
+        <div><i class="after" style="--v: 24.9"><span>25%</span></i></div>
+        <div><i class="after" style="--v: 17.7"><span>18%</span></i></div>
+        <div><i class="after" style="--v: 23.9"><span>24%</span></i></div>
+        <div><i class="after" style="--v: 29.8"><span>30%</span></i></div>
+        <div><i class="after" style="--v: 28.8"><span>29%</span></i></div>
       </div>
+      <div class="colchart-x" aria-hidden="true"><span>Dec<small>14</small></span><span>Jan<small>18</small></span><span>Feb<small>84</small></span><span>Mar<small>236</small></span><span>Apr<small>134</small></span><span>May<small>283</small></span><span>Jun<small>338</small></span><span>Jul<small>452</small></span><span>Aug<small>351</small></span><span>Sep<small>315</small></span><span>Oct<small>191</small></span></div>
+      <p class="colchart-note">Under each month: PRs merged. Oct is through the 22nd.</p>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#prs-touching-integration-tests">Data and method</a></p>
       <aside class="notes">
-        Share of merged PRs that touch integration tests, per month. Absolute: 10 to 13
-        PRs a month, then 80 to 94. Counts are first-parent commits on main. Overall PR
-        volume also grew as the team adopted coding agents; the share controls for that,
-        but it doesn't prove causation or measure delivery speed.
+        Share of merged PRs that touch integration tests, per month. Dec and Jan are high on very few PRs (14 and 18). Feb to Apr, PR volume jumped as the team adopted coding agents, and the share fell to 6 to 13% (10 to 13 PRs a month). After the port it held at 18 to 30% (80 to 94 a month, Jun to Sep) at the higher volume. Counts are first-parent commits on main. The share doesn't prove causation or measure delivery speed.
       </aside>
     </section>
 
     <section class="slide" id="fix-coverage">
       <h2>More fixes ship with a test</h2>
-      <div class="compare">
-        <div><span class="when">Feb&ndash;Apr 2026</span><span class="n">0&ndash;12%</span><span class="muted">of fix PRs</span></div>
-        <span class="arrow" aria-hidden="true">&rarr;</span>
-        <div class="after"><span class="when">Jun&ndash;Sep 2026</span><span class="n">14&ndash;46%</span><span class="muted">of fix PRs</span></div>
+      <p class="small muted">Share of fix PRs that add or change an integration test, by month</p>
+      <p class="legend"><span style="--swatch: var(--dais-muted)">Before the port finished (Jun 9)</span><span style="--swatch: var(--dais-accent)">After</span></p>
+      <div class="colchart" style="--max: 50" role="img" aria-label="Share of fix PRs that ship an integration test by month: Dec 0%, Jan 0%, Feb 13%, Mar 0%, Apr 3%, May 8%, Jun 18%, Jul 14%, Aug 23%, Sep 47%, Oct 36%">
+        <div><i style="--v: 0.0"><span>0%</span></i></div>
+        <div><i style="--v: 0.0"><span>0%</span></i></div>
+        <div><i style="--v: 12.5"><span>13%</span></i></div>
+        <div><i style="--v: 0.0"><span>0%</span></i></div>
+        <div><i style="--v: 3.4"><span>3%</span></i></div>
+        <div><i style="--v: 8.5"><span>8%</span></i></div>
+        <div><i class="after" style="--v: 17.8"><span>18%</span></i></div>
+        <div><i class="after" style="--v: 14.2"><span>14%</span></i></div>
+        <div><i class="after" style="--v: 23.2"><span>23%</span></i></div>
+        <div><i class="after" style="--v: 46.6"><span>47%</span></i></div>
+        <div><i class="after" style="--v: 35.9"><span>36%</span></i></div>
       </div>
+      <div class="colchart-x" aria-hidden="true"><span>Dec<small>5</small></span><span>Jan<small>2</small></span><span>Feb<small>16</small></span><span>Mar<small>46</small></span><span>Apr<small>29</small></span><span>May<small>106</small></span><span>Jun<small>135</small></span><span>Jul<small>218</small></span><span>Aug<small>151</small></span><span>Sep<small>58</small></span><span>Oct<small>39</small></span></div>
+      <p class="colchart-note">Under each month: fix PRs merged. Oct is through the 22nd.</p>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#fixes-that-ship-an-integration-test">Data and method</a></p>
       <aside class="notes">
-        Fix PRs that add or change an integration test, per month. "Fix PRs" = commit
-        subjects starting with "fix"; a heuristic. September alone: 46%. October so far:
-        35%.
+        "Fix PRs" = first-parent commits whose subject starts with "fix"; a heuristic that misses fixes titled differently. September: 27 of 58 (47%). October through the 22nd: 14 of 39 (36%). Dec and Jan had only 5 and 2 fix PRs.
       </aside>
     </section>
 
     <section class="slide" id="ci-usage">
       <h2>And CI runs them all the time</h2>
-      <div class="compare">
-        <div><span class="when">Feb&ndash;Apr 2026</span><span class="n">213&ndash;493</span><span class="muted">runs a month</span></div>
-        <span class="arrow" aria-hidden="true">&rarr;</span>
-        <div class="after"><span class="when">Jun&ndash;Sep 2026</span><span class="n">1,186&ndash;1,623</span><span class="muted">runs a month</span></div>
+      <p class="small muted">Runs of harper's integration test workflow, by month</p>
+      <p class="legend"><span style="--swatch: var(--dais-muted)">Before the port finished (Jun 9)</span><span style="--swatch: var(--dais-accent)">After</span></p>
+      <div class="colchart" style="--max: 1700" role="img" aria-label="Integration test CI runs per month: Dec 68, Jan 132, Feb 213, Mar 446, Apr 493, May 1,042, Jun 1,356, Jul 1,374, Aug 1,186, Sep 1,623, Oct 953">
+        <div><i style="--v: 68"><span>68</span></i></div>
+        <div><i style="--v: 132"><span>132</span></i></div>
+        <div><i style="--v: 213"><span>213</span></i></div>
+        <div><i style="--v: 446"><span>446</span></i></div>
+        <div><i style="--v: 493"><span>493</span></i></div>
+        <div><i style="--v: 1042"><span>1,042</span></i></div>
+        <div><i class="after" style="--v: 1356"><span>1,356</span></i></div>
+        <div><i class="after" style="--v: 1374"><span>1,374</span></i></div>
+        <div><i class="after" style="--v: 1186"><span>1,186</span></i></div>
+        <div><i class="after" style="--v: 1623"><span>1,623</span></i></div>
+        <div><i class="after" style="--v: 953"><span>953</span></i></div>
       </div>
+      <div class="colchart-x" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span></div>
+      <p class="colchart-note">Oct is through the 22nd.</p>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#ci-runs-per-month">Data and method</a></p>
       <aside class="notes">
-        Integration test workflow runs in harper. Dec 2025: 68 runs and 20 PR branches.
-        Last 30 days: 1,428 runs, about 347 PR branches excluding Renovate, 253 main
-        pushes. More runs show usage; on their own they don't show faster engineering or
-        better reliability.
+        Integration test workflow runs in harper. Dec 2025: 68 runs and 20 PR branches. Last 30 days: 1,428 runs, about 347 PR branches excluding Renovate, 253 main pushes. More runs show usage; on their own they don't show faster engineering or better reliability.
       </aside>
     </section>
 
@@ -1796,22 +1793,18 @@ steps:
       <div class="hero">
         <span class="n">31 repos</span>
         <p>import <code>@harperfast/integration-testing</code> in tests</p>
-        <p class="muted">Heaviest: harper-pro (123 files), harper-reflex (37), oauth (8)</p>
+        <p class="muted">Heaviest: harper-pro (127 files), harper-reflex (37), oauth (8)</p>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#repos-importing-the-package">Data and method</a></p>
       <aside class="notes">
-        HarperFast repos with test files importing the package, excluding harper itself
-        and a private advisory fork. Most templates and examples carry one smoke test.
-        Also: Developer-Relations-Agents (13), dispatch (7), nextjs. harper-pro's 123
-        importing files are out of 124 integration test files. Package: 23 versions,
-        56.7k npm downloads Sep 19 to Oct 18, 2026, mostly CI.
+        HarperFast repos with test files importing the package, excluding harper itself and a private advisory fork. Most templates and examples carry one smoke test. Also: Developer-Relations-Agents (13), dispatch (7), nextjs. harper-pro's 127 importing files are 123 integration tests, 3 smoke tests, and a benchmark. Package: 23 versions, 56.7k npm downloads Sep 19 to Oct 18, 2026, mostly CI.
       </aside>
     </section>
 
     <section class="slide" id="failure-history">
       <h2>CI is not always green</h2>
       <p class="small muted">Main pushes with a failed job, by month. Failure rate, not flake rate.</p>
-      <div class="bars" role="img" aria-label="Share of main branch CI runs that failed, by month. December 0%, January 8%, February 7%, March 16%, April 19%, May 41%, June 66%, July 52%, August 62%, September 19%, October 27%.">
-        <b>Dec</b> <i style="--pct: 0"></i> <b>0%</b>
+      <div class="bars" role="img" aria-label="Share of main branch CI runs that failed, by month. January 8%, February 7%, March 16%, April 19%, May 41%, June 66%, July 52%, August 62%, September 19%, October 27%.">
         <b>Jan</b> <i style="--pct: 8"></i> <b>8%</b>
         <b>Feb</b> <i style="--pct: 7"></i> <b>7%</b>
         <b>Mar</b> <i style="--pct: 16"></i> <b>16%</b>
@@ -1823,12 +1816,9 @@ steps:
         <b>Sep</b> <i style="--pct: 19"></i> <b>19%</b>
         <b>Oct</b> <i style="--pct: 27"></i> <b>27%</b>
       </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#main-branch-failures-by-month">Data and method</a></p>
       <aside class="notes">
-        Share of main push runs of integration-tests.yml with a failed conclusion.
-        Dec to Apr failures were almost all the legacy suite. Jun to Aug: the matrix grew
-        (Windows, Bun, Node 26, uWS) and Windows had long tail latency.
-        Runs where a Linux Node shard failed: Dec 0%, Jan 0%, Feb 0%, Mar 4%, Apr 0%,
-        May 12%, Jun 40%, Jul 30%, Aug 34%, Sep 10%, Oct 16%.
+        Share of main push runs of integration-tests.yml with a failed conclusion. December is left out: the workflow only started running on main when PR #27 merged on Dec 3, so it had just 13 main pushes (all passed). January also had only 13 (one failed). Jan to Apr failures were almost all the legacy suite. Jun to Aug: the matrix grew (Windows, Bun, Node 26, uWS) and Windows had long tail latency. Runs where a Linux Node shard failed: Dec 0%, Jan 0%, Feb 0%, Mar 4%, Apr 0%, May 12%, Jun 40%, Jul 30%, Aug 34%, Sep 10%, Oct 16%.
       </aside>
     </section>
 
@@ -1836,16 +1826,12 @@ steps:
       <h2>Last 30 days</h2>
       <ul class="lines reveal">
         <li>22% of main runs failed</li>
-        <li>Half of those failed only on Windows, Bun, or uWS</li>
+        <li>Nearly half of those failed only on Windows, Bun, or uWS</li>
         <li>Failures include real regressions, like Node 26</li>
       </ul>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#last-30-days">Data and method</a></p>
       <aside class="notes">
-        Sep 23 to Oct 22, 2026: 55 of 253 main runs failed; 11% of runs had a Linux Node
-        shard failure. Failures include real regressions the suite caught, like Node 26:
-        it alone failed 11 to 32 main runs a month and was pinned to 26.5.0 from Aug 3 to
-        Sep 1. Re-runs that turned green: 12.9% in July, 3.5% in October. Re-run-to-green = runs with run_attempt > 1 whose final attempt succeeded,
-        as a share of completed runs. The old and new suites and matrices differ, so this
-        does not show CI became less flaky.
+        Sep 23 to Oct 22, 2026: 55 of 253 main runs failed; 11% of runs had a Linux Node shard failure. Failures include real regressions the suite caught, like Node 26: it alone failed 11 to 32 main runs a month and was pinned to 26.5.0 from Aug 3 to Sep 1. Re-runs that turned green: 12.9% in July, 3.4% in October. Re-run-to-green = runs with run_attempt > 1 whose final attempt succeeded, as a share of completed runs. The old and new suites and matrices differ, so this does not show CI became less flaky.
       </aside>
     </section>
 
@@ -1853,9 +1839,7 @@ steps:
       <h2>Stability is the next frontier</h2>
       <p>Each failure points to one test file, its own instances, and its logs.</p>
       <aside class="notes">
-        Close on the concrete benefit of isolation: a failure is attributable. Supported
-        claims: more tests, broader adoption, failure isolation. Not supported: lower
-        flakiness.
+        Close on the concrete benefit of isolation: a failure is attributable. Supported claims: more tests, broader adoption, failure isolation. Not supported: lower flakiness.
       </aside>
     </section>
 
@@ -1863,11 +1847,14 @@ steps:
       <img class="me" src="ethan.jpg" alt="Ethan Arrowood on a ski slope" width="2800" height="2800">
       <h2>Thank you</h2>
       <p class="muted">Ethan Arrowood · Head of Open Source Engineering, Harper · ethanarrowood.com</p>
-      <p class="links">
-        <a href="https://github.com/HarperFast/integration-testing">github.com/HarperFast/integration-testing</a><br>
-        <a href="https://github.com/Ethan-Arrowood/node-test-runner-parallelization-analysis">github.com/Ethan-Arrowood/node-test-runner-parallelization-analysis</a><br>
-        <a href="https://github.com/HarperFast/nextjs">github.com/HarperFast/nextjs</a>
-      </p>
+      <dl class="links">
+        <dt>Framework</dt><dd><a href="https://github.com/HarperFast/integration-testing">github.com/HarperFast/integration-testing</a></dd>
+        <dt>Analysis</dt><dd><a href="https://github.com/Ethan-Arrowood/node-test-runner-parallelization-analysis">github.com/Ethan-Arrowood/node-test-runner-parallelization-analysis</a></dd>
+        <dt>Next.js</dt><dd><a href="https://github.com/HarperFast/nextjs">github.com/HarperFast/nextjs</a></dd>
+        <dt>Slides</dt><dd><a href="https://ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/slides/">ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/slides</a></dd>
+        <dt>Post</dt><dd><a href="https://ethanarrowood.com/blog/parallel-nodejs-integration-testing">ethanarrowood.com/blog/parallel-nodejs-integration-testing</a></dd>
+        <dt>Data</dt><dd><a href="https://ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/">ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data</a></dd>
+      </dl>
       <aside class="notes"></aside>
     </section>
 

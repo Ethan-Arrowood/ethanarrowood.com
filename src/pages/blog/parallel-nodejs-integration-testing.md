@@ -389,7 +389,7 @@ This depends on files being independent. A file that expects another file to loa
 
 ## What changed in practice
 
-I measured source history and CI runs through October 22, 2026. These observations cover different windows and changing suites. They are not a controlled benchmark of the old framework against the new one.
+I measured source history and CI runs through October 22, 2026. These observations cover different windows and changing suites. They are not a controlled benchmark of the old framework against the new one. The data, method, and scripts behind every number below are on [a separate page](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/), with one heading per number.
 
 ### The legacy suite and its port
 
@@ -406,47 +406,47 @@ describe('Main Test Suite', async () => {
 });
 ```
 
-It ran 28 ordered modules inside one `describe`, against one Harper instance configured with `THREADS_COUNT: 1`. It had 974 test calls, about 929 active after static skips. Files depended on state left by earlier files, so the suite couldn't be sharded.
+It ran 28 ordered modules inside one `describe`, against one Harper instance configured with `THREADS_COUNT: 1`. It had [974 test calls](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-suite-size), about 929 active after static skips. Files depended on state left by earlier files, so the suite couldn't be sharded.
 
-Its test step took a median 7.4 minutes, with a p90 of 7.7 minutes across 1,040 job steps from May through June 2026. Older step timings had expired. A static count found about 315 seconds, or 5.3 minutes, of hard-coded waits: 191 seconds in test files and 124 seconds around restarts. Faster hardware can't do much about five minutes of sleeping.
+Its test step took [a median 7.4 minutes](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-test-step-time), with a p90 of 7.7 minutes across 1,040 job steps from May through June 2026. Older step timings had expired. A static count found [about 315 seconds](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#hard-coded-waits), or 5.3 minutes, of hard-coded waits: 191 seconds in test files and 124 seconds around restarts. Faster hardware can't do much about five minutes of sleeping.
 
-The framework merged in December 2025 and became a separate package in April 2026. Kris Zyp ported the legacy suite with coding agents between May 15 and June 9, about three and a half weeks. Fourteen port PRs produced 17 self-contained files with their own Harper instances. The cleanup deleted 19,977 lines of legacy tests and infrastructure.
+The framework merged in December 2025 and became a separate package in April 2026. Kris Zyp ported the legacy suite with coding agents between May 15 and June 9, [about three and a half weeks](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#port-timeline). Fourteen port PRs produced 17 self-contained files with their own Harper instances. The cleanup deleted 19,977 lines of legacy tests and infrastructure.
 
 ### More tests within a bounded feedback window
 
-The legacy source count moved from 974 to 993 tests over seven months. The new suite reached 1,096 test calls after the port and 2,435 by October 22, adding 1,339 after migration.
+The legacy source count moved from 974 to 993 tests over seven months. The new suite reached 1,096 test calls after the port and [2,435 by October 22](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#test-cases-over-time), adding 1,339 after migration.
 
-The October 22 green main run reported 2,652 tests across the six Linux Node 24 shards: 2,630 passed, 21 skipped, one todo, and zero failures. Generated tests explain why the runtime count exceeds the source count. That run started 423 Harper instances across 263 test files.
+The October 22 green main run reported [2,652 tests](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#tests-and-instances-per-run) across the six Linux Node 24 shards: 2,630 passed, 21 skipped, one todo, and zero failures. Generated tests explain why the runtime count exceeds the source count. That run started 423 Harper instances across 263 test files.
 
-Its top-level suite durations summed to about 82 minutes. The slowest shard finished in 5.6 minutes, a ratio of about 15 to one. That combines concurrency inside each shard with distribution across six shards.
+Its top-level suite durations [summed to about 82 minutes](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#summed-suite-time-vs-slowest-shard). The slowest shard finished in 5.6 minutes, a ratio of about 15 to one. That combines concurrency inside each shard with distribution across six shards.
 
 The 82 minutes is summed suite time measured during concurrent execution, not an observed serial run. Concurrent files compete for CPU, so it slightly overstates true serial time. It illustrates overlapping work; it isn't a controlled 15x speedup measurement.
 
-For successful main runs in the last 30 days, the full matrix took a median 12.1 minutes from first job start to last job end, with a p90 of 13.1 minutes. That includes 36 shard jobs: six each for Linux Node 22, 24, and 26, Windows, Bun, and uWS. PRs run 24 shard jobs and took a median 11.5 minutes. Windows runs a subset of 871 tests.
+For successful main runs in the last 30 days, the full matrix took [a median 12.1 minutes](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#time-to-a-full-result) from first job start to last job end, with a p90 of 13.1 minutes. That includes 36 shard jobs: six each for Linux Node 22, 24, and 26, Windows, Bun, and uWS. PRs run 24 shard jobs and took a median 11.5 minutes. Windows runs a subset of 871 tests.
 
 Those full-matrix times cannot be compared directly with the legacy 7.4-minute test step. The tests, setup, platforms, and matrix all differ. The useful result is how much work fits into the feedback window.
 
 ### Adoption beyond the core suite
 
-In Harper Pro, cluster coverage grew from one file in March to 105 in October. The old cluster harness provisioned EC2, started five Docker containers, slept, and ran Newman/Postman tests over SSH. The new lifecycle can start multiple local instances in one test file, each with its own address.
+In Harper Pro, cluster coverage grew from [one file in March to 105 in October](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#cluster-test-growth). The old cluster harness provisioned EC2, started five Docker containers, slept, and ran Newman/Postman tests over SSH. The new lifecycle can start multiple local instances in one test file, each with its own address.
 
 The Next.js adapter uses 53 Playwright tests in 12 spec files and ten fixtures covering Next.js 14, 15, and 16. Harper also runs an advisory downstream check against the adapter using the proposed Harper build.
 
-That check had 3,336 workflow runs from July 15 through October 22. In a sample of 250, only 212 executed the suite because the check is path-filtered. Thirteen of those 212, about 6%, failed on at least one Node version. Some failures may come from the adapter repository's `nextjs` main branch rather than the Harper PR. The 6% applies to sampled suite runs, not all 3,336 workflow runs or confirmed Harper regressions.
+That check had [3,336 workflow runs](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#downstream-check) from July 15 through October 22. In a sample of 250, only 212 executed the suite because the check is path-filtered. Thirteen of those 212, about 6%, failed on at least one Node version. Some failures may come from the adapter repository's `nextjs` main branch rather than the Harper PR. The 6% applies to sampled suite runs, not all 3,336 workflow runs or confirmed Harper regressions.
 
-Across HarperFast, 31 other repositories import the package in test files, excluding the private advisory fork. Some have substantial suites; many templates have one smoke test.
+Across HarperFast, [31 other repositories](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#repos-importing-the-package) import the package in test files, excluding the private advisory fork. Some have substantial suites; many templates have one smoke test.
 
-Core CI usage reached 1,428 runs in the last 30 days, exercising about 347 PR head branches excluding Renovate. December had 68 runs and 20 PR branches. The share of merged PRs touching integration tests grew from roughly 6–13% per month in February through April to 18–30% in June through September. Overall PR volume also grew as the team adopted coding agents. These numbers show usage and participation, not proof that this framework caused faster delivery.
+Core CI usage reached [1,428 runs in the last 30 days](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#ci-runs-per-month), exercising about 347 PR head branches excluding Renovate. December had 68 runs and 20 PR branches. The [share of merged PRs touching integration tests](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#prs-touching-integration-tests) grew from roughly 6–13% per month in February through April to 18–30% in June through September. Overall PR volume also grew as the team adopted coding agents. These numbers show usage and participation, not proof that this framework caused faster delivery.
 
-Among commits whose subjects start with `fix`, 46% added or changed an integration test in September, and 35% did so in October through the 22nd. That subject-prefix heuristic misses fixes titled differently, but it gives us a repeatable measure.
+Among commits whose subjects start with `fix`, [47%](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#fixes-that-ship-an-integration-test) added or changed an integration test in September, and 36% did so in October through the 22nd. That subject-prefix heuristic misses fixes titled differently, but it gives us a repeatable measure.
 
 ### Failure rate is not flake rate
 
-The legacy API jobs failed on at least one Node version in 35 of 305 first-attempt main push runs, or 11.5%. In 75% of failing attempts, another Node version passed on the same commit. That suggests instability worth investigating, but a genuine version-specific regression can produce the same pattern.
+The legacy API jobs failed on at least one Node version in [52 of 450 first-attempt main push runs](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-main-branch-failures), or 11.6%. In 66% of failing attempts, another Node version passed on the same commit. That suggests instability worth investigating, but a genuine version-specific regression can produce the same pattern.
 
-The new workflow also fails. Main-push failure rates reached 52–66% during June through August as the suite and runtime matrix expanded. In the last 30 days, 55 of 253 main runs failed, about 22%. Linux Node shards failed in 11% of runs; roughly half the failed runs failed only on Windows, Bun, or uWS.
+The new workflow also fails. Main-push failure rates reached 52–66% during June through August as the suite and runtime matrix expanded. In the last 30 days, [55 of 253 main runs failed](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#last-30-days), about 22%. Linux Node shards failed in 11% of runs; roughly half the failed runs failed only on Windows, Bun, or uWS.
 
-Those failures include real regressions, including the Node 26 problems that led to temporarily pinning its version. Run metadata can't separate every regression from a flake. Runs that eventually turned green after a retry fell from 12.9% of completed runs in July to 3.5% in October, but that is still only a proxy.
+Those failures include real regressions, including the Node 26 problems that led to temporarily pinning its version. Run metadata can't separate every regression from a flake. [Runs that eventually turned green after a retry](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#re-runs-that-turned-green) fell from 12.9% of completed runs in July to 3.4% in October, but that is still only a proxy.
 
 The old and new suites and matrices differ. These measurements do not establish that CI became less flaky. They establish more coverage, broader use, and a clearer place to investigate each failure.
 
