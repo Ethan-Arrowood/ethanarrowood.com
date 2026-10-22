@@ -428,14 +428,25 @@ await startHarper(ctx);
 // 4. populate ctx.harper
 ```
 
-The resulting context exposes the resources the test needs:
+The resulting `ctx.harper` exposes the resources the test needs. It's a
+`HarperContext`:
 
-```javascript
-ctx.harper.httpURL            // 'http://127.0.0.3:9926'
-ctx.harper.operationsAPIURL   // 'http://127.0.0.3:9925'
-ctx.harper.hostname           // '127.0.0.3'
-ctx.harper.dataRootDir        // '/tmp/harper-integration-test-Xk3pQz'
+```typescript
+interface HarperContext {
+  httpURL: string;            // 'http://127.0.0.3:9926'
+  operationsAPIURL: string;   // 'http://127.0.0.3:9925'
+  hostname: string;           // '127.0.0.3'
+  dataRootDir: string;        // '/tmp/harper-integration-test-Xk3pQz'
+  admin: { username: string; password: string };
+  process: ChildProcess;
+  logDir?: string;
+  startupOutput?: { stdout: string; stderr: string };
+}
 ```
+
+`logDir` is set only when `HARPER_INTEGRATION_TEST_LOG_DIR` is configured.
+`startupOutput` holds Harper's stdout and stderr up to the point it reported
+ready.
 
 If `ctx.harper` already names a `dataRootDir` and `hostname`, `startHarper`
 reuses them. That's how a test restarts the same node.
