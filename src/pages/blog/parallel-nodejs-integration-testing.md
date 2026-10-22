@@ -470,11 +470,11 @@ The Next.js adapter uses 53 Playwright tests in 12 spec files and ten fixtures c
 
 That check had [3,336 workflow runs](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#downstream-check) from July 15 through October 22. In a sample of 250, only 212 executed the suite because the check is path-filtered. Thirteen of those 212, about 6%, failed on at least one Node version. Some failures may come from the adapter repository's `nextjs` main branch rather than the Harper PR. The 6% applies to sampled suite runs, not all 3,336 workflow runs or confirmed Harper regressions.
 
-Across HarperFast, [31 other repositories](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#repos-importing-the-package) import the package in test files, excluding the private advisory fork. Some have substantial suites; many templates have one smoke test.
+Across HarperFast, [32 other repositories](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#repos-importing-the-package) import the package in test files, excluding the private advisory fork. Some have substantial suites; many templates have one smoke test.
 
 Core CI usage reached [1,428 runs in the last 30 days](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#ci-runs-per-month), exercising about 347 PR head branches excluding Renovate. December had 68 runs and 20 PR branches. The [share of merged PRs touching integration tests](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#prs-touching-integration-tests) grew from roughly 6–13% per month in February through April to 18–30% in June through September. Overall PR volume also grew as the team adopted coding agents. These numbers show usage and participation, not proof that this framework caused faster delivery.
 
-Among commits whose subjects start with `fix`, [47%](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#fixes-that-ship-an-integration-test) added or changed an integration test in September. That subject-prefix heuristic misses fixes titled differently, but it gives us a repeatable measure.
+Among commits whose subjects start with `fix`, [46%](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#fixes-that-ship-an-integration-test) added or changed an integration test in September. That subject-prefix heuristic misses fixes titled differently, but it gives us a repeatable measure.
 
 ### Failure rate is not flake rate
 

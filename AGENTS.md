@@ -116,6 +116,8 @@ That deck used to live at `.../performant-parallelizable-framework-agnostic-node
 
 An edition's deck lives beside the event folders, in a folder named by its edition slug: `public/talks/<talk-slug>/<edition-slug>/slides/`. For example, a "2027 edition" lives in `public/talks/<talk-slug>/2027/slides/`. A draft deck's `index.html` carries `<meta name="robots" content="noindex">`; remove it once the edition is final. When an edition is presented at an event, copy its folder into that event's folder and point the event's `slidesUrl` at the copy. The event keeps the deck as presented while the edition keeps changing.
 
+A deck that presents measured data keeps that data beside it in a `data/` folder, with a rendered method page at `src/pages/talks/<talk-slug>/<edition-slug>/data.md` that has one heading per number, so slides and posts can link to `/talks/<talk-slug>/<edition-slug>/data/#<heading>`. The 2026 Q4 edition of the integration testing talk works this way: to refresh its numbers, follow `public/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/RUNBOOK.md`. Monthly series include only complete months.
+
 Slides exported as a PDF go in the same event folder as `slides.pdf`, for example `public/talks/nodejs-code-and-learn/nodejs-interactive-render-atl-2026/slides.pdf`, with the event's `slidesUrl` pointing at it.
 
 These slide decks may use Ethan's personal HTML+CSS based presentation framework, Dais. The framework is individually vendored into each slide directory in order to avoid existing/past presentations breaking whenever the framework is updated.

@@ -14,14 +14,15 @@ harper-reflex,37
 harper-support,1
 harper-todo-example,1
 http-cache,1
-nextjs-example,2
+http-router,2
 nextjs,5
+nextjs-example,2
 oauth,8
 react-ssr-example,1
 real-time-template,3
 solid-ssr-example,2
-status-check-fabric,1
 status-check,1
+status-check-fabric,1
 svelte-ssr-example,1
 symphony,4
 template-early-hints,1

@@ -20,11 +20,11 @@ All files sit next to this page, under `/talks/performant-parallelizable-framewo
 | File | What it holds |
 | --- | --- |
 | [`harper-integration-runs.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-integration-runs.csv) | Every run of harper's `integration-tests.yml` (8,912 runs, Nov 2025 to Oct 2026) |
-| [`harper-legacy-api-jobs.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-legacy-api-jobs.csv) | Legacy API test jobs and their "Run API Tests" step, for every main push run plus 400 random PR runs |
+| [`harper-legacy-api-jobs.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-legacy-api-jobs.csv) | Legacy API test jobs and their "Run API Tests" step, for every main push run plus 400 random PR runs. Frozen: the suite no longer exists. |
 | [`harper-main-failed-runs.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-main-failed-runs.csv) | Which job variants failed, for every main push run that didn't succeed |
 | [`harper-timing-sample.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-timing-sample.csv) | Wall-clock time for a stratified sample of 651 runs |
 | [`harper-shard-step-sample.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-shard-step-sample.csv) | Per-shard test step time for the same sample |
-| [`harper-run-39774245654-shards.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-run-39774245654-shards.csv) | Test counts, durations, and Harper instances per shard for one green main run |
+| [`harper-green-run-shards.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-green-run-shards.csv) | Test counts, durations, and Harper instances per shard for one green main run |
 | [`harper-test-growth.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-test-growth.csv) | Test files and test cases on harper's main branch over time |
 | [`harper-pr-activity.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-pr-activity.csv) | Merged PRs per month, and how many touched integration tests |
 | [`harper-pro-test-growth.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-pro-test-growth.csv) | harper-pro integration and cluster test files over time |
@@ -32,17 +32,28 @@ All files sit next to this page, under `/talks/performant-parallelizable-framewo
 | [`harper-nextjs-downstream-runs.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-nextjs-downstream-runs.csv) | Every run of harper's Next.js downstream check |
 | [`harper-nextjs-downstream-sample.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-nextjs-downstream-sample.csv) | 250 sampled downstream runs and whether the suite ran or failed |
 | [`org-adoption.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/org-adoption.csv) | HarperFast repositories that import the package in test files |
+| [`as-of.txt`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/as-of.txt) | The last day of data (2026-10-22) |
+| [`collection-times.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/collection-times.csv) | The newest run in each run list, which marks when it was collected |
+| [`git-refs.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/git-refs.csv) | The harper and harper-pro commits the git-history CSVs were computed from |
+| [`analysis.txt`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/analysis.txt) | The output of `analyze.py` for this data |
+| [`RUNBOOK.md`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/RUNBOOK.md) | How to repeat the collection for a later date, and where each number appears |
+| [`scripts/collect.py`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/scripts/collect.py) | Collects the raw data: run lists, samples, jobs, logs, adoption, and git history |
+| [`scripts/collect_git.py`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/scripts/collect_git.py) | Produces the three git-history CSVs from clones of harper and harper-pro |
+| [`scripts/extract.py`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/scripts/extract.py) | Turns the raw data into the published CSVs |
 | [`scripts/analyze.py`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/scripts/analyze.py) | Recomputes every number on this page from the CSVs |
-| [`scripts/collect-git.sh`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/scripts/collect-git.sh) | Produces the three git-history CSVs from clones of harper and harper-pro |
-| [`scripts/collect-jobs.py`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/scripts/collect-jobs.py) | Fetches jobs and steps for a list of run IDs |
-| [`scripts/extract.py`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/scripts/extract.py) | Turned the raw API responses into the published CSVs |
 
 ## How the data was collected
 
-- **Run lists:** `gh api --paginate "repos/HarperFast/<repo>/actions/workflows/<id>/runs?per_page=100"`. harper's `integration-tests.yml` is workflow 203879333 and its Next.js downstream check is 313396365. harper-pro's integration workflow is 238747852.
-- **Jobs and steps:** `scripts/collect-jobs.py`, which calls `GET /repos/HarperFast/<repo>/actions/runs/<id>/jobs?filter=all` for each run. GitHub keeps step timings for about five months and job logs for 90 days, so older runs only have job-level timing.
-- **Test and instance counts:** the job logs of run [39774245654](https://github.com/HarperFast/harper/actions/runs/39774245654), fetched with `gh run view --job <id> --log`.
-- **Git history:** `scripts/collect-git.sh` against full clones of [harper](https://github.com/HarperFast/harper) and [harper-pro](https://github.com/HarperFast/harper-pro) as of October 22, 2026.
+The whole procedure is scripted, and [`RUNBOOK.md`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/RUNBOOK.md) walks through repeating it for a later date. In short, `collect.py --as-of <date>` gathers the raw data, `extract.py` writes these CSVs, and `analyze.py` prints the numbers. Re-running `collect.py --as-of 2026-10-22 --green-run 39774245654 --reuse-samples` reproduces this snapshot, except for runs created on October 22 after the times in `collection-times.csv`; the run lists were collected between 14:07 and 16:06 UTC that day.
+
+- **Run lists:** every run of harper's `integration-tests.yml` (workflow 203879333), its Next.js downstream check (313396365), and harper-pro's integration workflow (238747852), up to the end of the as-of date.
+- **Jobs and steps:** `GET /repos/HarperFast/harper/actions/runs/<id>/jobs?filter=all` for every sampled run and every main push run that didn't succeed. GitHub keeps step timings for a few months and job logs for 90 days, so older runs only have job-level timing.
+- **Timing sample:** up to 30 first-attempt runs per month for main pushes and for PRs, drawn at random with a fixed seed per month. Months with fewer runs are taken whole.
+- **Next.js downstream sample:** 250 runs, drawn at random with a fixed seed.
+- **Test and instance counts:** the job logs of one green main run, [39774245654](https://github.com/HarperFast/harper/actions/runs/39774245654), fetched with `gh run view --job <id> --log`.
+- **Adoption:** GitHub code search for the package name across HarperFast, then a shallow clone of each repository to count the files that import it, outside `package.json` and lockfiles.
+- **Git history:** `collect_git.py` against full clones of [harper](https://github.com/HarperFast/harper) and [harper-pro](https://github.com/HarperFast/harper-pro), at the commits in `git-refs.csv`. Months and dates use UTC midnight boundaries.
+- **Months:** monthly series stop at the last complete month, so October 2026 is left out. The "last 30 days" window and point-in-time counts use the as-of date.
 - **Samples:** where a figure uses a sample, the sample's run IDs are in the CSV, so you can check exactly which runs were used.
 
 ## The legacy suite
@@ -107,7 +118,7 @@ Test cases on harper's main branch, counted as lines that start an `it()` or `te
 | Jun 9       |              45 |                1,096 |                 0 |
 | Jul 1       |              89 |                1,378 |                 0 |
 | Aug 1       |             148 |                1,699 |                 0 |
-| Sep 1       |             190 |                2,018 |                 0 |
+| Sep 1       |             189 |                2,007 |                 0 |
 | Oct 1       |             242 |                2,304 |                 0 |
 | Oct 22      |             263 |                2,435 |                 0 |
 
@@ -117,7 +128,7 @@ The framework passed the legacy suite's size on the day the port finished, and h
 
 ### Tests and instances per run
 
-Main run [39774245654](https://github.com/HarperFast/harper/actions/runs/39774245654) on October 22, 2026, summed over its six Linux Node.js 24 shards: **2,652 tests** (2,630 passed, 0 failed, 21 skipped, 1 todo) and **423 Harper instances**. Test counts come from node:test's summary lines (`ℹ tests`). Instances are counted from the harness's "Logs for this instance will be stored" line, which it prints once per started instance. The run executes more tests than the 2,435 `test()` calls in source because some tests are generated in loops. The Windows shards run 871 tests; the rest skip on Windows. Source: `harper-run-39774245654-shards.csv`.
+Main run [39774245654](https://github.com/HarperFast/harper/actions/runs/39774245654) on October 22, 2026, summed over its six Linux Node.js 24 shards: **2,652 tests** (2,630 passed, 0 failed, 21 skipped, 1 todo) and **423 Harper instances**. Test counts come from node:test's summary lines (`ℹ tests`). Instances are counted from the harness's "Logs for this instance will be stored" line, which it prints once per started instance. The run executes more tests than the 2,435 `test()` calls in source because some tests are generated in loops. The Windows shards run 871 tests; the rest skip on Windows. Source: `harper-green-run-shards.csv`.
 
 ### Summed suite time vs. slowest shard
 
@@ -172,19 +183,19 @@ Counted as first-parent commits on harper's main branch, which is one per merged
 | Dec 2025 | 14 | 3 | 21% | 5 | 0 | 0% |
 | Jan 2026 | 18 | 8 | 44% | 2 | 0 | 0% |
 | Feb 2026 | 84 | 11 | 13% | 16 | 2 | 13% |
-| Mar 2026 | 236 | 13 | 6% | 46 | 0 | 0% |
-| Apr 2026 | 134 | 10 | 7% | 29 | 1 | 3% |
-| May 2026 | 283 | 59 | 21% | 106 | 9 | 8% |
-| Jun 2026 | 338 | 84 | 25% | 135 | 24 | 18% |
-| Jul 2026 | 452 | 80 | 18% | 218 | 31 | 14% |
-| Aug 2026 | 351 | 84 | 24% | 151 | 35 | 23% |
-| Sep 2026 | 315 | 94 | 30% | 58 | 27 | 47% |
+| Mar 2026 | 233 | 13 | 6% | 46 | 0 | 0% |
+| Apr 2026 | 133 | 10 | 8% | 27 | 1 | 4% |
+| May 2026 | 287 | 59 | 21% | 108 | 9 | 8% |
+| Jun 2026 | 329 | 82 | 25% | 130 | 24 | 18% |
+| Jul 2026 | 456 | 82 | 18% | 223 | 31 | 14% |
+| Aug 2026 | 351 | 83 | 24% | 150 | 35 | 23% |
+| Sep 2026 | 311 | 94 | 30% | 59 | 27 | 46% |
 
-December and January are high on very few PRs. From February to April, PR volume jumped as the team adopted coding agents, and **6 to 13%** of merged PRs touched integration tests (10 to 13 a month). From June to September it held at **18 to 30%** (80 to 94 a month) at the higher volume. The share controls for overall volume, but it doesn't prove the framework caused the change or measure delivery speed.
+December and January are high on very few PRs. From February to April, PR volume jumped as the team adopted coding agents, and **6 to 13%** of merged PRs touched integration tests (10 to 13 a month). From June to September it held at **18 to 30%** (82 to 94 a month) at the higher volume. The share controls for overall volume, but it doesn't prove the framework caused the change or measure delivery speed.
 
 ### Fixes that ship an integration test
 
-From February to April, **0 to 13%** of fix PRs shipped an integration test each month. From June to September it was **14 to 47%**, peaking at 27 of 58 in September. The subject-prefix rule is a heuristic and misses fixes titled differently. See the table above.
+From February to April, **0 to 13%** of fix PRs shipped an integration test each month. From June to September it was **14 to 46%**, peaking at 27 of 59 in September. The subject-prefix rule is a heuristic and misses fixes titled differently. See the table above.
 
 ### CI runs per month
 
@@ -209,7 +220,7 @@ In the last 30 days there were 1,428 runs from 347 PR branches, not counting Ren
 
 ### Repos importing the package
 
-**31 HarperFast repositories** import `@harperfast/integration-testing` in test files, not counting harper itself or a private security advisory fork of it. They were found with GitHub code search for the package name, then checked by searching each repository for files that import it, outside `package.json` and lockfiles. Source: `org-adoption.csv`.
+**32 HarperFast repositories** import `@harperfast/integration-testing` in test files, not counting harper itself or a private security advisory fork of it. They were found with GitHub code search for the package name, then checked by searching each repository for files that import it, outside `package.json` and lockfiles. Source: `org-adoption.csv`.
 
 The heaviest users are harper-pro (127 files: 123 integration tests, 3 smoke tests, and a benchmark), harper-reflex (37), Developer-Relations-Agents (13), oauth (8), and dispatch (7). Most templates and examples carry a single smoke test. The package had 56.7k npm downloads from September 19 to October 18, 2026, mostly from CI.
 

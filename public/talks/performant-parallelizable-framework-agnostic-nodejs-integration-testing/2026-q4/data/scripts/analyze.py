@@ -4,9 +4,10 @@ from the CSVs next to this script's parent folder.
 
 Usage: python3 analyze.py [data-dir]
 
-No dependencies beyond the standard library. "Today" is 2026-10-22, the day
-the data was collected; "last 30 days" is 2026-09-23 through 2026-10-22.
-Percentages are rounded half up to whole numbers unless shown with a decimal.
+No dependencies beyond the standard library. "Today" is the date in
+as-of.txt, the day the data was collected; "last 30 days" is the 30 days
+ending then. Monthly series stop at the last complete month. Percentages
+are rounded half up to whole numbers unless shown with a decimal.
 """
 import csv
 import os
@@ -17,7 +18,8 @@ from datetime import datetime, timezone
 from decimal import ROUND_HALF_UP, Decimal
 
 DATA = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(__file__), "..")
-NOW = datetime(2026, 10, 22, 23, 59, 59, tzinfo=timezone.utc)
+AS_OF = open(os.path.join(DATA, "as-of.txt")).read().strip()
+NOW = datetime.fromisoformat(AS_OF).replace(hour=23, minute=59, second=59, tzinfo=timezone.utc)
 # Monthly series stop before the month still in progress on NOW.
 PARTIAL_MONTH = NOW.strftime("%Y-%m")
 
@@ -98,11 +100,11 @@ for g in growth:
     show(g["date"], f"framework {g['framework_cases']} cases in {g['framework_files']} files; legacy {g['legacy_cases']}")
 port_done = next(g for g in growth if g["date"] == "2026-06-09")
 latest = growth[-1]
-show("growth-since-port", int(latest["framework_cases"]) - int(port_done["framework_cases"]), "test cases added Jun 9 to Oct 22")
+show("growth-since-port", int(latest["framework_cases"]) - int(port_done["framework_cases"]), f"test cases added Jun 9 to {latest['date']}")
 
 # --- One CI run today ------------------------------------------------------------
-section("run 39774245654 (main, 2026-10-22), Linux Node 24 shards")
-shards = [s for s in rows("harper-run-39774245654-shards.csv") if s["job_name"].endswith("(Node.js v24)")]
+shards = [s for s in rows("harper-green-run-shards.csv") if s["job_name"].endswith("(Node.js v24)")]
+section(f"green main run {shards[0]['run_id']}, Linux Node 24 shards")
 show("tests-per-run", sum(int(s["tests"]) for s in shards), f"pass {sum(int(s['pass']) for s in shards)}, fail {sum(int(s['fail']) for s in shards)}, {len(shards)} shards")
 show("harper-instances-per-run", sum(int(s["harper_instances"]) for s in shards))
 serial = sum(int(s["top_level_suites_ms"]) for s in shards) / 60000
@@ -170,8 +172,8 @@ for m in sorted(act):
     print(f"  {m:<8} {mg:>6} {t:>8} {pct(t, mg) if mg else '-':>6} {fx:>6} {ft:>6} {pct(ft, fx) if fx else '-':>6}")
 
 before = ["2026-02", "2026-03", "2026-04"]
-after = ["2026-06", "2026-07", "2026-08", "2026-09"]
-for label, months in (("Feb-Apr 2026", before), ("Jun-Sep 2026", after)):
+after = [m for m in sorted(act) if m >= "2026-06"]
+for label, months in (("Feb-Apr 2026", before), (f"{after[0]} to {after[-1]}", after)):
     touch = span(months, lambda a: int(a["touching_integration_tests"]))
     share = span(months, lambda a: Decimal(100) * int(a["touching_integration_tests"]) / int(a["merged"]))
     fixes = span(months, lambda a: Decimal(100) * int(a["fix_with_integration_test"]) / int(a["fix_commits"]))
