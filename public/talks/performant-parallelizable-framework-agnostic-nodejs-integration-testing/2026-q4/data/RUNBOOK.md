@@ -9,7 +9,7 @@ This folder holds the data behind section 5, "Did it work?", of the 2026 Q4 edit
 - **Snapshots stay.** Point-in-time counts (test files and cases on a date, harper-pro files today) use the as-of date.
 - **Samples are seeded, never hand-picked.** `collect.py` keeps each published month of the timing sample once that month is complete, and redraws months that were still in progress when drawn. The Next.js downstream sample is redrawn from all runs with a fixed seed.
 - **The legacy suite is frozen.** `harper-legacy-api-jobs.csv` covers December 2025 to June 2026. The legacy suite no longer exists and GitHub has purged its step timings, so don't re-collect or edit it.
-- **Public data only.** Never publish raw data from the private `harperdb` repository. The data page cites its numbers as aggregates.
+- **No code, ever.** Metadata from private HarperFast repositories (repository names, CI run and job data, PR and commit counts) may be published. Source code and file contents may not. Check every new CSV column against that rule.
 - **Recompute, don't edit by hand.** Every number on the slides, the data page, and the post must come from `scripts/analyze.py` output. If a number changes, change it everywhere it appears (see the map below).
 
 ## Prerequisites

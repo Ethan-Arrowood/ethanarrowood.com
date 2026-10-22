@@ -206,7 +206,7 @@ show("downstream-failure-rate", pct(len(nx_failed), len(ran)), f"{len(nx_failed)
 # --- Adoption ------------------------------------------------------------------
 section("adoption across HarperFast")
 ad = rows("org-adoption.csv")
-summary = rows("org-adoption-summary.csv")[0]
-show("repos-importing", f"{len(ad)} public", f"plus {summary['non_public_repos']} private or internal, counted but not named")
+public = sum(a["visibility"] == "public" for a in ad)
+show("repos-importing", len(ad), f"{public} public, {len(ad) - public} private or internal")
 for a in sorted(ad, key=lambda a: -int(a["files_importing"]))[:5]:
     show(a["repo"], f"{a['files_importing']} files")

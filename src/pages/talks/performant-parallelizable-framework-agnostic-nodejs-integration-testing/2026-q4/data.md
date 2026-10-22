@@ -220,9 +220,9 @@ In the last 30 days there were 1,428 runs from 347 PR branches, not counting Ren
 
 ### Repos importing the package
 
-**26 public HarperFast repositories** import `@harperfast/integration-testing`, not counting harper itself. Six more private or internal repositories import it; they're counted but not named, and nothing from them is published. Repositories were found with GitHub code search for the package name, then each one was checked for files that actually import it (an `import`, `from`, or `require` of the package, outside Markdown, `package.json`, and lockfiles). Source: `org-adoption.csv` and `org-adoption-summary.csv`.
+**32 HarperFast repositories** import `@harperfast/integration-testing`, not counting harper itself: 26 public and 6 private or internal. Only repository names and file counts are published, never code. Repositories were found with GitHub code search for the package name, then each one was checked for files that actually import it (an `import`, `from`, or `require` of the package, outside Markdown, `package.json`, and lockfiles). Source: `org-adoption.csv`.
 
-The heaviest public users are harper-pro (126 files: 123 integration tests, 2 smoke tests, and a benchmark), oauth (6), symphony (4), nextjs (3), and real-time-template (3). Most templates and examples carry a single smoke test. The package had 56.7k npm downloads from September 19 to October 18, 2026.
+The heaviest users are harper-pro (126 files: 123 integration tests, 2 smoke tests, and a benchmark), harper-reflex (33), Developer-Relations-Agents (7), oauth (6), and symphony and agent-memory (4 each). Most templates and examples carry a single smoke test. The package had 56.7k npm downloads from September 19 to October 18, 2026.
 
 ## Stability
 

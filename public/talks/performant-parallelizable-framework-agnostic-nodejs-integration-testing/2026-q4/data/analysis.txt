@@ -83,9 +83,9 @@
   downstream-failure-rate            6%   (13 of 212 suite runs had a Node version fail)
 
 ## adoption across HarperFast
-  repos-importing                    26 public   (plus 6 private or internal, counted but not named)
+  repos-importing                    32   (26 public, 6 private or internal)
   harper-pro                         126 files
+  harper-reflex                      33 files
+  Developer-Relations-Agents         7 files
   oauth                              6 files
-  symphony                           4 files
-  nextjs                             3 files
-  real-time-template                 3 files
+  agent-memory                       4 files

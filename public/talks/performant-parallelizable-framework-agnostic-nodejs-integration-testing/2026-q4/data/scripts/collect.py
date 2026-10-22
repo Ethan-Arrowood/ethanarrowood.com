@@ -230,8 +230,9 @@ IMPORT_RE = r"(from|require\(|import\()[[:space:]]*['\"]@harperfast/integration-
 def adoption(raw):
     """Repositories whose code imports the package.
 
-    Code search runs with your token, so it also finds private repositories.
-    Only public repositories are named; the rest are counted. A file counts
+    Code search runs with your token, so it also finds private and internal
+    repositories; their visibility is recorded. Only names and counts are
+    published, never file contents. A file counts
     when it imports or requires the package, not when it only mentions it.
     """
     r = gh("search", "code", '"@harperfast/integration-testing"', "--owner", "HarperFast", "--limit", "1000",
