@@ -91,68 +91,47 @@
     #plateau[data-dais-step="0"] .bars :is(.peak, .over) i,
     #plateau[data-dais-step="1"] .bars .over i { background: var(--dais-muted); }
 
-    /* Variance: one full 12-row table that never shifts. Stepping (dais
-       data-dais-steps) changes only the highlighted cells, the heading, and the
-       caption, so it reads as walking the argument in place. 12 rows must
-       clear the footer. */
-    #variance table { font-size: 0.46em; }
-    #variance :is(th, td) { padding: 0.18em 0.8em; }
-    /* 12 rows + a two-line caption is tall; keep captions compact so the last
-       line clears the footer on every step (step 3 is tightest). */
-    #variance > p { font-size: 0.82em; margin-block: 0.9cqi 0; }
-    #variance > p.small { font-size: 0.62em; margin-block: 0.6cqi 0; }
+    /* Variance: two slides, each a small excerpt of the full table.
+       Stepping (dais data-dais-steps) changes only the highlighted cells and
+       reveals the caption, so the table never shifts. */
+    :is(#variance, #variance-tail) > table { font-size: 0.72em; }
+    :is(#variance, #variance-tail) :is(th, td) { padding: 0.4em 1em; }
+    :is(#variance, #variance-tail) > p { margin-block: 1.6cqi 0; }
+    :is(#variance, #variance-tail) > p.small { font-size: 0.62em; margin-block: 0.6cqi 1cqi; }
 
-    /* data-at="1 2" = visible on steps 1 and 2. Without dais.js there is no
-       data-dais-step, so the slide shows its final (step 3) state. */
-    #variance [data-at] { display: none; }
-    #variance[data-dais-step="0"] [data-at~="0"],
-    #variance[data-dais-step="1"] [data-at~="1"],
-    #variance[data-dais-step="2"] [data-at~="2"],
-    #variance[data-dais-step="3"] [data-at~="3"],
-    #variance:not([data-dais-step]) [data-at~="3"] { display: revert; }
-
-    /* data-hi="g1 b2" = good on step 1, bad on step 2, and so on. */
+    /* data-hi="g1 b2" = good on step 1, bad on step 2, and so on. Without
+       dais.js there is no data-dais-step, so each slide shows its final
+       state. */
     #variance[data-dais-step="1"] td[data-hi~="g1"],
-    #variance[data-dais-step="2"] td[data-hi~="g2"] {
+    #variance[data-dais-step="2"] td[data-hi~="g2"],
+    #variance:not([data-dais-step]) td[data-hi~="g2"] {
       background: color-mix(in srgb, var(--deck-good) 24%, transparent);
       color: var(--dais-text);
       font-weight: 700;
     }
     #variance[data-dais-step="2"] td[data-hi~="b2"],
-    #variance[data-dais-step="3"] td[data-hi~="b3"],
-    #variance:not([data-dais-step]) td[data-hi~="b3"] {
+    #variance:not([data-dais-step]) td[data-hi~="b2"],
+    #variance-tail[data-dais-step="1"] td[data-hi~="b1"],
+    #variance-tail:not([data-dais-step]) td[data-hi~="b1"] {
       background: color-mix(in srgb, var(--dais-accent-2) 26%, transparent);
       font-weight: 700;
     }
-    #variance[data-dais-step="3"] td[data-hi~="c3"],
-    #variance:not([data-dais-step]) td[data-hi~="c3"] {
+    #variance-tail[data-dais-step="1"] td[data-hi~="c1"],
+    #variance-tail:not([data-dais-step]) td[data-hi~="c1"] {
       background: color-mix(in srgb, var(--dais-accent) 28%, transparent);
       font-weight: 700;
     }
 
-    /* Two-column code comparison at a readable size on one slide. */
-    #two-runners .cols {
-      gap: 2cqi;
-    }
+    /* Short code examples that now have a slide to themselves read at a
+       larger size. Long single lines (ctx.harper, teardown, ifconfig) keep
+       the deck default so they fit. */
+    :is(#two-concepts, #suite-concurrency) pre { --dais-code-size: 0.9em; }
+    #lifecycle pre { --dais-code-size: 0.8em; }
 
-    #two-runners h3 {
+    /* One runner per slide, each with a small heading over its code. */
+    :is(#two-runners, #two-runners-playwright) h3 {
       font-size: 2.2cqi;
       margin-block-end: 0.5em;
-    }
-
-    /* Two code blocks side by side need to be smaller than one. Print clips
-       an overflowing pre rather than scrolling it, so these must actually fit. */
-    #two-runners pre {
-      --dais-code-size: 0.56em;
-    }
-
-    /* The two "concurrency" concept blocks fill the body below the title and
-       space themselves evenly, rather than bunching at the top. */
-    #two-concepts > .stack {
-      flex: 1;
-      min-height: 0;
-      justify-content: space-around;
-      gap: 0;
     }
 
     /* Code snippet + its takeaway centered in the body, instead of hugging the
@@ -406,13 +385,8 @@
 
     #constraints .questions .k { color: var(--dais-accent); }
 
-    /* Reframe: a general statement, then Harper's specific internals. Minimal
-       text on both; the detail is spoken. */
-    #application-equals-process .lead { font-size: 3.2cqi; margin-block: 1cqi 0; }
-
-    /* Keep the framing sentence on a single line. (There's no pure-CSS
-       fit-to-width; this is a hand-tuned size plus nowrap.) */
-    #application-equals-process > p { font-size: 1.9cqi; white-space: nowrap; }
+    /* Reframe: one statement, centered, at a readable size. */
+    #application-equals-process p { font-size: 3.2cqi; max-width: 60cqi; }
 
     /* The "change the address" reveal reads as neutral text with only the
        payoff word in accent, instead of a full screen of blue. */
@@ -438,39 +412,7 @@
     /* The shipped-default takeaway sits above the equation as a lead line. */
     #the-default-that-shipped .lead { font-size: 2.6cqi; margin-block-end: 1.4cqi; }
 
-    /* A short accent rule splits the framing from the lifecycle list — the same
-       accent-rule motif the title slide uses, not a full-width hairline. */
-    #application-equals-process .rule {
-      width: 12cqi;
-      height: 0.5cqi;
-      margin-block: 2.6cqi 2.4cqi;
-      border-radius: 999px;
-      background: var(--dais-accent);
-      opacity: 0.7;
-    }
-
-    /* One list rendered as two columns. A grid with a fixed row count and
-       column-major flow keeps every item a single nth-child sequence — so
-       .reveal staggers them one-after-another down the left column and then
-       down the right — while a plain two-<ul> split would fire both columns in
-       lockstep. Row count = ceil(items / 2). */
-    #application-equals-process .proc {
-      list-style-position: inside;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      grid-template-rows: repeat(5, auto);
-      grid-auto-flow: column;
-      grid-auto-columns: 1fr;
-      gap: 1.6cqi 8cqi;
-      font-size: 2.4cqi;
-    }
-
-    #application-equals-process .proc li {
-      margin: 0;
-    }
-
-    #app-complexities .big-list {
+    :is(#app-complexities, #process-lifecycle, #process-io) .big-list {
       list-style: none;
       margin: 1cqi 0 2cqi;
       padding: 0;
@@ -858,21 +800,32 @@
       <aside class="notes"></aside>
     </section>
 
-    <section class="slide" id="application-equals-process">
+    <section class="slide center" id="application-equals-process">
       <h2>Application = Process</h2>
       <p>Integration testing an application means managing the lifecycle of the application <strong>process</strong></p>
-      <div class="rule" aria-hidden="true"></div>
-      <ul class="reveal proc">
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="process-lifecycle">
+      <h2>Manage the lifecycle</h2>
+      <ul class="reveal big-list">
         <li>Start it</li>
         <li>Wait for it to be ready</li>
         <li>Restart it</li>
+        <li>Stop it</li>
+        <li>Clean up</li>
+      </ul>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="process-io">
+      <h2>Interact with the process</h2>
+      <ul class="reveal big-list">
         <li>Send signals to it</li>
         <li>Write to stdin</li>
         <li>Stream and read stdout and stderr</li>
         <li>Read and process log files</li>
         <li>Monitor crashes</li>
-        <li>Stop it</li>
-        <li>Clean up</li>
       </ul>
       <aside class="notes"></aside>
     </section>
@@ -919,19 +872,22 @@
     <section class="slide" id="two-concepts">
       <h2><code>node:test</code> "concurrency" is overloaded</h2>
       <div class="stack">
-        <div class="stack">
-          <h3>Test <strong>runner</strong> concurrency = file-level process <em>parallelism</em></h3>
-          <pre><code>node --test \
+        <h3>Test <strong>runner</strong> concurrency = file-level process <em>parallelism</em></h3>
+        <pre><code>node --test \
   --test-concurrency=<span class="tok-number">5</span> \
   <span class="tok-string">"*.test.js"</span></code></pre>
-        </div>
-        <div class="stack">
-          <h3>Test <strong>suite</strong> concurrency = in-process async <em>concurrency</em></h3>
-          <pre><code><span class="tok-fn">suite</span>(<span class="tok-string">'x'</span>, { concurrency: <span class="tok-keyword">true</span> }, () =&gt; {
+      </div>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="suite-concurrency">
+      <h2><code>node:test</code> "concurrency" is overloaded</h2>
+      <div class="stack">
+        <h3>Test <strong>suite</strong> concurrency = in-process async <em>concurrency</em></h3>
+        <pre><code><span class="tok-fn">suite</span>(<span class="tok-string">'x'</span>, { concurrency: <span class="tok-keyword">true</span> }, () =&gt; {
   <span class="tok-fn">test</span>(<span class="tok-string">'a'</span>, <span class="tok-keyword">async</span> () =&gt; { … });
   <span class="tok-fn">test</span>(<span class="tok-string">'b'</span>, <span class="tok-keyword">async</span> () =&gt; { … });
 });</code></pre>
-        </div>
       </div>
       <aside class="notes"></aside>
     </section>
@@ -952,17 +908,21 @@
       <ul>
         <li><strong>20 generated test files</strong>, each starting an
         application process</li>
-        <li>Work per file randomized within a <strong>mode</strong>:
-          <ul>
-            <li>0-100 MB file I/O</li>
-            <li>0-3 processes</li>
-            <li>0-4 worker threads</li>
-          </ul>
-        </li>
         <li>Concurrency <strong>1 → 12</strong> (sequential to max parallelism)</li>
         <li><strong>25 samples</strong> per level, on a normal developer laptop</li>
       </ul>
       <p class="muted small">https://github.com/ethan-arrowood/node-test-runner-parallelization-analysis</p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="experiment-work">
+      <h2>Work per file</h2>
+      <p>Work per file randomized within a <strong>mode</strong>:</p>
+      <ul>
+        <li>0-100 MB file I/O</li>
+        <li>0-3 processes</li>
+        <li>0-4 worker threads</li>
+      </ul>
       <aside class="notes"></aside>
     </section>
 
@@ -990,40 +950,59 @@
       <aside class="notes"></aside>
     </section>
 
-    <!-- Variance argument in three steps over ONE table. Step 0 is the bare
-         data; each step then changes only the highlighted cells, heading, and
-         caption (see the #variance CSS for data-at / data-hi), so the table
-         never shifts. Numbers are the real 25-sample medians. -->
-    <section class="slide" id="variance" data-dais-steps="3">
-      <h2><span data-at="0 1">All the data</span><span data-at="2">Past the plateau, variance more than doubles</span><span data-at="3">The real developer experience is in the <strong>tail</strong></span></h2>
+    <!-- Variance argument in two slides, each a small excerpt of the full
+         table (the full table is in the notes). Steps change only the
+         highlighted cells and reveal the caption, so the table never shifts.
+         Numbers are the real 25-sample medians. -->
+    <section class="slide" id="variance" data-dais-steps="2">
+      <h2>Past the plateau, variance more than doubles</h2>
       <p class="small muted">20 test files · 25 samples per level · concurrency 1&ndash;12 · duration in ms</p>
       <table>
         <thead>
           <tr><th>Concurrency</th><th class="num">Median</th><th class="num">Std dev</th><th class="num">p95</th><th class="num">Worst run</th></tr>
         </thead>
         <tbody>
-          <tr><td>1</td><td class="num">9,939</td><td class="num">363</td><td class="num">10,607</td><td class="num">10,885</td></tr>
-          <tr><td>2</td><td class="num">5,776</td><td class="num">307</td><td class="num">6,164</td><td class="num">6,876</td></tr>
-          <tr><td>3</td><td class="num">4,582</td><td class="num">365</td><td class="num">5,252</td><td class="num">5,729</td></tr>
-          <tr><td>4</td><td class="num" data-hi="c3">3,904</td><td class="num">368</td><td class="num">4,648</td><td class="num">5,238</td></tr>
-          <tr><td>5</td><td class="num">3,759</td><td class="num">332</td><td class="num">4,264</td><td class="num">4,739</td></tr>
-          <tr><td>6</td><td class="num">3,597</td><td class="num">459</td><td class="num">4,751</td><td class="num">4,874</td></tr>
           <tr><td data-hi="g1">7</td><td class="num" data-hi="g1">3,468</td><td class="num" data-hi="g1 g2">294</td><td class="num" data-hi="g1">3,990</td><td class="num" data-hi="g1">4,520</td></tr>
-          <tr><td>8</td><td class="num">3,671</td><td class="num">472</td><td class="num">4,575</td><td class="num">5,106</td></tr>
-          <tr><td>9</td><td class="num">3,601</td><td class="num">473</td><td class="num">4,804</td><td class="num">5,177</td></tr>
-          <tr><td>10</td><td class="num">3,534</td><td class="num" data-hi="b2">654</td><td class="num" data-hi="b3">5,339</td><td class="num">5,466</td></tr>
+          <tr><td>10</td><td class="num">3,534</td><td class="num" data-hi="b2">654</td><td class="num">5,339</td><td class="num">5,466</td></tr>
           <tr><td>11</td><td class="num">3,724</td><td class="num" data-hi="b2">690</td><td class="num">5,096</td><td class="num">5,717</td></tr>
-          <tr><td>12</td><td class="num">3,952</td><td class="num">488</td><td class="num">4,792</td><td class="num">5,055</td></tr>
         </tbody>
       </table>
-      <p data-at="1">The median flattens after 7. The real story is in the <strong>tail</strong> &mdash; std&nbsp;dev, p95, worst run.</p>
-      <p data-at="2">Std&nbsp;dev jumps from <strong>294</strong> at the optimum to <strong>654</strong> and <strong>690</strong> just past it <br> The run-to-run spread more than doubles.</p>
-      <p data-at="3">p95 at concurrency 10 (<strong>5,339</strong>) is worse than a <em>typical</em> run at 4 (<strong>3,904</strong>) <br> 2.5&times; the processes for worse overall performance.</p>
+      <p class="step" data-step="2">Std&nbsp;dev jumps from <strong>294</strong> at the optimum to <strong>654</strong> and <strong>690</strong> just past it <br> The run-to-run spread more than doubles.</p>
       <aside class="notes">
-        Step 2: same table, now read the std-dev column. Over-parallelizing doesn't make
+        All the data (concurrency: median, std dev, p95, worst run, in ms):
+        1: 9,939, 363, 10,607, 10,885.
+        2: 5,776, 307, 6,164, 6,876.
+        3: 4,582, 365, 5,252, 5,729.
+        4: 3,904, 368, 4,648, 5,238.
+        5: 3,759, 332, 4,264, 4,739.
+        6: 3,597, 459, 4,751, 4,874.
+        7: 3,468, 294, 3,990, 4,520.
+        8: 3,671, 472, 4,575, 5,106.
+        9: 3,601, 473, 4,804, 5,177.
+        10: 3,534, 654, 5,339, 5,466.
+        11: 3,724, 690, 5,096, 5,717.
+        12: 3,952, 488, 4,792, 5,055.
+        The median flattens after 7. The real story is in the tail: std dev, p95, worst run.
+        Step 2: now read the std-dev column. Over-parallelizing doesn't make
         the suite slower on average so much as it makes it *unpredictable*, and
         unpredictable is what makes people stop trusting a suite.
       </aside>
+    </section>
+
+    <section class="slide" id="variance-tail" data-dais-steps="1">
+      <h2>The real developer experience is in the <strong>tail</strong></h2>
+      <p class="small muted">20 test files · 25 samples per level · concurrency 1&ndash;12 · duration in ms</p>
+      <table>
+        <thead>
+          <tr><th>Concurrency</th><th class="num">Median</th><th class="num">Std dev</th><th class="num">p95</th><th class="num">Worst run</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>4</td><td class="num" data-hi="c1">3,904</td><td class="num">368</td><td class="num">4,648</td><td class="num">5,238</td></tr>
+          <tr><td>10</td><td class="num">3,534</td><td class="num">654</td><td class="num" data-hi="b1">5,339</td><td class="num">5,466</td></tr>
+        </tbody>
+      </table>
+      <p class="step" data-step="1">p95 at concurrency 10 (<strong>5,339</strong>) is worse than a <em>typical</em> run at 4 (<strong>3,904</strong>) <br> 2.5&times; the processes for worse overall performance.</p>
+      <aside class="notes"></aside>
     </section>
 
     <section class="slide" id="the-default-that-shipped">
@@ -1107,6 +1086,11 @@ test/application 3 → <span class="tok-string">http://127.0.0.4:9925</span></co
           <tr><td>Windows</td><td>Enabled by default</td><td>Must be added per address</td></tr>
         </tbody>
       </table>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="platform-macos">
+      <h2>macOS: register each address</h2>
       <pre><code><span class="tok-comment"># macOS: register each address as a loopback alias (once per machine)</span>
 sudo ifconfig lo0 alias 127.0.0.2 up
 sudo ifconfig lo0 alias 127.0.0.3 up</code></pre>
@@ -1167,13 +1151,21 @@ server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loo
 <span class="tok-comment">// 1. allocate a loopback address from the pool</span>
 <span class="tok-comment">// 2. create a temporary install directory</span>
 <span class="tok-comment">// 3. spawn Harper, wait until it is actually ready</span>
-<span class="tok-comment">// 4. populate ctx.harper</span>
+<span class="tok-comment">// 4. populate ctx.harper</span></code></pre>
+      <aside class="notes"></aside>
+    </section>
 
-ctx.harper.httpURL            <span class="tok-comment">// 'http://127.0.0.3:9926'</span>
+    <section class="slide" id="lifecycle-context">
+      <h2><code>ctx.harper</code></h2>
+      <pre><code>ctx.harper.httpURL            <span class="tok-comment">// 'http://127.0.0.3:9926'</span>
 ctx.harper.operationsAPIURL   <span class="tok-comment">// 'http://127.0.0.3:9925'</span>
-ctx.harper.rootpath           <span class="tok-comment">// '/var/folders/js/abc123_def456/T/harper-test-789'</span>
+ctx.harper.rootpath           <span class="tok-comment">// '/var/folders/js/abc123_def456/T/harper-test-789'</span></code></pre>
+      <aside class="notes"></aside>
+    </section>
 
-<span class="tok-keyword">await</span> <span class="tok-fn">teardownHarper</span>(ctx);    <span class="tok-comment">// kill, release the address, remove the directory</span></code></pre>
+    <section class="slide" id="lifecycle-teardown">
+      <h2><code>teardownHarper(ctx)</code></h2>
+      <pre><code><span class="tok-keyword">await</span> <span class="tok-fn">teardownHarper</span>(ctx);    <span class="tok-comment">// kill, release the address, remove the directory</span></code></pre>
       <aside class="notes"></aside>
     </section>
 
@@ -1208,10 +1200,9 @@ ctx.harper.rootpath           <span class="tok-comment">// '/var/folders/js/abc1
 
     <section class="slide" id="two-runners">
       <h2>Two runners, same lifecycle</h2>
-      <div class="cols">
-        <div class="stack">
-          <h3><code>node:test</code> - file per process</h3>
-          <pre><code><span class="tok-fn">suite</span>(<span class="tok-string">'install'</span>, (ctx: ContextWithHarper) =&gt; {
+      <div class="stack">
+        <h3><code>node:test</code> - file per process</h3>
+        <pre><code><span class="tok-fn">suite</span>(<span class="tok-string">'install'</span>, (ctx: ContextWithHarper) =&gt; {
   <span class="tok-fn">before</span>(<span class="tok-keyword">async</span> () =&gt; {
     <span class="tok-keyword">await</span> <span class="tok-fn">startHarper</span>(ctx);
   });
@@ -1224,10 +1215,15 @@ ctx.harper.rootpath           <span class="tok-comment">// '/var/folders/js/abc1
     <span class="tok-fn">strictEqual</span>(res.status, <span class="tok-number">200</span>);
   });
 });</code></pre>
-        </div>
-        <div class="stack">
-          <h3>Playwright - worker-scoped fixture</h3>
-          <pre><code><span class="tok-keyword">const</span> test = base.<span class="tok-fn">extend</span>&lt;
+      </div>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="two-runners-playwright">
+      <h2>Two runners, same lifecycle</h2>
+      <div class="stack">
+        <h3>Playwright - worker-scoped fixture</h3>
+        <pre><code><span class="tok-keyword">const</span> test = base.<span class="tok-fn">extend</span>&lt;
   {}, { harper: <span class="tok-type">HarperContext</span> }
 &gt;({
   harper: [<span class="tok-fn">makeHarperFixture</span>(name),
@@ -1240,7 +1236,6 @@ ctx.harper.rootpath           <span class="tok-comment">// '/var/folders/js/abc1
     <span class="tok-keyword">await</span> <span class="tok-fn">expect</span>(page.<span class="tok-fn">locator</span>(<span class="tok-string">'h1'</span>))
       .<span class="tok-fn">toHaveText</span>(<span class="tok-string">'Next.js v16'</span>);
   });</code></pre>
-        </div>
       </div>
       <aside class="notes"></aside>
     </section>
