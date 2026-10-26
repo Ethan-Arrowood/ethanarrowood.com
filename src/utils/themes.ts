@@ -27,6 +27,8 @@ export const themes: Theme[] = [
 
 /** Stored preferences. `system` follows `prefers-color-scheme`. */
 export const THEME_STORAGE_KEY = "theme";
+/** Used until the visitor picks a theme. */
+export const DEFAULT_THEME: ThemePreferences["theme"] = "spooky";
 export const ANIMATIONS_STORAGE_KEY = "animations";
 
 export interface ThemePreferences {

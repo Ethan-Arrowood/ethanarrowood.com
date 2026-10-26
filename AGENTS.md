@@ -134,7 +134,7 @@ These slide decks may use Ethan's personal HTML+CSS based presentation framework
 Visitors pick a theme from the "theme" menu in the header (`ThemePicker.astro`). Preferences live in `localStorage` (`theme`: `system` or a theme id; `animations`: `on` or `off`).
 
 - `src/utils/themes.ts` is the theme registry. Each theme has an `id`, `label`, `group` (`standard` or `special` for seasonal and fun themes), `scheme` (`light` or `dark`), and an optional background `animation`.
-- `src/components/ThemeInit.astro` runs inline in `<head>` before first paint. It sets `data-theme`, `data-scheme`, and `data-animation` on `<html>`, and exposes `window.siteTheme` for the picker. `system` follows `prefers-color-scheme`. Animations default to on unless the visitor prefers reduced motion.
+- `src/components/ThemeInit.astro` runs inline in `<head>` before first paint. It sets `data-theme`, `data-scheme`, and `data-animation` on `<html>`, and exposes `window.siteTheme` for the picker. Visitors who have not picked a theme get `DEFAULT_THEME` from `themes.ts` (currently `spooky`). `system` follows `prefers-color-scheme`. Animations default to on unless the visitor prefers reduced motion.
 - `src/styles/themes.css` defines the color tokens per theme, the dark Shiki colors, and GitHub alert colors.
 - Background animations live in `src/components/animations/` and are mounted by `BackgroundAnimation.astro`. Each renders hidden and shows itself when `<html data-animation>` matches its name. They render at the end of `<body>`, are fixed to the viewport, `aria-hidden`, and ignore pointer events.
   - `falling-leaves`: pure CSS leaves falling through the viewport. Not used by a theme right now.
