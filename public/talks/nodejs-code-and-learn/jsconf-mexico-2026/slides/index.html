@@ -1,543 +1,851 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex">
-  <title>Node.js Code and Learn · JSConf México 2026</title>
-  <meta name="description" content="Slides for the Node.js Code and Learn workshop at JSConf México 2026: open source ethos, the contributing guidelines, appropriate AI use, and how to get your first pull request ready.">
-  <link rel="stylesheet" href="dais/dais.css">
-  <link rel="stylesheet" href="theme.css">
-  <script src="dais/dais.js" defer></script>
-  <style>
-    /* This deck only. Theme tokens and decoration live in theme.css. */
-
-    /* A short line under a slide title. */
-    .dais .lede {
-      font-size: 1.9cqi;
-      color: var(--dais-muted);
-      margin-block-end: 1.5cqi;
-    }
-
-    /* A URL under a slide title or at its foot. */
-    .dais .url {
-      font-size: 1.8cqi;
-      font-weight: 600;
-      color: var(--dais-text);
-      overflow-wrap: anywhere;
-    }
-
-    .dais .url a { color: inherit; text-decoration-color: var(--dais-accent); }
-
-    /* --- Title --------------------------------------------------------- */
-
-    #intro {
-      gap: 0;
-      padding-block-start: 11%;
-    }
-
-    #intro .eyebrow {
-      font-size: 2cqi;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--dais-accent-2);
-      margin-block-end: 2cqi;
-    }
-
-    #intro .node-logo { height: 12cqi; width: auto; margin-block-end: 1cqi; }
-    #intro h1 { margin-block-end: 3.2cqi; }
-    #intro .presented { font-size: 1.8cqi; margin-block-end: 1.6cqi; }
-
-    /* Sponsor logos, title slide and closing slide. */
-    .dais .logos {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      gap: 5cqi;
-    }
-
-    .dais .logos li::marker { content: none; }
-    .dais .logos img { display: block; height: 4.6cqi; width: auto; border-radius: 0; }
-    .dais .logos .openjs { height: 5.4cqi; }
-    .dais .logos .harper { height: 4.2cqi; }
-    .dais .logos .node { height: 7cqi; }
-
-    /* --- About --------------------------------------------------------- */
-
-    #about .cols {
-      flex: 1;
-      min-height: 0;
-      grid-template-columns: 1.1fr 1fr;
-      align-items: center;
-      gap: 4cqi;
-    }
-
-    #about h2 { font-size: 4.6cqi; color: var(--dais-text); }
-    #about .role { font-size: 2.1cqi; color: var(--dais-accent); font-weight: 600; }
-
-    #about .rule {
-      width: 100%;
-      height: 0.3cqi;
-      margin-block: 2cqi 2.4cqi;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--mx-pink), var(--mx-gold), var(--mx-green), var(--mx-teal));
-    }
-
-    #about .contact {
-      list-style: none;
-      padding: 0;
-      gap: 1.6cqi;
-      font-size: 2cqi;
-    }
-
-    #about .contact li { display: flex; align-items: center; gap: 1.6cqi; }
-    #about .contact li::marker { content: none; }
-    #about .contact svg { width: 2.6cqi; height: 2.6cqi; flex: none; fill: var(--dais-accent-2); }
-
-    #about .photos {
-      position: relative;
-      height: 34cqi;
-    }
-
-    #about .photos img {
-      position: absolute;
-      object-fit: cover;
-      border-radius: 0.6cqi;
-      border: 0.5cqi solid var(--dais-text);
-      box-shadow: 0 1cqi 3cqi rgb(0 0 0 / 0.45);
-    }
-
-    #about .speaking { width: 34cqi; height: 21cqi; top: 0; right: 4cqi; rotate: 2deg; }
-    #about .ski { width: 15cqi; height: 15cqi; bottom: 0; left: 0; rotate: -4deg; }
-
-    /* --- Numbered rows (plan, sourcing ideas) -------------------------- */
-
-    .dais .rows {
-      list-style: none;
-      padding: 0;
-      gap: 2cqi;
-      counter-reset: row;
-    }
-
-    .dais .rows > li {
-      counter-increment: row;
-      display: grid;
-      grid-template-columns: 5cqi 26cqi 1fr;
-      align-items: center;
-      gap: 2.4cqi;
-      font-size: 1.9cqi;
-    }
-
-    .dais .rows > li::marker { content: none; }
-
-    .dais .rows > li::before {
-      content: counter(row);
-      display: grid;
-      place-items: center;
-      aspect-ratio: 1;
-      font-family: var(--dais-font-display);
-      font-size: 2.2cqi;
-      color: var(--row-color, var(--dais-accent));
-      border: 0.25cqi solid currentColor;
-      border-radius: 0.5cqi;
-      background: color-mix(in srgb, currentColor 10%, transparent);
-    }
-
-    .dais .rows > li:nth-child(5n + 1) { --row-color: var(--mx-pink); }
-    .dais .rows > li:nth-child(5n + 2) { --row-color: var(--mx-gold); }
-    .dais .rows > li:nth-child(5n + 3) { --row-color: var(--mx-green); }
-    .dais .rows > li:nth-child(5n + 4) { --row-color: var(--mx-teal); }
-    .dais .rows > li:nth-child(5n + 5) { --row-color: var(--mx-orange); }
-
-    .dais .rows .name { font-size: 2.4cqi; font-weight: 600; color: var(--dais-text); }
-    .dais .rows .desc { color: var(--dais-muted); }
-
-    #plan .rows { gap: 2.6cqi; margin-block-start: 1cqi; }
-    #sourcing-ideas .rows { gap: 1.5cqi; }
-    #sourcing-ideas .rows > li { grid-template-columns: 4.4cqi 24cqi 1fr; }
-
-    /* A closing rule of thumb at the foot of a slide. */
-    .dais .takeaway {
-      margin-block-start: auto;
-      font-size: 2.3cqi;
-      font-weight: 600;
-      color: var(--dais-text);
-    }
-
-    .dais .takeaway::before {
-      content: "✿ " / "";
-      color: var(--dais-accent-2);
-    }
-
-    /* --- What is Node.js ----------------------------------------------- */
-
-    #what-is-nodejs .cols {
-      flex: 1;
-      min-height: 0;
-      grid-template-columns: 1fr 1.25fr;
-      align-items: center;
-      gap: 4cqi;
-    }
-
-    #what-is-nodejs .tagline {
-      font-family: var(--dais-font-display);
-      font-size: 4cqi;
-      line-height: 1.15;
-      color: var(--dais-text);
-      margin-block-end: 2cqi;
-    }
-
-    #what-is-nodejs .tagline em { font-style: normal; color: var(--dais-accent-2); }
-    #what-is-nodejs .blurb { font-size: 2cqi; color: var(--dais-muted); }
-    #what-is-nodejs pre { --dais-code-size: 1.5cqi; }
-    #what-is-nodejs figcaption { align-self: start; font-size: 1.4cqi; }
-
-    /* --- API surface --------------------------------------------------- */
-
-    #api-surface .modules {
-      list-style: none;
-      padding: 0;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 0.7cqi 0.7cqi;
-      font-size: 1.38cqi;
-      line-height: 1.2;
-    }
-
-    #api-surface .modules li {
-      padding: 0.35em 0.75em;
-      border-radius: 999px;
-      background: var(--dais-surface);
-      border: 1px solid color-mix(in srgb, var(--chip, var(--mx-green)) 55%, transparent);
-    }
-
-    #api-surface .modules li::marker { content: none; }
-    #api-surface .modules li:nth-child(6n + 1) { --chip: var(--mx-pink); }
-    #api-surface .modules li:nth-child(6n + 2) { --chip: var(--mx-gold); }
-    #api-surface .modules li:nth-child(6n + 3) { --chip: var(--mx-green); }
-    #api-surface .modules li:nth-child(6n + 4) { --chip: var(--mx-teal); }
-    #api-surface .modules li:nth-child(6n + 5) { --chip: var(--mx-orange); }
-    #api-surface .modules li:nth-child(6n + 6) { --chip: var(--mx-purple); }
-
-    #api-surface .small { margin-block-start: auto; }
-
-    /* --- Contributing -------------------------------------------------- */
-
-    #contributing .cols {
-      grid-template-columns: 1fr 1.15fr;
-      gap: 4cqi;
-      align-items: stretch;
-    }
-
-    #contributing blockquote {
-      margin: 0.6cqi 0 2.6cqi;
-      font-family: var(--dais-font-display);
-      font-size: 2.5cqi;
-      line-height: 1.2;
-      color: var(--dais-text);
-    }
-
-    #contributing blockquote footer {
-      margin-block-start: 0.6em;
-      font-family: var(--dais-font);
-      font-size: 0.5em;
-      color: var(--dais-muted);
-    }
-
-    #contributing .facts { font-size: 2cqi; gap: 1.2cqi; }
-    #contributing .card h3 { font-size: 1.6cqi; text-transform: uppercase; letter-spacing: 0.1em; color: var(--dais-accent-2); margin-block-end: 1cqi; }
-    #contributing .card ol { font-size: 2cqi; gap: 0.6cqi; }
-    #contributing .card li::marker { color: var(--dais-accent-2); font-weight: 600; }
-    #contributing .url { margin-block-start: auto; }
-
-    /* --- AI policy ----------------------------------------------------- */
-
-    #ai-policy .url { margin-block-start: -0.4cqi; font-size: 1.5cqi; }
-
-    #ai-policy blockquote {
-      margin: 2cqi 0 2.6cqi;
-      padding-inline-start: 2cqi;
-      border-inline-start: 0.5cqi solid var(--dais-accent);
-      font-size: 2.2cqi;
-      line-height: 1.35;
-      color: var(--dais-text);
-    }
-
-    #ai-policy .cols { gap: 5cqi; }
-    #ai-policy h3 { font-size: 2.4cqi; margin-block-end: 1cqi; }
-    #ai-policy .cols ul { list-style: none; padding: 0; font-size: 1.95cqi; gap: 0.8cqi; }
-    #ai-policy .cols li { display: flex; gap: 0.7em; }
-    #ai-policy .cols li::marker { content: none; }
-    #ai-policy .ok h3, #ai-policy .ok li::before { color: var(--mx-green); }
-    #ai-policy .no h3, #ai-policy .no li::before { color: var(--mx-pink); }
-    #ai-policy .ok li::before { content: "✓" / ""; font-weight: 700; }
-    #ai-policy .no li::before { content: "✗" / ""; font-weight: 700; }
-
-    /* --- AI in practice ------------------------------------------------ */
-
-    #ai-in-practice .cols { gap: 5cqi; margin-block-start: 1cqi; }
-
-    #ai-in-practice .card {
-      padding: 2.4cqi 3cqi;
-      border-width: 0.25cqi;
-    }
-
-    #ai-in-practice .card.ok {
-      border-color: var(--mx-green);
-      background: color-mix(in srgb, var(--mx-green) 10%, var(--dais-bg));
-    }
-
-    #ai-in-practice .card.no {
-      border-color: var(--mx-pink);
-      background: color-mix(in srgb, var(--mx-pink) 10%, var(--dais-bg));
-    }
-
-    #ai-in-practice h3 { margin-block-end: 1.2cqi; }
-    #ai-in-practice .ok h3 { color: var(--mx-green); }
-    #ai-in-practice .no h3 { color: var(--mx-pink); }
-    #ai-in-practice .card ul { font-size: 2cqi; gap: 0.7cqi; }
-
-    /* --- Prerequisites ------------------------------------------------- */
-
-    #prerequisites .rows { gap: 1.3cqi; }
-    #prerequisites .rows > li { grid-template-columns: 4.4cqi 1fr; font-size: 2cqi; }
-    #prerequisites .rows > li::before { font-size: 2cqi; }
-    #prerequisites .rows code { font-size: 0.85em; }
-    #prerequisites .url { margin-block-start: auto; }
-
-    /* --- Start coding -------------------------------------------------- */
-
-    #start-coding { justify-content: center; text-align: center; }
-    #start-coding h2 { font-size: 5.2cqi; }
-    #start-coding .vamos { font-size: 2.4cqi; color: var(--dais-accent-2); font-weight: 600; margin-block: -0.6cqi 3cqi; }
-
-    #start-coding .tasks {
-      font-family: var(--dais-font-display);
-      font-size: 4cqi;
-      color: var(--dais-text);
-      margin-block-end: 3cqi;
-    }
-
-    #start-coding .tasks a { color: inherit; text-decoration-color: var(--dais-accent); text-decoration-thickness: 0.3cqi; }
-
-    #start-coding .wifi {
-      display: grid;
-      grid-template-columns: auto auto;
-      justify-content: center;
-      gap: 0.6cqi 2cqi;
-      margin: 0 0 3cqi;
-      font-size: 2.6cqi;
-      text-align: start;
-    }
-
-    #start-coding .wifi dt { color: var(--dais-muted); }
-    #start-coding .wifi dd { margin: 0; font-weight: 600; }
-    #start-coding .no-ai { font-size: 2.1cqi; color: var(--dais-muted); }
-    #start-coding .no-ai strong { color: var(--mx-pink); }
-
-    /* --- Before you open the PR ---------------------------------------- */
-
-    #before-you-open-the-pr .checks {
-      list-style: none;
-      padding: 0;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2.4cqi 6cqi;
-      margin: 2cqi 4cqi 0;
-      font-size: 2.6cqi;
-      font-weight: 600;
-    }
-
-    #before-you-open-the-pr .checks li { display: flex; gap: 0.6em; }
-    #before-you-open-the-pr .checks li::marker { content: none; }
-    #before-you-open-the-pr .checks li::before { content: "✓" / ""; color: var(--dais-accent); }
-
-    #before-you-open-the-pr .question {
-      margin: auto 4cqi 0;
-      padding: 2cqi 3cqi;
-      text-align: center;
-      font-size: 2.3cqi;
-      border: 0.25cqi solid var(--dais-accent);
-      border-radius: var(--dais-radius);
-      background: color-mix(in srgb, var(--dais-accent) 10%, var(--dais-bg));
-    }
-
-    #before-you-open-the-pr .question span { display: block; color: var(--dais-muted); font-size: 0.85em; }
-
-    /* --- Thanks -------------------------------------------------------- */
-
-    #thanks {
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding-block-start: 11%;
-      gap: 0;
-    }
-
-    #thanks .calavera { height: 15cqi; width: auto; border-radius: 0; margin-block-end: 1.5cqi; }
-
-    #thanks h2 {
-      font-size: 7cqi;
-      color: var(--dais-text);
-      text-shadow: 0.35cqi 0.35cqi 0 var(--mx-pink);
-    }
-
-    #thanks .thanks-en { font-size: 2.2cqi; color: var(--dais-muted); margin-block: 0.4cqi 4cqi; }
-    #thanks .logos { gap: 4.5cqi; }
-
-    /* --- Footer -------------------------------------------------------- */
-
-    /* Persistent deck footer: identity on the left, event on the right, with
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Node.js Code and Learn · JSConf México 2026</title>
+    <meta
+      name="description"
+      content="Slides for the Node.js Code and Learn workshop at JSConf México 2026: open source ethos, the contributing guidelines, appropriate AI use, and how to get your first pull request ready."
+    />
+    <link rel="stylesheet" href="dais/dais.css" />
+    <link rel="stylesheet" href="theme.css" />
+    <script src="dais/dais.js" defer></script>
+    <style>
+      /* This deck only. Theme tokens and decoration live in theme.css. */
+
+      /* A short line under a slide title. */
+      .dais .lede {
+        font-size: 1.9cqi;
+        color: var(--dais-muted);
+        margin-block-end: 1.5cqi;
+      }
+
+      /* A URL under a slide title or at its foot. */
+      .dais .url {
+        font-size: 1.8cqi;
+        font-weight: 600;
+        color: var(--dais-text);
+        overflow-wrap: anywhere;
+      }
+
+      .dais .url a {
+        color: inherit;
+        text-decoration-color: var(--dais-accent);
+      }
+
+      /* --- Title --------------------------------------------------------- */
+
+      #intro {
+        gap: 0;
+        padding-block-start: 11%;
+      }
+
+      #intro .eyebrow {
+        font-size: 2cqi;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--dais-accent-2);
+        margin-block-end: 2cqi;
+      }
+
+      #intro .node-logo {
+        height: 12cqi;
+        width: auto;
+        margin-block-end: 1cqi;
+      }
+      #intro h1 {
+        margin-block-end: 3.2cqi;
+      }
+      #intro .presented {
+        font-size: 1.8cqi;
+        margin-block-end: 1.6cqi;
+      }
+
+      /* Sponsor logos, title slide and closing slide. */
+      .dais .logos {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 5cqi;
+      }
+
+      .dais .logos li::marker {
+        content: none;
+      }
+      .dais .logos img {
+        display: block;
+        height: 4.6cqi;
+        width: auto;
+        border-radius: 0;
+      }
+      .dais .logos .openjs {
+        height: 5.4cqi;
+      }
+      .dais .logos .harper {
+        height: 4.2cqi;
+      }
+      .dais .logos .node {
+        height: 7cqi;
+      }
+
+      /* --- About --------------------------------------------------------- */
+
+      #about .cols {
+        flex: 1;
+        min-height: 0;
+        grid-template-columns: 1.1fr 1fr;
+        align-items: center;
+        gap: 4cqi;
+      }
+
+      #about h2 {
+        font-size: 4.6cqi;
+        color: var(--dais-text);
+      }
+      #about .role {
+        font-size: 2.1cqi;
+        color: var(--dais-accent);
+        font-weight: 600;
+      }
+
+      #about .rule {
+        width: 100%;
+        height: 0.3cqi;
+        margin-block: 2cqi 2.4cqi;
+        border-radius: 999px;
+        background: linear-gradient(
+          90deg,
+          var(--mx-pink),
+          var(--mx-gold),
+          var(--mx-green),
+          var(--mx-teal)
+        );
+      }
+
+      #about .contact {
+        list-style: none;
+        padding: 0;
+        gap: 1.6cqi;
+        font-size: 2cqi;
+      }
+
+      #about .contact li {
+        display: flex;
+        align-items: center;
+        gap: 1.6cqi;
+      }
+      #about .contact li::marker {
+        content: none;
+      }
+      #about .contact svg {
+        width: 2.6cqi;
+        height: 2.6cqi;
+        flex: none;
+        fill: var(--dais-accent-2);
+      }
+
+      #about .photos {
+        position: relative;
+        height: 34cqi;
+      }
+
+      #about .photos img {
+        position: absolute;
+        object-fit: cover;
+        border-radius: 0.6cqi;
+        border: 0.5cqi solid var(--dais-text);
+        box-shadow: 0 1cqi 3cqi rgb(0 0 0 / 0.45);
+      }
+
+      #about .speaking {
+        width: 34cqi;
+        height: 21cqi;
+        top: 0;
+        right: 4cqi;
+        rotate: 2deg;
+      }
+      #about .ski {
+        width: 15cqi;
+        height: 15cqi;
+        bottom: 0;
+        left: 0;
+        rotate: -4deg;
+      }
+
+      /* --- Numbered rows (plan, sourcing ideas) -------------------------- */
+
+      .dais .rows {
+        list-style: none;
+        padding: 0;
+        gap: 2cqi;
+        counter-reset: row;
+      }
+
+      .dais .rows > li {
+        counter-increment: row;
+        display: grid;
+        grid-template-columns: 5cqi 26cqi 1fr;
+        align-items: center;
+        gap: 2.4cqi;
+        font-size: 1.9cqi;
+      }
+
+      .dais .rows > li::marker {
+        content: none;
+      }
+
+      .dais .rows > li::before {
+        content: counter(row);
+        display: grid;
+        place-items: center;
+        aspect-ratio: 1;
+        font-family: var(--dais-font-display);
+        font-size: 2.2cqi;
+        color: var(--row-color, var(--dais-accent));
+        border: 0.25cqi solid currentColor;
+        border-radius: 0.5cqi;
+        background: color-mix(in srgb, currentColor 10%, transparent);
+      }
+
+      .dais .rows > li:nth-child(5n + 1) {
+        --row-color: var(--mx-pink);
+      }
+      .dais .rows > li:nth-child(5n + 2) {
+        --row-color: var(--mx-gold);
+      }
+      .dais .rows > li:nth-child(5n + 3) {
+        --row-color: var(--mx-green);
+      }
+      .dais .rows > li:nth-child(5n + 4) {
+        --row-color: var(--mx-teal);
+      }
+      .dais .rows > li:nth-child(5n + 5) {
+        --row-color: var(--mx-orange);
+      }
+
+      .dais .rows .name {
+        font-size: 2.4cqi;
+        font-weight: 600;
+        color: var(--dais-text);
+      }
+      .dais .rows .desc {
+        color: var(--dais-muted);
+      }
+
+      #plan .rows {
+        gap: 2.6cqi;
+        margin-block-start: 1cqi;
+      }
+      #sourcing-ideas .rows {
+        gap: 1.5cqi;
+      }
+      #sourcing-ideas .rows > li {
+        grid-template-columns: 4.4cqi 24cqi 1fr;
+      }
+
+      /* A closing rule of thumb at the foot of a slide. */
+      .dais .takeaway {
+        margin-block-start: auto;
+        font-size: 2.3cqi;
+        font-weight: 600;
+        color: var(--dais-text);
+      }
+
+      .dais .takeaway::before {
+        content: "✿ " / "";
+        color: var(--dais-accent-2);
+      }
+
+      /* --- What is Node.js ----------------------------------------------- */
+
+      #what-is-nodejs .cols {
+        flex: 1;
+        min-height: 0;
+        grid-template-columns: 1fr 1.25fr;
+        align-items: center;
+        gap: 4cqi;
+      }
+
+      #what-is-nodejs .tagline {
+        font-family: var(--dais-font-display);
+        font-size: 4cqi;
+        line-height: 1.15;
+        color: var(--dais-text);
+        margin-block-end: 2cqi;
+      }
+
+      #what-is-nodejs .tagline em {
+        font-style: normal;
+        color: var(--dais-accent-2);
+      }
+      #what-is-nodejs .blurb {
+        font-size: 2cqi;
+        color: var(--dais-muted);
+      }
+      #what-is-nodejs pre {
+        --dais-code-size: 1.5cqi;
+      }
+      #what-is-nodejs figcaption {
+        align-self: start;
+        font-size: 1.4cqi;
+      }
+
+      /* --- API surface --------------------------------------------------- */
+
+      #api-surface .modules {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.7cqi 0.7cqi;
+        font-size: 1.38cqi;
+        line-height: 1.2;
+      }
+
+      #api-surface .modules li {
+        padding: 0.35em 0.75em;
+        border-radius: 999px;
+        background: var(--dais-surface);
+        border: 1px solid
+          color-mix(in srgb, var(--chip, var(--mx-green)) 55%, transparent);
+      }
+
+      #api-surface .modules li::marker {
+        content: none;
+      }
+      #api-surface .modules li:nth-child(6n + 1) {
+        --chip: var(--mx-pink);
+      }
+      #api-surface .modules li:nth-child(6n + 2) {
+        --chip: var(--mx-gold);
+      }
+      #api-surface .modules li:nth-child(6n + 3) {
+        --chip: var(--mx-green);
+      }
+      #api-surface .modules li:nth-child(6n + 4) {
+        --chip: var(--mx-teal);
+      }
+      #api-surface .modules li:nth-child(6n + 5) {
+        --chip: var(--mx-orange);
+      }
+      #api-surface .modules li:nth-child(6n + 6) {
+        --chip: var(--mx-purple);
+      }
+
+      #api-surface .small {
+        margin-block-start: auto;
+      }
+
+      /* --- Contributing -------------------------------------------------- */
+
+      #contributing blockquote {
+        margin: 0.6cqi 0 3cqi;
+        font-family: var(--dais-font-display);
+        font-size: 3cqi;
+        line-height: 1.2;
+        color: var(--dais-text);
+      }
+
+      #contributing blockquote footer {
+        margin-block-start: 0.6em;
+        font-family: var(--dais-font);
+        font-size: 0.5em;
+        color: var(--dais-muted);
+      }
+
+      #contributing .card {
+        padding: 2.2cqi 3cqi;
+      }
+      #contributing .card h3 {
+        font-size: 1.6cqi;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--dais-accent-2);
+        margin-block-end: 1.4cqi;
+      }
+
+      /* Six items as two columns that read down, then across. */
+      #contributing .card ol {
+        display: grid;
+        grid-template-rows: repeat(3, auto);
+        grid-auto-flow: column;
+        grid-auto-columns: 1fr;
+        gap: 1cqi 5cqi;
+        font-size: 2.2cqi;
+      }
+
+      #contributing .card li::marker {
+        color: var(--dais-accent-2);
+        font-weight: 600;
+      }
+      #contributing .url {
+        margin-block-start: auto;
+      }
+
+      /* --- AI policy ----------------------------------------------------- */
+
+      #ai-policy .url {
+        margin-block-start: -0.4cqi;
+        font-size: 1.5cqi;
+      }
+
+      #ai-policy blockquote {
+        margin: 2cqi 0 2.6cqi;
+        padding-inline-start: 2cqi;
+        border-inline-start: 0.5cqi solid var(--dais-accent);
+        font-size: 2.2cqi;
+        line-height: 1.35;
+        color: var(--dais-text);
+      }
+
+      #ai-policy .cols {
+        gap: 5cqi;
+      }
+      #ai-policy h3 {
+        font-size: 2.4cqi;
+        margin-block-end: 1cqi;
+      }
+      #ai-policy .cols ul {
+        list-style: none;
+        padding: 0;
+        font-size: 1.95cqi;
+        gap: 0.8cqi;
+      }
+      #ai-policy .cols li {
+        display: flex;
+        gap: 0.7em;
+      }
+      #ai-policy .cols li::marker {
+        content: none;
+      }
+      #ai-policy .ok h3,
+      #ai-policy .ok li::before {
+        color: var(--mx-green);
+      }
+      #ai-policy .no h3,
+      #ai-policy .no li::before {
+        color: var(--mx-pink);
+      }
+      #ai-policy .ok li::before {
+        content: "✓" / "";
+        font-weight: 700;
+      }
+      #ai-policy .no li::before {
+        content: "✗" / "";
+        font-weight: 700;
+      }
+
+      /* The rule that applies most to today's tasks. Underlined, not italic. */
+      #ai-policy li em {
+        font-style: normal;
+        text-decoration: underline;
+        text-decoration-color: var(--mx-pink);
+        text-decoration-thickness: 0.2cqi;
+        text-underline-offset: 0.3em;
+      }
+
+      /* --- Prerequisites ------------------------------------------------- */
+
+      #prerequisites .rows {
+        gap: 1.3cqi;
+      }
+      #prerequisites .rows > li {
+        grid-template-columns: 4.4cqi 1fr;
+        font-size: 2cqi;
+      }
+      #prerequisites .rows > li::before {
+        font-size: 2cqi;
+      }
+      #prerequisites .rows code {
+        font-size: 0.85em;
+      }
+      #prerequisites .url {
+        margin-block-start: auto;
+      }
+
+      /* --- Start coding -------------------------------------------------- */
+
+      #start-coding {
+        justify-content: center;
+        text-align: center;
+      }
+      #start-coding h2 {
+        font-size: 5.2cqi;
+      }
+      #start-coding .vamos {
+        font-size: 2.4cqi;
+        color: var(--dais-accent-2);
+        font-weight: 600;
+        margin-block: -0.6cqi 3cqi;
+      }
+
+      #start-coding .tasks {
+        font-family: var(--dais-font-display);
+        font-size: 4cqi;
+        color: var(--dais-text);
+        margin-block-end: 3cqi;
+      }
+
+      #start-coding .tasks a {
+        color: inherit;
+        text-decoration-color: var(--dais-accent);
+        text-decoration-thickness: 0.3cqi;
+      }
+
+      #start-coding .wifi {
+        display: grid;
+        grid-template-columns: auto auto;
+        justify-content: center;
+        gap: 0.6cqi 2cqi;
+        margin: 0 0 3cqi;
+        font-size: 2.6cqi;
+        text-align: start;
+      }
+
+      #start-coding .wifi dt {
+        color: var(--dais-muted);
+      }
+      #start-coding .wifi dd {
+        margin: 0;
+        font-weight: 600;
+      }
+      #start-coding .no-ai {
+        font-size: 2.1cqi;
+        color: var(--dais-muted);
+      }
+      #start-coding .no-ai strong {
+        color: var(--mx-pink);
+      }
+
+      /* --- Before you open a pull request -------------------------------- */
+
+      #before-you-open-a-pull-request .checks {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.4cqi 6cqi;
+        margin: 2cqi 4cqi 0;
+        font-size: 2.6cqi;
+        font-weight: 600;
+      }
+
+      #before-you-open-a-pull-request .checks li {
+        display: flex;
+        gap: 0.6em;
+      }
+      #before-you-open-a-pull-request .checks li::marker {
+        content: none;
+      }
+      #before-you-open-a-pull-request .checks li::before {
+        content: "✓" / "";
+        color: var(--dais-accent);
+      }
+
+      #before-you-open-a-pull-request .question {
+        margin: auto 4cqi 0;
+        padding: 2cqi 3cqi;
+        text-align: center;
+        font-size: 2.3cqi;
+        border: 0.25cqi solid var(--dais-accent);
+        border-radius: var(--dais-radius);
+        background: color-mix(in srgb, var(--dais-accent) 10%, var(--dais-bg));
+      }
+
+      #before-you-open-a-pull-request .question span {
+        display: block;
+        color: var(--dais-muted);
+        font-size: 0.85em;
+      }
+
+      /* --- Thanks -------------------------------------------------------- */
+
+      #thanks {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding-block-start: 11%;
+        gap: 0;
+      }
+
+      #thanks .calavera {
+        height: 15cqi;
+        width: auto;
+        border-radius: 0;
+        margin-block-end: 1.5cqi;
+      }
+
+      #thanks h2 {
+        font-size: 7cqi;
+        color: var(--dais-text);
+        text-shadow: 0.35cqi 0.35cqi 0 var(--mx-pink);
+      }
+
+      #thanks .thanks-en {
+        font-size: 2.2cqi;
+        color: var(--dais-muted);
+        margin-block: 0.4cqi 4cqi;
+      }
+      #thanks .logos {
+        gap: 4.5cqi;
+      }
+
+      /* --- Footer -------------------------------------------------------- */
+
+      /* Persistent deck footer: identity on the left, event on the right, with
        the framework's nav dots centered between them. Anchored to the deck box
        (--dais) so it tracks the letterboxed deck, not the viewport. The footer
        is an inline-size container, so its children's cqi units resolve against
        the deck width and scale in fullscreen exactly like the slides do. */
-    .deck-footer {
-      position: fixed;
-      position-anchor: --dais;
-      left: anchor(left);
-      right: anchor(right);
-      bottom: anchor(bottom);
-      container-type: inline-size;
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      z-index: 1;
-      pointer-events: none;
-    }
+      .deck-footer {
+        position: fixed;
+        position-anchor: --dais;
+        left: anchor(left);
+        right: anchor(right);
+        bottom: anchor(bottom);
+        container-type: inline-size;
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        z-index: 1;
+        pointer-events: none;
+      }
 
-    .deck-footer .id,
-    .deck-footer .event {
-      display: flex;
-      flex-direction: column;
-      gap: 0.35em;
-      white-space: nowrap;
-      font-size: 1.3cqi;
-      line-height: 1.1;
-      color: var(--dais-muted);
-      padding-block-end: 1.6cqi;
-    }
+      .deck-footer .id,
+      .deck-footer .event {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35em;
+        white-space: nowrap;
+        font-size: 1.3cqi;
+        line-height: 1.1;
+        color: var(--dais-muted);
+        padding-block-end: 1.6cqi;
+      }
 
-    .deck-footer .id { padding-inline-start: 2.4cqi; align-items: start; }
-    .deck-footer .event { padding-inline-end: 2.4cqi; align-items: end; text-align: end; }
+      .deck-footer .id {
+        padding-inline-start: 2.4cqi;
+        align-items: start;
+      }
+      .deck-footer .event {
+        padding-inline-end: 2.4cqi;
+        align-items: end;
+        text-align: end;
+      }
 
-    .deck-footer .line1,
-    .deck-footer .line2 {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4em;
-    }
+      .deck-footer .line1,
+      .deck-footer .line2 {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4em;
+      }
 
-    .deck-footer .event .line2 { font-size: 0.85em; opacity: 0.85; }
+      .deck-footer .event .line2 {
+        font-size: 0.85em;
+        opacity: 0.85;
+      }
 
-    .deck-footer svg {
-      width: 1.05em;
-      height: 1.05em;
-      fill: currentColor;
-      translate: 0 0.04em;
-    }
+      .deck-footer svg {
+        width: 1.05em;
+        height: 1.05em;
+        fill: currentColor;
+        translate: 0 0.04em;
+      }
 
-    /* The footer is chrome, not slide content: hide it wherever the framework
+      /* The footer is chrome, not slide content: hide it wherever the framework
        hides its own nav dots, in overview mode and print. */
-    body:has(.dais-overview-toggle:checked) .deck-footer { display: none; }
+      body:has(.dais-overview-toggle:checked) .deck-footer {
+        display: none;
+      }
 
-    @media print {
-      .deck-footer { display: none; }
-    }
+      @media print {
+        .deck-footer {
+          display: none;
+        }
+      }
 
-    /* On screen the footer sits where the framework's slide number would, and
+      /* On screen the footer sits where the framework's slide number would, and
        the dots already show position. Print keeps the number. */
-    @media screen {
-      .dais > section::after { content: none; }
-    }
-  </style>
-</head>
-<body>
+      @media screen {
+        .dais > section::after {
+          content: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="dais-controls" aria-label="Presentation controls">
+      <label
+        ><input type="checkbox" class="dais-overview-toggle" /> Overview</label
+      >
+      <label><input type="checkbox" class="dais-notes-toggle" /> Notes</label>
+      <output class="dais-counter"></output>
+      <output
+        class="dais-timer"
+        data-dais-limit="20"
+        title="Presenter timer. Click or press T to pause"
+      ></output>
+    </nav>
 
-  <nav class="dais-controls" aria-label="Presentation controls">
-    <label><input type="checkbox" class="dais-overview-toggle"> Overview</label>
-    <label><input type="checkbox" class="dais-notes-toggle"> Notes</label>
-    <output class="dais-counter"></output>
-    <output class="dais-timer" data-dais-limit="20" title="Presenter timer. Click or press T to pause"></output>
-  </nav>
+    <div class="dais-progress" aria-hidden="true"></div>
 
-  <div class="dais-progress" aria-hidden="true"></div>
+    <main
+      class="dais dais-dots"
+      aria-label="Node.js Code and Learn, JSConf México 2026"
+      tabindex="0"
+    >
+      <section class="slide title" id="intro">
+        <p class="eyebrow">JSConf México 2026 · Guadalajara</p>
+        <img
+          class="node-logo"
+          src="nodejs-logo.png"
+          alt="Node.js"
+          width="412"
+          height="252"
+        />
+        <h1>Code and Learn</h1>
+        <p class="presented">Presented by</p>
+        <ul class="logos">
+          <li>
+            <img
+              src="jsconf-mx-logo.svg"
+              alt="JSConf México"
+              width="670"
+              height="166"
+            />
+          </li>
+          <li>
+            <img
+              class="openjs"
+              src="openjs-logo.png"
+              alt="OpenJS Foundation"
+              width="937"
+              height="295"
+            />
+          </li>
+          <li>
+            <img
+              class="harper"
+              src="harper-logo.svg"
+              alt="Harper"
+              width="471"
+              height="119"
+            />
+          </li>
+        </ul>
+        <aside class="notes">
+          ¡Bienvenidos! Welcome to Code and Learn. Short presentation first,
+          then we write code together until 17:30.
+        </aside>
+      </section>
 
-  <main class="dais dais-dots" aria-label="Node.js Code and Learn, JSConf México 2026" tabindex="0">
-
-    <section class="slide title" id="intro">
-      <p class="eyebrow">JSConf México 2026 · Guadalajara</p>
-      <img class="node-logo" src="nodejs-logo.png" alt="Node.js" width="412" height="252">
-      <h1>Code and Learn</h1>
-      <p class="presented">Presented by</p>
-      <ul class="logos">
-        <li><img src="jsconf-mx-logo.svg" alt="JSConf México" width="670" height="166"></li>
-        <li><img class="openjs" src="openjs-logo.png" alt="OpenJS Foundation" width="937" height="295"></li>
-        <li><img class="harper" src="harper-logo.svg" alt="Harper" width="471" height="119"></li>
-      </ul>
-      <aside class="notes">¡Bienvenidos! Welcome to Code and Learn. Short presentation first, then we write code together until 17:30.</aside>
-    </section>
-
-    <section class="slide" id="about">
-      <div class="cols">
-        <div>
-          <h2>Ethan Arrowood</h2>
-          <p class="role">Head of Open Source Engineering at Harper</p>
-          <div class="rule" aria-hidden="true"></div>
-          <ul class="contact">
-            <li>
-              <svg viewBox="0 0 16 16" role="img" aria-label="GitHub"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-              @Ethan-Arrowood
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" role="img" aria-label="LinkedIn"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0h.01z"/></svg>
-              linkedin.com/in/ethan-arrowood
-            </li>
-            <li>
-              <svg viewBox="0 0 568 501" role="img" aria-label="Bluesky"><path d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.209C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.749 114.875 19.53 144.097 84.29 80.986 149.05-119.859 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.843 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.05-65.72 11.184-139.6-7.296-159.875-79.749C9.945 203.66 0 75.293 0 57.947 0-28.906 76.135-1.611 123.121 33.664Z"/></svg>
-              bsky.app/profile/arrowood.dev
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" role="img" aria-label="Email"><path d="M2 4h20a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm.6 2.4L12 12.9l9.4-6.5V6H2.6v.4z"/></svg>
-              ethan@arrowood.dev
-            </li>
-          </ul>
+      <section class="slide" id="about">
+        <div class="cols">
+          <div>
+            <h2>Ethan Arrowood</h2>
+            <p class="role">Head of Open Source Engineering at Harper</p>
+            <div class="rule" aria-hidden="true"></div>
+            <ul class="contact">
+              <li>
+                <svg viewBox="0 0 16 16" role="img" aria-label="GitHub">
+                  <path
+                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+                  />
+                </svg>
+                @Ethan-Arrowood
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" role="img" aria-label="LinkedIn">
+                  <path
+                    d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0h.01z"
+                  />
+                </svg>
+                linkedin.com/in/ethan-arrowood
+              </li>
+              <li>
+                <svg viewBox="0 0 568 501" role="img" aria-label="Bluesky">
+                  <path
+                    d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.209C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.749 114.875 19.53 144.097 84.29 80.986 149.05-119.859 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.843 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.05-65.72 11.184-139.6-7.296-159.875-79.749C9.945 203.66 0 75.293 0 57.947 0-28.906 76.135-1.611 123.121 33.664Z"
+                  />
+                </svg>
+                bsky.app/profile/arrowood.dev
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" role="img" aria-label="Email">
+                  <path
+                    d="M2 4h20a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm.6 2.4L12 12.9l9.4-6.5V6H2.6v.4z"
+                  />
+                </svg>
+                ethan@arrowood.dev
+              </li>
+            </ul>
+          </div>
+          <div class="photos">
+            <img
+              class="speaking"
+              src="ethan-speaking.jpg"
+              alt="Ethan presenting on stage, wearing a Harper t-shirt"
+              width="1400"
+              height="868"
+            />
+            <img
+              class="ski"
+              src="ethan.jpg"
+              alt="Ethan on a ski slope"
+              width="900"
+              height="900"
+            />
+          </div>
         </div>
-        <div class="photos">
-          <img class="speaking" src="ethan-speaking.jpg" alt="Ethan presenting on stage, wearing a Harper t-shirt" width="1400" height="868">
-          <img class="ski" src="ethan.jpg" alt="Ethan on a ski slope" width="900" height="900">
-        </div>
-      </div>
-      <aside class="notes"></aside>
-    </section>
+        <aside class="notes"></aside>
+      </section>
 
-    <section class="slide" id="plan">
-      <h2>Plan</h2>
-      <p class="lede">Quick overview, then diving in head first.</p>
-      <ol class="rows">
-        <li><span class="name">Understand Node.js</span> <span class="desc">What it is and why the project is shaped this way</span></li>
-        <li><span class="name">Contributing</span> <span class="desc">Community and contribution details</span></li>
-        <li><span class="name">Work safely</span> <span class="desc">Contribution workflow, prerequisites, AI policy</span></li>
-        <li><span class="name">Start coding</span> <span class="desc">Claim a task, get to work!</span></li>
-      </ol>
-      <aside class="notes"></aside>
-    </section>
+      <section class="slide" id="plan">
+        <h2>Plan</h2>
+        <p class="lede">A short introduction, then hands-on coding.</p>
+        <ol class="rows">
+          <li>
+            <span class="name">Meet Node.js</span>
+            <span class="desc">What it is and what you can work on</span>
+          </li>
+          <li>
+            <span class="name">Contributing</span>
+            <span class="desc">The contribution guide and the AI rules</span>
+          </li>
+          <li>
+            <span class="name">Get ready</span>
+            <span class="desc"
+              >Find ideas, check your setup, prepare a pull request</span
+            >
+          </li>
+          <li>
+            <span class="name">Start coding</span>
+            <span class="desc">Choose a task and make a change</span>
+          </li>
+        </ol>
+        <aside class="notes"></aside>
+      </section>
 
-    <section class="slide" id="what-is-nodejs">
-      <h2>What is Node.js?</h2>
-      <div class="cols">
-        <div>
-          <p class="tagline">Run JavaScript <em>everywhere</em>.</p>
-          <p class="blurb">A free, open source, cross-platform JavaScript runtime for servers, web apps, command line tools, and scripts.</p>
-        </div>
-        <figure>
-          <pre><code><span class="line"><span class="tok-comment">// server.mjs</span></span>
+      <section class="slide" id="what-is-nodejs">
+        <h2>What is Node.js?</h2>
+        <div class="cols">
+          <div>
+            <p class="tagline">Run JavaScript <em>outside the browser</em>.</p>
+            <p class="blurb">
+              Free and open source. Runs on Windows, macOS, and Linux. Build
+              servers, web apps, command line tools, and scripts.
+            </p>
+          </div>
+          <figure>
+            <pre><code><span class="line"><span class="tok-comment">// server.mjs</span></span>
 <span class="line"><span class="tok-keyword">import</span> <span class="tok-punct">{</span> createServer <span class="tok-punct">}</span> <span class="tok-keyword">from</span> <span class="tok-string">'node:http'</span><span class="tok-punct">;</span></span>
 <span class="line"> </span>
 <span class="line"><span class="tok-keyword">const</span> server <span class="tok-punct">=</span> <span class="tok-fn">createServer</span><span class="tok-punct">((</span>req<span class="tok-punct">,</span> res<span class="tok-punct">)</span> <span class="tok-punct">=&gt;</span> <span class="tok-punct">{</span></span>
@@ -548,100 +856,107 @@
 <span class="line">server<span class="tok-punct">.</span><span class="tok-fn">listen</span><span class="tok-punct">(</span><span class="tok-number">3000</span><span class="tok-punct">,</span> <span class="tok-string">'127.0.0.1'</span><span class="tok-punct">,</span> <span class="tok-punct">()</span> <span class="tok-punct">=&gt;</span> <span class="tok-punct">{</span></span>
 <span class="line">  console<span class="tok-punct">.</span><span class="tok-fn">log</span><span class="tok-punct">(</span><span class="tok-string">'Listening on 127.0.0.1:3000'</span><span class="tok-punct">);</span></span>
 <span class="line"><span class="tok-punct">});</span></span></code></pre>
-          <figcaption>The example on the nodejs.org homepage. Run it with <code>node server.mjs</code>.</figcaption>
-        </figure>
-      </div>
-      <aside class="notes">Same story as the nodejs.org homepage. Point out node:http, the node: prefix, and that this is all core: no dependencies.</aside>
-    </section>
-
-    <section class="slide" id="api-surface">
-      <h2>A lot of surface area</h2>
-      <p class="lede">66 sections of API docs. Every one has code, tests, and docs you can improve.</p>
-      <ul class="modules">
-        <li>Assertion testing</li>
-        <li>Asynchronous context tracking</li>
-        <li>Async hooks</li>
-        <li>Benchmark runner</li>
-        <li>Buffer</li>
-        <li>C++ addons</li>
-        <li>C/C++ addons with Node-API</li>
-        <li>C++ embedder API</li>
-        <li>Child processes</li>
-        <li>Cluster</li>
-        <li>Command-line options</li>
-        <li>Console</li>
-        <li>Crypto</li>
-        <li>Debugger</li>
-        <li>Deprecated APIs</li>
-        <li>Diagnostics Channel</li>
-        <li>DNS</li>
-        <li>Domain</li>
-        <li>Environment Variables</li>
-        <li>Errors</li>
-        <li>Events</li>
-        <li>File system</li>
-        <li>FFI</li>
-        <li>Globals</li>
-        <li>HTTP</li>
-        <li>HTTP/2</li>
-        <li>HTTPS</li>
-        <li>Inspector</li>
-        <li>Internationalization</li>
-        <li>Iterable Streams API</li>
-        <li>CommonJS modules</li>
-        <li>ECMAScript modules</li>
-        <li>node:module API</li>
-        <li>Packages</li>
-        <li>TypeScript</li>
-        <li>Net</li>
-        <li>OS</li>
-        <li>Path</li>
-        <li>Performance hooks</li>
-        <li>Permissions</li>
-        <li>Process</li>
-        <li>Punycode</li>
-        <li>Query strings</li>
-        <li>Readline</li>
-        <li>REPL</li>
-        <li>Report</li>
-        <li>Single executable applications</li>
-        <li>SQLite</li>
-        <li>Stream</li>
-        <li>String decoder</li>
-        <li>Test runner</li>
-        <li>Timers</li>
-        <li>TLS/SSL</li>
-        <li>Trace events</li>
-        <li>TTY</li>
-        <li>UDP/datagram</li>
-        <li>URL</li>
-        <li>Utilities</li>
-        <li>V8</li>
-        <li>Virtual File System</li>
-        <li>VM</li>
-        <li>WASI</li>
-        <li>Web Crypto API</li>
-        <li>Web Streams API</li>
-        <li>Worker threads</li>
-        <li>Zlib</li>
-      </ul>
-      <p class="small muted">From the Node.js v26.12.1 documentation index, <span class="url">nodejs.org/api</span></p>
-      <aside class="notes">This is why there is always something to work on. Pick an area you use and read its docs and tests.</aside>
-    </section>
-
-    <section class="slide" id="contributing">
-      <h2>Contributing to Node.js</h2>
-      <div class="cols">
-        <div>
-          <blockquote>
-            <p>No contribution is too small and all contributions are valued.</p>
-            <footer>CONTRIBUTING.md</footer>
-          </blockquote>
-          <ul class="facts">
-            <li>Code, docs, answers, infrastructure, and advocacy all count.</li>
-            <li>Not a Collaborator yet? Keep at most <strong>10 pull requests</strong> open.</li>
-          </ul>
+            <figcaption>
+              A web server from the nodejs.org homepage. Run it with
+              <code>node server.mjs</code>.
+            </figcaption>
+          </figure>
         </div>
+        <aside class="notes">
+          Same story as the nodejs.org homepage. Point out node:http, the node:
+          prefix, and that this is all core: no dependencies.
+        </aside>
+      </section>
+
+      <section class="slide" id="api-surface">
+        <h2>Many places to contribute</h2>
+        <p class="lede">
+          66 topics in the API docs. Help improve their code, tests, and docs.
+        </p>
+        <ul class="modules">
+          <li>Assertion testing</li>
+          <li>Asynchronous context tracking</li>
+          <li>Async hooks</li>
+          <li>Benchmark runner</li>
+          <li>Buffer</li>
+          <li>C++ addons</li>
+          <li>C/C++ addons with Node-API</li>
+          <li>C++ embedder API</li>
+          <li>Child processes</li>
+          <li>Cluster</li>
+          <li>Command-line options</li>
+          <li>Console</li>
+          <li>Crypto</li>
+          <li>Debugger</li>
+          <li>Deprecated APIs</li>
+          <li>Diagnostics Channel</li>
+          <li>DNS</li>
+          <li>Domain</li>
+          <li>Environment Variables</li>
+          <li>Errors</li>
+          <li>Events</li>
+          <li>File system</li>
+          <li>FFI</li>
+          <li>Globals</li>
+          <li>HTTP</li>
+          <li>HTTP/2</li>
+          <li>HTTPS</li>
+          <li>Inspector</li>
+          <li>Internationalization</li>
+          <li>Iterable Streams API</li>
+          <li>CommonJS modules</li>
+          <li>ECMAScript modules</li>
+          <li>node:module API</li>
+          <li>Packages</li>
+          <li>TypeScript</li>
+          <li>Net</li>
+          <li>OS</li>
+          <li>Path</li>
+          <li>Performance hooks</li>
+          <li>Permissions</li>
+          <li>Process</li>
+          <li>Punycode</li>
+          <li>Query strings</li>
+          <li>Readline</li>
+          <li>REPL</li>
+          <li>Report</li>
+          <li>Single executable applications</li>
+          <li>SQLite</li>
+          <li>Stream</li>
+          <li>String decoder</li>
+          <li>Test runner</li>
+          <li>Timers</li>
+          <li>TLS/SSL</li>
+          <li>Trace events</li>
+          <li>TTY</li>
+          <li>UDP/datagram</li>
+          <li>URL</li>
+          <li>Utilities</li>
+          <li>V8</li>
+          <li>Virtual File System</li>
+          <li>VM</li>
+          <li>WASI</li>
+          <li>Web Crypto API</li>
+          <li>Web Streams API</li>
+          <li>Worker threads</li>
+          <li>Zlib</li>
+        </ul>
+        <p class="small muted">
+          From the Node.js v26.12.1 documentation index,
+          <span class="url">nodejs.org/api</span>
+        </p>
+        <aside class="notes">
+          This is why there is always something to work on. Pick an area you use
+          and read its docs and tests.
+        </aside>
+      </section>
+
+      <section class="slide" id="contributing">
+        <h2>Contributing to Node.js</h2>
+        <blockquote>
+          <p>No contribution is too small and all contributions are valued.</p>
+          <footer>CONTRIBUTING.md</footer>
+        </blockquote>
         <div class="card">
           <h3>What the guide covers</h3>
           <ol>
@@ -653,151 +968,259 @@
             <li>Developer's Certificate of Origin 1.1</li>
           </ol>
         </div>
-      </div>
-      <p class="url"><a href="https://github.com/nodejs/node/blob/main/CONTRIBUTING.md">github.com/nodejs/node/blob/main/CONTRIBUTING.md</a></p>
-      <aside class="notes">Open governance: people who make significant, valuable contributions become Collaborators with commit access (GOVERNANCE.md). The Developer's Certificate of Origin is why every commit needs a Signed-off-by line: git commit -s.</aside>
-    </section>
+        <p class="url">
+          <a href="https://github.com/nodejs/node/blob/main/CONTRIBUTING.md"
+            >github.com/nodejs/node/blob/main/CONTRIBUTING.md</a
+          >
+        </p>
+        <aside class="notes">
+          Code, docs, answering questions, infrastructure, and advocacy all
+          count. Open governance: people who make significant, valuable
+          contributions become Collaborators with commit access (GOVERNANCE.md).
+          Until then, keep at most 10 pull requests open. The Developer's
+          Certificate of Origin is why every commit needs a Signed-off-by line:
+          git commit -s.
+        </aside>
+      </section>
 
-    <section class="slide" id="ai-policy">
-      <h2>AI use in Node.js</h2>
-      <p class="url"><a href="https://github.com/nodejs/node/blob/main/doc/contributing/ai-guidelines.md">github.com/nodejs/node/blob/main/doc/contributing/ai-guidelines.md</a></p>
-      <blockquote>Decision making should always be based on human judgement instead of machine automation, regardless of whether the automation is powered by AI.</blockquote>
-      <div class="cols">
-        <div class="ok">
-          <h3>Okay</h3>
-          <ul>
-            <li>Read and understand the project</li>
-            <li>Treat AI output as a hypothesis, then verify it</li>
-            <li>Disclose AI use and how you checked it</li>
-            <li>Grammar checks and translation</li>
-          </ul>
+      <section class="slide" id="ai-policy">
+        <h2>AI use in Node.js</h2>
+        <p class="url">
+          <a
+            href="https://github.com/nodejs/node/blob/main/doc/contributing/ai-guidelines.md"
+            >github.com/nodejs/node/blob/main/doc/contributing/ai-guidelines.md</a
+          >
+        </p>
+        <blockquote>
+          In the Node.js project, decision making should always be based on
+          human judgement instead of machine automation, regardless of whether
+          the automation is powered by AI.
+        </blockquote>
+        <div class="cols">
+          <div class="ok">
+            <h3>Allowed by Node.js</h3>
+            <ul>
+              <li>Ask AI to explain code, then check it</li>
+              <li>Say what AI wrote and how you checked it</li>
+              <li>Grammar and spelling checks</li>
+            </ul>
+          </div>
+          <div class="no">
+            <h3>Not allowed</h3>
+            <ul>
+              <li>Pull requests from unapproved bots</li>
+              <li><em>Using AI to automate "good first issue" fixes</em></li>
+              <li>AI-generated replies to reviewers</li>
+              <li>Posting messages written entirely by AI</li>
+            </ul>
+          </div>
         </div>
-        <div class="no">
-          <h3>Not okay</h3>
-          <ul>
-            <li>Pull requests opened by automated tooling</li>
-            <li>AI fixes for "good first issue" issues</li>
-            <li>Automated replies to review feedback</li>
-            <li>Pasting messages generated entirely by AI</li>
-          </ul>
-        </div>
-      </div>
-      <aside class="notes">The policy changed since RenderATL: AI-automated fixes for good first issues are now explicitly prohibited. Those issues exist to teach new humans. You must be able to explain every change; disclosure is not a disclaimer.</aside>
-    </section>
+        <aside class="notes">
+          The policy changed since RenderATL: AI-automated fixes for good first
+          issues are now explicitly prohibited. Those issues exist to teach new
+          humans. You must be able to explain every change; disclosure is not a
+          disclaimer. Today we go further and skip AI entirely so everyone
+          learns the manual process.
+        </aside>
+      </section>
 
-    <section class="slide" id="ai-in-practice">
-      <h2>AI policy overview</h2>
-      <p class="lede">Use AI to learn faster. Do not use it to bypass human accountability.</p>
-      <div class="cols">
-        <div class="card ok">
-          <h3>Appropriate</h3>
-          <ul>
-            <li>Explain unfamiliar code</li>
-            <li>Draft a test plan</li>
-            <li>Check wording</li>
-            <li>Suggest debugging paths</li>
-          </ul>
-        </div>
-        <div class="card no">
-          <h3>Inappropriate</h3>
-          <ul>
-            <li>Unattended bots</li>
-            <li>PRs you cannot explain</li>
-            <li>Fake repro steps</li>
-            <li>Large opaque rewrites</li>
-          </ul>
-        </div>
-      </div>
-      <p class="takeaway">Human in the loop. Human signs off. Human responsible.</p>
-      <aside class="notes"></aside>
-    </section>
+      <section class="slide" id="prerequisites">
+        <h2>Check your setup</h2>
+        <p class="lede">
+          You are ready when Node.js builds and one test passes.
+        </p>
+        <ol class="rows">
+          <li>
+            <span
+              >Turn on two-factor authentication for your GitHub account</span
+            >
+          </li>
+          <li>
+            <span>Set Git's email to one linked to your GitHub account</span>
+          </li>
+          <li>
+            <span
+              >Fork <code>nodejs/node</code> on GitHub, then clone your
+              fork</span
+            >
+          </li>
+          <li>
+            <span
+              >Build Node.js in the dev container (recommended) or on your
+              computer</span
+            >
+          </li>
+          <li>
+            <span
+              >Run <code>tools/test.py test/parallel/test-assert.js</code> and
+              see it pass</span
+            >
+          </li>
+        </ol>
+        <p class="url">
+          <a
+            href="https://gist.github.com/Ethan-Arrowood/b75daccca7af5889ea70eab586292a78"
+            >gist.github.com/Ethan-Arrowood/b75daccca7af5889ea70eab586292a78</a
+          >
+        </p>
+        <aside class="notes">
+          Not set up yet? Start the dev container image pull now (docker pull
+          nodejs/devcontainer:nightly). It is about 3.3 GB, so pair up with
+          someone who is ready while it downloads.
+        </aside>
+      </section>
 
-    <section class="slide" id="sourcing-ideas">
-      <h2>How to sustainably source ideas</h2>
-      <p class="lede">Good contributors learn where problems come from, not just where labels appear.</p>
-      <ol class="rows">
-        <li><span class="name">Good first issues</span> <span class="desc">Start with curated entry points, like we are doing today.</span></li>
-        <li><span class="name">Recent PRs</span> <span class="desc">Learn from recently accepted work.</span></li>
-        <li><span class="name">Docs confusion</span> <span class="desc">Fix where your own understanding got stuck.</span></li>
-        <li><span class="name">Test gaps</span> <span class="desc">Protect behavior that already exists.</span></li>
-        <li><span class="name">Issue triage</span> <span class="desc">Reproduce, reduce, clarify, label.</span></li>
-      </ol>
-      <p class="takeaway">Make the smallest useful change that you can explain.</p>
-      <aside class="notes"></aside>
-    </section>
+      <section class="slide" id="sourcing-ideas">
+        <h2>Ideas for contributing</h2>
+        <p class="lede">Work on things you're interested in!</p>
+        <ol class="rows">
+          <li>
+            <span class="name">Beginner tasks</span>
+            <span class="desc"
+              >Issues labeled "good first issue" are hard to come by.<br/>We have a special set reserved for you today!</span
+            >
+          </li>
+          <li>
+            <span class="name">Accepted changes</span>
+            <span class="desc"
+              >Read recent pull requests and their reviews.</span
+            >
+          </li>
+          <li>
+            <span class="name">Unclear docs</span>
+            <span class="desc">Improve a part you found confusing.</span>
+          </li>
+          <li>
+            <span class="name">Missing tests</span>
+            <span class="desc">Add tests for features that already work.</span>
+          </li>
+          <li>
+            <span class="name">Bug reports</span>
+            <span class="desc"
+              >Confirm the bug. Simplify the example. Clarify the report.</span
+            >
+          </li>
+        </ol>
+        <p class="takeaway">Make a small, useful change you can explain.</p>
+        <aside class="notes"></aside>
+      </section>
 
-    <section class="slide" id="prerequisites">
-      <h2>Prerequisite recap</h2>
-      <p class="lede">You are ready when you can build Node.js and run one test.</p>
-      <ol class="rows">
-        <li><span>A GitHub account with two-factor authentication</span></li>
-        <li><span>Git configured with the same email as your GitHub account</span></li>
-        <li><span>Fork <code>nodejs/node</code>, clone it, and add <code>upstream</code></span></li>
-        <li><span>The Node.js dev container (recommended) or a local build</span></li>
-        <li><span><code>tools/test.py test/parallel/test-assert.js</code> passes</span></li>
-      </ol>
-      <p class="url"><a href="https://gist.github.com/Ethan-Arrowood/b75daccca7af5889ea70eab586292a78">gist.github.com/Ethan-Arrowood/b75daccca7af5889ea70eab586292a78</a></p>
-      <aside class="notes">Not set up yet? Start the dev container image pull now (docker pull nodejs/devcontainer:nightly). It is about 3.3 GB, so pair up with someone who is ready while it downloads.</aside>
-    </section>
+      <section class="slide" id="before-you-open-a-pull-request">
+        <h2>Before you open a pull request</h2>
+        <p class="lede">Help reviewers understand and check your change.</p>
+        <ul class="checks">
+          <li>Clear title</li>
+          <li>Tests and docs updated</li>
+          <li>Small scope</li>
+          <li>Sign off: <code>git commit -s</code></li>
+          <li>Why this matters</li>
+          <li>Respectful follow-up</li>
+        </ul>
+        <p class="question">
+          <span>In your description, answer:</span> What changed? Why? How did
+          you check it?
+        </p>
+        <aside class="notes">
+          Sign-off is the Developer's Certificate of Origin from
+          CONTRIBUTING.md. It is not cryptographic commit signing.
+        </aside>
+      </section>
 
-    <section class="slide" id="start-coding">
-      <h2>Let's start coding</h2>
-      <p class="vamos" lang="es">¡A programar!</p>
-      <dl class="wifi">
-        <dt>Wi-Fi</dt>
-        <dd>TBD</dd>
-        <dt>Password</dt>
-        <dd>TBD</dd>
-      </dl>
-      <p class="tasks"><a href="https://nodejs.org/code-and-learn-2026">nodejs.org/code-and-learn-2026</a></p>
-      <p class="no-ai"><strong>Please don't use AI for today's contribution.</strong> Learn the manual process first.</p>
-      <aside class="notes">Fill in the venue Wi-Fi before presenting. The task board says claiming opens during the event: tell people to reload when we say go. Flag down a contributor in the room for help.</aside>
-    </section>
+      <section class="slide" id="start-coding">
+        <h2>Let's start coding</h2>
+        <p class="vamos" lang="es">¡A programar!</p>
+        <dl class="wifi">
+          <dt>Wi-Fi</dt>
+          <dd>TBD</dd>
+          <dt>Password</dt>
+          <dd>TBD</dd>
+        </dl>
+        <p class="tasks">
+          <a href="https://nodejs.org/code-and-learn-2026"
+            >nodejs.org/code-and-learn-2026</a
+          >
+        </p>
+        <aside class="notes">
+          Fill in the venue Wi-Fi before presenting. Leave this slide up during
+          the coding session. The task board says claiming opens during the
+          event: tell people to reload when we say go.
+        </aside>
+      </section>
 
-    <section class="slide" id="before-you-open-the-pr">
-      <h2>Before you open the PR</h2>
-      <p class="lede">Make the reviewer's job easier. That is part of being helpful.</p>
-      <ul class="checks">
-        <li>Clear title</li>
-        <li>Tests or docs updated</li>
-        <li>Small scope</li>
-        <li>Signed-off commit</li>
-        <li>Why this matters</li>
-        <li>Respectful follow-up</li>
-      </ul>
-      <p class="question"><span>Reviewer question to answer:</span> What changed, why does it matter, and how did you check it?</p>
-      <aside class="notes"></aside>
-    </section>
+      <section class="slide finale no-number" id="thanks">
+        <img
+          class="calavera"
+          src="calavera.svg"
+          alt=""
+          width="200"
+          height="230"
+        />
+        <h2 lang="es">¡Gracias!</h2>
+        <p class="thanks-en">Thank you</p>
+        <ul class="logos">
+          <li>
+            <img
+              src="jsconf-mx-logo.svg"
+              alt="JSConf México"
+              width="670"
+              height="166"
+            />
+          </li>
+          <li>
+            <img
+              class="openjs"
+              src="openjs-logo.png"
+              alt="OpenJS Foundation"
+              width="937"
+              height="295"
+            />
+          </li>
+          <li>
+            <img
+              class="node"
+              src="nodejs-logo.png"
+              alt="Node.js"
+              width="412"
+              height="252"
+            />
+          </li>
+          <li>
+            <img
+              class="harper"
+              src="harper-logo.svg"
+              alt="Harper"
+              width="471"
+              height="119"
+            />
+          </li>
+        </ul>
+        <aside class="notes"></aside>
+      </section>
+    </main>
 
-    <section class="slide finale no-number" id="thanks">
-      <img class="calavera" src="calavera.svg" alt="" width="200" height="230">
-      <h2 lang="es">¡Gracias!</h2>
-      <p class="thanks-en">Thank you</p>
-      <ul class="logos">
-        <li><img src="jsconf-mx-logo.svg" alt="JSConf México" width="670" height="166"></li>
-        <li><img class="openjs" src="openjs-logo.png" alt="OpenJS Foundation" width="937" height="295"></li>
-        <li><img class="node" src="nodejs-logo.png" alt="Node.js" width="412" height="252"></li>
-        <li><img class="harper" src="harper-logo.svg" alt="Harper" width="471" height="119"></li>
-      </ul>
-      <aside class="notes"></aside>
-    </section>
-
-  </main>
-
-  <footer class="deck-footer" aria-hidden="true">
-    <span class="id">
-      <span class="line1">
-        <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-        @Ethan-Arrowood</span>
-      <span class="line2">
-        <svg viewBox="0 0 568 501"><path d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.209C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.749 114.875 19.53 144.097 84.29 80.986 149.05-119.859 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.843 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.05-65.72 11.184-139.6-7.296-159.875-79.749C9.945 203.66 0 75.293 0 57.947 0-28.906 76.135-1.611 123.121 33.664Z"/></svg>
-        @arrowood.dev</span>
-    </span>
-    <span class="event">
-      <span class="line1">Node.js Code and Learn · JSConf México</span>
-      <span class="line2">October 29, 2026</span>
-    </span>
-  </footer>
-
-</body>
+    <footer class="deck-footer" aria-hidden="true">
+      <span class="id">
+        <span class="line1">
+          <svg viewBox="0 0 16 16">
+            <path
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+            />
+          </svg>
+          @Ethan-Arrowood</span
+        >
+        <span class="line2">
+          <svg viewBox="0 0 568 501">
+            <path
+              d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.209C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.749 114.875 19.53 144.097 84.29 80.986 149.05-119.859 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.843 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.05-65.72 11.184-139.6-7.296-159.875-79.749C9.945 203.66 0 75.293 0 57.947 0-28.906 76.135-1.611 123.121 33.664Z"
+            />
+          </svg>
+          @arrowood.dev</span
+        >
+      </span>
+      <span class="event">
+        <span class="line1">Node.js Code and Learn · JSConf México</span>
+        <span class="line2">October 29, 2026</span>
+      </span>
+    </footer>
+  </body>
 </html>
