@@ -12,6 +12,7 @@ events:
   - name: "JSConf México 2026"
     date: "October 29, 2026"
     eventUrl: "https://www.jsconf.mx/"
+    slidesUrl: "/talks/nodejs-code-and-learn/jsconf-mexico-2026/slides/"
 ---
 
 ## Description

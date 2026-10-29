@@ -1,0 +1,189 @@
+/*!
+ * Deck theme: Node.js × JSConf México 2026.
+ *
+ * Node.js green on JSConf México's midnight navy, with Día de Muertos
+ * touches: a papel picado banner across every slide, cempasúchil (marigold)
+ * flowers, and a calavera painted on the Node.js hexagon.
+ *
+ * Link AFTER dais/dais.css. Fonts are self-hosted (fonts/, SIL OFL) so the
+ * deck works with no network. Every text/background pair clears WCAG AA;
+ * see the ratios next to each token.
+ */
+
+@font-face {
+  font-family: "Chango";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/chango-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/poppins-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/poppins-600.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/poppins-700.woff2") format("woff2");
+}
+
+:root {
+  color-scheme: dark;
+
+  /* Ratios are against --dais-bg (#0b0f3a). */
+  --dais-stage: #05061a;
+  --dais-bg: #0b0f3a;          /* JSConf México navy */
+  --dais-surface: #161c58;
+  --dais-text: #f7f3ea;        /* bone white, 16.6:1 */
+  --dais-muted: #b8bde6;       /* 10.0:1 */
+  --dais-accent: #6cc24a;      /* Node.js green, 8.3:1 */
+  --dais-accent-2: #f3ba20;    /* cempasúchil gold, 10.4:1 */
+  --dais-code-bg: #070a26;
+  --dais-code-text: #f7f3ea;
+
+  --dais-tok-comment: #9aa3d6;
+  --dais-tok-keyword: #ff5cae;
+  --dais-tok-string: #6cc24a;
+  --dais-tok-number: #f3ba20;
+  --dais-tok-fn: #5cc8e0;
+  --dais-tok-type: #b18cff;
+  --dais-tok-punct: #c9cdf0;
+
+  --dais-font: "Poppins", system-ui, "Segoe UI", Roboto, sans-serif;
+  --dais-font-display: "Chango", "Poppins", system-ui, sans-serif;
+  --dais-radius: 0.6cqi;
+
+  /* Room for the papel picado banner on top and the footer below. */
+  --dais-slide-padding: 7.5% 6% 8%;
+
+  /* Papel picado colors, shared with papel-picado.svg. All ≥ 6:1 on navy
+     when used as text. */
+  --mx-pink: #ff5cae;
+  --mx-gold: #f3ba20;
+  --mx-green: #6cc24a;
+  --mx-teal: #5cc8e0;
+  --mx-orange: #ff8a3d;
+  --mx-purple: #b18cff;
+}
+
+/* Chango ships a single weight; never let the browser fake a bold. */
+.dais :is(h1, h2) {
+  font-weight: 400;
+  font-synthesis: none;
+}
+
+/* Node.js green glowing in from the left edge, JSConf pink from the right,
+   echoing the green edge glow of the RenderATL deck. Percent sizes so the
+   glow scales with the slide in overview mode. */
+.dais > section {
+  background:
+    radial-gradient(38% 70% at 0% 60%, rgb(108 194 74 / 0.18), transparent 70%),
+    radial-gradient(38% 70% at 100% 40%, rgb(255 92 174 / 0.14), transparent 70%),
+    var(--dais-bg);
+}
+
+/* Papel picado: a string of cut-paper flags across the top of every slide. */
+.dais > section::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 5cqi;
+  background: url("papel-picado.svg") repeat-x 0 0 / auto 100%;
+  pointer-events: none;
+}
+
+/* Bigger flags on the title and closing slides. */
+.dais > section:is(.title, .finale)::before {
+  height: 11cqi;
+  background-position: -3cqi 0;
+}
+
+.dais h1 {
+  font-size: 8cqi;
+  letter-spacing: 0;
+  color: var(--dais-text);
+  text-shadow: 0.4cqi 0.4cqi 0 var(--mx-pink);
+}
+
+.dais h2 {
+  font-size: 3.4cqi;
+  letter-spacing: 0;
+  margin-block-end: 0.15em;
+}
+
+.dais h3 {
+  font-size: 2.4cqi;
+  font-weight: 700;
+}
+
+.dais strong {
+  font-weight: 600;
+}
+
+/* Marigold blossoms for bullets. */
+.dais ul > li::marker {
+  content: "✿  " / "";
+  color: var(--dais-accent-2);
+}
+
+.dais :not(pre) > code {
+  border: 1px solid color-mix(in srgb, var(--dais-text) 14%, transparent);
+}
+
+.dais pre {
+  border: 1px solid color-mix(in srgb, var(--dais-text) 12%, transparent);
+}
+
+.dais .card {
+  border: 1px solid color-mix(in srgb, var(--dais-text) 12%, transparent);
+}
+
+/* Title and closing slides: marigolds on either side, clear of the footer. */
+.dais > section:is(.title, .finale) {
+  background:
+    url("marigold.svg") no-repeat 2% 76% / 9% auto,
+    url("marigold.svg") no-repeat 6% 39% / 5.5% auto,
+    url("marigold.svg") no-repeat 98% 76% / 9% auto,
+    url("marigold.svg") no-repeat 94% 39% / 5.5% auto,
+    radial-gradient(38% 70% at 0% 60%, rgb(108 194 74 / 0.2), transparent 70%),
+    radial-gradient(38% 70% at 100% 40%, rgb(255 92 174 / 0.16), transparent 70%),
+    var(--dais-bg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The papel picado catches a breeze when a slide lands. */
+  @keyframes mx-flutter {
+    0%, 100% { translate: 0 0; }
+    30%      { translate: 0 0.25cqi; }
+    65%      { translate: 0 -0.1cqi; }
+  }
+
+  @container dais-slide scroll-state(snapped: x) {
+    .dais > section::before {
+      animation: mx-flutter 1.6s ease-in-out 1;
+    }
+  }
+}
+
+/* Print matches the screen: the PDF export is the deck's archived copy. */
+@media print {
+  .dais > section {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
