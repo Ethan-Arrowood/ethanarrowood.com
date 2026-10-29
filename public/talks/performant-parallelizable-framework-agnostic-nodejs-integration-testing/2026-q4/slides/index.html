@@ -1,0 +1,1894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Draft edition: remove noindex once it is final. -->
+  <meta name="robots" content="noindex">
+  <title>Performant, Parallelizable, Framework Agnostic Node.js Integration Testing</title>
+  <meta name="description" content="How the Harper integration testing framework runs integration tests in parallel across any test framework: process isolation, loopback address pooling, and a framework-agnostic API.">
+  <link rel="stylesheet" href="dais/dais.css">
+  <link rel="stylesheet" href="dais/themes/midnight.css">
+  <script src="dais/dais.js" defer></script>
+  <style>
+    /* This deck only. */
+    :root {
+      --dais-code-size: 0.66em;
+    }
+
+    /* Slightly smaller slide titles (dais.css sets 4.6cqi) to reclaim vertical
+       space. Doesn't touch .fit titles or section dividers — those are more
+       specific. */
+    .dais h2 { font-size: 4cqi; margin-block-end: 0.3em; }
+
+    /* A bar chart drawn from the real medians, so the plateau is visible
+       rather than asserted. Widths are proportional to duration. */
+    /* Twelve rows is the most this slide can hold; sized to fit, not to taste. */
+    .bars {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 0.2em 0.8em;
+      align-items: center;
+      font-size: 0.72em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .bars b {
+      font-weight: 400;
+      color: var(--dais-muted);
+    }
+
+    .bars i {
+      display: block;
+      height: 1.1em;
+      border-radius: 0.2cqi;
+      background: var(--dais-muted);
+      width: calc(var(--pct) * 1%);
+    }
+
+    /* The measured optimum is "good" — green, not the deck's blue accent, so it
+       reads as a positive marker against the orange "too far" rows. Defined here
+       with a light/print fallback since the theme has no green of its own. */
+    :root { --deck-good: #5fd68a; }
+    @media (prefers-color-scheme: light) { :root { --deck-good: #158043; } }
+    @media print { :root { --deck-good: #158043; } }
+
+    .bars .peak i {
+      background: var(--deck-good);
+    }
+
+    .bars .over i {
+      background: var(--dais-accent-2);
+    }
+
+    .bars .best { color: var(--deck-good); }
+
+    /* Column headers so the chart stands on its own: which axis is which, in
+       what units, and which direction is better. */
+    #plateau .bars-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.62em;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--dais-muted);
+      margin-block-end: 0.8cqi;
+      padding-block-end: 0.5cqi;
+      border-block-end: 1px solid color-mix(in srgb, var(--dais-text) 14%, transparent);
+    }
+
+    /* Caption + header + 12 rows is tall; shrink the whole chart so the last
+       bar clears the footer. Width stays put (it's a % of the track). */
+    #plateau .small { margin-block: 0.4cqi 1.2cqi; }
+    #plateau .bars { font-size: 0.6em; gap: 0.15em 0.8em; }
+
+    /* Color reveal (data-dais-steps="2"): step 0 is all muted, step 1 marks
+       the optimum, step 2 adds the orange comparison rows. Without dais.js
+       there is no data-dais-step, so every color shows. */
+    #plateau[data-dais-step="0"] .bars :is(.best, .accent-2),
+    #plateau[data-dais-step="1"] .bars .accent-2 { color: var(--dais-muted); }
+    #plateau[data-dais-step="0"] .bars :is(.peak, .over) i,
+    #plateau[data-dais-step="1"] .bars .over i { background: var(--dais-muted); }
+
+    /* Variance: two slides, each a small excerpt of the full table.
+       Stepping (dais data-dais-steps) changes only the highlighted cells and
+       reveals the caption, so the table never shifts. */
+    :is(#variance, #variance-tail) > table { font-size: 0.72em; }
+    :is(#variance, #variance-tail) :is(th, td) { padding: 0.4em 1em; }
+    :is(#variance, #variance-tail) > p { margin-block: 1.6cqi 0; }
+    :is(#variance, #variance-tail) > p.small { font-size: 0.62em; margin-block: 0.6cqi 1cqi; }
+
+    /* data-hi="g1 b2" = good on step 1, bad on step 2, and so on. Without
+       dais.js there is no data-dais-step, so each slide shows its final
+       state. */
+    #variance[data-dais-step="1"] td[data-hi~="g1"],
+    #variance[data-dais-step="2"] td[data-hi~="g2"],
+    #variance:not([data-dais-step]) td[data-hi~="g2"] {
+      background: color-mix(in srgb, var(--deck-good) 24%, transparent);
+      color: var(--dais-text);
+      font-weight: 700;
+    }
+    #variance[data-dais-step="2"] td[data-hi~="b2"],
+    #variance:not([data-dais-step]) td[data-hi~="b2"],
+    #variance-tail[data-dais-step="1"] td[data-hi~="b1"],
+    #variance-tail:not([data-dais-step]) td[data-hi~="b1"] {
+      background: color-mix(in srgb, var(--dais-accent-2) 26%, transparent);
+      font-weight: 700;
+    }
+    #variance-tail[data-dais-step="1"] td[data-hi~="c1"],
+    #variance-tail:not([data-dais-step]) td[data-hi~="c1"] {
+      background: color-mix(in srgb, var(--dais-accent) 28%, transparent);
+      font-weight: 700;
+    }
+
+    /* Short code examples that now have a slide to themselves read at a
+       larger size. Long single lines (ctx.harper, teardown, ifconfig) keep
+       the deck default so they fit. */
+    :is(#two-concepts, #suite-concurrency) pre { --dais-code-size: 0.9em; }
+    #lifecycle pre { --dais-code-size: 0.8em; }
+
+    /* One runner per slide, each with a small heading over its code. */
+    :is(#two-runners, #two-runners-playwright) h3 {
+      font-size: 2.2cqi;
+      margin-block-end: 0.5em;
+    }
+
+    /* Code snippet + its takeaway centered in the body, instead of hugging the
+       title with a dead lower half. */
+    #the-default .body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.4cqi;
+    }
+
+    /* The pool diagram: a row of address slots. */
+    .slots {
+      display: flex;
+      gap: 0.6cqi;
+      font-size: 1.5cqi;
+      font-family: var(--dais-font-mono);
+    }
+
+    .slots span {
+      flex: 1;
+      padding: 0.6em 0.2em;
+      border-radius: 0.3cqi;
+      text-align: center;
+      background: var(--dais-surface);
+      border: 1px solid color-mix(in srgb, var(--dais-text) 12%, transparent);
+    }
+
+    .slots span.taken {
+      background: color-mix(in srgb, var(--dais-accent) 24%, transparent);
+      border-color: var(--dais-accent);
+    }
+
+    .slots span.free {
+      color: var(--dais-muted);
+    }
+
+    /* The replication snippet has a few long lines; shrink it so nothing clips
+       (print clips an overflowing pre rather than scrolling it). */
+    #replication-code pre { --dais-code-size: 0.58em; }
+
+    /* "Testing is hard": a stack of overheard grievances that reveal one by one,
+       then the closing line lands last. */
+    #before .quotes {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4cqi;
+      margin-block-start: 1cqi;
+    }
+
+    #before .quotes p {
+      margin: 0;
+      font-size: 3.2cqi;
+      font-style: italic;
+    }
+
+    #before .quotes .close {
+      margin-block-start: 2.2cqi;
+      font-style: normal;
+      font-size: 2.4cqi;
+      color: var(--dais-muted);
+    }
+
+    /* Define "integration": three stacked cards on the left, the Goldilocks
+       illustration (with credit) on the right. The middle "just right" card
+       carries the accent. Sizes are tuned so the whole thing fits one screen. */
+    #define-integration .cols { gap: 3cqi; align-items: center; }
+
+    #define-integration .card {
+      padding: 1.4cqi 2cqi;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4cqi;
+      align-items: flex-start;
+    }
+
+    #define-integration .card h3 { font-size: 2.6cqi; }
+    #define-integration .card p { margin: 0; font-size: 1.7cqi; }
+
+    #define-integration .card .tag {
+      font-size: 1.4cqi;
+      font-style: italic;
+      color: var(--dais-muted);
+    }
+
+    #define-integration .accent-card {
+      background: color-mix(in srgb, var(--dais-accent) 16%, var(--dais-surface));
+      outline: 1px solid color-mix(in srgb, var(--dais-accent) 50%, transparent);
+    }
+
+    #define-integration .accent-card .tag {
+      font-style: normal;
+      font-weight: 600;
+      color: var(--dais-accent);
+    }
+
+    /* The Goldilocks illustration + its credit line. */
+    #define-integration .goldilocks {
+      width: auto;
+      max-width: 100%;
+      max-height: 34cqi;
+      border-radius: var(--dais-radius);
+    }
+
+    #define-integration .goldilocks-fig figcaption {
+      max-width: 42cqi;
+      margin-block-start: 1cqi;
+      font-size: 1.2cqi;
+      font-style: normal;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    /* The source URL sits alone on the last line, undecorated. */
+    #define-integration .goldilocks-fig figcaption a {
+      display: block;
+      margin-block-start: 0.5cqi;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    #define-integration .goldilocks-fig cite { font-style: italic; }
+
+    /* Black-box analogy: inputs you control flow into a sealed application box,
+       observable outputs flow out; the internals are deliberately opaque. A
+       five-column grid — in · arrow · box · arrow · out — centered on screen. */
+    #box-analogy .blackbox {
+      display: grid;
+      grid-template-columns: 1fr auto 1.15fr auto 1fr;
+      align-items: center;
+      gap: 2.4cqi;
+      margin-block-start: 4cqi;
+    }
+
+    /* Caption hugs the diagram instead of being pushed to the footer; the
+       leftover slack falls below it. */
+    #box-analogy .blackbox + p {
+      margin-block-start: 3cqi;
+    }
+
+    #box-analogy .io-label {
+      display: block;
+      font-family: var(--dais-font-display);
+      font-weight: 700;
+      font-size: 2.1cqi;
+      color: var(--dais-accent);
+      margin-block-end: 1cqi;
+    }
+
+    #box-analogy .io ul {
+      margin: 0;
+      padding-inline-start: 1.1em;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6cqi;
+      font-size: 1.8cqi;
+      color: var(--dais-muted);
+    }
+
+    #box-analogy .arrow {
+      font-size: 4.2cqi;
+      line-height: 1;
+      color: var(--dais-accent);
+    }
+
+    /* The box reads as sealed: a diagonal hatch over a low-contrast panel, with
+       a prominent border. Metaphorically opaque without hard-coding black, so it
+       survives the light (print) theme too. */
+    #box-analogy .box {
+      aspect-ratio: 5 / 4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8cqi;
+      text-align: center;
+      border-radius: var(--dais-radius);
+      border: 0.3cqi solid color-mix(in srgb, var(--dais-text) 22%, transparent);
+      background:
+        repeating-linear-gradient(45deg,
+          transparent 0 1.4cqi,
+          color-mix(in srgb, var(--dais-text) 7%, transparent) 1.4cqi 2.8cqi),
+        color-mix(in srgb, var(--dais-text) 6%, var(--dais-surface));
+    }
+
+    #box-analogy .box .box-title {
+      font-family: var(--dais-font-display);
+      font-weight: 700;
+      font-size: 2.6cqi;
+    }
+
+    #box-analogy .box .box-sub {
+      font-size: 1.7cqi;
+      color: var(--dais-muted);
+    }
+
+    /* "What am I testing?": the collapsed-stack illustration is the whole slide,
+       centered, with the source repos beneath it. The words are spoken, not read.
+       The illustration is a tall, transparent PNG, so it's height-constrained. */
+    #the-shape .shape-figure {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.6cqi;
+    }
+
+    #the-shape .collapsed-stack, .goldilocks {
+      width: auto;
+      max-width: 100%;
+      max-height: 40cqi;
+      border-radius: 0;
+    }
+
+    #the-shape .repos {
+      display: flex;
+      gap: 2.4cqi;
+      font-size: 1.4cqi;
+      color: var(--dais-muted);
+    }
+
+    #the-shape .repos p a {
+      color: var(--dais-muted);
+      text-decoration: none;
+    }
+
+    /* Four questions that each complete the slide's "How do we…" title. Not a
+       list — four large lines that reveal one after another, no number or
+       bullet, each hanging off the title. The operative concept in every line
+       carries the accent so the four scopes read at a glance. */
+    #constraints .questions {
+      display: flex;
+      flex-direction: column;
+      gap: 2.4cqi;
+      margin-block-start: 2cqi;
+      padding-inline-start: 1.2cqi;
+    }
+
+    #constraints .questions p {
+      margin: 0;
+      font-family: var(--dais-font-display);
+      font-weight: 700;
+      font-size: 4cqi;
+      line-height: 1.15;
+      color: var(--dais-text);
+    }
+
+    #constraints .questions .k { color: var(--dais-accent); }
+
+    /* Reframe: one statement, centered, at a readable size. */
+    #application-equals-process p { font-size: 3.2cqi; max-width: 60cqi; }
+
+    /* The "change the address" reveal reads as neutral text with only the
+       payoff word in accent, instead of a full screen of blue. */
+    #the-trick h2 { color: var(--dais-text); }
+    #the-trick .dim { color: var(--dais-muted); }
+
+    /* Closing slide: photo centered above the sign-off. The image is already
+       square, so height:auto shows it whole — no object-fit, no crop. Stacked
+       (not side-by-side) so the full URLs get the slide's whole width and the
+       text can be large. */
+    #thanks .me {
+      width: 16cqi;
+      height: auto;
+      border-radius: 2cqi;
+      margin-block-end: 1.5cqi;
+    }
+
+    #thanks h2 { font-size: 5cqi; margin-block-end: 0.6cqi; }
+    #thanks .muted { font-size: 2cqi; margin-block: 0 1.4cqi; }
+    /* Links as a left-aligned two-column list (label, URL), centered as a
+       block under the sign-off. */
+    #thanks .links {
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 0.3em 1.2em;
+      margin: 0;
+      font-size: 1.5cqi;
+      text-align: start;
+    }
+    #thanks .links dt { color: var(--dais-muted); }
+    #thanks .links dd { margin: 0; }
+    #thanks .links a { white-space: nowrap; }
+
+    /* The shipped-default takeaway sits above the equation as a lead line. */
+    #the-default-that-shipped .lead { font-size: 2.6cqi; margin-block-end: 1.4cqi; }
+
+    :is(#app-complexities, #process-lifecycle, #process-io) .big-list {
+      list-style: none;
+      margin: 1cqi 0 2cqi;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8cqi;
+      font-family: var(--dais-font-display);
+      font-weight: 700;
+      font-size: 3.6cqi;
+    }
+
+    /* Impact section. One idea per slide. Numbers come from harper's git
+       history and GitHub Actions run data, Oct 2025 to Oct 2026; sources and
+       full data are in each slide's notes. */
+
+    /* A big number centered in the body, with a line or two under it. */
+    .dais .hero {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 1.4cqi;
+    }
+
+    .dais .hero .n {
+      font-family: var(--dais-font-display);
+      font-weight: 700;
+      font-size: 10cqi;
+      line-height: 1;
+      color: var(--dais-accent);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dais .hero .n.bad { color: var(--dais-accent-2); }
+    .dais .hero p { margin: 0; font-size: 3cqi; }
+    .dais .hero p.muted { font-size: 2.2cqi; }
+
+    /* Short lines, centered in the body, at a readable size. */
+    .dais .lines {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2.4cqi;
+      margin: 0;
+      padding-inline-start: 1.2em;
+      font-size: 3cqi;
+    }
+
+    .dais .lines li { margin: 0; }
+
+    /* Before and after: two periods side by side with a big number each. */
+    .dais .compare {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 3cqi;
+    }
+
+    .dais .compare > div {
+      display: flex;
+      flex-direction: column;
+      gap: 1cqi;
+    }
+
+    .dais .compare .when {
+      font-size: 2cqi;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--dais-muted);
+    }
+
+    .dais .compare .n {
+      font-family: var(--dais-font-display);
+      font-weight: 700;
+      font-size: 6.5cqi;
+      line-height: 1;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      color: var(--dais-muted);
+    }
+
+    .dais .compare .after .n { color: var(--dais-accent); }
+
+    .dais .compare .arrow {
+      font-size: 5cqi;
+      color: var(--dais-accent);
+    }
+
+    /* Two proportional bars, each labeled just past its end. Width is
+       --pct of the space left beside the label column. */
+    .dais .hbars {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-content: center;
+      align-items: center;
+      gap: 2.4cqi 2cqi;
+      font-size: 2.4cqi;
+    }
+
+    .dais .hbars b { font-weight: 400; color: var(--dais-muted); }
+
+    .dais .hbars span {
+      display: flex;
+      align-items: center;
+      gap: 0.6em;
+    }
+
+    .dais .hbars i {
+      height: 2.4em;
+      width: calc(var(--pct) * 0.8%);
+      border-radius: 0.3cqi;
+      background: var(--dais-muted);
+    }
+
+    .dais .hbars em {
+      font-style: normal;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dais .hbars i.good { background: var(--dais-accent); }
+    .dais .hbars i.bad { background: var(--dais-accent-2); }
+
+    #legacy-suite pre { --dais-code-size: 0.8em; }
+    #legacy-suite .body { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 1.2cqi; }
+
+    #cluster-local pre { --dais-code-size: 0.9em; }
+    #cluster-local .body { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 2cqi; }
+
+    /* Chart legends: a swatch before each label. */
+    .dais .legend {
+      display: flex;
+      gap: 2.4cqi;
+      font-size: 1.6cqi;
+      color: var(--dais-muted);
+      margin: 0;
+    }
+
+    .dais .legend span::before {
+      content: "";
+      display: inline-block;
+      width: 1.2em;
+      height: 0.8em;
+      margin-inline-end: 0.5em;
+      border-radius: 0.2cqi;
+      background: var(--swatch);
+    }
+
+    /* Test growth: one column per month, legacy and framework bars side by
+       side. Heights are proportional to test count (max 2,435). */
+    #growth .chart {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.2cqi;
+      height: 30cqi;
+      margin-block-start: 2cqi;
+      border-block-end: 1px solid color-mix(in srgb, var(--dais-text) 20%, transparent);
+    }
+
+    #growth .chart > div {
+      display: flex;
+      align-items: end;
+      gap: 0.3cqi;
+      height: 100%;
+    }
+
+    #growth .chart i {
+      position: relative;
+      flex: 1;
+      height: calc(var(--v) / 2435 * 100%);
+      border-radius: 0.2cqi 0.2cqi 0 0;
+      background: var(--dais-muted);
+    }
+
+    #growth .chart i.new { background: var(--dais-accent); }
+
+    /* Value labels sit just above their bar. */
+    #growth .chart i span {
+      position: absolute;
+      inset-block-end: 100%;
+      inset-inline-start: 50%;
+      translate: -50% -0.4em;
+      font-size: 1.8cqi;
+      font-style: normal;
+      white-space: nowrap;
+      color: var(--dais-text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    #growth .months {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.2cqi;
+      margin-block-start: 0.6cqi;
+      font-size: 1.5cqi;
+      text-align: center;
+      color: var(--dais-muted);
+    }
+
+    /* "Data and method" link on data slides, pinned to the bottom right of
+       the content box and kept quiet. It points at the edition's data page. */
+    .dais > section > .src { margin: auto 0 0; align-self: flex-end; font-size: 1.3cqi; }
+    .dais > section > .src a { color: var(--dais-muted); }
+
+    /* Monthly column chart: one bar per month, height = --v / --max. Bars
+       from June on (after the legacy port) carry the accent. Value labels sit
+       above each bar; the x axis can carry a small count under each month. */
+    .dais .colchart {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: 1.4cqi;
+      align-items: end;
+      height: 24cqi;
+      margin-block-start: 3cqi;
+      border-block-end: 1px solid color-mix(in srgb, var(--dais-text) 20%, transparent);
+    }
+
+    .dais .colchart > div { display: flex; align-items: end; height: 100%; }
+
+    .dais .colchart i {
+      position: relative;
+      width: 100%;
+      height: calc(var(--v) / var(--max) * 100%);
+      border-radius: 0.2cqi 0.2cqi 0 0;
+      background: var(--dais-muted);
+    }
+
+    .dais .colchart i.after { background: var(--dais-accent); }
+
+    .dais .colchart i span {
+      position: absolute;
+      inset-block-end: 100%;
+      inset-inline-start: 50%;
+      translate: -50% -0.4em;
+      font-size: 1.6cqi;
+      font-style: normal;
+      white-space: nowrap;
+      color: var(--dais-text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dais .colchart-x {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: 1.4cqi;
+      margin-block-start: 0.6cqi;
+      font-size: 1.5cqi;
+      text-align: center;
+      color: var(--dais-muted);
+    }
+
+    .dais .colchart-x small {
+      display: block;
+      font-size: 0.8em;
+      opacity: 0.8;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Stacked variant: bar height is the month's total, the accent segment
+       at the bottom is the part (--part, a % of the bar), and the label above
+       is the share. Volume and share read together. */
+    .dais .colchart.stacked i {
+      display: flex;
+      align-items: flex-end;
+      background: color-mix(in srgb, var(--dais-muted) 55%, transparent);
+    }
+
+    .dais .colchart.stacked i b {
+      display: block;
+      width: 100%;
+      height: calc(var(--part) * 1%);
+      border-radius: inherit;
+      background: var(--dais-accent);
+    }
+
+    .dais .colchart.stacked + .colchart-x small { white-space: nowrap; }
+
+    .dais .colchart-note { font-size: 1.3cqi; color: var(--dais-muted); margin: 0.8cqi 0 0; }
+
+    :is(#velocity, #code-with-tests, #ci-usage) .legend { margin: 0; }
+
+    /* Main-branch failure rate by month: one series, full width. */
+    #failure-history .bars { font-size: 0.62em; gap: 0.25em 0.8em; margin-block-start: 1cqi; }
+    #failure-history .bars i { width: calc(var(--pct) * 1.4%); }
+    #failure-history .bars .hot i { background: var(--dais-accent-2); }
+
+    #isolation h2 { font-size: 5cqi; }
+
+    /* The alias-to-network mapping reads larger than default code. */
+    #netmask pre { --dais-code-size: 0.9em; }
+    #ci-usage .compare .n { font-size: 5cqi; }
+
+    /* Persistent deck footer: GitHub handle on the left, talk title and
+       edition on the right, with the framework's nav dots centered between
+       them. Anchored to the deck box
+       (--dais) so it tracks the letterboxed deck, not the viewport. The footer
+       is an inline-size container, so its children's cqi units resolve against
+       the deck width and scale in fullscreen exactly like the slides do.
+       Deck-only; the vendored framework is untouched. */
+    .deck-footer {
+      position: fixed;
+      position-anchor: --dais;
+      left: anchor(left);
+      right: anchor(right);
+      bottom: anchor(bottom);
+      container-type: inline-size;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .deck-footer .id,
+    .deck-footer .event {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35em;
+      white-space: nowrap;
+      font-size: 1.4cqi;
+      line-height: 1.1;
+      color: var(--dais-muted);
+      padding-block: 0.85cqi;   /* same total height as the old two-line footer */
+    }
+
+    .deck-footer .id { padding-inline-start: 2.6cqi; align-items: start; }
+    .deck-footer .event { padding-inline-end: 2.6cqi; align-items: end; text-align: end; }
+
+    /* The edition sits under the title, a step quieter. */
+    .deck-footer .event .line2 {
+      font-size: 0.82em;
+      opacity: 0.8;
+    }
+
+    /* Both footer lines can carry a leading icon. */
+    .deck-footer .line1,
+    .deck-footer .line2 {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4em;
+    }
+
+    .deck-footer .gh {
+      width: 1.05em;
+      height: 1.05em;
+      fill: currentColor;
+      translate: 0 0.04em;   /* optical centering against the text baseline */
+    }
+
+    /* The footer is chrome, not slide content — hide it wherever the framework
+       hides its own nav dots: overview mode and print. */
+    body:has(.dais-overview-toggle:checked) .deck-footer {
+      display: none;
+    }
+
+    @media print {
+      .deck-footer { display: none; }
+    }
+
+    /* On screen, position is already shown three ways (top counter, nav dots,
+       and the footer), so the framework's per-slide corner number is redundant
+       and would collide with the footer's event label on the right. Suppress it
+       on screen only — print keeps it, since there the footer and dots are gone. */
+    @media screen {
+      .dais > section::after { content: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="dais-controls" aria-label="Presentation controls">
+    <label><input type="checkbox" class="dais-overview-toggle"> Overview</label>
+    <label><input type="checkbox" class="dais-notes-toggle"> Notes</label>
+    <output class="dais-counter"></output>
+    <output class="dais-timer" data-dais-limit="30" title="Presenter timer — click or press T to pause"></output>
+  </nav>
+
+  <div class="dais-progress" aria-hidden="true"></div>
+
+  <main class="dais" aria-label="Performant, Parallelizable, Framework Agnostic Node.js Integration Testing" tabindex="0">
+
+    <section class="slide title" id="intro">
+      <h1>Performant, Parallelizable, Framework&nbsp;Agnostic Node.js Integration Testing</h1>
+      <p>Ethan Arrowood</p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="before">
+      <h2>Testing is hard</h2>
+      <div class="reveal quotes">
+        <p>"It works on my machine."</p>
+        <p>"That test's just flaky, re-run it."</p>
+        <p>"You can't run those locally."</p>
+        <p>"It only runs in CI."</p>
+        <p>"Don't touch it! It's finally green."</p>
+      </div>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="the-shape">
+      <h2>What am I testing?</h2>
+      <div class="shape-figure">
+        <img class="collapsed-stack" src="harper-collapsed-stack.png"
+             alt="Harper as a collapsed stack: one process holding the API layer (GraphQL, REST, WebSocket, MQTT), an in-memory cache, and a NoSQL, vector, and blob database."
+             width="2037" height="2277">
+        <div class="repos">
+          <p><a href="https://github.com/HarperFast/harper">github.com/HarperFast/harper</a> (Apache 2.0)</p>
+          <p><a href="https://github.com/HarperFast/harper-pro">github.com/HarperFast/harper-pro</a> (ELv2)</p>
+        </div>
+      </div>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="define-integration">
+      <h2>Define "integration"</h2>
+      <div class="cols">
+        <div class="stack">
+          <div class="card">
+            <h3>Unit</h3>
+            <p>A single <i>unit</i> of code; everything else mocked/stubbed.</p>
+            <span class="tag">too little</span>
+          </div>
+          <div class="card accent-card">
+            <h3>Integration</h3>
+            <p>The complete application. No hooking into internals.</p>
+            <span class="tag">just right</span>
+          </div>
+          <div class="card">
+            <h3>End-to-end</h3>
+            <p>The full production stack. Like end users experience.</p>
+            <span class="tag">too much</span>
+          </div>
+        </div>
+        <figure class="goldilocks-fig">
+          <img class="goldilocks" src="goldilocks-and-the-three-bears.jpg" alt="Goldilocks and The Three Bears illustration">
+          <figcaption>Illustration by Arthur Rackham, 1918, in <cite>English Fairy Tales</cite> by Flora Annie Steel for &ldquo;The Story of the Three Bears&rdquo;<a href="https://en.wikipedia.org/wiki/Goldilocks_and_the_Three_Bears">en.wikipedia.org/wiki/Goldilocks_and_the_Three_Bears</a></figcaption>
+        </figure>
+      </div>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="box-analogy">
+      <h2>Application is a black box</h2>
+      <div class="blackbox">
+        <div class="io in">
+          <span class="io-label">Inputs you control</span>
+          <ul>
+            <li>Requests &amp; operations</li>
+            <li>Config, env, CLI flags</li>
+            <li>stdin &amp; signals</li>
+          </ul>
+        </div>
+        <div class="arrow" aria-hidden="true">&rarr;</div>
+        <div class="box">
+          <span class="box-title">Application</span>
+          <span class="box-sub">internals off-limits</span>
+        </div>
+        <div class="arrow" aria-hidden="true">&rarr;</div>
+        <div class="io out">
+          <span class="io-label">Outputs you observe</span>
+          <ul>
+            <li>Responses &amp; status</li>
+            <li>Logs, stdout/stderr</li>
+            <li>Files &amp; exit codes</li>
+          </ul>
+        </div>
+      </div>
+      <p class="small muted">No mocking, no stubbing, no reaching inside. Assert on behavior, never on implementation.</p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide center" id="application-equals-process">
+      <h2>Application = Process</h2>
+      <p>Integration testing an application means managing the lifecycle of the application <strong>process</strong></p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="process-lifecycle">
+      <h2>Manage the lifecycle</h2>
+      <ul class="reveal big-list">
+        <li>Start it</li>
+        <li>Wait for it to be ready</li>
+        <li>Restart it</li>
+        <li>Stop it</li>
+        <li>Clean up</li>
+      </ul>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="process-io">
+      <h2>Interact with the process</h2>
+      <ul class="reveal big-list">
+        <li>Send signals to it</li>
+        <li>Write to stdin</li>
+        <li>Stream and read stdout and stderr</li>
+        <li>Read and process log files</li>
+        <li>Monitor crashes</li>
+      </ul>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="harper-uses">
+      <h2>Harper is an application platform</h2>
+      <p class="lead">Harper can run all sorts of applications</p>
+      <ul class="reveal">
+        <li>Web apps: Vite, React, Astro</li>
+        <li>Backend APIs: REST, MQTT, GraphQL, MCP</li>
+        <li>Data stores: Blob, LMDB, RocksDB</li>
+        <li>Multi-instance replication</li>
+        <li>GPU access for LLMs</li>
+      </ul>
+    </section>
+
+    <section class="slide" id="constraints">
+      <h2>How do we&hellip;</h2>
+      <div class="reveal questions">
+        <p><span class="k">isolate</span> each test in its own process?</p>
+        <p>make the suite <span class="k">run everywhere</span>?</p>
+        <p>test <span class="k">every kind</span> of application?</p>
+        <p>do it all <span class="k">performantly</span>?</p>
+      </div>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide">
+      <h2>Early decision: use <code>node:test</code> test runner API</h2>
+      <ul>
+        <li>One less dependency to manage</li>
+        <li>Simple concurrency model to architect around</li>
+        <li>Dogfood the new API</li>
+        <li>Still planning to build agnostic API to work with other runners</li>
+      </ul>
+    </section>
+
+    <section class="slide divider" id="part-parallel">
+      <p>When running multiple complex processes</p>
+      <h2>how much parallelism is actually possible?</h2>
+      <p>Measuring instead of guessing</p>
+    </section>
+
+    <section class="slide" id="two-concepts">
+      <h2><code>node:test</code> "concurrency" is overloaded</h2>
+      <div class="stack">
+        <h3>Test <strong>runner</strong> concurrency = file-level process <em>parallelism</em></h3>
+        <pre><code>node --test \
+  --test-concurrency=<span class="tok-number">5</span> \
+  <span class="tok-string">"*.test.js"</span></code></pre>
+      </div>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="suite-concurrency">
+      <h2><code>node:test</code> "concurrency" is overloaded</h2>
+      <div class="stack">
+        <h3>Test <strong>suite</strong> concurrency = in-process async <em>concurrency</em></h3>
+        <pre><code><span class="tok-fn">suite</span>(<span class="tok-string">'x'</span>, { concurrency: <span class="tok-keyword">true</span> }, () =&gt; {
+  <span class="tok-fn">test</span>(<span class="tok-string">'a'</span>, <span class="tok-keyword">async</span> () =&gt; { … });
+  <span class="tok-fn">test</span>(<span class="tok-string">'b'</span>, <span class="tok-keyword">async</span> () =&gt; { … });
+});</code></pre>
+      </div>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="the-default">
+      <h2>Node's default concurrency is built for cheap tests</h2>
+      <div class="body">
+        <pre><code><span>node --test --test-concurrency</span></code></pre>
+        <pre><code>os.<span class="tok-fn">availableParallelism</span>() <span class="tok-comment">// 12 on my laptop</span></code></pre>
+        <p>If each test process spawns an application process, we realistically only have half the available parallelism.</p>
+        <p>But computers are really good at doing multiple things at once.</p>
+      </div>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="the-experiment">
+      <h2>The experiment</h2>
+      <ul>
+        <li><strong>20 generated test files</strong>, each starting an application process</li>
+        <li>Concurrency <strong>1 → 12</strong> (sequential to max parallelism)</li>
+        <li><strong>25 samples</strong> per level, on a normal developer laptop</li>
+      </ul>
+      <p class="muted small">https://github.com/ethan-arrowood/node-test-runner-parallelization-analysis</p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="experiment-work">
+      <h2>Work per file</h2>
+      <p>Work per file randomized within a <strong>mode</strong>:</p>
+      <ul>
+        <li>0-100 MB file I/O</li>
+        <li>0-3 processes</li>
+        <li>0-4 worker threads</li>
+      </ul>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="plateau" data-dais-steps="2">
+      <h2>The gain plateaus, then reverses</h2>
+      <p class="small muted">Total median suite duration (shorter is faster)</p>
+      <div class="bars-head">
+        <span>Concurrency</span>
+        <span>Median duration (ms)</span>
+      </div>
+      <div class="bars">
+        <b>1</b>  <i style="--pct: 100"></i>          <b>9,939 ms</b>
+        <b>2</b>  <i style="--pct: 58"></i>           <b>5,776</b>
+        <b>3</b>  <i style="--pct: 46"></i>           <b>4,582</b>
+        <b class="accent-2">4</b>  <span class="over"><i style="--pct: 39"></i></span> <b class="accent-2">3,904</b>
+        <b>5</b>  <i style="--pct: 38"></i>           <b>3,759</b>
+        <b>6</b>  <i style="--pct: 36"></i>           <b>3,597</b>
+        <b class="best">7</b> <span class="peak"><i style="--pct: 35"></i></span> <b class="best">3,468 <span class="step" data-step="1">← best</span></b>
+        <b>8</b>  <i style="--pct: 37"></i>           <b>3,671</b>
+        <b>9</b>  <i style="--pct: 36"></i>           <b>3,601</b>
+        <b>10</b> <i style="--pct: 36"></i>           <b>3,534</b>
+        <b>11</b> <i style="--pct: 37"></i>           <b>3,724</b>
+        <b class="accent-2">12</b> <span class="over"><i style="--pct: 40"></i></span> <b class="accent-2">3,952</b>
+      </div>
+      <aside class="notes"></aside>
+    </section>
+
+    <!-- Variance argument in two slides, each a small excerpt of the full
+         table (the full table is in the notes). Steps change only the
+         highlighted cells and reveal the caption, so the table never shifts.
+         Numbers are the real 25-sample medians. -->
+    <section class="slide" id="variance" data-dais-steps="2">
+      <h2>Past the plateau, variance more than doubles</h2>
+      <p class="small muted">20 test files · 25 samples per level · concurrency 1&ndash;12 · duration in ms</p>
+      <table>
+        <thead>
+          <tr><th>Concurrency</th><th class="num">Median</th><th class="num">Std dev</th><th class="num">p95</th><th class="num">Worst run</th></tr>
+        </thead>
+        <tbody>
+          <tr><td data-hi="g1">7</td><td class="num" data-hi="g1">3,468</td><td class="num" data-hi="g1 g2">294</td><td class="num" data-hi="g1">3,990</td><td class="num" data-hi="g1">4,520</td></tr>
+          <tr><td>10</td><td class="num">3,534</td><td class="num" data-hi="b2">654</td><td class="num">5,339</td><td class="num">5,466</td></tr>
+          <tr><td>11</td><td class="num">3,724</td><td class="num" data-hi="b2">690</td><td class="num">5,096</td><td class="num">5,717</td></tr>
+        </tbody>
+      </table>
+      <p class="step" data-step="2">Std&nbsp;dev jumps from <strong>294</strong> at the optimum to <strong>654</strong> and <strong>690</strong> just past it <br> The run-to-run spread more than doubles.</p>
+      <aside class="notes">
+        All the data (concurrency: median, std dev, p95, worst run, in ms): 1: 9,939, 363, 10,607, 10,885. 2: 5,776, 307, 6,164, 6,876. 3: 4,582, 365, 5,252, 5,729. 4: 3,904, 368, 4,648, 5,238. 5: 3,759, 332, 4,264, 4,739. 6: 3,597, 459, 4,751, 4,874. 7: 3,468, 294, 3,990, 4,520. 8: 3,671, 472, 4,575, 5,106. 9: 3,601, 473, 4,804, 5,177. 10: 3,534, 654, 5,339, 5,466. 11: 3,724, 690, 5,096, 5,717. 12: 3,952, 488, 4,792, 5,055. The median flattens after 7. The real story is in the tail: std dev, p95, worst run. Step 2: now read the std-dev column. Over-parallelizing doesn't make the suite slower on average so much as it makes it *unpredictable*, and unpredictable is what makes people stop trusting a suite.
+      </aside>
+    </section>
+
+    <section class="slide" id="variance-tail" data-dais-steps="1">
+      <h2>The real developer experience is in the <strong>tail</strong></h2>
+      <p class="small muted">20 test files · 25 samples per level · concurrency 1&ndash;12 · duration in ms</p>
+      <table>
+        <thead>
+          <tr><th>Concurrency</th><th class="num">Median</th><th class="num">Std dev</th><th class="num">p95</th><th class="num">Worst run</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>4</td><td class="num" data-hi="c1">3,904</td><td class="num">368</td><td class="num">4,648</td><td class="num">5,238</td></tr>
+          <tr><td>10</td><td class="num">3,534</td><td class="num">654</td><td class="num" data-hi="b1">5,339</td><td class="num">5,466</td></tr>
+        </tbody>
+      </table>
+      <p class="step" data-step="1">p95 at concurrency 10 (<strong>5,339</strong>) is worse than a <em>typical</em> run at 4 (<strong>3,904</strong>) <br> 2.5&times; the processes for worse overall performance.</p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="the-default-that-shipped">
+      <h2>Calculated default</h2>
+      <p class="lead">When each test spawns its own application process, the ideal concurrency is <br><strong>half the available parallelism, plus one</strong></p>
+      <pre><code>concurrency = <span class="tok-fn">floor</span>(availableParallelism / <span class="tok-number">2</span>) + <span class="tok-number">1</span>
+            = <span class="tok-fn">floor</span>(<span class="tok-number">12</span> / <span class="tok-number">2</span>) + <span class="tok-number">1</span>
+            = <span class="tok-number">7</span>   <span class="tok-comment">// the measured optimum</span></code></pre>
+      <p class="small muted">This might not be perfect, but its a better starting point than max parallelism, and remains configurable</p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide divider" id="part-isolation">
+      <h2>2. Networking contention</h2>
+      <p>Everything wants port 9925</p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="port-problem">
+      <h2>Dynamic ports would mean core changes</h2>
+      <p>The easy fix: let the OS hand out a free port.</p>
+      <pre><code>server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, () =&gt; {
+  <span class="tok-keyword">const</span> { port } = server.<span class="tok-fn">address</span>();   <span class="tok-comment">// the OS picked a free one</span>
+});</code></pre>
+      <p>But two problems:</p>
+      <ul class="reveal">
+        <li>The app has to <strong>report back</strong> which ports it received</li>
+        <li>Harper currently requires ports to be <strong>configured</strong></li>
+      </ul>
+      <p class="small muted">How can we solve this without modifying core?</p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="getfreeport">
+      <h2>Not a real fix: <code>get-port</code></h2>
+      <pre><code><span class="tok-comment">// what get-port does, roughly:</span>
+<span class="tok-keyword">async function</span> <span class="tok-fn">getPort</span>() {
+  <span class="tok-keyword">const</span> server = net.<span class="tok-fn">createServer</span>();
+  <span class="tok-keyword">await</span> <span class="tok-fn">listen</span>(server, <span class="tok-number">0</span>);          <span class="tok-comment">// OS assigns a free port</span>
+  <span class="tok-keyword">const</span> { port } = server.<span class="tok-fn">address</span>();
+  <span class="tok-keyword">await</span> <span class="tok-fn">close</span>(server);              <span class="tok-comment">// ← the port is released here</span>
+  <span class="tok-keyword">return</span> port;
+}
+
+<span class="tok-keyword">const</span> port = <span class="tok-keyword">await</span> <span class="tok-fn">getPort</span>();
+<span class="tok-keyword">const</span> harper = <span class="tok-keyword">await</span> <span class="tok-fn">createHarper</span>(port);   <span class="tok-comment">// ← nothing reserved it in between</span></code></pre>
+      <p>Between the <strong>release</strong> and the <strong>reuse</strong>, the OS can hand that port to any other process &mdash; especially with many test processes racing at once.</p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide center" id="the-trick">
+      <h2 class="fit">If we can't reliably reserve the <span class="dim">ports</span>&hellip;<br>what about the <span class="accent">address</span>?</h2>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="loopback">
+      <h2>Introducing loopback addresses</h2>
+      <p>All of <code>127.0.0.0/8</code> (<code>127.0.0.1</code> through <code>127.255.255.255</code>) loops back to localhost</p>
+      <pre><code><span class="tok-comment">// every instance keeps its default ports</span>
+test/application 1 → <span class="tok-string">http://127.0.0.2:9925</span>
+test/application 2 → <span class="tok-string">http://127.0.0.3:9925</span>
+test/application 3 → <span class="tok-string">http://127.0.0.4:9925</span></code></pre>
+      <ul>
+        <li>Every instance can use port 9925 without conflict</li>
+        <li>Isolation is by <strong>address</strong></li>
+      </ul>
+      <aside class="notes">
+        Each node binds several fixed ports on its address: 9925 (operations), 9926 (HTTP), 1883 and 8883 (MQTT), and 9927 (HTTPS) when TLS is configured. The harness passes them as address:port, e.g. --HTTP_PORT=127.0.0.2:9926.
+      </aside>
+    </section>
+
+    <section class="slide" id="platform">
+      <h2>One caveat: macOS needs setup</h2>
+      <table>
+        <thead><tr><th>Platform</th><th><code>127.0.0.1</code></th><th><code>127.0.0.2</code>-<code>127.255.255.255</code></th></tr></thead>
+        <tbody>
+          <tr><td>Linux (Ubuntu)</td><td>Enabled by default</td><td>Enabled by default</td></tr>
+          <tr><td>macOS</td><td>Enabled by default</td><td>Must be added per address</td></tr>
+          <tr><td>Windows</td><td>Enabled by default</td><td>Enabled by default</td></tr>
+        </tbody>
+      </table>
+      <aside class="notes">
+        Windows routes all of 127.0.0.0/8 to loopback already: harper's Windows CI shards run with no alias setup. The integration-testing README still says Windows needs setup; that's worth fixing upstream.
+      </aside>
+    </section>
+
+    <section class="slide" id="platform-macos">
+      <h2>macOS: register each address</h2>
+      <pre><code><span class="tok-comment"># once per boot, or install the provided launchd daemon</span>
+npx harper-integration-test-setup-loopback
+
+<span class="tok-comment"># what it runs for each address in the pool</span>
+sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
+      <aside class="notes">
+        The script configures 32 addresses by default (127.0.0.2 to 127.0.0.33; set HARPER_INTEGRATION_TEST_LOOPBACK_POOL_COUNT for more, up to 254), verifies every alias landed, and ships scripts/io.harperdb.loopback-setup.plist so the aliases survive a reboot. macOS drops lo0 aliases on every restart.
+      </aside>
+    </section>
+
+    <section class="slide" id="netmask">
+      <h2>Every alias claims the same network</h2>
+      <p>No explicit netmask? macOS assigns <code>/8</code>.</p>
+      <pre><code><span class="tok-comment"># address     claimed network</span>
+127.0.0.2  →  <span class="tok-string">127.0.0.0/8</span>
+127.0.0.3  →  <span class="tok-string">127.0.0.0/8</span>
+127.0.0.4  →  <span class="tok-string">127.0.0.0/8</span></code></pre>
+      <ul class="lines">
+        <li class="step" data-step="1">Each address conflicts with every other.</li>
+        <li class="step" data-step="2">mDNSResponder keeps defending them.<br><span class="accent-2">O(n²) work. A storm of announcements.</span></li>
+      </ul>
+      <aside class="notes">
+        That netmask in the setup command matters. Without it, macOS assigns 255.0.0.0, or /8. These are different addresses, but every alias claims the whole 127.0.0.0/8 network. [Step 1] This was diagnosed on a developer machine configured with about 254 aliases. The overlapping interface addresses trigger mDNSResponder's address-conflict defense, PacketRRConflict. [Step 2] Each address conflicts with every other, so the defense work grows quadratically. It floods loopback with mDNS announcements on UDP port 5353 and can pin a CPU core. The busy process is mDNSResponder, not a test worker. Source: HarperFast/integration-testing PR #21, Kris Zyp, July 2026.
+      </aside>
+    </section>
+
+    <section class="slide" id="netmask-fix">
+      <h2><code>/32</code> removes the overlap</h2>
+      <ul class="lines">
+        <li><code>255.255.255.255</code>: each alias claims only itself.</li>
+        <li>Same pool capacity. Same test isolation.</li>
+      </ul>
+      <div class="stack step" data-step="1">
+        <p class="muted">254 aliases. One macOS box. One paired measurement.</p>
+        <table>
+          <thead>
+            <tr><th scope="col">Netmask</th><th scope="col" class="num">mDNSResponder CPU</th><th scope="col" class="num">UDP 5353 packets / 8 s</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row"><code>/8</code></th><td class="num">~65%</td><td class="num">85</td></tr>
+            <tr><th scope="row"><code>/32</code></th><td class="num">~0%</td><td class="num">5</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="notes">
+        A /32 is a host netmask. Each alias claims one address, so the subnet claims no longer overlap. The addresses still loop back. Same number of aliases, same isolation. [Step 1] This comparison used 254 aliases on the same macOS machine in the same run. With /8, mDNSResponder measured about 65% CPU and 85 packets over eight seconds on UDP 5353. With /32, about zero CPU and five packets, the observed floor. One measurement, not a cross-machine benchmark. The setup script removes each existing alias before adding it, so re-running it converts old /8 setups to /32. Next: the addresses are configured. How do we assign them to test processes without handing out the same address twice? Source: HarperFast/integration-testing PR #21, Kris Zyp, July 2026.
+      </aside>
+    </section>
+
+    <section class="slide" id="pool">
+      <h2>How do we manage which process gets which address?</h2>
+      <p><strong>Loopback Address Pool</strong>: JSON file with an array of PIDs, shared by every test process.</p>
+      <pre><code>[<span class="tok-number">42</span>, <span class="tok-number">43</span>, <span class="tok-keyword">null</span>, <span class="tok-number">45</span>, <span class="tok-keyword">null</span>, <span class="tok-keyword">null</span>]</code></pre>
+      <p class="small muted">index 0 → 127.0.0.2 (PID 42) · index 1 → 127.0.0.3 (PID 43) · …</p>
+      <ul>
+        <li>Index is the address; value is the owning process ID</li>
+        <li>First-available allocation; released once its ports are free</li>
+      </ul>
+      <aside class="notes">
+        The PIDs are test runner processes, not Harper. Default pool: 32 addresses. Pool file: $TMPDIR/harper-integration-test-loopback-pool.json.
+      </aside>
+    </section>
+
+    <section class="slide" id="lock">
+      <h2>Cross-process mutex to avoid conflicts</h2>
+      <pre><code><span class="tok-comment">// 'wx' fails if the file already exists — atomically</span>
+<span class="tok-keyword">const</span> handle = <span class="tok-keyword">await</span> <span class="tok-fn">open</span>(LOCK_PATH, <span class="tok-string">'wx'</span>);
+<span class="tok-keyword">await</span> handle.<span class="tok-fn">writeFile</span>(token);   <span class="tok-comment">// we hold the lock</span>
+<span class="tok-keyword">await</span> handle.<span class="tok-fn">close</span>();</code></pre>
+      <p>One of many options (daemon, orchestrator, atomics).</p>
+      <p>File lock was simplest. Plus a stale-lock timeout for crashed processes.</p>
+      <aside class="notes">
+        The stale timeout is 10 seconds. The token is pid, a counter, and random bytes, so a process can tell its own lock from a successor's.
+      </aside>
+    </section>
+
+    <section class="slide" id="lock-token">
+      <h2>A slow writer can lose the lock</h2>
+      <pre><code><span class="tok-keyword">await</span> <span class="tok-fn">writeFile</span>(pendingPath, JSON.<span class="tok-fn">stringify</span>(pool));
+<span class="tok-keyword">await</span> <span class="tok-fn">assertLockHeld</span>(token);          <span class="tok-comment">// still ours?</span>
+<span class="tok-keyword">await</span> <span class="tok-fn">rename</span>(pendingPath, POOL_PATH);  <span class="tok-comment">// atomic publish</span></code></pre>
+      <p>If a write outlasts the stale timeout, another process takes the lock. The token check stops the old writer from overwriting the new claim.</p>
+      <aside class="notes">
+        Added Oct 2026 (integration-testing #32 and #33). Writes go to a temp file and are published by rename, so readers never see a torn file. On a lost lock the operation retries from the current pool state, up to 3 times. An unreadable pool file is quarantined for 6 minutes before it's reset, so in-flight reservations aren't wiped. The check narrows the race; it doesn't close it completely.
+      </aside>
+    </section>
+
+    <section class="slide" id="reaping">
+      <h2>Crashed tests would leak addresses forever</h2>
+      <pre><code><span class="tok-comment">// signal 0 checks liveness without signalling</span>
+<span class="tok-keyword">try</span> {
+  process.<span class="tok-fn">kill</span>(pid, <span class="tok-number">0</span>);       <span class="tok-comment">// alive — leave it allocated</span>
+} <span class="tok-keyword">catch</span> {
+  loopbackPool[index] = <span class="tok-keyword">null</span>;  <span class="tok-comment">// dead — reclaim it</span>
+}</code></pre>
+      <p class="small muted">A <kbd>Ctrl</kbd>+<kbd>C</kbd> mid-run doesn't break the pool</p>
+      <aside class="notes">
+        Reaping runs when the pool is full: dead runner PIDs are cleared before waiting for a free slot.
+      </aside>
+    </section>
+
+    <section class="slide" id="orphans">
+      <h2>Crashed runners left Harper running</h2>
+      <ul class="lines reveal">
+        <li>Each Harper starts in its own process group</li>
+        <li>A shared monitor reaps groups whose runner died</li>
+        <li>POSIX only; Windows relies on runner cleanup</li>
+      </ul>
+      <aside class="notes">
+        A SIGKILL'd runner or a cancelled CI job used to leave Harper alive, holding its fixed ports. Since Sep 2026 (integration-testing #30) every instance registers in a cross-process registry, and one monitor per user reaps orphaned or overdue process groups with kill(-pgid).
+      </aside>
+    </section>
+
+    <section class="slide" id="trust-but-verify">
+      <h2>Allocated is not the same as usable</h2>
+      <pre><code><span class="tok-comment">// bind to port 0 just to prove the address exists</span>
+server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loopbackAddress, () =&gt; {
+  server.<span class="tok-fn">close</span>(() =&gt; <span class="tok-fn">resolve</span>(loopbackAddress));
+});</code></pre>
+      <p>1. Verify the whole pool at startup (ensure setup script was run)</p>
+      <p>2. Verify again per allocation to avoid collisions</p>
+      <p class="small muted">Then two more checks before an address is handed out.</p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="reuseport">
+      <h2>A dying node can still hold the address</h2>
+      <p>Harper's HTTP workers bind with <code>SO_REUSEPORT</code>. A new node could share 9926 with an old node's lingering workers and split its connections.</p>
+      <pre><code><span class="tok-comment">// an exclusive bind fails with EADDRINUSE, even beside an SO_REUSEPORT socket</span>
+<span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> port <span class="tok-keyword">of</span> [<span class="tok-number">9925</span>, <span class="tok-number">9926</span>]) {
+  <span class="tok-keyword">if</span> (<span class="tok-keyword">await</span> <span class="tok-fn">isPortInUseOnAddress</span>(port, address)) skip(address);
+}</code></pre>
+      <aside class="notes">
+        The conflict canary, added Jun 2026. The common shape: after a kill, Harper's main thread has exited (freeing 9925) but its HTTP workers still hold 9926. The pool releases the poisoned address, skips it for this attempt, and re-probes it later. This detection is Linux-effective; macOS SO_REUSEPORT semantics differ, but macOS doesn't show the silent co-bind, and CI runs on Linux. Teardown also waits up to 5 s for all ports to free before releasing an address.
+      </aside>
+    </section>
+
+    <section class="slide" id="foreign-listener">
+      <h2>Some listeners cover every address</h2>
+      <p>A process on <code>0.0.0.0:9926</code>, like a local Harper, overlaps the whole pool. On macOS and Windows it quietly takes a node's connections.</p>
+      <pre><code><span class="tok-comment">// an exclusive bind succeeds beside it there, so connect instead</span>
+<span class="tok-keyword">const</span> port = <span class="tok-keyword">await</span> <span class="tok-fn">findAcceptingPort</span>(address, [<span class="tok-number">9925</span>, <span class="tok-number">9926</span>]);
+<span class="tok-keyword">if</span> (port) <span class="tok-keyword">throw new</span> <span class="tok-type">ForeignListenerError</span>(address, port);</code></pre>
+      <aside class="notes">
+        Added Sep 2026. The foreign process gets the node's connections whenever the node has no listener of its own: while it starts, while HTTP workers restart, and after teardown. Keep-alive connections then stay with it, so a suite fails, or passes, against the wrong server. Linux refuses the exclusive bind, so it skips this probe. Set HARPER_INTEGRATION_TEST_ALLOW_FOREIGN_LISTENERS=1 to turn the error into a warning.
+      </aside>
+    </section>
+
+    <section class="slide" id="lifecycle">
+      <h2>The API is shaping up</h2>
+      <pre><code><span class="tok-comment">// ctx is a general options object</span>
+
+<span class="tok-keyword">await</span> <span class="tok-fn">startHarper</span>(ctx);
+<span class="tok-comment">// 1. create a temporary install directory</span>
+<span class="tok-comment">// 2. allocate a loopback address from the pool</span>
+<span class="tok-comment">// 3. spawn Harper, wait until it is actually ready</span>
+<span class="tok-comment">// 4. populate ctx.harper</span></code></pre>
+      <aside class="notes">
+        If ctx.harper already names a dataRootDir and hostname, startHarper reuses them. That's how a test restarts the same node.
+      </aside>
+    </section>
+
+    <section class="slide" id="lifecycle-context">
+      <h2><code>ctx.harper</code></h2>
+      <pre><code><span class="tok-keyword">interface</span> <span class="tok-type">HarperContext</span> {
+  httpURL: <span class="tok-type">string</span>;            <span class="tok-comment">// 'http://127.0.0.3:9926'</span>
+  operationsAPIURL: <span class="tok-type">string</span>;   <span class="tok-comment">// 'http://127.0.0.3:9925'</span>
+  hostname: <span class="tok-type">string</span>;           <span class="tok-comment">// '127.0.0.3'</span>
+  dataRootDir: <span class="tok-type">string</span>;        <span class="tok-comment">// '/tmp/harper-integration-test-Xk3pQz'</span>
+  admin: { username: <span class="tok-type">string</span>; password: <span class="tok-type">string</span> };
+  process: <span class="tok-type">ChildProcess</span>;
+  logDir?: <span class="tok-type">string</span>;
+  startupOutput?: { stdout: <span class="tok-type">string</span>; stderr: <span class="tok-type">string</span> };
+}</code></pre>
+      <aside class="notes">
+        The real interface from integration-testing src/harperLifecycle.ts, exported as HarperContext. startHarper(ctx) populates it on ctx.harper. logDir is set only when HARPER_INTEGRATION_TEST_LOG_DIR is configured; startupOutput is Harper's stdout and stderr up to the point it reported ready.
+      </aside>
+    </section>
+
+    <section class="slide" id="lifecycle-teardown">
+      <h2><code>teardownHarper(ctx)</code></h2>
+      <pre><code><span class="tok-keyword">await</span> <span class="tok-fn">teardownHarper</span>(ctx);
+<span class="tok-comment">// 1. stop Harper's whole process group</span>
+<span class="tok-comment">// 2. wait for its ports to be free</span>
+<span class="tok-comment">// 3. release the address, remove the directory</span>
+<span class="tok-comment">//    (if a port stays held, keep both)</span></code></pre>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide divider" id="part-agnostic">
+      <h2>3. Framework agnostic</h2>
+    </section>
+
+    <section class="slide" id="agnostic-api">
+      <h2>The API imports nothing from a test runner</h2>
+      <pre><code><span class="tok-fn">startHarper</span>(ctx, options?)
+<span class="tok-fn">setupHarperWithFixture</span>(ctx, fixturePath, options?)
+<span class="tok-fn">killHarper</span>(ctx)
+<span class="tok-fn">teardownHarper</span>(ctx)
+<span class="tok-fn">createHarperContext</span>(name?)   <span class="tok-comment">// for non-node:test frameworks</span></code></pre>
+      <p><code>ctx</code> is <strong>any object</strong> with an optional <code>name</code> and a <code>harper</code> property to write to.</p>
+      <p class="small muted">Deliberately loose, so a <code>node:test</code> context and a plain object both satisfy it.</p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="not-required">
+      <h2>Keep it flexible</h2>
+      <pre><code><span class="tok-comment">// src/run.ts:</span>
+<span class="tok-comment">// Important! This script should not be required</span>
+<span class="tok-comment">// to execute integration tests.</span></code></pre>
+      <p class="small muted"><a href="https://github.com/HarperFast/integration-testing/blob/main/src/run.ts">https://github.com/HarperFast/integration-testing/blob/main/src/run.ts</a></p>
+      <p>The convenience runner (configures a smarter concurrency default) holds <strong>no state</strong>.</p>
+      <p>Every test file still runs under plain <code>node --test</code>, and parallelization still works.</p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="two-runners">
+      <h2>Two runners, same lifecycle</h2>
+      <div class="stack">
+        <h3><code>node:test</code> - file per process</h3>
+        <pre><code><span class="tok-fn">suite</span>(<span class="tok-string">'install'</span>, (ctx: ContextWithHarper) =&gt; {
+  <span class="tok-fn">before</span>(<span class="tok-keyword">async</span> () =&gt; {
+    <span class="tok-keyword">await</span> <span class="tok-fn">startHarper</span>(ctx);
+  });
+  <span class="tok-fn">after</span>(<span class="tok-keyword">async</span> () =&gt; {
+    <span class="tok-keyword">await</span> <span class="tok-fn">teardownHarper</span>(ctx);
+  });
+
+  <span class="tok-fn">test</span>(<span class="tok-string">'serves'</span>, <span class="tok-keyword">async</span> () =&gt; {
+    <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> <span class="tok-fn">fetch</span>(ctx.harper.httpURL);
+    <span class="tok-fn">strictEqual</span>(res.status, <span class="tok-number">200</span>);
+  });
+});</code></pre>
+      </div>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="two-runners-playwright">
+      <h2>Two runners, same lifecycle</h2>
+      <div class="stack">
+        <h3>Playwright - worker-scoped fixture</h3>
+        <pre><code><span class="tok-keyword">const</span> test = base.<span class="tok-fn">extend</span>&lt;
+  {}, { harper: <span class="tok-type">HarperContext</span> }
+&gt;({
+  harper: [<span class="tok-fn">makeHarperFixture</span>(name),
+           { scope: <span class="tok-string">'worker'</span> }],
+});
+
+<span class="tok-fn">test</span>(<span class="tok-string">'home page renders'</span>,
+  <span class="tok-keyword">async</span> ({ page, harper }) =&gt; {
+    <span class="tok-keyword">await</span> page.<span class="tok-fn">goto</span>(harper.httpURL);
+    <span class="tok-keyword">await</span> <span class="tok-fn">expect</span>(page.<span class="tok-fn">locator</span>(<span class="tok-string">'h1'</span>))
+      .<span class="tok-fn">toHaveText</span>(<span class="tok-string">'Next.js v16'</span>);
+  });</code></pre>
+      </div>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="playwright-fixture">
+      <h2>Playwright integration</h2>
+      <pre><code><span class="tok-keyword">export function</span> <span class="tok-fn">makeHarperFixture</span>(fixtureName: <span class="tok-type">string</span>) {
+  <span class="tok-keyword">return async</span> ({}, use) =&gt; {
+    <span class="tok-keyword">const</span> ctx = <span class="tok-fn">createHarperContext</span>(fixtureName);
+    <span class="tok-keyword">const</span> started = <span class="tok-keyword">await</span> <span class="tok-fn">setupHarperWithFixture</span>(ctx, fixturePath, {
+      harperBinPath: <span class="tok-fn">getHarperBinPath</span>(),
+      startupTimeoutMs: <span class="tok-number">120_000</span>,   <span class="tok-comment">// a Next.js build is slow</span>
+    });
+
+    <span class="tok-keyword">await</span> <span class="tok-fn">use</span>(started.harper);
+
+    <span class="tok-keyword">await</span> <span class="tok-fn">teardownHarper</span>(started);
+  };
+}</code></pre>
+      <p class="small muted"><a href="https://github.com/HarperFast/nextjs/blob/main/integrationTests/fixture.ts">https://github.com/HarperFast/nextjs/blob/main/integrationTests/fixture.ts</a></p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="ethos">
+      <h2>Discovering core testing values for high quality tests</h2>
+      <!-- todo: make the content text bigger  -->
+      <ul>
+        <li><strong>Independent</strong>: no dependence on order or shared state</li>
+        <li><strong>Hermetic</strong>: self-contained, no external side effects</li>
+        <li><strong>Deterministic</strong>: same input, same output</li>
+      </ul>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide divider" id="part-ci">
+      <h2>4. Surviving CI</h2>
+      <p>How do you think a M3 Macbook compares to a default GitHub CI runner?</p>
+    </section>
+
+    <section class="slide" id="ci">
+      <h2>One default runner can't run all the tests</h2>
+      <p>Parallelize <em>across</em> runners: a matrix that shards the suite.</p>
+      <pre><code><span class="tok-comment"># .github/workflows/integration-tests.yml</span>
+strategy:
+  matrix:
+    shard: [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>]
+steps:
+  - run: node --test --test-shard=${{ matrix.shard }}/<span class="tok-number">4</span></code></pre>
+      <p class="small muted"><code>--test-shard=1/3</code> always runs the same group of tests, on any machine <br><a href="https://github.com/HarperFast/harper/blob/main/.github/workflows/integration-tests.yml">https://github.com/HarperFast/harper/blob/main/.github/workflows/integration-tests.yml</a></p>
+      <aside class="notes">
+        node:test also exposes this programmatically: run({ shard: { index, total } }). The groupings are deterministic — shard 1/3 is the same set of files on every machine — so a flake on one shard is reproducible.
+      </aside>
+    </section>
+
+    <section class="slide divider" id="part-impact">
+      <h2>5. Did it work?</h2>
+      <p>Eleven months of Harper CI data</p>
+      <aside class="notes">
+        This section combines source counts, merged PRs, and CI runs with different windows. They are observations, not a controlled experiment. Data covers HarperFast/harper from Nov 2025 through Oct 21, 2026, plus harper-pro and the Next.js plugin. Monthly series stop at September, the last complete month.
+      </aside>
+    </section>
+
+    <section class="slide" id="legacy-suite">
+      <h2>Before: one long, ordered suite</h2>
+      <div class="body">
+        <pre><code><span class="tok-comment">// integrationTests/apiTests/tests/testSuite.mjs</span>
+<span class="tok-fn">describe</span>(<span class="tok-string">'Main Test Suite'</span>, <span class="tok-keyword">async</span> () =&gt; {
+  <span class="tok-keyword">await import</span>(<span class="tok-string">'./0_envCleanup.mjs'</span>);
+  <span class="tok-keyword">await import</span>(<span class="tok-string">'./1_environmentSetup.mjs'</span>);
+  <span class="tok-keyword">await import</span>(<span class="tok-string">'./2_dataLoad.mjs'</span>);
+  <span class="tok-keyword">await import</span>(<span class="tok-string">'./3_sqlTests.mjs'</span>);
+  <span class="tok-comment">// &hellip; 23 more, in exactly this order</span>
+  <span class="tok-keyword">await import</span>(<span class="tok-string">'./26_crlVerification.mjs'</span>);
+});</code></pre>
+        <p class="small muted">Inherited from <code>harperdb</code> v4, before the open-source split. Public copy: <a href="https://github.com/HarperFast/harper/blob/fb098c0f54f4321848bc2ae7c9cca05aee709a2c/integrationTests/apiTests/tests/testSuite.mjs">HarperFast/harper@fb098c0</a></p>
+      </div>
+      <aside class="notes">
+        The suite was written in the private harperdb repo (Harper v4): first API tests in Dec 2024, converted Postman tests added Feb 2025, renamed to .mjs Aug 2025. It came into the public harper repo on Oct 25, 2025 and was removed there on Jun 8, 2026 (b4f83887f). The snippet is from fb098c0, the commit before PR #27. Legacy apiTests at that commit: 28 ordered files run by one node --test process. The suite's own README said the tests were "not currently independent or idempotent".
+      </aside>
+    </section>
+
+    <section class="slide" id="legacy-shared">
+      <h2>Every test shared one Harper instance</h2>
+      <div class="hero">
+        <span class="n">~930 tests</span>
+        <p>Each file depends on the state of the previous.</p>
+        <p class="muted">No isolating test failures, no sharding, no parallelism, no running one file on its own.</p>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-suite-size">Data and method</a></p>
+      <aside class="notes">
+        974 it() calls; 45 statically skipped (19 it.skip plus a describe.skip holding 26 S3 tests), so about 929 active. One Harper instance with THREADS_COUNT 1. The suite barely grew: 974 to 993 tests in 7 months (Nov 2025 to Jun 2026).
+      </aside>
+    </section>
+
+    <section class="slide" id="legacy-runtime">
+      <h2>Most of each run was waiting</h2>
+      <div class="hbars">
+        <b>Test step</b> <span><i style="--pct: 100"></i><em>7.5 min</em></span>
+        <b>Hard-coded waits</b> <span><i class="bad" style="--pct: 86.7"></i><em>6.5 min</em></span>
+        <b>After removing sleeps</b> <span><i class="good" style="--pct: 74.7"></i><em>5.6 min</em></span>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-test-step-time">Data and method</a></p>
+      <aside class="notes">
+        Test step: median of 778 successful "Run API Tests" steps on Linux, May 5 to Jun 2, 2026 (p90 7.7). GitHub had purged older step timings. Waits: 387.7 s of fixed timers and restart sleeps in the suite at that time (8780c52), counted by scripts/legacy_waits.py. On Jun 2, harper PR #1091 replaced the restart sleeps with readiness polls, and the median step fell to 5.6 min (n=262).
+      </aside>
+    </section>
+
+    <section class="slide" id="legacy-failures">
+      <h2>And it failed often</h2>
+      <div class="hero">
+        <span class="n bad">9.3%</span>
+        <p>of main pushes had the suite fail on at least one Node version</p>
+        <p class="muted">Dec 2025 to Jun 2026</p>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-main-branch-failures">Data and method</a></p>
+      <aside class="notes">
+        42 of 450 main push runs, first attempt, Linux Node.js legacy jobs. 10 more runs failed during setup, before any test ran, and aren't counted. By version: Node 20 5.5%, Node 22 4.0%, Node 24 2.7%. In 61% of failing attempts (77 of 126) another Node version passed on the same commit. A failure rate, not a measured flake rate.
+      </aside>
+    </section>
+
+    <section class="slide" id="agent-port">
+      <h2>Porting it took 3.5 weeks</h2>
+      <div class="hero">
+        <span class="n">3.5 weeks</span>
+        <p>Kris Zyp, working with coding agents</p>
+        <p class="muted">May 15 to Jun 9, 2026</p>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#port-timeline">Data and method</a></p>
+      <aside class="notes">
+        The framework landed in PR #27 (opened Nov 4, merged Dec 3, 2025) and was extracted into @harperfast/integration-testing in April 2026. Port PRs: #555, #597, #627, #634, #645, #646, #647, #648, #730, #731, #732, #759, #761, #778. Cleanup: #1173 (b4f83887f) removed the legacy suite on Jun 8.
+      </aside>
+    </section>
+
+    <section class="slide" id="port-units">
+      <h2>The port used small, independent files</h2>
+      <ul class="lines reveal">
+        <li>14 PRs, one legacy file or group each</li>
+        <li>17 self-contained files, each with its own Harper</li>
+        <li>19,977 lines of legacy suite and infrastructure deleted</li>
+      </ul>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#port-timeline">Data and method</a></p>
+      <aside class="notes">
+        Independent, hermetic files are small units an agent can port one at a time. The port PRs ran on claude/api-tests-* branches. 17 apiTests files existed when the legacy suite was removed (Jun 8); 7 more were added there later.
+      </aside>
+    </section>
+
+    <section class="slide" id="growth">
+      <h2>The legacy suite stayed flat. The new one grew.</h2>
+      <p class="legend"><span style="--swatch: var(--dais-muted)">Legacy suite</span><span style="--swatch: var(--dais-accent)">Framework tests</span></p>
+      <div class="chart" role="img" aria-label="Test cases on main by month. The legacy suite stays near 990 from December to June, then is removed. Framework tests grow from 7 in December to 117 in May, 1,378 in July, and 2,422 on October 21.">
+        <div><i style="--v: 985"><span>985</span></i><i class="new" style="--v: 7"></i></div>
+        <div><i style="--v: 985"></i><i class="new" style="--v: 7"></i></div>
+        <div><i style="--v: 985"></i><i class="new" style="--v: 28"></i></div>
+        <div><i style="--v: 985"></i><i class="new" style="--v: 59"></i></div>
+        <div><i style="--v: 985"></i><i class="new" style="--v: 60"></i></div>
+        <div><i style="--v: 993"></i><i class="new" style="--v: 117"></i></div>
+        <div><i style="--v: 993"></i><i class="new" style="--v: 372"></i></div>
+        <div><i style="--v: 0"></i><i class="new" style="--v: 1378"><span>1,378</span></i></div>
+        <div><i style="--v: 0"></i><i class="new" style="--v: 1699"></i></div>
+        <div><i style="--v: 0"></i><i class="new" style="--v: 2007"></i></div>
+        <div><i style="--v: 0"></i><i class="new" style="--v: 2304"></i></div>
+        <div><i style="--v: 0"></i><i class="new" style="--v: 2422"><span>2,422</span></i></div>
+      </div>
+      <div class="months" aria-hidden="true">
+        <span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Now</span>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#test-cases-over-time">Data and method</a></p>
+      <aside class="notes">
+        Test cases on harper's main branch, counted as it()/test() calls in integrationTests at the end of the first day of each month (Dec = Dec 4, after PR #27 merged; Now = Oct 21, 2026). Legacy suite removed Jun 8. Legacy: 985 Dec to Apr, 993 May and Jun. Framework: Dec 7, Jan 7, Feb 28, Mar 59, Apr 60, May 117, Jun 372, Jul 1,378, Aug 1,699, Sep 2,007, Oct 2,304, Now 2,422. The framework passed the legacy suite the day the port finished and has added 1,326 tests since.
+      </aside>
+    </section>
+
+    <section class="slide" id="today">
+      <h2>Today, one CI run executes</h2>
+      <div class="hero">
+        <span class="n">2,632 tests</span>
+        <p>starting 421 Harper instances</p>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#tests-and-instances-per-run">Data and method</a></p>
+      <aside class="notes">
+        Run 39696281381 (main, Oct 21, 2026), summed over its six Linux Node.js 24 shards: 2,632 tests, 2,610 pass, 0 fail, 21 skipped, 1 todo. That's more than the 2,422 test() calls in source because some tests are generated in loops. The Windows shards run 871 tests.
+      </aside>
+    </section>
+
+    <section class="slide" id="parallel-time">
+      <h2>Summed suite time vs. the slowest shard</h2>
+      <div class="hbars">
+        <b>Summed suite time</b> <span><i style="--pct: 100"></i><em>74.4 min</em></span>
+        <b>Slowest shard</b> <span><i class="good" style="--pct: 7.3"></i><em>5.4 min</em></span>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#summed-suite-time-vs-slowest-shard">Data and method</a></p>
+      <aside class="notes">
+        A 13.8x ratio. 74.4 min is the sum of top-level suite durations on the six Linux Node.js 24 shards of that run. Those durations were measured while files ran concurrently, so they aren't a serial baseline; this shows how much work overlaps, not a measured speedup. Each shard runs three files at once (floor(4 / 2) + 1 on a 4-vCPU runner) across six shards.
+      </aside>
+    </section>
+
+    <section class="slide" id="ci-matrix">
+      <h2>On every platform we support</h2>
+      <div class="hero">
+        <span class="n">36 jobs</span>
+        <p>Node 22, 24, 26, Bun, Windows, and uWS</p>
+        <p class="muted">six shards each</p>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#ci-matrix">Data and method</a></p>
+      <aside class="notes">
+        Main, release branches, and a nightly run all 36 shard jobs. PRs run 24: Node 24 plus Windows, Bun, and uWS. Windows and Bun were added in May 2026, Node 26 on May 29, uWS on Jul 9. Windows runs 871 tests; the rest skip on that platform.
+      </aside>
+    </section>
+
+    <section class="slide" id="result-time">
+      <h2>And returns a result in about 12 minutes</h2>
+      <div class="hero">
+        <span class="n">11.9 min</span>
+        <p>median time to a full-matrix result</p>
+        <p class="muted">205 successful first-attempt main runs, last 30 days</p>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#time-to-a-full-result">Data and method</a></p>
+      <aside class="notes">
+        First job start to last job end, Sep 22 to Oct 21, 2026, every successful first-attempt main push run; p90 13.1. PRs (24 jobs): median 10.5 min from a 25% sample. Monthly medians for main runs went 8.6 (Dec), 9.0 (Feb), 10.3 (Mar), 15.9 (Jun), 9.2 (Sep) while the suite grew from 2 to about 190 test files. This is full-matrix elapsed time; the legacy 7.5 min was one test step, so they aren't a direct comparison.
+      </aside>
+    </section>
+
+    <section class="slide" id="harper-pro">
+      <h2>Cluster tests used to need EC2</h2>
+      <ol class="lines reveal">
+        <li>Provision an EC2 instance with Terraform</li>
+        <li>Start Docker containers; run Postman over SSH</li>
+        <li>Copy the logs back; destroy the instance</li>
+      </ol>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#old-cluster-harness">Data and method</a></p>
+      <aside class="notes">
+        harperdb's docker-cluster-test workflows: Terraform a c7g.2xlarge, load a Docker image, start 5 HarperDB containers, sleep 30s, run Newman (Postman) suites, scp the logs back, destroy the instance. 40 minute job timeout.
+      </aside>
+    </section>
+
+    <section class="slide" id="cluster-local">
+      <h2>Now a cluster fits in one test file</h2>
+      <div class="body">
+        <pre><code><span class="tok-keyword">await</span> Promise.<span class="tok-fn">all</span>([
+  <span class="tok-fn">startHarper</span>(ctxA, <span class="tok-fn">config</span>(hostnameA)),
+  <span class="tok-fn">startHarper</span>(ctxB, <span class="tok-fn">config</span>(hostnameB)),
+]);
+<span class="tok-comment">// two nodes, two loopback addresses, one runner</span></code></pre>
+      </div>
+      <aside class="notes">
+        From harper-pro integrationTests/cluster/addNodeFullCopy.test.mjs. Most cluster tests use startHarper plus getNextAvailableLoopbackAddress. Tests use 2 to 4 nodes: NODE_COUNT is 2 in 11 files, 3 in 3, 4 in 2.
+      </aside>
+    </section>
+
+    <section class="slide" id="cluster-growth">
+      <h2>harper-pro cluster tests: 1 to 104 files</h2>
+      <div class="compare">
+        <div><span class="when">Mar 2026</span><span class="n">1</span><span class="muted">cluster test file</span></div>
+        <span class="arrow" aria-hidden="true">&rarr;</span>
+        <div class="after"><span class="when">Today</span><span class="n">104</span><span class="muted">cluster test files</span></div>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#cluster-test-growth">Data and method</a></p>
+      <aside class="notes">
+        harper-pro on Oct 21, 2026: 123 integration test files (4 on Mar 1) with 295 test cases; 104 of the files are in integrationTests/cluster. Its integration workflow ran 579 times in June 2026, then 409 to 428 times a month from July to September.
+      </aside>
+    </section>
+
+    <section class="slide" id="nextjs-plugin">
+      <h2>Every Next.js version gets its own Harper</h2>
+      <div class="hero">
+        <span class="n">10 fixtures</span>
+        <p>Next.js 14, 15, and 16</p>
+        <p class="muted">webpack, Turbopack, ISR, <code>use cache</code>, cluster</p>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#nextjs-fixtures-and-tests">Data and method</a></p>
+      <aside class="notes">
+        @harperfast/nextjs: 53 Playwright tests in 12 spec files, each fixture on its own Harper and loopback address. v2 (Apr 2026) moved to makeHarperFixture, a worker-scoped Playwright fixture. Before (Dec 2024): a Playwright global setup ran one shared `npx harperdb start`, then setTimeout(2000).
+      </aside>
+    </section>
+
+    <section class="slide" id="downstream-checks">
+      <h2>Harper PRs run the Next.js suite</h2>
+      <div class="hero">
+        <span class="n">3,325</span>
+        <p>runs of the check since Jul 15, 2026</p>
+        <p class="muted">It builds the PR's Harper and tests the adapter against it.</p>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#downstream-check">Data and method</a></p>
+      <aside class="notes">
+        Workflow: "Next.js Integration Tests (downstream)" in harper, added Jul 2026, Node 20, 22, and 24. It is advisory and path-filtered, so not every run executes the suite: in a 7.5% hash sample of 254 runs, 208 (82%) did.
+      </aside>
+    </section>
+
+    <section class="slide" id="downstream-failures">
+      <h2>The check flags failures in review</h2>
+      <div class="hero">
+        <span class="n">~5%</span>
+        <p>10 of 208 sampled suite runs failed on a Node version</p>
+        <p class="muted">Some may come from Next.js main, not the Harper PR.</p>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#downstream-check">Data and method</a></p>
+      <aside class="notes">
+        Of 254 sampled runs, 208 executed the suite and 10 of those had at least one Node version fail on the final attempt. Don't apply 5% to all 3,325 runs, and don't call every failure a Harper regression: the check tracks nextjs main.
+      </aside>
+    </section>
+
+    <section class="slide" id="velocity">
+      <h2>More PRs come with integration tests</h2>
+      <p class="small muted">Merged harper PRs by month, and how many touched integration tests</p>
+      <p class="legend"><span style="--swatch: var(--dais-accent)">Touched integration tests</span><span style="--swatch: var(--dais-muted)">Other merged PRs</span></p>
+      <div class="colchart stacked" style="--max: 250" role="img" aria-label="Merged PRs that touch integration tests by month: Dec 3 of 14 (21%), Jan 3 of 13 (23%), Feb 5 of 30 (17%), Mar 10 of 96 (10%), Apr 8 of 67 (12%), May 29 of 151 (19%), Jun 59 of 229 (26%), Jul 54 of 215 (25%), Aug 48 of 148 (32%), Sep 74 of 238 (31%).">
+        <div><i style="--v: 14"><b style="--part: 21.4"></b><span>21%</span></i></div>
+        <div><i style="--v: 13"><b style="--part: 23.1"></b><span>23%</span></i></div>
+        <div><i style="--v: 30"><b style="--part: 16.7"></b><span>17%</span></i></div>
+        <div><i style="--v: 96"><b style="--part: 10.4"></b><span>10%</span></i></div>
+        <div><i style="--v: 67"><b style="--part: 11.9"></b><span>12%</span></i></div>
+        <div><i style="--v: 151"><b style="--part: 19.2"></b><span>19%</span></i></div>
+        <div><i style="--v: 229"><b style="--part: 25.8"></b><span>26%</span></i></div>
+        <div><i style="--v: 215"><b style="--part: 25.1"></b><span>25%</span></i></div>
+        <div><i style="--v: 148"><b style="--part: 32.4"></b><span>32%</span></i></div>
+        <div><i style="--v: 238"><b style="--part: 31.1"></b><span>31%</span></i></div>
+      </div>
+      <div class="colchart-x" aria-hidden="true"><span>Dec<small>3 of 14</small></span><span>Jan<small>3 of 13</small></span><span>Feb<small>5 of 30</small></span><span>Mar<small>10 of 96</small></span><span>Apr<small>8 of 67</small></span><span>May<small>29 of 151</small></span><span>Jun<small>59 of 229</small></span><span>Jul<small>54 of 215</small></span><span>Aug<small>48 of 148</small></span><span>Sep<small>74 of 238</small></span></div>
+      <p class="colchart-note">Bar height: PRs merged that month. Label: share that touched integration tests.</p>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#prs-touching-integration-tests">Data and method</a></p>
+      <aside class="notes">
+        Merged PRs to harper's main branch from GitHub, by merge month. "Touched" means the PR changed a file under integrationTests/ (not the legacy suite). Dec and Jan are tiny months. Feb to Apr: 10 to 17%. Jun to Sep: 25 to 32%, at three times the volume. Some of those PRs only fix or maintain tests, so the next slide looks at code changes. October is left out because the month isn't over.
+      </aside>
+    </section>
+
+    <section class="slide" id="code-with-tests">
+      <h2>More code changes ship with a test</h2>
+      <p class="small muted">PRs that change non-test code, and how many also change an integration test</p>
+      <p class="legend"><span style="--swatch: var(--dais-accent)">Also changed an integration test</span><span style="--swatch: var(--dais-muted)">Code only</span></p>
+      <div class="colchart stacked" style="--max: 170" role="img" aria-label="Code PRs that also change an integration test by month: Dec 1 of 7 (14%), Jan 2 of 8 (25%), Feb 3 of 23 (13%), Mar 2 of 60 (3%), Apr 2 of 42 (5%), May 15 of 97 (15%), Jun 26 of 151 (17%), Jul 35 of 161 (22%), Aug 33 of 102 (32%), Sep 47 of 144 (33%).">
+        <div><i style="--v: 7"><b style="--part: 14.3"></b><span>14%</span></i></div>
+        <div><i style="--v: 8"><b style="--part: 25.0"></b><span>25%</span></i></div>
+        <div><i style="--v: 23"><b style="--part: 13.0"></b><span>13%</span></i></div>
+        <div><i style="--v: 60"><b style="--part: 3.3"></b><span>3%</span></i></div>
+        <div><i style="--v: 42"><b style="--part: 4.8"></b><span>5%</span></i></div>
+        <div><i style="--v: 97"><b style="--part: 15.5"></b><span>15%</span></i></div>
+        <div><i style="--v: 151"><b style="--part: 17.2"></b><span>17%</span></i></div>
+        <div><i style="--v: 161"><b style="--part: 21.7"></b><span>22%</span></i></div>
+        <div><i style="--v: 102"><b style="--part: 32.4"></b><span>32%</span></i></div>
+        <div><i style="--v: 144"><b style="--part: 32.6"></b><span>33%</span></i></div>
+      </div>
+      <div class="colchart-x" aria-hidden="true"><span>Dec<small>1 of 7</small></span><span>Jan<small>2 of 8</small></span><span>Feb<small>3 of 23</small></span><span>Mar<small>2 of 60</small></span><span>Apr<small>2 of 42</small></span><span>May<small>15 of 97</small></span><span>Jun<small>26 of 151</small></span><span>Jul<small>35 of 161</small></span><span>Aug<small>33 of 102</small></span><span>Sep<small>47 of 144</small></span></div>
+      <p class="colchart-note">Bar height: merged PRs that changed non-test code. Label: share that also changed an integration test.</p>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#code-changes-that-ship-an-integration-test">Data and method</a></p>
+      <aside class="notes">
+        A code PR changes a .js or .ts file outside test directories. It "ships with a test" when it also adds or changes an integration test file. This replaces counting "fix" commits by subject, which depended on how people titled commits. Feb to Apr: 3 to 13%. Jun to Sep: 17 to 33%. September: 47 of 144. October is left out because the month isn't over.
+      </aside>
+    </section>
+
+    <section class="slide" id="ci-usage">
+      <h2>And CI runs them all the time</h2>
+      <p class="small muted">Runs of harper's integration test workflow, by month</p>
+      <p class="legend"><span style="--swatch: var(--dais-muted)">Before the port finished (Jun 9)</span><span style="--swatch: var(--dais-accent)">After</span></p>
+      <div class="colchart" style="--max: 1700" role="img" aria-label="Integration test CI runs per month: Dec 68, Jan 132, Feb 213, Mar 446, Apr 493, May 1,042, Jun 1,356, Jul 1,374, Aug 1,186, Sep 1,622">
+        <div><i style="--v: 68"><span>68</span></i></div>
+        <div><i style="--v: 132"><span>132</span></i></div>
+        <div><i style="--v: 213"><span>213</span></i></div>
+        <div><i style="--v: 446"><span>446</span></i></div>
+        <div><i style="--v: 493"><span>493</span></i></div>
+        <div><i style="--v: 1042"><span>1,042</span></i></div>
+        <div><i class="after" style="--v: 1356"><span>1,356</span></i></div>
+        <div><i class="after" style="--v: 1374"><span>1,374</span></i></div>
+        <div><i class="after" style="--v: 1186"><span>1,186</span></i></div>
+        <div><i class="after" style="--v: 1622"><span>1,622</span></i></div>
+      </div>
+      <div class="colchart-x" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#ci-runs-per-month">Data and method</a></p>
+      <aside class="notes">
+        Runs of integration-tests.yml per month. Dec 2025: 68 runs from 14 PR branches, not counting Renovate. Last 30 days (to Oct 21): 1,461 runs from 355 PR branches. More runs show use; on their own they don't show faster engineering or better reliability.
+      </aside>
+    </section>
+
+    <section class="slide" id="package-adoption">
+      <h2>Adopted across HarperFast</h2>
+      <div class="hero">
+        <span class="n">32 repos</span>
+        <p>import <code>@harperfast/integration-testing</code></p>
+        <p class="muted">Heaviest: harper-pro (126 files), harper-reflex (35), Developer-Relations-Agents (7)</p>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#repos-importing-the-package">Data and method</a></p>
+      <aside class="notes">
+        HarperFast repos with code that imports the package (an import or require of it, not a mention in docs), excluding harper itself: 26 public and 6 private or internal. Next: oauth (6), agent-memory (4), symphony (4). Most templates and examples carry one smoke test. harper-pro's 126 importing files are 123 integration tests, 2 smoke tests, and a benchmark. npm: 23 versions, 49,736 downloads Sep 22 to Oct 21, 2026.
+      </aside>
+    </section>
+
+    <section class="slide" id="failure-history">
+      <h2>CI is not always green</h2>
+      <p class="small muted">Main pushes with a failed job, by month. Failure rate, not flake rate.</p>
+      <div class="bars" role="img" aria-label="Share of main branch CI runs that failed, by month. January 8%, February 7%, March 16%, April 19%, May 41%, June 66%, July 52%, August 62%, September 19%.">
+        <b>Jan</b> <i style="--pct: 8"></i> <b>8%</b>
+        <b>Feb</b> <i style="--pct: 7"></i> <b>7%</b>
+        <b>Mar</b> <i style="--pct: 16"></i> <b>16%</b>
+        <b>Apr</b> <i style="--pct: 19"></i> <b>19%</b>
+        <b>May</b> <i style="--pct: 41"></i> <b>41%</b>
+        <b class="accent-2">Jun</b> <span class="hot"><i style="--pct: 66"></i></span> <b class="accent-2">66%</b>
+        <b class="accent-2">Jul</b> <span class="hot"><i style="--pct: 52"></i></span> <b class="accent-2">52%</b>
+        <b class="accent-2">Aug</b> <span class="hot"><i style="--pct: 62"></i></span> <b class="accent-2">62%</b>
+        <b>Sep</b> <i style="--pct: 19"></i> <b>19%</b>
+      </div>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#main-branch-failures-by-month">Data and method</a></p>
+      <aside class="notes">
+        Share of main push runs of integration-tests.yml whose final attempt failed. December is left out: the workflow only started running on main when PR #27 merged on Dec 3, so it had just 13 main pushes (all passed). January also had only 13 (one failed). Jan to Apr failures were almost all the legacy suite. Jun to Aug: the matrix grew (Windows, Bun, Node 26, uWS) and Windows had long tail latency. Runs where a Linux Node shard failed: Jan 0%, Feb 0%, Mar 4%, Apr 0%, May 12%, Jun 40%, Jul 30%, Aug 34%, Sep 10%. October is left out because the month isn't over.
+      </aside>
+    </section>
+
+    <section class="slide" id="failure-scope">
+      <h2>Last 30 days</h2>
+      <ul class="lines reveal">
+        <li>20% of main runs failed</li>
+        <li>20 of those 52 failed only on Windows, Bun, or uWS</li>
+        <li>Failures include real regressions, like Node 26</li>
+      </ul>
+      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#last-30-days">Data and method</a></p>
+      <aside class="notes">
+        Sep 22 to Oct 21, 2026: 52 of 258 main runs failed on the final attempt (19% on the first). A Linux Node.js shard failed in 11% of runs. 23 of the 52 had no Linux Node.js shard failure; 20 of those failed only in Windows, Bun, or uWS jobs. Node 26 failed 44, 37, 17, and 15 main runs from June to September and was pinned to 26.5.0 from Aug 3 to Sep 1. Runs that succeeded after a re-run: 12.9% in July, 4.3% in September. The legacy suite failed on 9.3% of main pushes, but it's a different suite on a smaller matrix, so this doesn't show CI became less or more flaky.
+      </aside>
+    </section>
+
+    <section class="slide center" id="isolation">
+      <h2>Stability is the next frontier</h2>
+      <p>Each failure points to one test file, its own instances, and its logs.</p>
+      <aside class="notes">
+        Close on what isolation gives you by design: a failure is attributable to one file. The data supports more tests, more of them in code changes, and broader adoption. It doesn't measure isolation itself, and it doesn't show lower flakiness.
+      </aside>
+    </section>
+
+    <section class="slide title no-number" id="thanks">
+      <img class="me" src="ethan.jpg" alt="Ethan Arrowood on a ski slope" width="2800" height="2800">
+      <h2>Thank you</h2>
+      <p class="muted">Ethan Arrowood · Head of Open Source Engineering, Harper · ethanarrowood.com</p>
+      <dl class="links">
+        <dt>Framework</dt><dd><a href="https://github.com/HarperFast/integration-testing">github.com/HarperFast/integration-testing</a></dd>
+        <dt>Analysis</dt><dd><a href="https://github.com/Ethan-Arrowood/node-test-runner-parallelization-analysis">github.com/Ethan-Arrowood/node-test-runner-parallelization-analysis</a></dd>
+        <dt>Next.js</dt><dd><a href="https://github.com/HarperFast/nextjs">github.com/HarperFast/nextjs</a></dd>
+        <dt>Slides</dt><dd><a href="https://ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/slides/">ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/slides</a></dd>
+        <dt>Post</dt><dd><a href="https://ethanarrowood.com/blog/parallel-nodejs-integration-testing">ethanarrowood.com/blog/parallel-nodejs-integration-testing</a></dd>
+        <dt>Data</dt><dd><a href="https://ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/">ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data</a></dd>
+      </dl>
+      <aside class="notes"></aside>
+    </section>
+
+  </main>
+
+  <footer class="deck-footer" aria-hidden="true">
+    <span class="id">
+      <span class="line1">
+        <svg class="gh" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GitHub">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        @Ethan-Arrowood</span>
+    </span>
+    <span class="event">
+      <span class="line1">Performant, Parallelizable, Framework Agnostic Node.js Integration Testing</span>
+      <span class="line2">2026 Q4</span>
+    </span>
+  </footer>
+
+</body>
+</html>
