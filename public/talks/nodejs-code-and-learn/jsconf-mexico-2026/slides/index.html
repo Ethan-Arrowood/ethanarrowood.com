@@ -47,20 +47,37 @@
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--dais-accent-2);
-        margin-block-end: 2cqi;
+        margin-block-end: 1.6cqi;
       }
 
       #intro .node-logo {
-        height: 12cqi;
+        height: 9.5cqi;
         width: auto;
-        margin-block-end: 1cqi;
+        margin-block-end: 0.8cqi;
       }
       #intro h1 {
-        margin-block-end: 3.2cqi;
+        margin-block-end: 2.2cqi;
       }
+
+      /* Wi-Fi up front so people can connect while they wait. */
+      #intro .wifi-pill {
+        display: flex;
+        gap: 2.4cqi;
+        padding: 0.5em 1.4em;
+        margin-block-end: 2.4cqi;
+        font-size: 2.2cqi;
+        color: var(--dais-muted);
+        border: 0.25cqi solid var(--dais-accent);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--dais-accent) 12%, var(--dais-bg));
+      }
+      #intro .wifi-pill strong {
+        color: var(--dais-text);
+      }
+
       #intro .presented {
-        font-size: 1.8cqi;
-        margin-block-end: 1.6cqi;
+        font-size: 1.6cqi;
+        margin-block-end: 1.2cqi;
       }
 
       /* Sponsor logos, title slide and closing slide. */
@@ -716,6 +733,10 @@
           height="252"
         />
         <h1>Code and Learn</h1>
+        <p class="wifi-pill">
+          <span>Wi-Fi <strong>JSConf-TallerB</strong></span>
+          <span>Password <strong>ajolotes</strong></span>
+        </p>
         <p class="presented">Presented by</p>
         <ul class="logos">
           <li>
