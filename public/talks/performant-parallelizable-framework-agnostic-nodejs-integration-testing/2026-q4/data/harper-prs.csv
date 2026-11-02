@@ -1,0 +1,1214 @@
+number,merged_at,month,files,files_truncated,touches_integration_tests,changes_integration_test_file,changes_non_test_code,title
+48,2025-11-24T22:55:38Z,2025-11,1,False,False,False,False,Update dependency semver to v7.7.3
+47,2025-11-24T22:55:21Z,2025-11,1,False,False,False,False,Update dependency msgpackr to v1.11.5
+46,2025-11-24T20:55:49Z,2025-11,1,False,False,False,False,Update dependency inquirer to v8.2.7
+45,2025-11-24T19:04:45Z,2025-11,2,False,False,False,False,Enable Renovate PR review requests
+43,2025-11-24T18:36:37Z,2025-11,1,False,False,False,False,Update dependency fs-extra to v11.3.2
+42,2025-11-24T18:25:30Z,2025-11,1,False,False,False,False,Update dependency @harperdb/code-guidelines to ^0.0.6
+41,2025-11-24T18:12:53Z,2025-11,2,False,False,False,False,Add Renovate config for automated deps updating
+36,2025-11-11T22:50:38Z,2025-11,44,False,False,False,True,Sync internal 11/11/25
+28,2025-11-07T16:49:51Z,2025-11,1,False,False,False,True,Expand entryPoint check to cover nulls
+15,2025-11-03T17:44:29Z,2025-11,49,False,False,False,True,More and better unit tests
+11,2025-11-05T15:12:19Z,2025-11,2,False,False,False,True,Improve Harper Application Management with lockfile 
+10,2025-11-12T21:02:08Z,2025-11,14,False,False,False,True,Fixes for maintaining compatibility with existing components by allow…
+64,2025-12-23T21:27:30Z,2025-12,14,False,False,False,True,Sync from harperdb repo 2025-12-22
+63,2025-12-23T17:27:35Z,2025-12,2,False,False,False,True,Fix a couple small issues
+62,2025-12-18T18:27:02Z,2025-12,3,False,True,False,True,Suggest admin instead of HDB_ADMIN for admin username
+61,2025-12-16T19:10:25Z,2025-12,1,False,False,False,False,Update latest synced commit
+58,2025-12-15T18:21:24Z,2025-12,1,False,False,False,False,fix(deps): update aws-sdk-js-v3 monorepo to v3.946.0
+57,2025-12-15T18:20:43Z,2025-12,1,False,False,False,False,fix(deps): update dependency jsonwebtoken to v9.0.3
+56,2025-12-11T14:40:50Z,2025-12,1,False,False,False,False,fix(deps): update dependency yaml to v2.8.2
+55,2025-12-12T17:32:07Z,2025-12,1,False,False,False,False,Sync 2025-12-08
+53,2025-12-05T20:35:21Z,2025-12,1,False,False,False,True,Running harper within a folder should automatically run the applicati…
+52,2025-12-04T20:32:53Z,2025-12,54,False,True,False,True,Sync from old repo 2025-12-03
+51,2025-12-03T18:26:00Z,2025-12,2,False,False,False,True,pin prettier version and fix formatting of file affected by minor or …
+50,2025-12-09T17:31:31Z,2025-12,1,False,False,False,False,fix(deps): update dependency ws to v8.18.3
+49,2025-12-11T14:40:23Z,2025-12,1,False,False,False,False,fix(deps): update dependency systeminformation to v5.27.11
+27,2025-12-03T23:07:19Z,2025-12,22,False,True,True,True,Integration test overhaul
+117,2026-01-29T20:02:50Z,2026-01,18,False,False,False,True,Migrate config and bin unit tests
+114,2026-01-22T18:03:57Z,2026-01,6,False,False,False,True,Sync 2026-01-20
+92,2026-01-14T15:43:58Z,2026-01,1,False,False,False,False,Update aws-sdk-js-v3 monorepo to v3.964.0
+91,2026-01-14T15:32:13Z,2026-01,1,False,False,False,False,Update dependency fs-extra to v11.3.3
+89,2026-01-14T15:16:14Z,2026-01,1,False,False,False,False,Update dependency asn1js to v3.0.7
+76,2026-01-15T21:43:56Z,2026-01,21,False,False,False,True,Sync from HarperDB 2026-01-12
+75,2026-01-29T21:29:27Z,2026-01,100,True,True,True,True,Copy/migrate tests from /harperdb
+73,2026-01-07T14:27:44Z,2026-01,1,False,False,False,True,"Added deploy command info in ""haper help"" command list"
+72,2026-01-12T16:32:20Z,2026-01,3,False,False,False,True,Sync from harperdb 2026-01-05
+69,2026-01-08T04:18:00Z,2026-01,4,False,True,False,False,Integration tests improvements
+66,2026-01-12T16:55:52Z,2026-01,24,False,False,False,True,Migrate component unit tests
+65,2026-01-02T17:21:44Z,2026-01,49,False,True,True,True,HarperDB is dead. Long live Harper!
+60,2026-01-13T21:06:02Z,2026-01,1,False,False,False,False,Update dependency argon2 to v0.44.0
+182,2026-02-27T12:44:26Z,2026-02,1,False,False,False,True,Another harper-config.yaml check
+181,2026-02-26T21:17:24Z,2026-02,4,False,False,False,True,Restore get_registration_info op
+179,2026-02-27T16:26:27Z,2026-02,1,False,False,False,True,Update a JSDoc to match actual params
+178,2026-02-26T20:51:12Z,2026-02,6,False,False,False,False,Add release pipeline workflows
+177,2026-02-27T16:26:51Z,2026-02,2,False,False,False,True,Make the server.http options type match the docs
+176,2026-02-26T16:40:18Z,2026-02,2,False,False,False,False,Rename sql_testUtils vars to sqlTestUtils
+175,2026-02-25T17:32:01Z,2026-02,1,False,False,False,True,Warn users if they are running Harper in an application folder (or root folder)
+173,2026-02-26T21:18:20Z,2026-02,1,False,False,False,True,Stop setting Server response header
+171,2026-02-24T19:59:58Z,2026-02,7,False,False,False,True,More storage fixes
+170,2026-02-27T16:24:15Z,2026-02,12,False,True,True,True,allow role to specify access to specific operations
+168,2026-02-24T17:15:19Z,2026-02,1,False,False,False,False,Document how to not fetch tags from old repo when syncing
+162,2026-02-23T18:36:07Z,2026-02,6,False,False,False,True,Reduce globals to those that have been documented and put everything …
+161,2026-02-23T18:29:42Z,2026-02,9,False,False,False,True,Fixes for using LMDB
+160,2026-02-23T18:36:33Z,2026-02,9,False,True,True,True,Rename default home directory from hdb to harper
+157,2026-02-18T21:38:37Z,2026-02,1,False,False,False,False,Update rocksdb
+156,2026-02-18T19:47:32Z,2026-02,3,False,True,True,True,Fix root store configuration and add test to verify that transaction …
+154,2026-02-18T16:05:09Z,2026-02,4,False,True,False,True,Integration tests updates
+151,2026-02-18T15:41:18Z,2026-02,3,False,False,False,True,Properly export more of our top level functions
+149,2026-02-19T20:32:25Z,2026-02,2,False,False,False,True,Add support for defining a package manager prefix
+148,2026-02-18T19:47:14Z,2026-02,4,False,False,False,True,Use a safer mechanism for freezing intrinsics
+146,2026-02-18T16:09:08Z,2026-02,3,False,False,False,True,Update/upsert records should use patch
+143,2026-02-13T18:35:03Z,2026-02,1,False,False,False,False,Don't duplicate deps in devDependencies
+140,2026-02-18T02:33:57Z,2026-02,100,True,True,False,True,Sync HarperDB -> Harper 2026-02-09
+134,2026-02-09T21:54:19Z,2026-02,96,False,False,False,False,Consolidate unitTests/test_utils & unitTests/testUtils
+133,2026-02-05T19:43:29Z,2026-02,3,False,False,False,False,Fix some more badly-named unit test files
+126,2026-02-09T18:10:28Z,2026-02,19,False,False,False,True,HarperDB -> Harper sync 2026-02-02
+125,2026-02-06T16:06:50Z,2026-02,2,False,False,False,True,Add harperdb repo sync helper script
+124,2026-02-09T21:03:59Z,2026-02,7,False,False,False,True,Immediately parse search/queries in URLs provided to RequestTarget
+121,2026-02-13T13:43:30Z,2026-02,25,False,False,False,True,Separate top level scope for each app
+37,2026-02-17T23:25:56Z,2026-02,95,False,False,False,True,RocksDB storage
+306,2026-03-31T14:35:22Z,2026-03,16,False,False,False,True,Config relative paths
+305,2026-03-31T14:05:19Z,2026-03,1,False,False,False,False,Update version (and rocksdb-js)
+303,2026-03-31T06:18:16Z,2026-03,1,False,False,False,False,pin axios to 1.14.0
+302,2026-03-31T02:55:44Z,2026-03,1,False,False,False,True,Change log level of thread message failure
+301,2026-03-31T14:24:37Z,2026-03,10,False,False,False,True,Symlink harperdb and provide type exports for better back-compat
+298,2026-03-31T13:50:44Z,2026-03,4,False,False,False,True,Tolerate missing methods on registered resources
+295,2026-03-31T14:01:03Z,2026-03,1,False,False,False,True,"Revert ""Add --experimental-vm-modules flag"""
+290,2026-03-31T13:38:32Z,2026-03,1,False,False,False,False,Match assertion condtion to log condition.
+289,2026-03-31T14:01:52Z,2026-03,3,False,False,False,True,Run node storage tracking less often than the standard analytics inteval and make configurable
+286,2026-03-26T15:48:31Z,2026-03,3,False,False,False,True,Add node storage metric
+285,2026-03-26T14:24:59Z,2026-03,1,False,False,False,False,Provide default password
+284,2026-03-26T13:54:29Z,2026-03,1,False,False,False,True,Add missing timeout parameter
+283,2026-03-26T15:50:24Z,2026-03,1,False,False,False,True,"When loading a sub-component/plugin, don't override the verifyPath if…"
+282,2026-03-26T15:59:54Z,2026-03,1,False,False,False,True,avoid mutating cached records in `get_analytics`
+281,2026-03-26T13:54:13Z,2026-03,4,False,True,True,False,Add integration test for upgrading from 4.x
+279,2026-03-26T13:53:53Z,2026-03,1,False,False,False,True,Use the usageType to determine the configuration of the HTTP connection
+278,2026-03-26T03:39:59Z,2026-03,1,False,False,False,True,fix drop db closing store before emitting events
+277,2026-03-26T13:53:26Z,2026-03,5,False,False,False,True,Load package relative
+276,2026-03-25T23:07:39Z,2026-03,4,False,False,False,True,Configurable scoped application logger
+274,2026-03-31T14:01:18Z,2026-03,17,False,False,False,True,use relative paths in harper config
+273,2026-03-25T12:05:19Z,2026-03,2,False,False,False,True,Add more harper module ids and use a better matching mechanism
+272,2026-03-20T21:54:44Z,2026-03,1,False,False,False,True,fix: Close scopes on shutdown
+271,2026-03-20T16:02:18Z,2026-03,3,False,False,False,True,Fix accessing the database path for tracking subscriptions
+270,2026-03-20T01:32:09Z,2026-03,9,False,False,False,False,fix: Pin and version digests
+268,2026-03-20T04:18:06Z,2026-03,1,False,False,False,False,Update to rocksdb-js@0.1.13
+267,2026-03-20T04:17:54Z,2026-03,1,False,False,False,True,Add `--experimental-vm-modules` flag to `bin/harper`
+266,2026-03-19T21:12:46Z,2026-03,2,False,False,False,False,Set 15 minute timeout for integration tests
+264,2026-03-19T14:13:10Z,2026-03,4,False,False,False,True,Remove json2csv
+263,2026-03-19T14:10:17Z,2026-03,2,False,False,False,True,Fix first run certificates where HARPER_SET_CONFIG doesn't seem to apply
+261,2026-03-19T15:06:21Z,2026-03,4,False,False,False,False,Fix test assertions
+260,2026-03-18T23:38:30Z,2026-03,1,False,False,False,True,fix: handle JSON file imports in sandboxed module loader
+259,2026-03-18T23:38:09Z,2026-03,1,False,False,False,False,fix: Always latest for now
+258,2026-03-18T20:57:09Z,2026-03,1,False,False,False,True,"Enqueue message events if there are any in the queue, to better emula…"
+257,2026-03-18T20:46:21Z,2026-03,1,False,False,False,False,Update `fastify` packages to resolve high/low-severity vulnerabilities
+256,2026-03-18T21:03:02Z,2026-03,1,False,False,False,False,Update `mocha` to resolve high-severity vulnerabilities
+255,2026-03-18T21:02:48Z,2026-03,1,False,False,False,False,Update `@aws-sdk/client-s3` to resolve critical-severity vulnerabilities
+254,2026-03-18T21:02:38Z,2026-03,1,False,False,False,False,Update `lodash` to resolve moderate-severity vulnerabilities
+253,2026-03-18T21:02:24Z,2026-03,1,False,False,False,False,Update `systeminformation` to resolve high-severity vulnerabilities
+252,2026-03-18T21:00:52Z,2026-03,1,False,False,False,False,Update `tar-fs` to resolve high-severity vulnerabilities
+251,2026-03-18T20:59:19Z,2026-03,1,False,False,False,False,Update `undici` to resolve high-severity vulnerabilities
+249,2026-03-18T19:50:51Z,2026-03,1,False,False,False,True,Make TLS (re)loading to be explicitly sync
+248,2026-03-18T17:39:05Z,2026-03,1,False,True,False,False,Correctly report exit signal if there is no exit code
+247,2026-03-18T17:33:54Z,2026-03,1,False,False,False,False,Update rocksdb-js to 0.1.12
+246,2026-03-17T20:30:22Z,2026-03,2,False,False,False,True,Restrict user code on main thread
+244,2026-03-18T14:43:54Z,2026-03,1,False,False,False,True,fix: Return consistent values from getIndexedValues
+243,2026-03-17T20:44:22Z,2026-03,7,False,False,False,True,"fix: Remove v1+v2, defaulting to v1"
+241,2026-03-18T17:39:23Z,2026-03,5,False,False,False,True,Handle loading TypeStrip modules in applications using VM loader
+240,2026-03-17T16:31:02Z,2026-03,1,False,False,False,False,"simplify apiTests ""upload logs on failure"" step condition and upload available output and logs on failure"
+238,2026-03-17T19:27:27Z,2026-03,2,False,False,False,True,Properly honor the async option
+236,2026-03-17T14:40:07Z,2026-03,1,False,False,False,False,Fix build.sh file name
+235,2026-03-18T20:28:41Z,2026-03,10,False,True,True,False,"Improve integration test harperLifecycle: rename setupHarper, add docs for killHarper/logDir/env vars"
+234,2026-03-16T22:04:32Z,2026-03,2,False,False,False,True,Don't exclude dot files
+233,2026-03-16T22:05:18Z,2026-03,5,False,False,False,True,Backport release build scripts and configuration
+232,2026-03-16T21:28:57Z,2026-03,22,False,False,False,True,Sync 03162026
+231,2026-03-19T14:02:47Z,2026-03,4,False,True,True,False,Add support for a harperBinPath
+229,2026-03-16T22:06:58Z,2026-03,20,False,True,True,True,hash_attribute -> primary_key
+228,2026-03-16T14:57:23Z,2026-03,3,False,False,False,True,Update loader to properly handle circular dependencies
+227,2026-03-16T14:57:52Z,2026-03,2,False,False,False,True,Queue messages delivered by message type
+226,2026-03-16T22:05:49Z,2026-03,1,False,False,False,True,Fix session to be updatable
+225,2026-03-16T22:06:42Z,2026-03,4,False,False,False,True,Remove profiler
+223,2026-03-16T15:44:26Z,2026-03,3,False,False,False,True,Return problem details on errors
+222,2026-03-16T15:42:49Z,2026-03,1,False,True,False,False,Expose killHarper so we can test restart/crashes
+221,2026-03-12T22:02:51Z,2026-03,1,False,False,False,False,Remove private because we actually want to publish this thing
+220,2026-03-12T21:20:11Z,2026-03,1,False,False,False,False,Use correct token
+219,2026-03-12T20:22:08Z,2026-03,2,False,False,False,False,Add Dockerfile
+218,2026-03-12T20:22:01Z,2026-03,2,False,False,False,False,Use correct name for tgz file
+217,2026-03-12T19:29:42Z,2026-03,3,False,True,False,False,"updating integration test action versions, minor integration test uti…"
+216,2026-03-12T17:25:58Z,2026-03,1,False,False,False,True,Optional arg
+215,2026-03-12T19:29:14Z,2026-03,4,False,False,False,False,Use the SLACK_BOT_TOKEN to send Slack notifications
+214,2026-03-12T15:44:03Z,2026-03,5,False,False,False,True,Db/setup fixes
+213,2026-03-12T15:00:23Z,2026-03,1,False,True,False,False,Improve integration test settings
+212,2026-03-12T15:07:16Z,2026-03,25,False,False,False,True,feat: Convert logger to TypeScript
+211,2026-03-12T15:07:40Z,2026-03,4,False,False,False,True,fix: Use jwt types to adjust the implementation slightly
+210,2026-03-13T20:07:45Z,2026-03,8,False,False,False,True,Spawn Wisely
+209,2026-03-12T15:45:08Z,2026-03,6,False,False,False,True,Use the VM loader for loading plugin modules as well resource modules
+208,2026-03-11T17:05:58Z,2026-03,1,False,False,False,False,Update msgpackr and cbor for security updates
+207,2026-03-11T15:57:42Z,2026-03,3,False,True,False,True,Update integration test workflow to save hdb.log from failed tests
+205,2026-03-10T18:15:29Z,2026-03,2,False,False,False,True,remove SUPPORTED_OPS check for CLI commands
+204,2026-03-09T15:30:29Z,2026-03,2,False,False,False,True,Fix misspelling of registration_info
+201,2026-03-06T16:33:41Z,2026-03,1,False,False,False,False,Fix exports to point to dist module
+199,2026-03-09T21:23:25Z,2026-03,1,False,False,False,True,Resolve cwd as absolute path
+198,2026-03-11T17:05:43Z,2026-03,8,False,False,False,True,Branching transaction history
+195,2026-03-04T23:38:08Z,2026-03,1,False,False,False,True,CLI errors exit with code 1 and error message cleanup
+193,2026-03-06T20:56:39Z,2026-03,4,False,False,False,True,if operationsApi/http ~~secretPort~~ securePort is set to the same value as the port…
+192,2026-03-05T17:16:12Z,2026-03,2,False,False,False,False,see if this helps with test reliability
+190,2026-03-05T15:51:34Z,2026-03,7,False,True,True,True,Stop the profiler if aggregate period is not positive
+189,2026-03-04T15:33:54Z,2026-03,1,False,False,False,True,Don't override path hdb_boot_properties.file with ROOTPATH
+186,2026-03-03T22:19:03Z,2026-03,1,False,False,False,False,Remove extra v in version
+185,2026-03-06T21:39:49Z,2026-03,9,False,False,False,True,User/Role/Permission downgrade impersonation on the operations API
+184,2026-03-02T23:55:49Z,2026-03,7,False,False,False,True,add warning for extension api and remove plugin api warning
+183,2026-03-03T12:49:49Z,2026-03,9,False,False,False,True,Add ability to query multiple logs with exclusion and dynamic addition
+180,2026-03-02T23:18:56Z,2026-03,3,False,False,False,True,Simplify Table to support a single source tied to the specific class
+174,2026-03-02T23:19:43Z,2026-03,1,False,False,False,True,Bring over sync-commits.js improvements from Harper Pro
+169,2026-03-13T04:24:31Z,2026-03,14,False,False,False,True,Sync from HarperDB 2026-02-23
+164,2026-03-03T12:49:25Z,2026-03,7,False,False,False,True,Handle `Response` objects in cache resolution and in RESTful responses
+93,2026-03-19T15:25:57Z,2026-03,1,False,False,False,False,fix(deps): update dependency easy-ocsp to v1.3.1
+439,2026-04-30T22:45:55Z,2026-04,1,False,False,False,False,ci(claude): bump ai-review-prompts pin to pick up concise-PR + within-PR memory
+438,2026-04-30T22:18:25Z,2026-04,1,False,False,False,False,ci(claude): route within-PR learnings to log surface via $RUNNER_TEMP file
+437,2026-04-30T21:51:27Z,2026-04,1,False,False,False,False,ci(claude): tighten override so concise-PR rule beats universal calibration clause
+434,2026-04-30T22:44:40Z,2026-04,3,False,False,False,True,fix: downgrade TLS SNI log from info to debug
+432,2026-04-30T19:33:40Z,2026-04,1,False,False,False,False,ci(claude): consolidate PR review into one edited comment + per-PR log
+430,2026-04-30T22:43:29Z,2026-04,2,False,False,False,True,fix: handle scalar root config values in OptionsWatcher
+427,2026-04-30T04:04:59Z,2026-04,3,False,False,False,True,Fix require('harperdb') in CJS modules loaded via VM
+424,2026-04-29T22:26:27Z,2026-04,7,False,False,False,True,Fix relative require resolution for symlinked modules
+423,2026-04-30T04:05:13Z,2026-04,3,False,False,False,True,Handle error in outstandingCommit promise
+422,2026-04-29T01:57:13Z,2026-04,1,False,False,False,False,My favorite thing in the world is merging package-lock.json
+420,2026-04-29T14:30:57Z,2026-04,1,False,False,False,False,Upgrade rocksdb-js
+418,2026-04-28T20:36:02Z,2026-04,9,False,False,False,False,fix: Specify default dev node version
+412,2026-04-28T14:17:48Z,2026-04,1,False,False,False,True,Don't double nest uses array
+411,2026-04-28T22:33:25Z,2026-04,1,False,False,False,True,Remove undefined logger variable
+409,2026-04-29T15:42:06Z,2026-04,4,False,False,False,True,Use PID-based paths consistently in unit test utilities
+407,2026-04-29T15:44:07Z,2026-04,3,False,False,False,True,Cache HTTP responses based on RFC 9111 cacheable status codes
+402,2026-04-24T20:54:16Z,2026-04,3,False,False,False,False,"ci: add Claude-powered PR review, mention, and issue-to-PR workflows"
+396,2026-04-29T18:41:31Z,2026-04,15,False,False,False,True,Expose RocksDB stats in system information
+394,2026-04-22T19:11:28Z,2026-04,1,False,False,False,True,Skip node hostname prompt when env var not present
+390,2026-04-20T20:40:27Z,2026-04,18,False,False,False,True,V5.0
+384,2026-04-23T15:15:53Z,2026-04,1,False,True,True,False,add early-hints component integration test
+383,2026-04-29T22:48:25Z,2026-04,14,False,False,False,True,Refactor plugin system: replace `start()` with `handleApplication()` …
+375,2026-04-21T01:15:16Z,2026-04,4,False,True,True,True,Add migrateOnStart option to migrate LMDB databases to RocksDB
+374,2026-04-23T15:16:47Z,2026-04,1,False,True,True,False,add redirector component integration test
+367,2026-04-23T15:45:08Z,2026-04,1,False,True,True,False,add risk-query component integration test
+358,2026-04-20T19:30:26Z,2026-04,1,False,False,False,True,"Shutdown using our more graceful shutdown process, inside of containers"
+357,2026-04-29T22:54:35Z,2026-04,5,False,False,False,True,Add Unix Domain Socket mirrors for TLS ports with metadata export
+356,2026-04-23T15:43:47Z,2026-04,1,False,False,False,True,Reset the event timer when resuming from a paused breakpoint
+354,2026-04-16T02:10:56Z,2026-04,2,False,False,False,True,add composed config helper for out of band merged config inspection
+353,2026-04-23T00:39:09Z,2026-04,4,False,False,False,True,Dot Product Distance for vector search
+352,2026-04-14T21:52:47Z,2026-04,1,False,False,False,True,Fix getThisNodeName() reference
+351,2026-04-14T19:39:45Z,2026-04,2,False,False,False,False,Update rocksdb-js@1.0.0
+350,2026-04-16T21:07:26Z,2026-04,4,False,False,False,False,chore(deps): update pin digests (major)
+349,2026-04-14T19:23:16Z,2026-04,1,False,False,False,True,Load built-ins for jobs so everything is registered
+348,2026-04-14T21:21:45Z,2026-04,2,False,False,False,True,Mqtt reliability
+346,2026-04-14T02:41:17Z,2026-04,1,False,False,False,True,Warn if there are conflicting node and replication hostname settings
+344,2026-04-13T13:23:10Z,2026-04,2,False,False,False,False,chore(deps): update dependency @types/sinon to v21
+343,2026-04-14T18:58:24Z,2026-04,4,False,False,False,False,fix(deps): update all non-major dependencies
+342,2026-04-14T18:58:59Z,2026-04,3,False,False,False,True,fixes types for the server.upgrade method and adds `request.__harperRequestUpgraded`
+340,2026-04-14T18:57:57Z,2026-04,2,False,False,False,True,Add option to freeze intrinsics after applications are loaded
+339,2026-04-14T21:22:23Z,2026-04,1,False,False,False,True,Add support for using ids in delete operation and returning ids in au…
+338,2026-04-14T21:21:35Z,2026-04,3,False,False,False,True,Created time handling
+336,2026-04-14T18:58:47Z,2026-04,1,False,False,False,False,Fix mispelled env var in Dockerfile
+335,2026-04-14T21:45:48Z,2026-04,23,False,False,False,True,RocksDB transaction log operations API
+334,2026-04-29T21:55:21Z,2026-04,24,False,True,True,False,Extract integration testing utils and runner
+331,2026-04-12T00:43:06Z,2026-04,2,False,False,False,False,fix type exports to actually include the root index.d.ts
+328,2026-04-07T20:46:38Z,2026-04,4,False,False,False,True,fix: Remove hdd-space
+327,2026-04-07T17:32:35Z,2026-04,2,False,True,False,False,Fix one more export of important default
+325,2026-04-06T16:06:01Z,2026-04,1,False,True,False,False,Fix exports of important defaults
+324,2026-04-14T19:25:19Z,2026-04,5,False,False,False,False,Use --ignore-scripts in CI
+323,2026-04-06T02:43:18Z,2026-04,1,False,False,False,True,Only run post install scripts when specifically enabled
+322,2026-04-06T02:41:02Z,2026-04,1,False,False,False,False,Maybe we are going too fast
+321,2026-04-06T02:40:51Z,2026-04,1,False,False,False,True,Ensure that we preserve the transaction state across database transac…
+320,2026-04-06T15:44:21Z,2026-04,3,False,False,False,False,fix: Pin and npm ci
+319,2026-04-06T02:41:46Z,2026-04,7,False,False,False,True,Consistent logic for VM containment and fix CJS error handling
+317,2026-04-02T21:05:59Z,2026-04,2,False,False,False,True,Tighter transaction timing
+316,2026-04-02T20:24:09Z,2026-04,1,False,False,False,False,Upgrade LMDB
+315,2026-04-02T20:20:55Z,2026-04,4,False,False,False,True,Shared intrinsics
+314,2026-04-02T20:24:22Z,2026-04,1,False,False,False,True,Cli/fix operations unix domain socket path
+312,2026-04-02T02:13:53Z,2026-04,1,False,False,False,True,"Add the ability to define 'universal' headers, that can be used for l…"
+311,2026-04-02T14:35:05Z,2026-04,2,False,False,False,True,Maintain the same module cache for an application scope
+310,2026-04-02T02:25:52Z,2026-04,2,False,False,False,True,Fix handling serialization and assigning body to a Response object
+309,2026-04-02T02:18:19Z,2026-04,1,False,False,False,True,Use URLs for file paths for import module compatibility with Windows
+308,2026-04-01T15:30:51Z,2026-04,1,False,False,False,True,Allow Map methods to be overriden with frozen intrinsics
+294,2026-04-01T15:07:37Z,2026-04,1,False,False,False,True,Attempt to better determine target.loadedFromSource
+292,2026-04-01T15:08:13Z,2026-04,1,False,False,False,False,MQTT test updates
+120,2026-04-05T14:02:56Z,2026-04,15,False,True,True,True,replace old ocsp and crl apiTests with new integration tests
+889,2026-05-31T12:13:33Z,2026-05,1,False,False,False,True,fix(migration): reuse copied structures during LMDB→RocksDB re-encode
+884,2026-05-31T12:13:54Z,2026-05,3,False,False,False,True,fix(RecordEncoder): retain blob files still referenced by the new record on update
+880,2026-05-30T13:59:21Z,2026-05,2,False,False,False,False,chore(deps): remove @datadog/pprof from core
+875,2026-05-30T19:01:32Z,2026-05,2,False,False,False,False,chore(deps): Update rocksdb-js to 1.4.0
+870,2026-05-30T19:20:34Z,2026-05,5,False,False,False,True,fix(migration): preserve records with file-backed blobs during v4→v5 migration
+862,2026-05-29T22:50:46Z,2026-05,1,False,False,False,True,fix(analytics): continue instead of return so later dbs still get merics
+861,2026-05-29T16:14:48Z,2026-05,2,False,False,False,False,"ci: drop Node v20, add Node v26 to test matrix"
+860,2026-05-29T22:40:04Z,2026-05,2,False,False,False,True,fix(databases): rebind table store after in-place engine migration
+856,2026-05-30T18:31:11Z,2026-05,26,False,True,True,True,"[MCP] v1 tools surface + listChanged + audit/rate-limit (consolidated: #617, #618, #619, #620, #622)"
+855,2026-05-29T14:16:45Z,2026-05,1,False,False,False,False,chore(format): fix prettier drift in Models.test.js
+844,2026-05-30T13:19:30Z,2026-05,2,False,False,False,True,fix: persist indexingFailed in runIndexing outer catch
+842,2026-05-28T13:55:50Z,2026-05,1,False,False,False,False,ci: use individual reviewers instead of developers team
+841,2026-05-29T05:54:32Z,2026-05,1,False,False,False,False,Fix update-rocksdb-js workflow push protection error
+840,2026-05-28T13:56:42Z,2026-05,2,False,False,False,False,chore(deps): Update rocksdb-js to 1.3.0
+837,2026-05-29T22:44:39Z,2026-05,5,False,False,False,True,Fix jsLoader to support ESM-only packages
+824,2026-05-28T14:44:15Z,2026-05,6,False,False,False,True,Add input validation to `get_analytics` operation
+823,2026-05-30T13:20:11Z,2026-05,12,False,False,False,True,Block component process.exit from terminating Harper workers
+822,2026-05-30T13:10:47Z,2026-05,8,False,False,False,True,Suppress watcher restart storms during component deploy
+808,2026-05-27T22:10:50Z,2026-05,3,False,False,False,True,Fix flaky HNSW vector index unit test
+788,2026-05-29T01:26:22Z,2026-05,7,False,True,True,True,[MCP] Resources capability
+781,2026-05-28T19:39:10Z,2026-05,8,False,True,True,True,[MCP] Tool registry + RBAC-aware tools/list
+780,2026-05-26T20:31:58Z,2026-05,2,False,False,False,True,Make RocksDB memory config configurable (block cache + WriteBufferManager)
+764,2026-05-28T21:00:50Z,2026-05,7,False,False,False,True,Expose the Models singleton as a top-level package export
+763,2026-05-28T18:47:20Z,2026-05,18,False,True,True,True,[MCP] Streamable HTTP transport
+760,2026-05-30T13:08:26Z,2026-05,12,False,True,True,True,feat(deploy): Slice B2 — peer-side blob reads + install-line streaming
+749,2026-05-23T04:02:11Z,2026-05,1,False,False,False,True,fix: hand-roll authorize promise wrapper to avoid DEP0174
+748,2026-05-26T18:40:27Z,2026-05,2,False,False,False,True,fix(migration): pass compression to OpenDBIObject (root cause of LMDB→RocksDB hang)
+746,2026-05-22T19:28:15Z,2026-05,1,False,False,False,False,ci: use pull_request_target so assign-reviewers runs without fork approval
+743,2026-05-28T21:01:28Z,2026-05,3,False,False,False,True,Expose ensureTable on plugin scope
+742,2026-05-23T03:10:49Z,2026-05,2,False,False,False,True,Detect SSH auth failure on private-repo deploy and emit clear error
+732,2026-05-22T19:27:44Z,2026-05,1,False,True,True,False,test(integration): OpenAPI endpoint tests (port legacy 22)
+731,2026-05-23T03:10:30Z,2026-05,1,False,True,True,False,test(integration): GraphQL query tests (port legacy 19)
+730,2026-05-23T03:10:11Z,2026-05,1,False,True,True,False,test(integration): computed indexed properties (port legacy 18)
+721,2026-05-22T21:08:58Z,2026-05,3,False,False,False,True,fix(table): return 400 from checkValidId on invalid primary keys
+719,2026-05-23T03:09:52Z,2026-05,3,False,False,False,True,feat(analytics): make retention windows configurable
+710,2026-05-21T23:43:14Z,2026-05,5,False,False,False,True,enforce 5 MB default file-size limit on get_component_file
+709,2026-05-22T20:04:06Z,2026-05,1,False,False,False,False,chore(renovate): enable auto-merge for dependency updates
+707,2026-05-22T18:08:16Z,2026-05,16,False,True,True,True,feat(models): Phase 6 — anthropic + bedrock backends
+698,2026-05-21T20:57:30Z,2026-05,9,False,True,True,True,feat(models): Phase 3 — openai backend + toolMode: 'return'
+677,2026-05-21T22:55:08Z,2026-05,3,False,False,False,True,fix: store local node id in record encoding for unambiguous audit log lookup
+655,2026-05-23T03:14:14Z,2026-05,27,False,True,True,True,feat(deploy): Slice A — hdb_deployment system table + audit record per deploy
+654,2026-05-23T03:47:21Z,2026-05,4,False,False,False,False,"fix(tests): address recurring flaky failures in subscription-replay, MQTT, and multi-threaded suites"
+653,2026-05-21T20:40:42Z,2026-05,2,False,False,False,False,ci: replace CODEOWNERS auto-assign with conditional reviewer workflow
+652,2026-05-21T20:41:11Z,2026-05,5,False,False,False,True,fix(openapi): query worker thread for REST OpenAPI spec on main thread
+651,2026-05-21T16:34:11Z,2026-05,9,False,True,True,True,feat(models): Phase 2 — ollama backend
+649,2026-05-23T17:12:12Z,2026-05,6,False,False,False,True,[MCP] foundation: component scaffold + config schema + boot gating
+648,2026-05-22T12:49:33Z,2026-05,1,False,True,True,False,test(integration): port blob lifecycle suite to harperLifecycle
+647,2026-05-21T21:10:08Z,2026-05,1,False,True,True,False,test(integration): port terminology-alias suite to harperLifecycle
+646,2026-05-20T23:08:12Z,2026-05,1,False,True,True,False,test(integration): port configuration suite to harperLifecycle
+645,2026-05-21T21:10:52Z,2026-05,1,False,True,True,False,test(integration): port authentication suite to harperLifecycle
+640,2026-05-21T20:45:43Z,2026-05,1,False,False,False,True,fix(replication): propagate per-event expiresAt to record writes
+638,2026-05-21T00:27:15Z,2026-05,13,False,False,False,True,feat(models): Phase 1 — scope.models foundation
+636,2026-05-20T13:35:46Z,2026-05,2,False,False,False,True,feat(deploy-component): add install_allow_scripts flag
+635,2026-05-20T15:50:08Z,2026-05,3,False,False,False,True,"feat: expose request.signal AbortSignal, aborted on client disconnect"
+634,2026-05-21T20:39:31Z,2026-05,1,False,True,True,False,test(integration): port token-auth suite to harperLifecycle
+627,2026-05-20T21:34:28Z,2026-05,2,False,True,True,False,"test(integration): add component-install helper, port REST query suite"
+624,2026-05-19T22:55:22Z,2026-05,2,False,False,False,True,fix(rocks-audit-iterator): retry done iterators before returning done
+611,2026-05-19T19:31:11Z,2026-05,5,False,True,True,False,test(integration): restore Windows skips for restart_service tests (#549)
+609,2026-05-19T23:55:38Z,2026-05,5,False,False,False,True,fix(itc): direct-route component status responses; drop wasteful broadcast
+605,2026-05-19T17:44:12Z,2026-05,5,False,False,False,True,fix: clean up TypeScript build errors surfacing from harper-pro
+597,2026-05-19T23:02:07Z,2026-05,3,False,True,True,False,test(integration): port transaction-log + audit-log suites to harperLifecycle
+583,2026-05-19T14:44:10Z,2026-05,1,False,False,False,True,fix: export CERT_ATTRIBUTES from security/keys
+579,2026-05-19T04:24:31Z,2026-05,3,False,False,False,True,Add pre-merge cherry-pick flow for patch-labeled PRs
+577,2026-05-18T21:33:38Z,2026-05,3,False,False,False,True,fix: skip corrupt audit entries during iteration instead of throwing
+576,2026-05-18T19:19:58Z,2026-05,1,False,False,False,False,fix(ci): unbreak claude-review.yml — remove caller-side permissions: {}
+573,2026-05-18T21:36:04Z,2026-05,1,False,False,False,True,Retry saveStructures transaction on busy
+563,2026-05-18T21:36:59Z,2026-05,9,False,False,False,False,fix(deps): update all non-major dependencies
+561,2026-05-18T18:29:26Z,2026-05,2,False,False,False,False,ci: bump ai-review-prompts pin to 13cdfab (post #37 + #38 + #39) + caller hardening
+560,2026-05-18T21:32:30Z,2026-05,2,False,False,False,True,fix(table): eviction never starts for sourcedFrom and eviction-only tables
+555,2026-05-19T03:32:28Z,2026-05,7,False,True,True,False,test(integration): migrate api-tests foundation to harperLifecycle framework
+553,2026-05-15T14:18:04Z,2026-05,1,False,False,False,False,test(auditLog): replace fixed delay with event-driven wait (Node 22 flake)
+552,2026-05-15T14:59:42Z,2026-05,1,False,False,False,False,style: run prettier on subscriptionReplay.test.js
+539,2026-05-15T12:34:04Z,2026-05,4,False,True,True,True,fix(replay): skip corrupt audit entries instead of crash-looping on replay
+538,2026-05-15T12:22:40Z,2026-05,3,False,False,False,True,fix: defer and yield audit-store commit notifications
+534,2026-05-14T23:23:51Z,2026-05,3,False,False,False,True,fix(ops-api): skip reusePort for operations API to fix macOS ENOTSUP
+533,2026-05-14T14:18:35Z,2026-05,7,False,False,False,True,Fix flaky unit tests: timing races and LMDB segfault on Node v24
+532,2026-05-16T15:10:42Z,2026-05,2,False,False,False,True,Register application/x-ndjson content type for iterator streaming
+530,2026-05-20T04:36:19Z,2026-05,14,False,True,True,True,feat(deploy): stream deploy_component as multipart/form-data
+529,2026-05-14T15:02:38Z,2026-05,3,False,False,False,True,fix: prevent silent index gaps when per-record puts fail during schema migration
+528,2026-05-14T14:44:33Z,2026-05,22,False,True,True,True,Investigate Integration Test Flakiness
+527,2026-05-18T16:10:35Z,2026-05,15,False,False,False,True,feat: harper login and logout
+523,2026-05-13T17:29:03Z,2026-05,1,False,False,False,True,fix: register operations in worker threads so replication WS can dispatch them
+522,2026-05-19T22:59:42Z,2026-05,4,False,False,False,True,docs: per-folder navigation guides for resources/ and server/
+521,2026-05-16T04:13:05Z,2026-05,1,False,False,False,True,Close the inspector when the process receives an exit signal
+519,2026-05-12T19:27:11Z,2026-05,2,False,False,False,True,fix: make atomicWriteFile temp path unique across worker threads
+518,2026-05-15T12:19:59Z,2026-05,3,False,True,True,True,fix(migrate): skip Symbol.for('structures') entries in copyDbiToRocks
+517,2026-05-12T19:52:06Z,2026-05,1,False,False,False,True,Fix invalid `this` reference
+516,2026-05-12T19:26:14Z,2026-05,1,False,False,False,True,fix: Lookup hostname in logs properly
+508,2026-05-12T13:45:02Z,2026-05,1,False,False,False,False,Fix release notes step failing when grep filters out all commits
+506,2026-05-11T23:21:59Z,2026-05,2,False,False,False,False,Update rocksdb-js@1.2.0
+505,2026-05-12T00:50:49Z,2026-05,1,False,False,False,False,Update rocksdb js workflow fix
+504,2026-05-11T23:02:55Z,2026-05,1,False,False,False,False,"Add workflow that checks for a new rocksdb-js release, then creates a PR"
+500,2026-05-11T14:15:44Z,2026-05,1,False,False,False,False,ci(claude): bump ai-review-prompts pin to 3278ce4e
+499,2026-05-08T16:35:53Z,2026-05,2,False,False,False,True,fix: cast env-var strings before comparing in updateConfigValue
+496,2026-05-08T13:33:10Z,2026-05,3,False,False,False,True,Use RocksDB's `estimate-num-keys` instead of non-existent `entryCount`
+494,2026-05-08T13:15:55Z,2026-05,2,False,False,False,True,fix: Restore getRecordCount sampling early-exit on RocksDB
+493,2026-05-08T13:16:24Z,2026-05,4,False,False,False,True,fix: write Harper config files atomically
+492,2026-05-07T17:35:43Z,2026-05,4,False,False,False,False,ci(claude): bump ai-review-prompts pin to 6463b3da
+491,2026-05-07T17:09:56Z,2026-05,1,False,False,False,False,docs(agents): prefer node:assert/strict; no new sinon/rewire
+489,2026-05-07T14:32:44Z,2026-05,4,False,False,False,False,ci(claude): bump ai-review-prompts pin to f6daed30
+485,2026-05-06T17:04:44Z,2026-05,1,False,False,False,False,ci(claude): run caller-workflow validator on every PR
+481,2026-05-06T19:33:58Z,2026-05,1,False,False,False,False,some necessary readme updates
+480,2026-05-08T11:04:44Z,2026-05,5,False,False,False,True,Update read_log to handle any log name
+478,2026-05-06T16:37:56Z,2026-05,11,False,False,False,False,ci(claude): full Day 2 caller migration — review + mention + issue-to-PR + caller validator
+473,2026-05-05T20:22:13Z,2026-05,2,False,False,False,False,"ci(claude): clarify --allowedTools is convenience, not enforcement"
+471,2026-05-06T14:37:04Z,2026-05,1,False,False,False,True,Set correct RocksDB size
+469,2026-05-06T16:05:33Z,2026-05,2,False,False,False,True,fix(search): handle null/missing primary-store entries from HNSW results
+468,2026-05-07T11:33:49Z,2026-05,3,False,False,False,True,fix(migration): preserve blob file references during LMDB-to-RocksDB migration
+467,2026-05-04T23:20:45Z,2026-05,3,False,False,False,True,Fix crash when CJS module uses dynamic import() via VM loader
+466,2026-05-04T23:43:58Z,2026-05,1,False,False,False,True,Fix EEXIST error when symlinking harper module over dangling symlink
+464,2026-05-04T16:25:31Z,2026-05,6,False,False,False,False,ci: bump third-party action versions across workflows
+463,2026-05-06T02:14:02Z,2026-05,2,False,False,False,True,"perf(hnsw): MinHeap for candidates, bisect for results, pre-compute query magnitude"
+462,2026-05-06T01:45:35Z,2026-05,7,False,False,False,True,fix(blob): clean up orphaned blob files on aborted/superseded writes
+461,2026-05-02T23:44:27Z,2026-05,4,False,False,False,False,ci(claude): bump actions/checkout v4.3.1 → v6.0.2 (Node 24)
+460,2026-05-19T04:23:44Z,2026-05,4,False,False,False,True,"Add `in` comparator, `negated` modifier, and plain-JSON nested-path filters"
+459,2026-05-13T17:56:28Z,2026-05,2,False,False,False,True,fix(hnsw): skip corrupt nodes instead of crashing on decode errors
+458,2026-05-05T14:45:57Z,2026-05,2,False,False,False,False,add .gitattributes for npm-merge-driver
+457,2026-05-29T14:21:19Z,2026-05,4,False,False,False,True,feat: upgrade msgpackr to v2 and use structon for random-access struct encoding
+456,2026-05-06T04:45:31Z,2026-05,3,False,False,False,True,"fix: populate import.meta.filename, dirname, and resolve in VM loader"
+454,2026-05-04T23:38:34Z,2026-05,20,False,False,False,True,Auto cherry-pick patch-labeled PRs to release branch
+453,2026-05-02T22:33:46Z,2026-05,1,False,False,False,False,ci(claude): fix yq expression in auth-gate-invariants validator
+452,2026-05-01T23:01:07Z,2026-05,1,False,False,False,False,ci(claude): bump max-turns 24→48 + sharpen anti-pattern in Tools section
+451,2026-05-01T21:56:22Z,2026-05,1,False,False,False,True,Export lastValueEncoding for full-copy replication fix
+450,2026-05-06T14:41:31Z,2026-05,7,False,False,False,True,Read-only mode
+449,2026-05-01T21:08:27Z,2026-05,3,False,False,False,False,Fix empty release notes for patch releases
+448,2026-05-01T19:56:08Z,2026-05,1,False,False,False,True,Only ignore nested node_modules dirs
+447,2026-05-01T18:45:27Z,2026-05,6,False,False,False,False,ci(claude): extract inline workflow scripts to .github/scripts/
+446,2026-05-01T19:01:18Z,2026-05,1,False,False,False,True,return a promise that resolves once the initial load of entries is co…
+445,2026-05-19T23:01:42Z,2026-05,3,False,False,False,True,fix: always set ITC originator from threadId; guard readerList with optional chaining
+444,2026-05-01T18:37:51Z,2026-05,1,False,False,False,False,ci(claude): marker-based review-comment edit-in-place; fixes mention-collision
+443,2026-05-01T17:54:02Z,2026-05,1,False,False,False,True,fix: prevent LMDBTransaction leak in evict() causing repeated transaction errors
+442,2026-05-01T02:14:02Z,2026-05,1,False,False,False,False,ci(claude): drop ^ anchor from no-blockers detection regex
+441,2026-05-01T18:39:17Z,2026-05,1,False,False,False,True,`schemaDescribe` return type
+440,2026-05-01T01:58:53Z,2026-05,2,False,False,False,False,Bump main to 5.1.0
+436,2026-05-01T20:12:24Z,2026-05,2,False,False,False,True,fix: guard against undefined events in subscription handler
+435,2026-05-01T19:01:08Z,2026-05,9,False,False,False,True,Fix package exports to properly define types of actually globally exported values
+433,2026-05-05T14:45:21Z,2026-05,2,False,False,False,True,yield every 100 entries in subscription catchup
+431,2026-05-01T20:13:43Z,2026-05,1,False,False,False,True,fix: prevent uncaughtException when timer force-closes a pooled LMDB read transaction
+428,2026-05-01T18:44:44Z,2026-05,3,False,False,False,True,Wrap source-resolved records in RecordObject with entryMap registration
+426,2026-05-26T16:13:25Z,2026-05,6,False,True,True,False,add acl-connect component integration test
+425,2026-05-01T18:45:00Z,2026-05,2,False,False,False,False,Update @fastify/static
+417,2026-05-01T22:20:15Z,2026-05,6,False,False,False,False,ci(claude): two-job auth gate (App token + CODEOWNERS-driven team check) + invariants validator
+413,2026-05-15T19:47:16Z,2026-05,100,True,True,False,True,Eliminate TypeScript Errors and Convert foundational .js files to .ts
+408,2026-05-06T04:34:16Z,2026-05,2,False,False,False,True,Add withNodeAdapter() to Request for Node middleware adapter pattern
+406,2026-05-08T00:46:48Z,2026-05,2,False,True,True,True,Add test to confirm we can downgrade to older harperdb
+397,2026-05-12T19:25:16Z,2026-05,10,False,False,False,True,Middleware ordering and routing
+382,2026-05-19T17:28:03Z,2026-05,3,False,False,False,True,fix(deps): update dependency alasql to v4.17.2
+381,2026-05-04T19:04:48Z,2026-05,8,False,False,False,False,fix(deps): update all non-major dependencies
+378,2026-05-13T20:42:57Z,2026-05,29,False,True,True,True,Add Bun runtime support
+355,2026-05-11T03:06:30Z,2026-05,12,False,False,False,True,Run the operations API on the main thread
+326,2026-05-07T17:03:23Z,2026-05,5,False,False,False,True,fix: Update dev dep mqtt to v5
+1531,2026-06-30T12:42:32Z,2026-06,1,False,False,False,False,chore(deps): disable Renovate updates for sinon (keep 21.0.3)
+1523,2026-06-29T21:07:20Z,2026-06,1,False,True,True,False,perf(test): cut round-trips in HNSW vector-index integration tests
+1522,2026-06-29T21:34:09Z,2026-06,6,False,True,True,True,fix(mcp): enforce row-level RBAC on MCP application verb tools (#1487)
+1521,2026-06-30T12:42:14Z,2026-06,7,False,False,False,True,feat(models): config-selectable backends via backend: <module> (#1471)
+1519,2026-06-30T04:45:15Z,2026-06,2,False,False,False,False,chore(ci): bump ai-review-prompts to 9cf49d2 (calibration #70 + prompt-ref tracking #71)
+1514,2026-06-30T14:31:47Z,2026-06,16,False,False,False,False,fix(deps): update all non-major dependencies
+1502,2026-06-28T14:21:40Z,2026-06,2,False,False,False,False,chore(ci): bump ai-review-prompts to 1bbc562 (week-of-06-15 calibration + log-count fix)
+1500,2026-06-28T22:02:59Z,2026-06,1,False,False,False,False,Set up default config for gemini PR reviews
+1499,2026-06-29T14:56:25Z,2026-06,4,False,False,False,True,fix(itc): await cross-worker propagation for role/schema mutations (#1497)
+1498,2026-06-26T04:24:14Z,2026-06,3,False,True,True,True,perf(describe): add skip_record_count to skip the per-table count scan
+1496,2026-06-29T15:58:27Z,2026-06,5,False,True,True,True,feat(deploy): auto-drop large deployment payload blobs after a successful deploy
+1493,2026-06-25T18:37:56Z,2026-06,2,False,False,False,False,chore(deps): Update rocksdb-js to 2.3.0
+1492,2026-06-25T18:39:34Z,2026-06,2,False,False,False,True,fix(blob): progress-gate the source-idle watchdog so a stalled paused receive recovers
+1491,2026-06-29T15:01:53Z,2026-06,4,False,False,False,True,feat(audit): table-reload marker type for copyApply system-DB coverage
+1490,2026-06-29T16:03:21Z,2026-06,15,False,True,True,False,test(database): promote 4 more regression anchors (patch-merge / hot-snapshot / multi-condition / append-durability)
+1488,2026-06-29T16:37:12Z,2026-06,13,False,True,True,False,test(database): promote 4 regression anchors (bulk-conditional / delete-update-race / auto-fields / date-queries)
+1486,2026-06-25T18:39:38Z,2026-06,2,False,False,False,True,fix(replication): skip keyed audit-dedup lookup for versions older than txn-log retention
+1480,2026-06-25T18:39:41Z,2026-06,2,False,False,False,True,fix(blob): mark a retriable source-stream write-abort PENDING (503) not incomplete (500) (harper-pro#481)
+1479,2026-06-25T11:51:07Z,2026-06,2,False,False,False,True,copyApply write mode for non-system base copies (harper-pro#480)
+1478,2026-06-25T11:49:46Z,2026-06,1,False,False,False,True,Log notify message at startup when HARPER_SAFE_MODE is set
+1477,2026-06-25T11:49:42Z,2026-06,3,False,False,False,True,docs: clarify that tables/databases are live process-wide singletons
+1473,2026-06-24T13:51:44Z,2026-06,3,False,False,False,True,fix: use getSync for system-table point reads (RocksDB MaybePromise)
+1466,2026-06-24T15:50:01Z,2026-06,2,False,False,False,True,Fix deploy packaging an empty component when installed under a node_modules path
+1464,2026-06-23T22:32:06Z,2026-06,2,False,False,False,True,fix: invoke startOnMainThread at most once per component (harper-pro#460)
+1461,2026-06-25T17:27:00Z,2026-06,2,False,False,False,True,feat(replication): add replication_copyTimeout config param
+1460,2026-06-24T16:54:36Z,2026-06,12,False,True,True,True,feat(resources): support parameterised paths in Resource exports (#602)
+1456,2026-06-23T14:44:33Z,2026-06,2,False,False,False,True,fix(blob): bound the stream() incomplete-content wait so a truncated blob can't spin a worker at 100% CPU (#1454)
+1455,2026-06-24T19:40:16Z,2026-06,3,False,False,False,True,fix(migration): persist canonical classic structures so v5 workers don't fork (#1453)
+1452,2026-06-22T23:47:18Z,2026-06,4,False,False,False,True,Clarify upgrade migration log: show the data→software transition and migration purpose
+1447,2026-06-22T18:58:22Z,2026-06,2,False,False,False,True,fix(deploy): restore CLI deploy compatibility with pre-5.1 servers
+1444,2026-06-23T15:35:39Z,2026-06,3,False,False,False,True,fix(blob): idle watchdog on writeBlobWithStream source to unwedge stalled replication receives
+1439,2026-06-22T13:18:00Z,2026-06,1,False,True,True,False,test(tls): stabilize cert hot-reload test under CI overlayfs (inotify drop)
+1433,2026-06-23T22:32:28Z,2026-06,2,False,False,False,False,fix(deps): update alasql
+1432,2026-06-22T23:32:10Z,2026-06,2,False,True,True,True,Overlap HTTP worker restarts to eliminate connection-refused gap (#1417)
+1431,2026-06-22T12:36:23Z,2026-06,5,False,True,True,True,fix: keep the operations API off the app http ports (#1420)
+1430,2026-06-22T12:31:44Z,2026-06,2,False,False,False,True,Detect operationsApi/http port collisions during config validation
+1429,2026-06-20T23:11:03Z,2026-06,2,False,False,False,False,chore(deps): bump @harperfast/integration-testing to ^0.6.2 (loopback canary HTTP-port fix)
+1428,2026-06-22T23:32:19Z,2026-06,3,False,False,False,True,fix(jobs): exclude job worker ports from schema-change broadcasts
+1427,2026-06-22T23:29:48Z,2026-06,52,False,True,True,False,test: promote 15 single-node QA-campaign regression anchors
+1425,2026-06-22T12:45:11Z,2026-06,4,False,False,False,True,"fix(blob): validate reads/replication against descriptor size and bound read waits (#1424, #1423)"
+1410,2026-06-19T18:21:48Z,2026-06,3,False,True,True,True,fix(deploy): stream deploy payloads into payload_blob instead of buffering (lift 200 MB cap)
+1409,2026-06-19T18:53:42Z,2026-06,4,False,True,True,True,fix(tls): rebuild worker secure context on private-key hot-reload
+1408,2026-06-19T19:23:24Z,2026-06,2,False,False,False,True,fix(tls): persist and read certificate file_timestamp for staleness guard
+1406,2026-06-19T19:37:26Z,2026-06,6,False,True,True,True,fix(audit): report entries_deleted for delete_transaction/audit_logs_before (#1294)
+1405,2026-06-29T22:48:57Z,2026-06,10,False,False,False,True,feat(models): public registerBackend + defineBackend for custom backends (#1325)
+1404,2026-06-23T17:11:13Z,2026-06,25,False,True,True,True,"feat(mcp): complete the MCP v1 protocol surface — prompts, completion, streaming, subscriptions, server-requests, resumability (#1349)"
+1403,2026-06-19T16:49:28Z,2026-06,2,False,False,False,True,Avoid needless secondary-index rebuilds from equivalent index-option representations; log rebuild reason
+1391,2026-06-19T19:34:03Z,2026-06,7,False,False,False,True,Add workload descriptions to YCSB benchmark series names
+1390,2026-06-19T11:53:13Z,2026-06,1,False,False,False,False,test(blob): correct complete() fault contract for track-only vs needs-saving blobs (#1353/#1376)
+1389,2026-06-19T14:13:28Z,2026-06,2,False,False,False,False,chore(deps): Update rocksdb-js to 2.2.0
+1388,2026-06-19T23:12:37Z,2026-06,10,False,False,False,True,Periodically cool transaction-log mmaps for memory reclamation
+1387,2026-06-23T23:03:41Z,2026-06,2,False,False,False,True,feat(blob): add findIncompleteBlobRefs and isBlobComplete for repair sweep
+1386,2026-06-19T16:11:26Z,2026-06,10,False,True,True,True,fix(mcp): deliver server-push SSE on both profiles (GET establish + list_changed)
+1383,2026-06-19T18:55:58Z,2026-06,4,False,True,True,False,test(integration): schema-type contract tests (§5.1 of v5 test plan)
+1379,2026-06-19T11:33:14Z,2026-06,11,False,False,False,True,"benchmarks: add indexed-write (ST-2), ttl-churn (ST-1), concurrent-rw (ST-5)"
+1378,2026-06-19T19:08:15Z,2026-06,3,False,True,True,False,test(integration): Category 12 / §5.1 large-scale data & multi-index
+1377,2026-06-19T18:54:43Z,2026-06,1,False,True,True,False,Add parameterized v5.N-1 minor upgrade integration test (Category 14 / §5.9)
+1376,2026-06-18T18:44:30Z,2026-06,1,False,False,False,True,fix(blob): don't await already-saving replication blobs in preCommit.complete()
+1374,2026-06-18T17:28:40Z,2026-06,2,False,False,False,True,fix(databases): complete the dead restartNumber reindex-recovery trigger
+1369,2026-06-18T18:45:04Z,2026-06,2,False,False,False,True,fix(blob): gate blob unlink on the delete/update committing (#1364)
+1367,2026-06-18T03:15:29Z,2026-06,2,False,False,False,False,fix(test): drain orphaned lmdb cursor wrappers after Read Txn Expiration
+1363,2026-06-18T17:28:35Z,2026-06,6,False,False,False,True,"Throw a typed, retryable error when querying an attribute whose index is still building"
+1361,2026-06-18T18:44:21Z,2026-06,3,False,False,False,True,fix(table): make TTL eviction path errors non-fatal on both storage engines (#1287)
+1360,2026-06-17T23:32:04Z,2026-06,2,False,False,False,True,fix(headers): group multi-valued Set-Cookie for writeHead
+1353,2026-06-18T18:44:42Z,2026-06,3,False,False,False,True,fix(blob): tolerate source-unavailable blobs in pre-commit so a missing blob can't wedge replication
+1352,2026-06-18T18:44:16Z,2026-06,2,False,False,False,True,Flag structure updates per transaction log so replicas decode against current structures (#1348)
+1351,2026-06-18T18:44:53Z,2026-06,3,False,False,False,True,fix(migration): await in-flight blob saves before declaring v4→v5 migration done
+1350,2026-06-18T03:15:33Z,2026-06,6,False,False,False,True,feat(mcp): implement ping + logging/setLevel + notifications/message
+1347,2026-06-18T18:44:08Z,2026-06,1,False,False,False,False,fix(test): resolve MQTT retained-message subscribe timeout flake (mqtt-test.mjs:94)
+1346,2026-06-19T18:56:03Z,2026-06,2,False,False,False,True,Add clearJWTRSAKeysCache to invalidate the in-memory JWT key cache
+1344,2026-06-17T20:41:37Z,2026-06,3,False,False,False,True,"fix: writeHead iterable response headers as an object, not a nested array"
+1343,2026-06-19T18:54:39Z,2026-06,3,False,False,False,True,Fix audit read crash and wrong value images for keys deleted then re-inserted (#1330)
+1342,2026-06-18T12:37:30Z,2026-06,2,False,False,False,True,Warn when a per-record expiresAt has no scheduled cleanup (#1339)
+1341,2026-06-17T14:37:09Z,2026-06,5,False,False,False,True,fix(blob): clean up replication-received blobs when a source apply is skipped (harper-pro#406)
+1338,2026-06-17T14:37:14Z,2026-06,6,False,True,True,True,"fix(deploy): make peer deployment-row wait configurable, default 120s"
+1336,2026-06-17T20:26:06Z,2026-06,5,False,True,True,True,fix(mcp): result-shaped output schemas for application CRUD tools (#1324)
+1335,2026-06-17T14:29:59Z,2026-06,8,False,False,False,True,Add RocksDB transaction log stats to analytics
+1334,2026-06-17T14:37:20Z,2026-06,4,False,False,False,True,deploy_component: fail the deploy on peer replication failures (non-zero exit)
+1332,2026-06-19T18:54:35Z,2026-06,4,False,False,False,True,fix(RecordEncoder): reset lastValueEncoding at the start of each recordUpdater call
+1323,2026-06-16T21:49:43Z,2026-06,5,False,False,False,True,"fix: dispose component scopes before worker exit in dev, and serialize reloads"
+1321,2026-06-16T21:48:59Z,2026-06,2,False,False,False,True,perf(commit): early-out the out-of-order audit walk when a write is fully superseded
+1320,2026-06-17T16:27:14Z,2026-06,17,False,True,True,True,fix(mcp): application-profile 500 + operations-profile conformance (#1317)
+1318,2026-06-16T22:14:22Z,2026-06,8,False,False,False,True,fix(replay): bound slow-but-progressing replay and bypass validation during crash recovery
+1315,2026-06-16T21:22:05Z,2026-06,1,False,False,False,True,Register replication_leadingDuplicateSkip in CONFIG_PARAMS
+1314,2026-06-18T18:47:33Z,2026-06,1,False,True,True,False,test(integration): TLS cert hot-reload multi-worker regression test (#586)
+1312,2026-06-16T21:15:40Z,2026-06,2,False,False,False,True,De-flake drop suite: tolerate already-dropped column family and serialize dropTable
+1310,2026-06-16T04:49:36Z,2026-06,2,False,False,False,True,fix(table): dedup re-delivered out-of-order writes before the resequencing walk (#1114)
+1308,2026-06-16T04:33:09Z,2026-06,3,False,False,False,True,fix(encoding): stop versioned-write metadata leaking into non-versioned __dbis__ records (#1307)
+1306,2026-06-16T04:37:02Z,2026-06,5,False,True,True,False,test: closed transaction in ALS context still reads latest committed state
+1305,2026-06-16T03:30:21Z,2026-06,2,False,False,False,False,ci: bump ai-review-prompts pin to 9eb635a9 (week-of-06-08 calibration)
+1304,2026-06-15T19:37:22Z,2026-06,2,False,False,False,True,fix: do not revalidate replicated writes on cache-sourced tables (#1302)
+1301,2026-06-16T04:48:22Z,2026-06,2,False,False,False,True,fix(server): never use SO_REUSEPORT for the operations API (Bun path)
+1297,2026-06-15T16:37:06Z,2026-06,3,False,True,True,True,fix(deploy): surface install output and failed phase in deploy_component error response
+1284,2026-06-16T14:00:18Z,2026-06,3,False,True,True,False,test: regression guard for heterogeneous schema-less ingest (#1282)
+1280,2026-06-16T13:59:19Z,2026-06,2,False,False,False,True,Defer getRecordCount key scan to the timeout path
+1279,2026-06-16T04:47:31Z,2026-06,2,False,False,False,True,Fix describe_table record_count over-estimate on large RocksDB tables
+1275,2026-06-12T23:46:15Z,2026-06,2,False,False,False,True,fix: replay structure updates to the key the decoder reads (#362)
+1274,2026-06-12T20:22:59Z,2026-06,2,False,True,True,True,Register authentication middleware on the operations API port
+1273,2026-06-12T23:05:38Z,2026-06,4,False,False,False,True,fix: stop in-place v4→v5 upgrade from planting node.hostname: localhost (#351)
+1271,2026-06-12T23:04:52Z,2026-06,3,False,False,False,True,fix(replay): bound skip-dominated boot replay so it can't grind forever (#1266)
+1270,2026-06-12T21:49:32Z,2026-06,2,False,False,False,False,chore(deps): Update rocksdb-js to 2.1.0
+1268,2026-06-12T20:10:26Z,2026-06,2,False,False,False,False,chore: bump @harperfast/integration-testing to ^0.5.1
+1267,2026-06-12T23:16:25Z,2026-06,2,False,True,True,True,fix(migration): persist __dbis__ structures to RocksDB CF on LMDB→RocksDB upgrade
+1264,2026-06-12T12:34:28Z,2026-06,1,False,False,False,False,chore: regenerate stale package-lock.json (5.1.0-beta.3)
+1263,2026-06-12T12:34:47Z,2026-06,1,False,False,False,False,fix(ci): keep YCSB nightly working tree clean before benchmark auto-push
+1262,2026-06-12T23:03:08Z,2026-06,1,False,True,True,False,test(northwind): make checkJobCompleted Bun-aware for CI timeout flakes
+1259,2026-06-12T23:02:04Z,2026-06,2,False,False,False,True,Also skip recovery-replay of message entries whose record body failed to decode
+1258,2026-06-12T23:22:41Z,2026-06,2,False,False,False,True,fix(table): complete the @table metadata re-apply (continuation of #1247)
+1257,2026-06-11T23:34:43Z,2026-06,3,False,False,False,True,Skip recovery-replay of put/patch entries whose record body failed to decode
+1256,2026-06-11T23:35:31Z,2026-06,6,False,False,False,True,Fix fastifyRoutes 404 by deriving route prefix from urlPath config
+1253,2026-06-11T22:46:30Z,2026-06,2,False,False,False,True,fix(install): don't leak DEV_MODE from installer into the run process
+1252,2026-06-11T23:26:36Z,2026-06,4,False,False,False,True,Never drop source-applied writes on conflict; backpressure the apply loop
+1251,2026-06-11T22:42:21Z,2026-06,3,False,False,False,True,Default the RocksDB WriteBufferManager on at 1/3 of block cache
+1250,2026-06-11T23:33:18Z,2026-06,2,False,False,False,True,"Add urlPath, host, and loadComponent to get_components response"
+1249,2026-06-11T19:34:04Z,2026-06,3,False,False,False,True,feat: enable int8 HNSW quantization by default + exact threshold rerank
+1248,2026-06-11T23:26:39Z,2026-06,2,False,False,False,True,Default applications.moduleLoader to vm-current-context
+1247,2026-06-11T17:50:39Z,2026-06,4,False,True,True,True,fix(table): re-apply @table metadata on reload + coerce directive args
+1246,2026-06-12T23:32:19Z,2026-06,4,False,False,False,True,"fix(schema): atomic table drops, interrupted-drop completion at startup, and create-lock release (ghost tables)"
+1240,2026-06-10T23:36:17Z,2026-06,2,False,False,False,False,chore(deps): bump structon to ^1.0.7 (#1163)
+1239,2026-06-11T15:10:09Z,2026-06,3,False,False,False,True,feat(replication): LOCAL_ONLY record-metadata flag for non-replicating writes
+1238,2026-06-11T18:41:29Z,2026-06,4,False,False,False,True,feat(config): add `HARPER_CONFIG` as the recommended way to set config from the environment
+1237,2026-06-11T22:43:54Z,2026-06,2,False,False,False,True,fix(storage): surface missing shared-structure decode misses (#1163)
+1236,2026-06-15T16:02:31Z,2026-06,12,False,False,False,True,fix(models): backend and analytics correctness batch for 5.1 GA
+1234,2026-06-10T23:28:34Z,2026-06,5,False,True,True,True,fix(hnsw): six data-integrity fixes for the HNSW vector index (5.1 GA)
+1233,2026-06-11T04:03:11Z,2026-06,2,False,True,True,False,fix(integration): wait for csv_data_load completion in northwind suite (#1222)
+1231,2026-06-11T04:01:25Z,2026-06,2,False,False,False,True,fix: guard against corrupt __dbis__ entries crashing startup
+1230,2026-06-10T21:44:21Z,2026-06,1,False,False,False,False,Re-enable latest/next package tagging
+1229,2026-06-25T17:24:22Z,2026-06,3,False,True,True,False,test(integration): add scale correctness suite (#1192)
+1228,2026-06-16T13:13:56Z,2026-06,3,False,True,True,False,test(integration): blob-advanced — multi-path blobPaths striping + per-device-type DB sharding
+1227,2026-06-10T22:09:21Z,2026-06,1,False,False,False,True,fix(jobs): unref parentPort after job completes to prevent Bun NAPI crash
+1225,2026-06-11T23:46:56Z,2026-06,1,False,True,True,False,test: clearer timeouts + row_count polling for northwind csv_data_load races (refs #1222)
+1224,2026-06-10T22:09:30Z,2026-06,1,False,False,False,False,ci: increase integration test shards from 4 to 6
+1223,2026-06-10T22:09:16Z,2026-06,1,False,False,False,True,fix(transaction): retry ERR_TRY_AGAIN commits instead of dropping them silently
+1221,2026-06-10T22:09:25Z,2026-06,2,False,False,False,True,chore: update engines.node to ^22.18.0 || >=24.0.0 for rocksdb-js 2.0.0
+1220,2026-06-09T22:22:02Z,2026-06,2,False,False,False,False,chore(deps): bump @harperfast/rocksdb-js to 2.0.0
+1219,2026-06-10T22:09:34Z,2026-06,1,False,False,False,False,test: replace fixed-delay sleep-then-assert races in subscriptionReplay
+1218,2026-06-09T21:54:17Z,2026-06,1,False,False,False,False,"ci: bump issue-to-pr pin (Opus for :bug/:test, efficiency guidance)"
+1217,2026-06-10T04:21:59Z,2026-06,2,False,False,False,True,feat(config): add `$union` array directive for config env vars
+1216,2026-06-11T13:12:38Z,2026-06,4,False,True,False,False,"test: establish docs-mirrored directory structure for integration tests (database/, resources/, mqtt/)"
+1211,2026-06-10T14:54:57Z,2026-06,4,False,True,True,False,test(integration): custom jsResource patterns (#1190)
+1210,2026-06-09T22:08:13Z,2026-06,1,False,True,True,False,test: TTL edge-case integration tests
+1209,2026-06-16T04:39:40Z,2026-06,7,False,True,True,False,"test(integration): MQTT suite for %u substitution, anonymousSubscriber, SYS_CON, RS256"
+1208,2026-06-12T23:02:38Z,2026-06,1,False,True,True,False,test: integration tests for sourcedFrom and allowStaleWhileRevalidate
+1207,2026-06-12T23:48:06Z,2026-06,1,False,True,True,False,test: expand v4→v5 upgrade test matrix with clustering config and hdb_status sub-cases
+1205,2026-06-17T20:47:54Z,2026-06,3,False,True,True,False,"test: expand schema tests — @sealed, Brotli Blob, array @indexed, schema-less table"
+1204,2026-06-10T22:09:38Z,2026-06,1,False,True,True,False,test(blob): multi-path blobPaths striping and per-device-type LMDB sharding
+1201,2026-06-09T22:12:36Z,2026-06,1,False,True,True,False,test(jobs): add job-queue lifecycle integration test
+1186,2026-06-09T20:58:01Z,2026-06,2,False,False,False,True,fix(resources): detect RequestTarget in transactional arg normalizer
+1185,2026-06-09T20:17:45Z,2026-06,1,False,False,False,True,fix(installer): warn when DEFAULTS_MODE is set to an unrecognized value (RE-6)
+1184,2026-06-09T20:24:29Z,2026-06,2,False,False,False,True,fix(components): prevent eager EntryHandler creation before handleEntry() (RE-8)
+1183,2026-06-10T22:09:00Z,2026-06,2,False,False,False,True,fix(databases): sync non-indexed attributes on worker-restart schema reload (RE-7)
+1182,2026-06-09T21:51:33Z,2026-06,2,False,True,True,False,test(embed-directive): poll for async embed count before asserting
+1181,2026-06-09T20:06:52Z,2026-06,2,False,False,False,False,chore: bump version to 5.1.0-beta.2
+1180,2026-06-09T02:57:40Z,2026-06,2,False,False,False,False,Bump msgpackr to 2.0.4: two-byte over-cap record decode fix (5.1)
+1178,2026-06-09T02:34:54Z,2026-06,1,False,False,False,False,test: restore leaked envMngr.get stub in installation.test.js
+1177,2026-06-11T04:18:39Z,2026-06,13,False,False,False,False,test(apiTests): isolate per-process loopback address to prevent port collisions
+1175,2026-06-09T02:17:52Z,2026-06,1,False,False,False,True,fix(logging): scope logRotator state per instance
+1174,2026-06-09T15:03:28Z,2026-06,2,False,False,False,False,ci: bump ai-review-prompts pin to 3f2300a3 (week-of-06-01 calibration)
+1173,2026-06-09T03:51:22Z,2026-06,62,False,True,False,False,chore(test): remove legacy API test suite and related infrastructure
+1172,2026-06-10T22:09:12Z,2026-06,1,False,False,False,True,fix(replication): prevent out-of-order full update from reverting newer record
+1171,2026-06-09T03:50:48Z,2026-06,3,False,False,False,True,fix(deploy): converge hdb_deployment terminal status on peers
+1167,2026-06-09T20:23:34Z,2026-06,19,False,False,False,True,feat(mcp/openapi): quality descriptions and richer tool-payload metadata (#1095)
+1166,2026-06-08T20:37:09Z,2026-06,2,False,False,False,True,fix(hnsw): don't drop int8 graph nodes read cold/frozen from disk (#1161)
+1160,2026-06-08T13:49:56Z,2026-06,8,False,True,True,True,fix(downgrade): gate struct-mode encoding to primary DBIs for v4 compat
+1156,2026-06-08T12:07:25Z,2026-06,3,False,True,True,True,fix(downgrade): store is_hash_attribute in __dbis__ for harperdb@4.x compat
+1155,2026-06-08T12:06:26Z,2026-06,1,False,False,False,False,fix(ci): clean stale Harper data dir before integration test run
+1154,2026-06-09T20:16:39Z,2026-06,1,False,False,False,True,Report a non-committed shared-structure save as not-saved
+1153,2026-06-16T21:21:32Z,2026-06,2,False,False,False,True,Batch RocksDB record eviction/tombstone cleanup into shared transactions
+1152,2026-06-09T03:51:53Z,2026-06,12,False,False,False,True,Make typed random-access structures opt-in (default off) in 5.1
+1150,2026-06-09T03:52:17Z,2026-06,1,False,False,False,True,fix(indexing): yield the event loop during a synchronous custom-index backfill
+1149,2026-06-12T23:46:56Z,2026-06,1,False,False,False,False,"test(ci): drop startup-timeout workarounds, now handled by integration-testing 0.5.x (#1139)"
+1147,2026-06-09T19:45:20Z,2026-06,1,False,False,False,True,fix(table): reliably skip a re-delivered out-of-order commutative op (#1137)
+1145,2026-06-09T21:50:46Z,2026-06,3,False,False,False,True,Cap the typed-structure dictionary in RecordEncoder (maxOwnStructures)
+1144,2026-06-08T18:38:09Z,2026-06,8,False,False,False,False,test: replace fixed-delay sleep-then-assert with waitFor (#1138)
+1140,2026-06-08T23:31:19Z,2026-06,4,False,True,True,True,fix(replay): recover from corrupt transaction-log frames instead of aborting startup
+1134,2026-06-08T12:22:56Z,2026-06,2,False,False,False,True,fix: Harper login can use inquirer for easier parsing
+1130,2026-06-09T21:42:05Z,2026-06,4,False,False,False,True,feat(analytics): add replicated mode to get_analytics
+1129,2026-06-09T20:22:17Z,2026-06,0,False,False,False,False,Gate struct-mode encoding to primary DBIs for v4 downgrade compat
+1128,2026-06-05T14:14:21Z,2026-06,3,False,False,False,True,fix(replay): contain rocksdb-js corrupt-entry throws to a single log
+1127,2026-06-09T20:20:00Z,2026-06,2,False,False,False,True,fix(nodeName): hostnameToUrl should not manufacture 'ws://undefined:port' URLs
+1126,2026-06-04T17:57:47Z,2026-06,8,False,True,True,True,"fix(upgrade): create hdb_deployment on 5.0.x→5.1 upgrades, and run upgrade directives without confirmation"
+1124,2026-06-04T15:19:27Z,2026-06,2,False,False,False,False,ci: add always-on toggle + opt-in Gemini review caller
+1120,2026-06-03T19:08:33Z,2026-06,2,False,False,False,False,chore(deps): bump @harperfast/rocksdb-js to ^1.4.2
+1118,2026-06-03T19:52:04Z,2026-06,1,False,False,False,False,ci: bump ai-review-prompts pin to 2be0f70
+1117,2026-06-03T18:33:02Z,2026-06,3,False,False,False,True,fix(replay): purge aged transaction logs during recovery before replay
+1116,2026-06-03T18:43:18Z,2026-06,2,False,False,False,True,fix(table): bound out-of-order audit-chain walk to prevent full-copy OOM
+1113,2026-06-08T21:27:28Z,2026-06,3,False,False,False,True,feat: expose urlPath in deploy_component operation and CLI
+1112,2026-06-08T21:17:46Z,2026-06,1,False,False,False,True,fix(dev): graphql schema changes trigger worker restart in dev mode
+1111,2026-06-08T21:17:42Z,2026-06,3,False,False,False,True,fix(logging): require logRotator .default and improve error message
+1109,2026-06-08T21:17:53Z,2026-06,3,False,False,False,True,feat: log application path and table init during startup
+1108,2026-06-08T21:17:50Z,2026-06,1,False,False,False,True,fix: overwrite stale boot props when settings_path no longer exists
+1105,2026-06-02T21:22:05Z,2026-06,1,False,False,False,False,fix(ci): add registry-url to setup-node in publish-harper-npm-package job
+1104,2026-06-02T21:12:43Z,2026-06,1,False,False,False,False,feat(ci): add workflow_dispatch to publish-npm workflow
+1103,2026-06-02T20:49:24Z,2026-06,1,False,False,False,False,fix(ci): checkout before setup-node in harper publish job
+1102,2026-06-02T20:29:31Z,2026-06,2,False,False,False,False,chore: bump version to 5.1.0-beta.1
+1101,2026-06-02T20:20:04Z,2026-06,2,False,False,False,False,chore(deps): Update rocksdb-js to 1.4.1
+1100,2026-06-02T20:17:38Z,2026-06,2,False,False,False,False,chore: bump @harperfast/rocksdb-js to 1.4.1
+1099,2026-06-02T19:01:14Z,2026-06,2,False,False,False,True,fix: normalize cert.uses to array in createTLSSelector
+1098,2026-06-02T18:29:41Z,2026-06,4,False,False,False,True,"feat(hnsw): dynamic/query-time ef, rerank, and no-reindex on search-only option change"
+1092,2026-06-02T00:42:56Z,2026-06,2,False,False,False,False,chore: bump lmdb to 3.5.5
+1091,2026-06-02T17:38:01Z,2026-06,9,False,True,True,False,fix(ci): replace fixed sleeps with active readiness polls to eliminate startup-timing flakes
+1090,2026-06-02T00:42:50Z,2026-06,2,False,False,False,True,fix(logging): default rotation path to <log dir>/rotated when unset
+894,2026-06-02T17:38:38Z,2026-06,2,False,False,False,True,feat(hnsw): optional int8 vector quantization for HNSW index
+892,2026-06-02T17:46:07Z,2026-06,5,False,False,False,True,"fix: proper async close lifecycle for EntryHandler, OptionsWatcher, and Scope"
+891,2026-06-02T12:59:35Z,2026-06,1,False,False,False,False,test(Scope): drain in-flight watcher events before rmSync to fix flake
+890,2026-06-02T00:42:43Z,2026-06,1,False,False,False,True,fix(table): make evict() return a Promise on RocksDB
+888,2026-06-01T23:45:51Z,2026-06,24,False,True,True,True,"[MCP] v1 CLI + E2E + PR-1 follow-ups (consolidated: #621, #623)"
+881,2026-06-02T17:46:02Z,2026-06,16,False,False,False,True,Add YCSB-style CRUD load test
+877,2026-06-02T17:54:02Z,2026-06,3,False,False,False,True,Strip PROXY protocol header on the MQTT/secure-socket UDS mirror
+873,2026-06-02T17:37:52Z,2026-06,1,False,False,False,False,Ignore some AI dot folders
+872,2026-06-02T17:38:34Z,2026-06,3,False,False,False,True,feat(replication): add configurable ping interval/timeout params
+871,2026-06-02T17:38:05Z,2026-06,3,False,False,False,True,Record RocksDB statistics in analytics
+849,2026-06-02T17:37:47Z,2026-06,1,False,False,False,True,Fix circular dependency causing jsLoader tests to fail in isolation
+848,2026-06-02T17:38:46Z,2026-06,6,False,True,True,True,feat(models): toolMode 'auto' agent loop on scope.models.generate (#612)
+839,2026-06-02T17:38:10Z,2026-06,18,False,False,False,True,feat(agent): scaffold built-in Harper Agent component (#626)
+821,2026-06-02T17:38:14Z,2026-06,8,False,False,False,True,Fall back to polling-based file watching on inotify/FD exhaustion
+809,2026-06-02T17:45:57Z,2026-06,2,False,False,False,True,Exclude transient npm/git artifacts from component file watcher
+779,2026-06-02T18:47:18Z,2026-06,2,False,False,False,True,Emit aggregate analytics for scope.models.embed / generate
+778,2026-06-08T22:27:55Z,2026-06,1,False,True,True,False,test(integration): port Northwind test suite to self-contained framework
+772,2026-06-30T03:42:52Z,2026-06,2,False,False,False,False,chore(deps): update dependency eventsource to v4
+762,2026-06-02T17:38:21Z,2026-06,2,False,True,True,False,fix(tests): add AbortSignal timeouts to thread-management integration suite
+761,2026-06-08T22:27:35Z,2026-06,1,False,True,True,False,test(integration): port delete operations tests to self-contained framework
+759,2026-06-02T17:38:26Z,2026-06,1,False,True,True,False,test(integration): component lifecycle tests (port legacy 15)
+747,2026-06-02T12:22:29Z,2026-06,10,False,True,True,True,feat(models): @embed directive + write-time hook + auto-HNSW (Phase 5 of #510)
+669,2026-06-02T17:37:57Z,2026-06,2,False,False,False,True,chore: remove install README copy
+650,2026-06-02T17:38:30Z,2026-06,4,False,False,False,True,feat(storage): quota-aware reclamation via host-manager quota-status file
+503,2026-06-16T14:00:26Z,2026-06,2,False,True,True,False,fix: backfill schemaDefined on replicas missing the flag
+304,2026-06-08T12:56:38Z,2026-06,3,False,False,False,True,make read txn timeout configurable and set default to 5min
+142,2026-06-29T23:19:39Z,2026-06,39,False,False,False,True,Convert configUtils to TypeScript
+2015,2026-07-31T03:12:37Z,2026-07,6,False,False,False,True,fix(http): WebSocket upgrades were silently dropped on the per-worker UDS mirror listeners
+2014,2026-07-31T02:31:34Z,2026-07,9,False,False,False,True,Write the version/metadata prefix on LMDB→RocksDB migrated records so they keep versions and record prototypes
+2010,2026-07-31T02:35:02Z,2026-07,2,False,False,False,True,Fix MQTT secure-port UDS metadata publishing an empty certificate list (SNI proxy served the node cert on 8883)
+2007,2026-07-31T02:36:28Z,2026-07,2,False,False,False,True,Log once when checkOverloaded() first rejects writes (harper#2001)
+2006,2026-07-31T17:53:23Z,2026-07,3,False,False,False,True,Relationship property access now always resolves synchronously
+2003,2026-07-30T22:55:15Z,2026-07,5,False,False,False,True,feat(tls): give MQTT's raw-socket listener its own TLS usage type (split from #1999)
+2002,2026-07-31T12:11:15Z,2026-07,1,False,False,False,False,test: deflake audit log subscription-event assertion (split from #1999)
+1999,2026-07-30T18:34:12Z,2026-07,2,False,False,False,True,Fix MQTT UDS listener exporting an empty TLS certificate list to a fronting proxy
+1994,2026-07-31T12:12:12Z,2026-07,4,False,False,False,True,fix(logging): render structured operation-error diagnostics past Console's default depth/breadth
+1992,2026-07-30T18:51:41Z,2026-07,3,False,False,False,True,chore: migrate to @harperfast/code-guidelines
+1991,2026-07-30T13:18:59Z,2026-07,18,False,False,False,True,Prevent concurrent component installs from corrupting dependencies
+1988,2026-07-30T13:19:30Z,2026-07,3,False,False,False,True,fix(resources): store the real prior version for LMDB audit entries
+1985,2026-07-30T16:34:17Z,2026-07,5,False,False,False,True,Expose forwarded PROXY v2 TLS facts as request.connectionInfo
+1981,2026-07-28T20:18:49Z,2026-07,1,False,False,False,False,Fix syntax error in udsMirror.test.js breaking main CI
+1980,2026-07-31T19:05:27Z,2026-07,4,False,False,False,True,Remove vestigial resourceCache plumbing
+1971,2026-07-29T22:55:31Z,2026-07,1,False,False,False,False,Prevent resource test teardown from racing source-cache writes
+1970,2026-07-28T23:05:48Z,2026-07,7,False,False,False,True,fix(txn): apply repeat writes to a key on top of the earlier write in the same transaction
+1967,2026-07-28T18:52:08Z,2026-07,2,False,False,False,True,Clarify open-transaction timeout error message
+1964,2026-07-31T13:53:09Z,2026-07,27,False,True,True,True,Route applications by host/urlPath declared in the root config
+1963,2026-07-30T15:26:42Z,2026-07,2,False,False,False,True,fix(audit): give audit cleanup a real completion signal (deflake auditLog prune test)
+1961,2026-07-30T21:43:17Z,2026-07,12,False,True,True,True,fix(security): authorize schema-unqualified SQL against the table the engine resolves
+1959,2026-07-28T19:39:36Z,2026-07,5,False,False,False,True,fix(build): strip the react-native tree from the published shrinkwrap
+1957,2026-07-30T15:18:09Z,2026-07,3,False,False,False,True,fix(storage): bound the interrupted-drop retry to one actionable error
+1956,2026-07-29T23:58:37Z,2026-07,5,False,False,False,True,fix(resources): restore v4 super.post create on collection posts
+1955,2026-07-27T14:51:16Z,2026-07,15,False,False,False,False,fix(deps): update all non-major dependencies
+1954,2026-07-27T16:14:32Z,2026-07,1,False,False,False,False,chore(deps): update dependency @harperfast/integration-testing to v0.6.4
+1948,2026-07-28T23:33:09Z,2026-07,3,False,False,False,True,fix(resources): await the request body in the built-in login resource
+1947,2026-07-28T19:06:30Z,2026-07,3,False,False,False,True,server: add stall-timeout guard to enableProxyProtocol's header buffering
+1943,2026-07-31T19:02:55Z,2026-07,3,False,False,False,True,fix(mcp): list verb tools for table-less Resources to any authenticated user
+1938,2026-07-24T23:34:11Z,2026-07,2,False,False,False,False,chore(ci): bump mention + issue-to-pr pins to 54d9e61 (Opus 5)
+1933,2026-07-28T19:28:35Z,2026-07,2,False,False,False,True,fix(resources): URL attribute-suffix routing for programmatic static-properties Resources
+1919,2026-07-28T00:11:59Z,2026-07,6,False,False,False,True,Keep uWebSockets.js opt-in for npm consumers
+1915,2026-07-30T19:13:10Z,2026-07,25,False,True,True,True,Restore operation-scoped read authorization and add explicit row filters
+1913,2026-07-28T19:38:32Z,2026-07,10,False,False,False,True,fix(auth): reject reserved role-permission names as database names + complete cluster_user handling
+1911,2026-07-24T00:33:15Z,2026-07,2,False,False,False,True,fix(query): stop query planning from mutating the caller's conditions
+1910,2026-07-27T04:40:01Z,2026-07,2,False,False,False,True,Activate WAF on upgraded instances
+1909,2026-07-23T13:52:06Z,2026-07,1,False,False,False,False,fix: remove duplicate assert in RESTProperties-test
+1908,2026-07-27T18:45:29Z,2026-07,1,False,False,False,False,test: add packaged application E2E workflow
+1907,2026-07-30T15:30:40Z,2026-07,12,False,False,False,True,Fail soft on operations API domain socket bind failure; warn on path-length overflow
+1906,2026-07-27T04:41:25Z,2026-07,2,False,False,False,True,fix(resources): Table.clear() also clears secondary index dbis
+1905,2026-07-27T04:40:56Z,2026-07,2,False,False,False,True,Canonicalize PACKAGE_ROOT so it matches realpath'd allowedPath checks
+1900,2026-07-28T23:11:46Z,2026-07,14,False,True,True,False,test(upgrade): promote 3 QA cross-version upgrade read-visibility anchors
+1899,2026-07-22T17:51:06Z,2026-07,1,False,False,False,True,Fix recordCommitLatency parameter type for the widened commitResolution union
+1898,2026-07-23T14:55:38Z,2026-07,8,False,False,False,True,Implement get_deployment_payload and delete_deployment_payload operations
+1896,2026-07-23T14:57:01Z,2026-07,5,False,True,True,True,fix: TTL eviction/delete no longer orphans secondary-index entries (F-149)
+1895,2026-07-23T12:33:34Z,2026-07,2,False,False,False,False,"test(apitests): await table clears on re-setup, make check-operations assertions diagnostic"
+1892,2026-07-21T22:59:59Z,2026-07,2,False,False,False,False,chore(deps): Update rocksdb-js to 2.5.0
+1891,2026-07-22T00:18:48Z,2026-07,3,False,False,False,False,chore(ci): bump ai-review-prompts to 82c9484 (#73 calibration + #74 caller hygiene)
+1888,2026-07-23T12:20:58Z,2026-07,2,False,False,False,True,fix(replication): stop the resume-cursor write freezing the apply worker
+1887,2026-07-22T23:34:08Z,2026-07,3,False,False,False,True,Return complete starts_with results for astral Unicode values
+1886,2026-07-23T14:48:52Z,2026-07,8,False,True,True,False,test(database): promote 2 QA secondary-index integrity anchors
+1884,2026-07-27T04:39:28Z,2026-07,14,False,True,True,False,test(resources): consolidate 3 promoted QA tests into one shared-instance suite
+1883,2026-07-23T14:54:35Z,2026-07,1,False,False,False,False,ci: run a single Node version for integration tests on PR pushes
+1876,2026-07-31T03:09:39Z,2026-07,7,False,False,False,True,feat(cli): token env vars for CI/CD auth
+1875,2026-07-21T02:16:26Z,2026-07,3,False,False,False,True,"Scheduler: in-repo election, failover, and catch-up test coverage"
+1873,2026-07-28T23:10:13Z,2026-07,5,False,False,False,True,fix(cli): separate transport auth from operation payload for add_user/alter_user
+1871,2026-07-21T23:01:30Z,2026-07,2,False,False,False,False,Add gemini-code-assist styleguide to reduce review noise
+1870,2026-07-28T11:32:18Z,2026-07,4,False,True,True,False,test(upgrade): pin typed-struct plateau on legacy-origin in-place upgrade (QA-606)
+1869,2026-07-27T19:55:22Z,2026-07,5,False,True,True,True,fix: thread {transaction} into removeEntry for audit:false table deletes
+1868,2026-07-21T01:03:35Z,2026-07,1,False,False,False,False,chore(deps): update dependency node to v24
+1867,2026-07-21T00:54:09Z,2026-07,7,False,False,False,False,fix(deps): update all non-major dependencies
+1863,2026-07-21T00:49:34Z,2026-07,2,False,False,False,True,fix: guard SSE writes against undefined event data (#1724)
+1861,2026-07-27T04:46:03Z,2026-07,1,False,False,False,False,test(txn): pin that commit retry exhaustion rejects the awaited request chain
+1860,2026-07-27T18:47:21Z,2026-07,3,False,False,False,True,fix(txn): don't drop writes staged while read iterators defer the commit
+1859,2026-07-22T23:33:13Z,2026-07,4,False,False,False,True,"fix(server): socket noDelay/keepAlive options were never applied on TCP/UDS listeners, and keep-alive delay was 600ms not 10min"
+1858,2026-07-28T14:44:44Z,2026-07,6,False,False,False,True,Decode PROXY protocol v2 with forwarded mTLS client certificates on UDS mirrors
+1853,2026-07-23T14:59:37Z,2026-07,1,False,False,False,True,fix(storage): honest Promise<number | void> type for commit-latency recorder
+1848,2026-07-22T20:01:18Z,2026-07,5,False,False,False,True,Safe mode now disables worker preload modules
+1847,2026-07-22T20:00:21Z,2026-07,4,False,False,False,True,fix: built-in agent drains operations tools from the lazy provider
+1845,2026-07-22T11:19:24Z,2026-07,4,False,False,False,True,bench(sql): add SQL engine A/B benchmark (new vs legacy)
+1844,2026-07-22T11:15:19Z,2026-07,2,False,True,True,True,fix(resources): serve a sort on the primary key from primary-store order
+1842,2026-07-29T23:10:10Z,2026-07,5,False,False,False,True,Preserve operation-scoped write authorization
+1841,2026-07-17T20:39:05Z,2026-07,5,False,True,True,True,fix(tls): honor `ciphers`/`SECLEVEL` from every configured source when building TLS listeners
+1839,2026-07-22T11:20:51Z,2026-07,7,False,True,True,True,fix(mcp): enforce row-level allowRead on custom mcpResources reads (#1735)
+1838,2026-07-22T11:13:49Z,2026-07,5,False,False,False,True,fix(deploy): retry peer-side payload_blob read on transient 503 stall
+1837,2026-07-17T11:35:42Z,2026-07,9,False,False,False,True,fix: reject null hash values on delete + primary-key changes on populated tables (studio#1199)
+1833,2026-07-21T23:02:31Z,2026-07,12,False,True,True,False,test(resources): promote QA read-consistency regression anchors
+1831,2026-07-31T21:07:32Z,2026-07,35,False,False,False,True,Add RocksDB managed backup and restore operations
+1828,2026-07-20T03:12:21Z,2026-07,13,False,True,True,True,Scheduler component plugin: config-declared cron and interval jobs that run once per cluster
+1825,2026-07-20T04:17:12Z,2026-07,6,False,False,False,True,fix(sandbox): wire the six typed-resources exports into the component sandbox
+1823,2026-07-23T14:58:59Z,2026-07,2,False,False,False,True,fix(txn): retry ERR_TRY_AGAIN on the same transaction (native in-place reset)
+1821,2026-07-22T04:07:09Z,2026-07,12,False,True,True,True,"Register the MCP durable quota policy as a function, not a config-referenced Resource (#1809)"
+1820,2026-07-17T20:08:12Z,2026-07,7,False,True,True,True,fix: flag restart when redeploying an active jsResource component (#1817)
+1819,2026-07-21T23:02:19Z,2026-07,4,False,False,False,True,fix: gate npm pack --ignore-scripts on install_allow_scripts alone
+1816,2026-07-22T11:05:32Z,2026-07,4,False,False,False,True,refactor: hoist duplicated MAX_SET_TIMEOUT_MS constant into hdbTerms.ts
+1814,2026-07-17T20:07:36Z,2026-07,3,False,False,False,True,fix(upgrade): activate new built-in components on in-place-upgraded configs
+1812,2026-07-21T22:59:38Z,2026-07,3,False,False,False,True,Make @expiresAt attribute authoritative over the table expiration default
+1808,2026-07-17T20:08:04Z,2026-07,2,False,False,False,True,"fix(cli): friendly ""Harper is not running"" message on local connect failure"
+1807,2026-07-21T02:08:43Z,2026-07,4,False,False,False,True,fix: return clean 404 instead of crashing on POST without a trailing slash
+1806,2026-07-21T23:01:52Z,2026-07,8,False,True,True,True,fix(rest): actionable 404 for a deployed-but-not-restarted component
+1803,2026-07-17T20:08:17Z,2026-07,2,False,False,False,True,fix: expand ~/... install destination to an absolute path immediately after input
+1802,2026-07-17T20:07:59Z,2026-07,11,False,True,True,False,"test: promote 4 QA regression anchors (audit-completeness, overtime-atomicity, TTL-rate-limiter, planner-range-scan)"
+1801,2026-07-18T19:57:02Z,2026-07,5,False,False,False,True,"fix: ensure CLI failure paths exit non-zero, including operation timeouts"
+1798,2026-07-14T19:33:11Z,2026-07,2,False,False,False,True,"fix(analytics): drive get_analytics off the bounded time window, not the metric index (#1796)"
+1797,2026-07-15T23:03:58Z,2026-07,15,False,False,False,True,Reshape deploy_component registryAuth into a general-purpose credentials array
+1795,2026-07-17T00:22:13Z,2026-07,2,False,False,False,True,Decrypt SSH deploy keys to a transient file for git operations
+1794,2026-07-14T18:33:56Z,2026-07,1,False,False,False,False,test(crud): poll for analytics-recording instead of a fixed sleep (deflake Node v24)
+1791,2026-07-16T12:20:13Z,2026-07,19,False,True,True,False,"test(server): promote validated QA regression anchors (static, deploy, shutdown-drain, secrets)"
+1790,2026-07-20T13:39:02Z,2026-07,1,False,False,False,False,ci(review): explicit caller-job permissions on the Claude review caller
+1789,2026-07-14T18:34:00Z,2026-07,2,False,False,False,True,Fix SSE hang + uncaughtException when a generator throws mid-stream
+1787,2026-07-14T12:44:39Z,2026-07,3,False,False,False,True,Add live secret change subscription and live scoped accessor (#1776)
+1786,2026-07-15T21:26:25Z,2026-07,17,False,True,True,True,Record-scoped allowRead: unified row-level read access control (#1422 gap 2)
+1784,2026-07-14T15:58:49Z,2026-07,2,False,False,False,True,Fix ReDoS in configValidator directory-path regex (CLI hangs at 100% CPU)
+1783,2026-07-14T18:08:59Z,2026-07,2,False,False,False,True,fix(build): strip devDependencies from published shrinkwrap
+1781,2026-07-13T23:27:35Z,2026-07,1,False,False,False,False,fix(build): prune devDependencies before shrinkwrapping
+1773,2026-07-13T14:40:39Z,2026-07,1,False,False,False,False,test(storage): cover the isRetry leak that dropped fresh-batch audit entries
+1772,2026-07-13T13:32:42Z,2026-07,2,False,False,False,False,chore(deps): update dependency @types/sinon to v22
+1771,2026-07-14T00:14:29Z,2026-07,4,False,False,False,False,fix(deps): update all non-major dependencies
+1769,2026-07-13T00:05:16Z,2026-07,8,False,True,True,True,Fix root-mounted static serving: urlPath '/' matched only the exact path '/'
+1768,2026-07-13T18:24:24Z,2026-07,8,False,False,False,True,Predicate-aware HNSW traversal: filtered vector search with user-function and RBAC participation
+1767,2026-07-14T19:37:18Z,2026-07,21,False,False,False,True,"Typed, discoverable resources — code-first defineTable + per-method request contract (RFC 0001)"
+1765,2026-07-14T17:55:23Z,2026-07,1,False,False,False,True,Refuse uWS backend on pointer-compression Node builds unless rebuilt for that ABI
+1760,2026-07-13T21:26:10Z,2026-07,17,False,True,True,False,test(record-caching): run the multi-worker suite on real workers + add cross-worker coherence anchors
+1759,2026-07-13T00:05:21Z,2026-07,1,False,False,False,False,ci(review): canary Claude reviews on claude-sonnet-5 (harper only)
+1756,2026-07-11T22:53:14Z,2026-07,2,False,False,False,False,"fix: resolve uWebSockets.js via a tarball URL, not a github: git spec"
+1753,2026-07-10T21:04:17Z,2026-07,1,False,True,True,False,fix(lint): unbreak main — node:assert/strict → node:assert in bytes-scan-crash test
+1750,2026-07-10T12:18:48Z,2026-07,1,False,True,True,False,"test(blob): fix ""sensor schema missing"" flake in per-device-type sharding suite"
+1749,2026-07-10T21:42:19Z,2026-07,6,False,False,False,True,fix: auto-wrap Error args in the logger + diagnostic property allowlist (#1734)
+1748,2026-07-11T12:18:32Z,2026-07,7,False,True,True,True,"Configurable cache headers for the static plugin (maxAge, immutable, cacheControl)"
+1746,2026-07-10T22:08:29Z,2026-07,15,False,True,True,True,Cache-Control/Vary hardening and shared-cache defaults
+1743,2026-07-10T12:27:18Z,2026-07,8,False,True,True,True,fix: make server.registerOperation() from components reachable via the ops API (#1736)
+1741,2026-07-09T21:04:02Z,2026-07,2,False,False,False,False,chore(deps): Update rocksdb-js to 2.4.0
+1738,2026-07-10T02:53:10Z,2026-07,3,False,False,False,False,Add tsgo as an opt-in fast type-checker
+1737,2026-07-10T02:55:00Z,2026-07,5,False,False,False,True,fix: don't log raw Error objects in REST.ts (leaks secrets to hdb.log) (#1734)
+1726,2026-07-15T15:02:05Z,2026-07,6,False,False,False,True,fix(config): scope.options sees runtime env config before the file flush (#1618)
+1721,2026-07-11T12:06:49Z,2026-07,1,False,True,True,False,test(integration): de-flake computed indexed properties REST block
+1720,2026-07-09T13:00:16Z,2026-07,2,False,False,False,True,fix: only join an ambient transaction if it is genuinely still OPEN
+1718,2026-07-08T22:38:41Z,2026-07,5,False,False,False,True,Fix deploy silently truncating tarball on dangling symlink
+1714,2026-07-17T20:07:55Z,2026-07,2,False,False,False,True,fix(windows): widen atomicWriteFile rename-retry backoff for EPERM/EACCES
+1713,2026-07-08T16:36:06Z,2026-07,3,False,False,False,True,fix(hnsw): reconnect survivors severed from the entry point by deletes
+1710,2026-07-17T20:07:50Z,2026-07,1,False,True,False,False,fix(test): await startCrlServer so the EADDRINUSE retry covers the listen
+1709,2026-07-08T11:35:38Z,2026-07,3,False,False,False,True,fix(rest): don't mutate live cache records in finalizeResponse (persisted headers corruption)
+1707,2026-07-10T03:08:28Z,2026-07,2,False,False,False,True,HTTP/2 support via cleartext h2 UDS mirror (symphony-L4 ALPN dispatch)
+1697,2026-07-08T03:08:21Z,2026-07,2,False,False,False,True,fix(mqtt): close last-will persistence race; give retained-message test more headroom
+1696,2026-07-09T11:46:49Z,2026-07,3,False,False,False,True,fix(storage): replay conflict retry on a fresh transaction after ERR_TRY_AGAIN
+1694,2026-07-08T17:29:43Z,2026-07,2,False,False,False,True,MCP: accept missing MCP-Protocol-Version as the session's negotiated version
+1693,2026-07-10T16:21:41Z,2026-07,4,False,False,False,True,feat(logs): stream read_log over SSE as a live tail
+1690,2026-07-07T18:05:59Z,2026-07,1,False,False,False,False,fix(ci): keep npm latest/next dist-tags on the newest release line
+1689,2026-07-20T19:11:41Z,2026-07,4,False,False,False,True,feat(analytics): expose write/read transaction queue depth (count) metrics
+1688,2026-07-17T20:07:45Z,2026-07,4,False,False,False,True,feat(analytics): record write-transaction commit latency
+1687,2026-07-10T16:23:18Z,2026-07,5,False,False,False,True,fix(logging): close rotated log fd immediately + expose logging.rotation.retention (#683)
+1643,2026-07-07T18:05:55Z,2026-07,3,False,False,False,True,fix(queue): waitForDrain poll fallback for drains that never emit
+1641,2026-07-07T18:05:45Z,2026-07,2,False,False,False,True,fix(blob): never gate apply commits on wire-carried save flags; gate local writes on blob durability
+1634,2026-07-11T12:21:50Z,2026-07,1,False,True,True,False,test(security): extend #1414 subscription re-auth coverage to WS/MQTT + alter_role
+1633,2026-07-08T12:27:40Z,2026-07,29,False,True,True,True,MCP: per-client rate limiting + durable operator quota hook for public tools
+1632,2026-07-11T12:06:08Z,2026-07,3,False,False,False,True,Fix SSE hang + uncaughtException on finite generator streamed to completion (#1628)
+1626,2026-07-13T17:13:57Z,2026-07,4,False,False,False,True,Make target.loadedFromSource the sole cache-disposition signal (net of v5.1 #1575 + #1590)
+1625,2026-07-07T12:10:15Z,2026-07,1,False,False,False,False,test(resources): fix main-red subscriptionReplay flakes (fixed collect() window vs #1345 load)
+1622,2026-07-10T21:04:20Z,2026-07,1,False,False,False,False,fix(build): ship npm-shrinkwrap.json in published package
+1621,2026-07-08T22:56:41Z,2026-07,5,False,False,False,True,feat(threads): graceful drain hook for in-flight work before worker shutdown
+1620,2026-07-11T12:06:52Z,2026-07,1,False,False,False,False,ci(docker): add smoke test that builds and boots the image
+1619,2026-07-06T21:02:13Z,2026-07,1,False,False,False,False,fix(docker): entrypoint written empty via RUN heredoc redirect (exec format error on 5.1.x)
+1615,2026-07-13T17:11:52Z,2026-07,4,False,False,False,True,"fix(crdt): unify add fold, fix counter time-travel reconstruction, harden apply path"
+1612,2026-07-06T14:16:42Z,2026-07,1,False,True,True,False,fix(lint): use plain node:assert import in allowread-fail-closed test
+1608,2026-07-06T14:56:07Z,2026-07,2,False,False,False,False,chore(deps): update dependency globals to v17
+1607,2026-07-06T19:50:06Z,2026-07,11,False,True,True,True,fix(deps): update all non-major dependencies
+1605,2026-07-10T22:22:01Z,2026-07,7,False,True,True,True,feat(server): surface external port conflicts on all platforms; single-worker default without SO_REUSEPORT
+1603,2026-07-06T15:50:01Z,2026-07,2,False,False,False,True,fix(mqtt): share the MQTT port across workers except on macOS
+1602,2026-07-06T21:02:26Z,2026-07,2,False,False,False,True,fix(mcp): surface parameterized custom resources as MCP tools
+1601,2026-07-27T19:56:55Z,2026-07,9,False,True,True,True,fix(serialization): surface @computed scalars on default reads + guard cyclic @enumerable serialization (#1484)
+1600,2026-07-06T23:20:04Z,2026-07,3,False,False,False,True,fix(test): de-flake MQTT durable-session reconnect test
+1599,2026-07-09T23:49:30Z,2026-07,7,False,False,False,True,feat(auth): let registered operations declare permissions for scoped delegation
+1596,2026-07-06T21:44:57Z,2026-07,9,False,False,False,True,@embed / models.embed no longer forwards the logical model name as the provider wire model id
+1592,2026-07-08T16:58:10Z,2026-07,3,False,False,False,True,Audit records now attribute registered-operation writes to the authenticated user
+1587,2026-07-08T17:25:43Z,2026-07,10,False,False,False,True,feat(http): observable middleware chain order via debug log + get_status (#1573)
+1584,2026-07-06T21:23:58Z,2026-07,9,False,True,True,True,Fix static plugin serving nothing when urlPath is configured
+1582,2026-07-10T12:12:07Z,2026-07,19,False,False,False,True,Two-tier component secret delivery + env declarations (#1550)
+1581,2026-07-09T23:49:26Z,2026-07,2,False,False,False,True,fix(cache): consult allowStaleWhileRevalidate for query-driven revalidation (#1578)
+1580,2026-07-10T13:48:26Z,2026-07,9,False,True,True,True,Warn loudly when config-shaping env vars arrive via component .env files (not honored)
+1579,2026-07-08T16:58:03Z,2026-07,5,False,False,False,True,fix(mcp): compute operations-profile tools lazily so late-registered ops surface (#1562)
+1574,2026-07-08T16:36:09Z,2026-07,6,False,False,False,True,feat(static): support `after` ordering and warn when `fallthrough: false` blocks REST
+1569,2026-07-08T16:58:00Z,2026-07,7,False,False,False,True,Add threads.preload config to preload modules (e.g. APM agents) on worker threads
+1568,2026-07-17T20:07:31Z,2026-07,15,False,True,True,True,Name authentication middleware and add http.securityHeaders config
+1563,2026-07-02T13:45:00Z,2026-07,2,False,False,False,True,fix(blob): 503 an in-flight replication receive instead of 404
+1559,2026-07-06T22:35:47Z,2026-07,6,False,False,False,True,Add worker-spawn workerData providers and deferred env-secret decrypt replay
+1558,2026-07-06T12:21:01Z,2026-07,100,True,True,True,False,chore(test): migrate node:assert/strict to plain node:assert; lint-enforce via oxlint (#1555)
+1556,2026-07-02T13:45:15Z,2026-07,4,False,True,True,True,Support `replicated: true` on `set_configuration`
+1554,2026-07-08T17:55:08Z,2026-07,19,False,False,False,True,feat: hdb_secret store with grant-scoped secret operations
+1553,2026-07-28T23:46:43Z,2026-07,5,False,False,False,True,feat(cli): add `harper agent` — CLI client for the built-in agent (#626)
+1549,2026-07-16T12:39:11Z,2026-07,23,False,False,False,True,fix(agent): make the built-in agent runnable end-to-end (#626)
+1546,2026-07-02T15:29:31Z,2026-07,6,False,True,True,True,Auth: support token login in core — exchange a validated JWT for an httpOnly hdb-session cookie
+1543,2026-07-01T12:20:26Z,2026-07,1,False,False,False,True,fix: use getDatabases() in role validation to avoid startup crash
+1542,2026-07-02T15:40:13Z,2026-07,2,False,False,False,True,fix(blob): harden FileBackedBlob.stream() cancel/cleanup paths (#1457)
+1541,2026-07-01T14:00:39Z,2026-07,2,False,False,False,True,fix(analytics): bound the last-aggregation lookup to avoid main-thread full-scans (#1538)
+1540,2026-07-01T14:00:44Z,2026-07,4,False,False,False,True,fix: atomically swap component dir on deploy to avoid ENOTEMPTY on live apps
+1536,2026-07-01T14:10:21Z,2026-07,2,False,False,False,True,fix: resolve extension packages outside ROOTPATH during node_modules walk (#1507)
+1535,2026-07-06T23:39:00Z,2026-07,6,False,True,True,True,feat: re-authorize live subscriptions; revoke on permission loss or token expiry (#1414)
+1533,2026-07-01T11:44:47Z,2026-07,14,False,False,False,True,"feat(models)!: pluggable routing + namespaced extension API (#1326, #1534)"
+1532,2026-07-02T15:31:46Z,2026-07,1,False,False,False,True,fix: bind related-table allowRead to a proper resource instance
+1530,2026-07-02T15:31:51Z,2026-07,2,False,False,False,True,fix(subscriptions): re-deliver current scope to live subscribers on a copyApply reload marker
+1529,2026-07-08T16:57:56Z,2026-07,2,False,False,False,True,Validate directional controlled-flow replication route fields
+1528,2026-07-01T23:03:38Z,2026-07,6,False,False,False,True,feat(env): dormant decrypt hook + enc:v1 contract for env-secret encryption
+1527,2026-07-01T23:01:24Z,2026-07,9,False,False,False,True,feat(components): protect .env files in the operations API
+1526,2026-07-08T17:25:05Z,2026-07,10,False,True,True,True,fix(mcp): register component-author static mcpTools/mcpPrompts at runtime (#1448)
+1520,2026-07-01T04:38:47Z,2026-07,2,False,False,False,True,fix(migration): build the v4→v5 canonical structure seed for decoded records
+1517,2026-07-08T16:58:13Z,2026-07,20,False,True,True,False,test: promote exploratory-QA concurrency & data-integrity regression anchors
+1501,2026-07-02T13:33:17Z,2026-07,4,False,True,True,True,Honor thrown Response and `status` field for custom-resource HTTP status
+1489,2026-07-02T13:33:03Z,2026-07,6,False,True,True,True,fix: fail closed when allow* hooks throw or reject (#1422 gap 1)
+1476,2026-07-04T12:42:35Z,2026-07,3,False,True,True,True,fix(indexing): treat shutdown-closed store during backfill as benign; de-flake reindex test
+1475,2026-07-17T20:07:40Z,2026-07,1,False,True,True,False,test(northwind): poll for async auth-cache propagation after alter_role
+1474,2026-07-01T04:39:12Z,2026-07,1,False,True,True,False,test(terminology): poll for async ITC propagation to de-flake schema/auth races
+1465,2026-07-10T21:55:20Z,2026-07,3,False,False,False,True,fix(components): close deploy-validation Scopes to stop deployLifecycle listener leak
+1418,2026-07-14T19:00:08Z,2026-07,12,False,True,True,False,test: promote 7 exploratory QA tests to integration suite
+1411,2026-07-08T17:33:30Z,2026-07,8,False,True,True,True,Abort over-time write transactions instead of force-committing (#1407)
+1394,2026-07-08T16:57:52Z,2026-07,6,False,False,False,True,Add periodic re-read safety net for TLS cert watcher (#586)
+1393,2026-07-02T16:11:20Z,2026-07,2,False,False,False,True,fix(blob): decompress (inflate) compressed blobs on read instead of re-deflating
+1385,2026-07-18T21:23:11Z,2026-07,1,False,False,False,False,ci: run Next.js adapter integration suite against harper PRs (downstream gate)
+1345,2026-07-06T12:21:14Z,2026-07,1,False,False,False,False,test(resources): cover search_by_value during active runIndexing
+1313,2026-07-10T12:13:01Z,2026-07,6,False,True,True,True,fix(table): reject non-object record roots; guard scan freeze (#1298)
+1285,2026-07-17T11:10:19Z,2026-07,62,False,True,True,True,New SQL engine on the Resource API (phases 0-4; phase-5 cutover gated)
+1106,2026-07-06T12:20:32Z,2026-07,3,False,False,False,True,feat(models): add openaiStream() OpenAI-compatible SSE formatter
+1096,2026-07-10T05:51:34Z,2026-07,12,False,False,False,True,feat(#914): uWebSockets.js HTTP/WebSocket backend (default-off)
+421,2026-07-10T21:39:11Z,2026-07,2,False,False,False,False,chore: add workflow to sync package-lock.json when it drifts from pac…
+410,2026-07-11T12:03:47Z,2026-07,17,False,True,True,True,Record caching
+35,2026-07-02T12:55:49Z,2026-07,7,False,False,False,True,Disable snapshots for get_analytics queries
+2416,2026-08-31T15:03:19Z,2026-08,1,False,False,False,False,Gate the EDQUOT storage-exhaustion tests on platforms that define EDQUOT
+2415,2026-08-31T20:27:32Z,2026-08,2,False,False,False,True,"Decode blob content created from a plain Uint8Array as text, not as byte values"
+2414,2026-08-31T20:09:28Z,2026-08,5,False,True,True,True,Fix a branched database silently discarding its latest writes when restarted after a crash or hard kill
+2413,2026-08-31T13:16:51Z,2026-08,1,False,False,False,True,Let an empty branchedDatabases declaration load under LMDB
+2409,2026-08-31T12:09:50Z,2026-08,7,False,False,False,True,Deliver RocksDB subscription events for source fills whose version differs from the log key
+2408,2026-08-31T13:31:23Z,2026-08,2,False,False,False,False,fix(deps): update dependency alasql to v4.18.0
+2407,2026-08-31T13:31:11Z,2026-08,5,False,False,False,False,fix(deps): update all non-major dependencies
+2405,2026-08-31T12:43:16Z,2026-08,2,False,False,False,True,Fix MCP create_* tools being manufactured for Resources with no real create verb
+2403,2026-08-31T12:46:08Z,2026-08,1,False,False,False,False,Fix the EntryHandler unit tests on Windows and make their watcher cleanup unconditional
+2400,2026-08-31T12:54:49Z,2026-08,4,False,True,True,False,test: anchor #1854's audit:false delete fix at the RocksDB storage layer
+2399,2026-08-31T12:50:42Z,2026-08,4,False,True,True,False,Add an integration anchor pinning the transaction-log purge blast radius to audit history only
+2398,2026-08-31T20:26:25Z,2026-08,8,False,True,True,True,fix(upgrade): fail the boot when the data-version stamp is not recorded
+2397,2026-08-31T13:17:18Z,2026-08,2,False,False,False,True,Fix REST query-string parser fall-through from group-by into sort
+2384,2026-08-31T15:05:08Z,2026-08,6,False,True,True,True,Publish TLS state transactionally so a failed rebuild never downgrades below last-good
+2374,2026-08-28T13:25:55Z,2026-08,8,False,True,True,True,Windows local archive deployments avoid unnecessary npm work
+2371,2026-08-31T13:08:49Z,2026-08,11,False,False,False,True,Report incomplete PR descriptions before review
+2368,2026-08-28T11:58:04Z,2026-08,13,False,True,True,True,"Keep resolved attribute values out of durable records, at every layer that writes them"
+2367,2026-08-31T13:10:11Z,2026-08,13,False,False,False,True,"Stop harper_logger.test.js from silently taking its mocha process down, and pin both logging suites config"
+2362,2026-08-27T15:39:44Z,2026-08,2,False,False,False,False,Schedule the self-hosted bench nightlies to finish before working hours
+2357,2026-08-27T00:11:44Z,2026-08,2,False,False,False,False,ci: exclude ready_for_review from the always-on cancelling arm
+2353,2026-08-26T23:18:37Z,2026-08,2,False,False,False,False,ci: ready_for_review runs review but never cancels
+2352,2026-08-31T04:32:39Z,2026-08,23,False,True,True,True,"Give an application a private, durable fork of a database"
+2351,2026-08-31T13:06:05Z,2026-08,3,False,True,True,True,Close a streamed HTTP response on Bun when the client asked for it (fixes hung iterable REST responses)
+2348,2026-08-26T21:08:31Z,2026-08,2,False,False,False,False,ci: keep ineligible runs out of the review concurrency group
+2347,2026-08-28T03:47:30Z,2026-08,13,False,True,True,True,"feat(operations): add a `put` operation, and fix the target-database authorization mismatch"
+2341,2026-08-27T15:56:06Z,2026-08,10,False,True,True,True,"Wait for the restart a component deploy triggers, and tell MQTT clients why a publish was refused"
+2340,2026-08-26T14:24:12Z,2026-08,4,False,False,False,True,Honor the documented dry_run flag in install_node_modules
+2339,2026-08-27T15:15:11Z,2026-08,9,False,True,True,True,Fix intermittent set_configuration 500s on Windows caused by the config write's rename retry
+2328,2026-08-26T15:40:11Z,2026-08,5,False,False,False,False,ci: adopt ai-review-prompts #89 — sonnet-5/xhigh/96-turn review defaults
+2325,2026-08-25T22:19:34Z,2026-08,13,False,True,True,True,Start a real transaction scope when the context slot holds a self-committing transaction
+2317,2026-08-25T22:33:30Z,2026-08,4,False,False,False,False,Target release backports by PR milestone instead of the `patch` label
+2316,2026-08-25T23:16:02Z,2026-08,17,False,False,False,True,Prevent worker respawns from blocking container restarts
+2314,2026-08-28T12:00:34Z,2026-08,10,False,True,True,True,Keep a pre-ready worker's event loop alive through startup (fixes the 'exited with code 0 before reporting ready' CI failure)
+2310,2026-08-26T17:22:29Z,2026-08,2,False,False,False,False,Add job and step timeouts to the integration-test workflows
+2309,2026-08-27T13:35:20Z,2026-08,14,False,False,False,True,Canonicalize watch paths so a Windows 8.3 short path cannot abort the process
+2303,2026-08-26T11:56:20Z,2026-08,1,False,False,False,False,Assign dependency-bot PRs to a single reviewer
+2302,2026-08-28T03:34:02Z,2026-08,6,False,True,True,True,Operations API resolves @relationship attributes instead of returning null or rejecting them
+2291,2026-08-25T03:14:34Z,2026-08,5,False,True,True,True,fix(txn): commit the handle an ImmediateTransaction opens during its own commit
+2290,2026-08-25T04:42:48Z,2026-08,8,False,True,True,True,Keep a node bootable when threads.maxHeapMemory is set below what a worker can start on
+2287,2026-08-24T13:25:12Z,2026-08,2,False,False,False,False,chore(deps): update dependency eventsource to v5
+2286,2026-08-24T13:30:06Z,2026-08,2,False,False,False,False,fix(deps): update all non-major dependencies
+2285,2026-08-25T12:25:38Z,2026-08,4,False,False,False,True,Let a database be opened into a caller-owned table graph instead of the global map
+2276,2026-08-31T20:29:56Z,2026-08,7,False,True,True,True,"Deflake the unit-test cluster: seed HNSW routing, signal-based waits, quarantine two unreproduced hangs"
+2272,2026-08-24T19:48:12Z,2026-08,3,False,True,True,True,Reject unrecognized parameters in set_configuration instead of reporting success
+2271,2026-08-24T15:32:59Z,2026-08,3,False,False,False,True,Order list_agent_sessions by activity time instead of primary-key order
+2265,2026-08-26T14:32:46Z,2026-08,8,False,True,True,True,"Capture only whole blobs in a backup, substituting a marker for one still being written"
+2263,2026-08-25T17:20:15Z,2026-08,2,False,True,False,True,Report the Harper version in the startup options banner
+2260,2026-08-26T14:24:53Z,2026-08,10,False,True,True,True,Allow a component-registered operation to be granted in a role's operations allowlist
+2258,2026-08-28T03:35:51Z,2026-08,4,False,False,False,True,Make cluster-origin table definitions additive-only so a peer's partial schema snapshot cannot destroy locally declared attributes
+2256,2026-08-21T19:32:32Z,2026-08,3,False,False,False,False,Canary reliable AI review evidence in Harper
+2252,2026-08-25T21:39:04Z,2026-08,7,False,False,False,True,Bound the exclusive 'update-attributes' lock wait and release it structurally
+2250,2026-08-24T14:56:32Z,2026-08,6,False,True,True,True,Make per-table record-structure dictionary size observable
+2248,2026-08-20T19:34:21Z,2026-08,1,False,True,True,False,test(database): keep the QA-782 lmdb control arm off Windows
+2245,2026-08-31T13:13:31Z,2026-08,8,False,False,False,True,Keep Harper booting when its storage volume is full or at quota
+2244,2026-08-25T04:41:22Z,2026-08,1,False,True,True,False,Stabilize transaction-log purge blast-radius coverage
+2242,2026-08-20T18:15:09Z,2026-08,2,False,False,False,True,Bound the analytics node-storage walk so it cannot OOM the main thread on every boot
+2239,2026-08-20T22:08:50Z,2026-08,7,False,True,True,True,fix(txn): make writes after a mid-scope commit atomic with the scope that owns them
+2235,2026-08-20T19:52:55Z,2026-08,5,False,False,False,True,Fix a replicated delete+put of the same record dropping all of its secondary index entries
+2233,2026-08-20T03:40:43Z,2026-08,2,False,False,False,True,Register replication_receiveQueueHighWaterMark so the receive-queue budget can be configured
+2232,2026-08-20T14:08:36Z,2026-08,4,False,False,False,True,Correct blind-write transaction bookkeeping and bring those transactions under the long-transaction monitor
+2230,2026-08-20T12:03:51Z,2026-08,8,False,False,False,True,fix(txn): keep context.transaction usable after its transaction completes
+2228,2026-08-20T15:19:51Z,2026-08,4,False,False,False,True,Release blob locks before failed saves settle
+2227,2026-08-20T18:16:21Z,2026-08,1,False,True,True,False,Deflake early-hints integration deployment on Windows
+2225,2026-08-20T19:53:27Z,2026-08,2,False,False,False,True,Keep reads working when storage.debugLongTransactions is enabled
+2223,2026-08-21T18:54:24Z,2026-08,10,False,False,False,True,Reject a non-bare-host node identity and fix IPv6 replication URLs
+2219,2026-08-21T18:44:36Z,2026-08,4,False,False,False,True,fix(run): stop double-wrapping startup URLs when node.hostname is a URL
+2209,2026-08-20T17:56:16Z,2026-08,6,False,False,False,True,Add process uptime to `harper status`
+2208,2026-08-19T23:07:07Z,2026-08,6,False,False,False,True,Deflake deferred cache and await LMDB reload markers
+2204,2026-08-27T13:20:27Z,2026-08,3,False,True,True,False,Fail fast when the concurrent PATCH route is not ready
+2202,2026-08-25T13:26:24Z,2026-08,11,False,False,False,True,fix(security): honor the SQL permission denial processAST computes
+2197,2026-08-20T04:13:17Z,2026-08,1,False,False,False,False,chore: sync package-lock.json with package.json
+2196,2026-08-18T15:43:54Z,2026-08,1,False,False,False,False,Restore npm installs by aligning the Structon dependency pin
+2190,2026-08-17T14:02:51Z,2026-08,2,False,False,False,False,chore(deps): update dependency openai to v7
+2189,2026-08-17T14:12:02Z,2026-08,3,False,False,False,False,fix(deps): update all non-major dependencies
+2184,2026-08-27T13:36:41Z,2026-08,1,False,False,False,False,Prevent indexed cache TTL test flakes
+2183,2026-08-18T20:33:37Z,2026-08,8,False,False,False,True,Add review-coverage CI check (report mode)
+2181,2026-08-21T00:03:18Z,2026-08,5,False,False,False,True,Auto-scale efConstruction and the search-ef ceiling with graph size for 1M+ node HNSW graphs
+2179,2026-08-18T02:44:25Z,2026-08,6,False,False,False,True,Pin the load-bearing native and encoder dependencies
+2177,2026-08-18T23:47:14Z,2026-08,6,False,False,False,True,Repair dangling blob references when a base copy re-delivers the record; add replication.blobGapReconnectMs
+2176,2026-08-21T22:06:10Z,2026-08,20,False,True,True,True,Add scoped authentication tokens (inline role on create_authentication_tokens)
+2173,2026-08-21T20:08:24Z,2026-08,43,False,False,False,True,feat: OIDC trusted publishing — deploy from CI with no stored credential
+2167,2026-08-14T13:24:16Z,2026-08,1,False,False,False,False,Fix deployment ingest transaction-context test
+2163,2026-08-31T13:14:39Z,2026-08,6,False,False,False,True,Use storage-level statistical range estimates in the query planner
+2159,2026-08-25T20:56:43Z,2026-08,1,False,False,False,False,fix(test): make getRecordCount within-budget cases immune to CI timing
+2154,2026-08-13T18:17:26Z,2026-08,3,False,False,False,True,Fix malformed bodyless audit entries that permanently wedge replication
+2152,2026-08-17T18:57:27Z,2026-08,3,False,False,False,True,feat(components): stream package_component instead of base64 JSON
+2145,2026-08-14T13:03:32Z,2026-08,4,False,False,False,True,Retain superseded blob files long enough for in-flight readers
+2144,2026-08-13T23:19:07Z,2026-08,6,False,False,False,True,fix(config): prune emptied parents when env-config removal vacates a subtree
+2133,2026-08-13T19:02:59Z,2026-08,4,False,False,False,True,Return vector distances for selective filtered queries
+2132,2026-08-12T01:50:07Z,2026-08,2,False,False,False,False,fix(deps): update dependency argon2 to v0.45.1
+2131,2026-08-14T23:33:31Z,2026-08,7,False,False,False,False,fix(deps): update all non-major dependencies
+2128,2026-08-25T11:56:45Z,2026-08,3,False,False,False,True,Release the RocksDB transaction handle on abort and on a failed direct commit
+2125,2026-08-14T01:14:18Z,2026-08,7,False,False,False,True,"Remove linear-in-corpus-size work from HNSW vector search, and honor limit past the candidate list"
+2124,2026-08-12T22:47:19Z,2026-08,2,False,False,False,True,fix(sql-engine): honor SELECT TOP n and floor fractional LIMIT/OFFSET
+2119,2026-08-07T19:36:28Z,2026-08,2,False,False,False,True,"fix(blob): re-encode inline blobs from the copied buffer, not a stale read-buffer view"
+2118,2026-08-07T15:32:14Z,2026-08,2,False,False,False,False,chore(deps): Update rocksdb-js to 2.7.1
+2112,2026-08-24T15:32:35Z,2026-08,6,False,True,True,True,fix: surface swallowed uWS startup-listen failures instead of hanging silently
+2111,2026-08-07T15:37:47Z,2026-08,2,False,False,False,True,fix: EPIPE self-feeding uncaughtException loop on a closed stdio pipe (#2106)
+2104,2026-08-07T04:35:02Z,2026-08,2,False,False,False,False,chore(deps): raise msgpackr floor to ^2.0.5
+2098,2026-08-29T18:42:47Z,2026-08,8,False,False,False,True,"Fix copy-db producing a silently corrupt, non-restorable database copy"
+2096,2026-08-26T22:58:03Z,2026-08,4,False,True,True,True,fix(server): SSE serializer must distinguish absent data/id/retry from falsy
+2094,2026-08-29T18:41:00Z,2026-08,17,False,True,True,False,"test: promote five regression anchors, each measured green on main and red without its fix"
+2090,2026-08-05T14:07:56Z,2026-08,6,False,False,False,True,Track storage benchmark trends on the gh-pages dashboard
+2089,2026-08-05T17:01:38Z,2026-08,3,False,True,True,True,fix(test): unblock main — txnlog-purge arm 5 asserts the F-225 bug that was fixed a day before the spec landed
+2086,2026-08-26T16:22:51Z,2026-08,10,False,True,True,True,Don't poison a transaction parked in its commit phase (it destroyed the deploy payload blob)
+2085,2026-08-27T13:19:22Z,2026-08,3,False,False,False,True,fix(components): avoid startup hangs on zombie process groups
+2075,2026-08-05T21:25:48Z,2026-08,6,False,True,True,True,Reject user and role changes that would remove the last active super_user
+2070,2026-08-19T23:22:59Z,2026-08,9,False,True,True,False,"test(server,resources): pin streaming delivery + stream-error contracts"
+2068,2026-08-06T15:00:25Z,2026-08,3,False,False,False,True,Add `-h`/`--help` CLI flags and a width-responsive help screen
+2066,2026-08-24T17:13:44Z,2026-08,13,False,True,True,True,Restore components after failed deployment preparation
+2065,2026-08-29T18:40:40Z,2026-08,7,False,False,False,True,Fix sourcedFrom cache-fill conflict convergence
+2064,2026-08-03T22:10:59Z,2026-08,6,False,True,True,True,`delete_transaction_logs_before` with a table on RocksDB now returns an error instead of deleting the entire database's transaction log
+2060,2026-08-07T04:24:13Z,2026-08,2,False,False,False,True,LMDB-to-RocksDB migrations avoid redundant WAL writes
+2059,2026-08-05T17:02:48Z,2026-08,5,False,False,False,True,fix(upgrade): log downgrade refusals and fail fast when no TTY can answer the prompt
+2058,2026-08-14T00:59:32Z,2026-08,7,False,False,False,True,Give the deploy payload-ingest write its own open-transaction budget
+2055,2026-08-05T20:43:46Z,2026-08,8,False,True,True,False,"test(database): pin the #1881 cross-table secondary-index read contract, including wrong-row substitution"
+2054,2026-08-04T03:48:51Z,2026-08,22,False,False,False,False,fix(deps): update all non-major dependencies
+2053,2026-08-04T06:31:33Z,2026-08,2,False,False,False,False,chore(deps): update dependency @harperfast/integration-testing to ^0.7.0
+2052,2026-08-05T17:13:12Z,2026-08,2,False,False,False,True,Stop reads from extending the open-transaction limit while uncommitted writes are held
+2051,2026-08-25T21:38:06Z,2026-08,7,False,False,False,True,fix(audit): track deleteHistory removals with bounded concurrency
+2050,2026-08-05T21:25:11Z,2026-08,2,False,False,False,True,Release the retained read handle's write intents when an outstanding-iterator commit replays
+2045,2026-08-03T12:02:21Z,2026-08,2,False,False,False,False,"ci: temporarily pin Node 26 CI to 26.5.0 for harper#2025, with non-blocking canary"
+2044,2026-08-05T11:21:30Z,2026-08,21,False,True,True,True,"Honor storage.compression on upgraded databases, and let a deployment select the codec"
+2042,2026-08-06T20:33:29Z,2026-08,6,False,False,False,True,fix(docker): install harper from the packed tarball's own shrinkwrap
+2041,2026-08-01T02:50:16Z,2026-08,2,False,False,False,True,fix(windows): ride out longer AV holds in atomicWriteFile's rename retry
+2040,2026-08-25T12:57:21Z,2026-08,15,False,True,True,True,perf(mqtt): share payload and QoS 0 packet encoding across topic subscribers
+2039,2026-08-26T16:24:04Z,2026-08,2,False,False,False,True,feat(server): let liveSubscriptionAuth revoke a single subscriber without ending its subscription
+2037,2026-08-01T00:12:51Z,2026-08,5,False,False,False,True,fix: Tolerate legacy storage.compression values when opening RocksDB databases
+2036,2026-08-01T02:49:01Z,2026-08,2,False,False,False,False,chore(deps): Update rocksdb-js to 2.6.1
+2035,2026-08-03T14:14:31Z,2026-08,5,False,False,False,True,"fix: make UDS mirror cleanup ownership-aware, not path-based"
+2030,2026-08-07T04:22:36Z,2026-08,5,False,False,False,True,fix: release the context's transaction back-reference on completion
+2029,2026-08-25T21:36:15Z,2026-08,2,False,True,True,False,fix(test): stop using fetch() in ttlResetOnWrite / static-cache-headers (Node 26.5.1 flakiness)
+2024,2026-08-14T01:00:56Z,2026-08,9,False,False,False,True,fix(threads): worker threads must inherit the parent's in-process config overrides
+2023,2026-08-04T11:40:05Z,2026-08,1,False,False,False,False,test(uws): fix macOS EPIPE flake in the UDS 413 test
+2022,2026-08-14T01:00:13Z,2026-08,1,False,False,False,True,verifyMigratedDatabase: close opened handles when a later open fails
+2009,2026-08-03T12:14:26Z,2026-08,3,False,False,False,True,"Track every outstanding write commit, not just one per thread"
+1995,2026-08-06T20:06:19Z,2026-08,2,False,False,False,True,fix(resources): drain in-flight source-populated cache writes before dropTable() drops column families
+1990,2026-08-04T11:40:23Z,2026-08,6,False,False,False,True,fix(storage): derive storage stats from quota-status.json when available
+1987,2026-08-04T15:51:45Z,2026-08,12,False,True,True,False,test(database): promote 3 QA destructive-operation integrity anchors
+1972,2026-08-04T11:40:49Z,2026-08,11,False,True,True,False,test(server): promote 3 QA server-layer contract anchors
+1969,2026-08-04T18:09:16Z,2026-08,3,False,False,False,False,chore(ci): bump ai-review-prompts to 224c2ad (#80 week-of-07-20 calibration)
+1952,2026-08-21T04:38:01Z,2026-08,9,False,False,False,True,fix(status): count all live worker threads for get_status cross-thread aggregation
+1936,2026-08-04T11:39:44Z,2026-08,26,False,True,True,True,fix(components): preserve entry events across deploy scans
+1916,2026-08-19T23:11:00Z,2026-08,24,False,True,True,False,test(database): promote 6 QA eviction/removal/reclaim data-integrity anchors
+1904,2026-08-18T11:34:38Z,2026-08,2,False,True,True,False,refactor(integrationTests): extract waitForRouteReady from restartHttpWorkers
+1851,2026-08-17T21:37:40Z,2026-08,12,False,False,False,True,feat(cli): `harper deploy setup=true` — seal a durable deploy credential client-side
+1850,2026-08-14T17:47:56Z,2026-08,2,False,False,False,True,feat(cli): `harper deploy by_ref=true` — deploy by git+https reference (+ credential)
+1616,2026-08-04T19:27:23Z,2026-08,35,False,True,True,True,"feat(models): OpenAI-compatible /v1/* gateway as built-in Resources (#631, Phase 4 of #510)"
+2922,2026-09-30T02:40:15Z,2026-09,2,False,False,False,False,Fix the intermittent LMDB failure in the subscribed-record read-count test
+2921,2026-09-30T01:24:19Z,2026-09,4,False,False,False,True,Read a subscribed record once per update instead of once per subscriber
+2919,2026-09-30T03:50:41Z,2026-09,2,False,False,False,True,"Keep whenThreadsStarted typed as a Promise, and every manageThreads export importable by name from ES modules"
+2916,2026-09-29T20:27:43Z,2026-09,3,False,False,False,True,Make a transaction's commit wait for the long-transaction monitor's force-commit instead of acking in-flight writes
+2915,2026-09-30T03:57:38Z,2026-09,4,False,True,True,False,Test documented full-text examples
+2914,2026-09-30T01:30:06Z,2026-09,14,False,False,False,True,"Give restored and copied databases a new generation, and end subscriptions from before the copy instead of resuming them"
+2913,2026-09-29T20:28:56Z,2026-09,6,False,True,True,True,Keep delivering each record to a key's other subscribers when one subscription ends mid-delivery
+2911,2026-09-29T17:01:59Z,2026-09,2,False,False,False,True,Add unit tests for the per-database analytics metric writers
+2910,2026-09-29T19:51:16Z,2026-09,2,False,True,True,False,Harden three weak assertions in eviction/blob-restart integration tests
+2909,2026-09-29T17:34:49Z,2026-09,1,False,False,False,False,Keep the #2062 multi-store txn-tracking tests from timing the runner's real native commit
+2905,2026-09-29T17:48:00Z,2026-09,4,False,True,True,False,Pin that MCP lists and dispatches only the verbs a Resource implements
+2904,2026-09-29T20:59:41Z,2026-09,4,False,False,False,True,Emit Table.d.ts on TypeScript 6+ by giving makeTable() an explicit public type
+2900,2026-09-29T13:14:13Z,2026-09,4,False,False,False,True,Abort a uWS HTTP response whose stream fails instead of completing it as a truncated 200
+2899,2026-09-29T04:44:00Z,2026-09,9,False,True,True,True,"Compress buffer responses at the fast brotli quality the stream path uses, and compress every serializeStream return form without failing"
+2897,2026-09-29T13:11:00Z,2026-09,15,False,True,True,True,"Keep the release a deploy replaces, so deployment_id can return to it, and let a retried activation converge"
+2896,2026-09-28T19:05:43Z,2026-09,7,False,False,False,True,"Fix main's three recurring Unit Test flakes, including a worker's parentPort close announced to siblings as the main thread's exit"
+2895,2026-09-28T19:01:54Z,2026-09,3,False,True,True,False,Cover delete event types on SSE and REST WebSocket subscriptions
+2894,2026-09-29T17:19:26Z,2026-09,3,False,False,False,True,ci(review-coverage): count a Review-Coverage footer only when the pre-push helper could have written it
+2893,2026-09-28T20:42:36Z,2026-09,7,False,True,True,True,"Deploys no longer fail on cluster peers when a dependency extends a built-in as it loads, such as reflect-metadata"
+2892,2026-09-28T16:58:57Z,2026-09,1,False,False,False,False,"Test the `harper agent` CLI: connection and credential resolution, argument parsing, and the approval-hang guard"
+2890,2026-09-28T17:08:03Z,2026-09,8,False,True,True,True,Identify a spawned Windows process tree by lifetime so a recycled PID cannot wedge its termination
+2888,2026-09-28T18:54:48Z,2026-09,1,False,False,False,False,Scope gitSSHMaterialization unit test's temp-dir sweep to a private directory
+2887,2026-09-28T16:57:28Z,2026-09,2,False,False,False,False,"Give the superseded-subscription suite its own database, and re-size the LMDB unit step cap, to get main's Unit Test green"
+2886,2026-09-29T15:46:29Z,2026-09,10,False,False,False,True,"Fail release packaging on TypeScript errors, and hold the compiler off 6.0.x–7.0.x"
+2884,2026-09-28T15:50:21Z,2026-09,2,False,False,False,True,fix(components): scope the handleApplication lock per application
+2882,2026-09-29T11:30:34Z,2026-09,3,False,False,False,True,Warn when a worker's event-loop utilization stays pinned
+2880,2026-09-28T14:12:02Z,2026-09,4,False,False,False,True,Keep the Docker image shrinkwrap check meaningful after dependency updates
+2879,2026-09-28T13:37:07Z,2026-09,1,False,False,False,False,"Prune resources/DESIGN.md back under its 1000-line budget, fixing main's design-doc lint"
+2878,2026-09-28T13:17:58Z,2026-09,1,False,False,False,False,Deflake the staggered-cascade transaction-monitor test on slow-disk CI runners
+2877,2026-09-28T12:44:35Z,2026-09,10,False,False,False,False,fix(deps): update all non-major dependencies
+2876,2026-09-28T12:05:58Z,2026-09,1,False,False,False,False,chore(config): migrate Renovate config
+2874,2026-09-27T21:09:29Z,2026-09,3,False,False,False,True,Fix durable subscriptions skipping records when catch-up replay stops early
+2855,2026-09-29T04:42:14Z,2026-09,48,False,True,True,True,Complete native full-text indexing and search
+2848,2026-09-27T21:32:25Z,2026-09,51,False,True,True,True,"Complete `models.decide`: likelihood scoring, the `@decide` directive, durable decisions with outcomes, no-match scores, and schema-enforcement and scoring-limit gates"
+2836,2026-09-26T15:45:13Z,2026-09,20,False,False,False,True,"Add `models.decide`, a third model primitive for typed decisions with probabilities"
+2835,2026-09-28T11:52:06Z,2026-09,18,False,True,True,True,"Declare the certificate verification tables on every node with record-metadata expiry, and close three ways a revoked client certificate was accepted"
+2828,2026-09-27T22:12:07Z,2026-09,8,False,True,True,True,"Deflake the EAV burst probe's request-queue 503 and the ssh deploy-key observer, and log when the HTTP request queue sheds"
+2826,2026-09-27T22:13:07Z,2026-09,2,False,False,False,False,Commit the previousCount scan-bound fixture in batches so the LMDB unit step fits its 4-minute cap
+2825,2026-09-25T20:26:18Z,2026-09,4,False,False,False,True,Fix unbounded recursion (RangeError) when a conflict retry re-saves a lock-protected write on an immediate transaction
+2823,2026-09-28T11:43:12Z,2026-09,13,False,True,True,True,Expire OIDC replay records on every node
+2820,2026-09-28T03:52:34Z,2026-09,4,False,True,True,False,"Test that same-transaction writes to one record build on each other, on LMDB and RocksDB"
+2818,2026-09-27T21:37:13Z,2026-09,9,False,False,False,True,Stop a replicated deploy of a component named harper from deadlocking its peers
+2817,2026-09-27T21:38:23Z,2026-09,6,False,True,True,True,"Show why a deploy was refused instead of ""Deploy completed (no result payload)"""
+2816,2026-09-28T11:42:40Z,2026-09,12,False,True,True,True,"Log why an operation was refused, once, instead of [object Object] twice"
+2812,2026-09-25T17:44:57Z,2026-09,2,False,False,False,False,"Fix two main regressions from harper#2800: index its design note, and close a leaked test transaction"
+2809,2026-09-25T17:05:32Z,2026-09,9,False,True,True,True,Let role allowlists grant deploy_component and 19 other refused operations; stop granting catchup
+2808,2026-09-28T13:10:48Z,2026-09,3,False,False,False,True,Audit log cleanup no longer records a failed removal as removed
+2805,2026-09-25T17:03:18Z,2026-09,4,False,False,False,True,"Convert crossThread's remaining wall-clock tests to the setImmediate-sentinel pattern, add three clarity comments"
+2804,2026-09-25T16:48:27Z,2026-09,7,False,True,True,False,"Test that SSH deploy keys reach git only as a transient file, and require sshd for it in CI"
+2803,2026-09-25T18:10:27Z,2026-09,3,False,False,False,True,Retry a lock claim read that Windows refuses mid-unlink instead of failing the acquire
+2801,2026-09-25T18:31:03Z,2026-09,11,False,True,True,True,"Refuse root-config changes the config environment would undo, remove a dropped component's entry last, and release a scanner-held lock ticket"
+2800,2026-09-25T16:45:46Z,2026-09,6,False,False,False,True,"Keep a replicated transaction to one connection and one origin log, and hold a failed one for replay"
+2789,2026-09-25T13:50:32Z,2026-09,18,False,True,True,True,Publish a component's root config entry only once its deploy goes live
+2788,2026-09-25T12:59:34Z,2026-09,4,False,False,False,True,fix(replay): replay each native commit separately so boot recovery can't run out of heap
+2787,2026-09-25T13:02:32Z,2026-09,4,False,False,False,True,Stop creating empty transaction logs named after unmapped node ids
+2785,2026-09-24T21:17:08Z,2026-09,2,False,False,False,False,"test: bound the far-future audit floor assertion by the clamp's inputs, not the wall clock"
+2784,2026-09-24T21:30:37Z,2026-09,12,False,True,True,True,fix(components): bound how long startup waits for component installs
+2783,2026-09-25T17:08:05Z,2026-09,8,False,True,True,True,"Start secret custody before boot-time application installs, so sealed SSH keys and stored registry credentials work at startup"
+2782,2026-09-29T00:03:38Z,2026-09,3,False,False,False,False,"Add regression tests for the combined @relationship(from:, to:) directive"
+2781,2026-09-24T16:41:23Z,2026-09,10,False,False,False,False,test: exclude worker-thread fixtures from test:unit:server's spec glob
+2776,2026-09-24T21:13:34Z,2026-09,42,False,True,True,True,"Read users and roles through the record cache, ending user-cache refresh storms"
+2773,2026-09-24T03:18:17Z,2026-09,6,False,False,False,True,Resolve author_association live for review-coverage
+2770,2026-09-24T21:18:54Z,2026-09,5,False,False,False,False,ci: fail the build step on TypeScript errors
+2769,2026-09-28T16:59:56Z,2026-09,1,False,True,False,False,docs(integration-tests): warn against running suites with Bun's own test runner
+2767,2026-09-25T18:31:43Z,2026-09,11,False,True,True,True,Skip superseded subscription updates during catch-up
+2766,2026-09-25T13:59:20Z,2026-09,4,False,False,False,True,Close a shared LMDB environment once instead of closing its dbis after another alias freed it
+2764,2026-09-23T12:03:28Z,2026-09,1,False,False,False,False,style: prettier-format serverUtilities call-site redaction test (fix main Format Check)
+2761,2026-09-24T11:07:05Z,2026-09,5,False,False,False,True,Stop re-logging a replicated delete that is re-delivered onto its own tombstone
+2759,2026-09-23T12:12:41Z,2026-09,1,False,False,False,False,chore: sync package-lock.json with package.json
+2758,2026-09-25T18:11:31Z,2026-09,2,False,False,False,False,Fix flaky derived-index coverage tests by holding the native barrier until the transaction monitor acts
+2753,2026-09-24T16:30:46Z,2026-09,7,False,True,True,True,Stop MCP tool discovery advertising operations that dispatch denies
+2751,2026-09-23T11:22:49Z,2026-09,1,False,False,False,False,test: pin REST operation-log redaction at the processLocalTransaction call site
+2749,2026-09-23T21:19:19Z,2026-09,3,False,False,False,False,Move the update-attributes lock note out of the MCP design doc
+2745,2026-09-22T14:15:36Z,2026-09,1,False,False,False,False,Restore derived-index review coverage
+2742,2026-09-28T17:13:05Z,2026-09,4,False,True,True,False,Promote the QA-759 cache-revalidation MQTT publish spec into the integration suite
+2741,2026-09-22T14:16:14Z,2026-09,4,False,False,False,True,Prevent SSH private keys from reaching operation logs
+2728,2026-09-22T02:08:24Z,2026-09,23,False,False,False,True,Partition DESIGN.md into per-directory design notes and index them from the root
+2725,2026-09-28T13:43:24Z,2026-09,1,False,False,False,False,ci(deps): fail the rocksdb-js bump on a lockfile that cannot be installed
+2724,2026-09-22T02:51:17Z,2026-09,2,False,False,False,True,Keep logger.closeLogFile bound to the current file after a path change
+2723,2026-09-28T17:12:12Z,2026-09,19,False,True,True,False,"Promote four regression anchors for shipped fixes (#1887, #1906, #1970, blob reader supersession)"
+2722,2026-09-21T22:56:31Z,2026-09,2,False,False,False,False,Bump @harperfast/hnsw to 0.4.0
+2720,2026-09-21T23:51:26Z,2026-09,6,False,False,False,False,chore(deps): Update rocksdb-js to 2.10.0
+2717,2026-09-22T12:09:46Z,2026-09,21,False,True,True,True,Decide a rejected cookie session instead of rendering it as a raw error
+2702,2026-09-21T16:44:34Z,2026-09,1,False,False,False,False,Bound HNSW distance inversions on pinned graphs instead of a random draw
+2701,2026-09-21T13:40:23Z,2026-09,5,False,False,False,True,"Make the native HNSW plane's layer-0 neighbour cap a per-index option, defaulting to 64"
+2700,2026-09-21T16:59:13Z,2026-09,2,False,False,False,False,chore(deps): update dependency mocha to v12
+2699,2026-09-21T13:45:12Z,2026-09,2,False,False,False,False,Wait for the aggregate write in the analytics aggregation-cycle test instead of racing it
+2698,2026-09-21T06:11:28Z,2026-09,2,False,False,False,False,fix(deps): update dependency alasql to v4.19.1
+2692,2026-09-20T01:24:24Z,2026-09,4,False,False,False,True,Resume analytics aggregation from the last raw record it rolled up
+2691,2026-09-29T21:00:18Z,2026-09,7,False,False,False,True,"Answer a filtered vector search's indexed conditions from the index, instead of decoding a record at every visited node"
+2689,2026-09-19T04:27:09Z,2026-09,3,False,False,False,True,Fix an infinite loop in subscription broadcast when a record key starts with `/`
+2686,2026-09-22T21:34:19Z,2026-09,2,False,False,False,False,ci: bump ai-review-prompts pin to f811c3a (App-token log auth)
+2685,2026-09-18T20:19:16Z,2026-09,3,False,False,False,True,Classify an exhausted cluster lock wait from an answer a home actually gave
+2684,2026-09-18T23:18:07Z,2026-09,7,False,False,False,True,"Skip the out-of-order audit walk below the retention floor, and stop its head lookup fanning out across every transaction log"
+2683,2026-09-21T19:41:09Z,2026-09,3,False,False,False,True,Keep blob paths stable for aliased databases
+2680,2026-09-18T15:04:15Z,2026-09,1,False,True,True,False,Retry a TTL probe window the seed outlived instead of calling it NO-RESET
+2679,2026-09-18T14:41:50Z,2026-09,3,False,False,False,False,Split the resources unit suite into two CI steps so its budget stays spendable as the suite grows
+2678,2026-09-18T05:00:31Z,2026-09,1,False,False,False,False,Size the unit-test step budgets from measured runs and raise `Unit tests: resources` to 12 minutes
+2677,2026-09-18T02:13:21Z,2026-09,1,False,False,False,False,chore: sync package-lock.json with package.json
+2676,2026-09-18T12:51:06Z,2026-09,4,False,True,True,True,"Run a requested HNSW durability barrier during catch-up, not only when the queue drains"
+2675,2026-09-18T02:09:50Z,2026-09,6,False,False,False,True,Resolve post-ordering sort keys once per row; renew a multi-store chain's idle window at each native commit
+2673,2026-09-17T21:57:06Z,2026-09,1,False,False,False,False,Stabilize durable MQTT patch reconnect test
+2668,2026-09-17T17:47:18Z,2026-09,4,False,False,False,True,Tell authors the coverage footer is cumulative when the check fails
+2667,2026-09-17T21:42:29Z,2026-09,4,False,False,False,True,Record locks: relay a local lock() to the owner worker for threads.count > 1
+2665,2026-09-18T02:06:21Z,2026-09,7,False,True,False,True,Native HNSW queries rerank only the rows they return and resolve hits from keys stored in the plane
+2664,2026-09-17T14:18:42Z,2026-09,3,False,False,False,False,Stop node 26.9.0 from aborting the unit suite on an inspector exception
+2663,2026-09-17T03:30:41Z,2026-09,2,False,False,False,True,Record locks: let a node prove it has quiesced instead of waiting out the delegation lease
+2662,2026-09-17T04:33:23Z,2026-09,2,False,False,False,True,Keep an analytics sample recorded while its window is being flushed
+2661,2026-09-17T22:00:26Z,2026-09,1,False,False,False,True,Say what clears a deployment id whose claim was never named
+2658,2026-09-17T18:10:53Z,2026-09,17,False,True,True,True,Bound native HNSW lag and support waiting for prior writes
+2657,2026-09-18T01:47:52Z,2026-09,16,False,True,True,True,Default eligible HNSW indexes to native plane
+2656,2026-09-16T21:56:43Z,2026-09,1,False,False,False,False,Cover condition-driven delete against a request transaction's staged writes
+2654,2026-09-16T22:00:14Z,2026-09,1,False,False,False,False,Stabilize config socket path validation test
+2653,2026-09-16T18:54:07Z,2026-09,1,False,False,False,False,Fix stale draft release Slack link
+2651,2026-09-16T21:46:16Z,2026-09,1,False,False,False,False,Make cache source-error coverage deterministic
+2646,2026-09-29T15:35:31Z,2026-09,16,False,False,False,True,Refuse an engine-only restore over a database that still has blobs
+2645,2026-09-28T18:29:55Z,2026-09,6,False,False,False,True,Settle jobs left unfinished by a Harper process that is gone
+2644,2026-09-21T20:04:59Z,2026-09,3,False,False,False,True,Publish the restoring marker by rename so a torn write cannot unblock a half-purged database
+2630,2026-09-16T00:11:27Z,2026-09,6,False,False,False,True,Report replicated apply failures before consuming later events
+2627,2026-09-16T00:06:48Z,2026-09,8,False,False,False,True,Add the lockBarrier record-lock control entry as the recovery fence for successor freshness
+2626,2026-09-22T22:16:26Z,2026-09,15,False,False,False,True,Replace inquirer 8 and prompt with lazily-loaded @inquirer packages (−18MB installed)
+2621,2026-09-15T17:00:05Z,2026-09,4,False,False,False,True,Fix unsettled Table.get() when a cache source rejects with a non-writable error message
+2617,2026-09-15T14:21:00Z,2026-09,3,False,True,True,False,Pin the terminal harper-error frame in the two SSE anchors #2614 missed
+2616,2026-09-26T14:12:18Z,2026-09,62,False,False,False,True,Activate native full-text indexes with shared lifecycle coordination
+2615,2026-09-23T02:25:38Z,2026-09,7,False,False,False,True,Add @fullText schema declaration and validation
+2614,2026-09-15T11:50:22Z,2026-09,8,False,True,True,True,Return structured errors from streaming REST responses
+2613,2026-09-15T12:47:09Z,2026-09,7,False,False,False,True,Keep record-lock successors fresh across cross-node handoffs
+2612,2026-09-15T14:49:25Z,2026-09,2,False,False,False,True,Size describe record counts with a bounded estimate instead of a second full key scan
+2610,2026-09-18T20:39:37Z,2026-09,2,False,False,False,False,ci: bump ai-review-prompts pin to 28544a1 (calibration weeks 8/24 + 8/31)
+2609,2026-09-22T22:37:44Z,2026-09,12,False,False,False,True,Make @aws-sdk/client-s3 and lib-storage optional peers
+2605,2026-09-16T21:29:48Z,2026-09,14,False,True,True,True,Stage a component build with activate:false and deploy it later by deployment_id
+2604,2026-09-24T16:49:10Z,2026-09,9,False,True,True,True,Defer column-family reclamation behind generation-distinct table stores
+2600,2026-09-15T14:56:48Z,2026-09,4,False,False,False,True,Keep a job worker from disabling the rolling-restart throttle
+2597,2026-09-16T21:57:08Z,2026-09,4,False,True,True,False,Promote the QA-685 stalled-blob-upload blast-radius spec into the integration suite
+2596,2026-09-15T04:10:41Z,2026-09,1,False,False,False,False,Attribute the stuck-commit log assertions to the commit under test
+2595,2026-09-15T04:09:06Z,2026-09,1,False,False,False,False,test(logging): wait for the write before asserting on the rotated log
+2594,2026-09-22T12:04:54Z,2026-09,8,False,False,False,True,Require framing receipts for core-shared changes
+2592,2026-09-14T17:09:39Z,2026-09,1,False,False,False,False,Make integration dependency installs resilient to transient fetch failures
+2590,2026-09-14T16:50:57Z,2026-09,1,False,False,False,False,Attribute the getRecordCount entry-count spy to the call under test
+2589,2026-09-14T14:34:26Z,2026-09,3,False,False,False,False,chore(deps): Update rocksdb-js to 2.9.1
+2588,2026-09-14T16:50:27Z,2026-09,1,False,False,False,False,Split unit-test.yml's Run tests step into one step per suite
+2586,2026-09-14T13:43:12Z,2026-09,2,False,False,False,False,chore(deps): update dependency @harperfast/integration-testing to v1
+2585,2026-09-14T11:31:08Z,2026-09,3,False,True,True,True,Stop package_component packaging the Harper install through a loaded component's node_modules/harper
+2584,2026-09-13T19:43:23Z,2026-09,1,False,False,False,False,Stop the nightly perf benchmark failing on its alert-comment API call
+2583,2026-09-13T19:42:46Z,2026-09,1,False,True,True,False,Stabilize sub-second TTL counter integration coverage
+2579,2026-09-13T19:41:49Z,2026-09,1,False,False,False,False,Fix flaky outstanding-commit tracking unit test under concurrent analytics commits
+2578,2026-09-12T18:43:38Z,2026-09,2,False,False,False,True,Reject a supplied record root instead of the instance's staged changes
+2574,2026-09-12T03:49:14Z,2026-09,7,False,False,False,True,Temporarily take the derived-index runner lock without an unlock callback (rocksdb-js#848 workaround)
+2572,2026-09-11T22:00:44Z,2026-09,5,False,False,False,True,Honor install-script policy in custom component commands
+2571,2026-09-11T22:11:37Z,2026-09,1,False,False,False,False,Make subscription replay timing-independent
+2570,2026-09-11T22:32:42Z,2026-09,3,False,False,False,True,Retry the deploy activation swap through a transient rename lock
+2569,2026-09-21T16:34:43Z,2026-09,10,False,False,False,True,Add a full-text derived-index backend
+2567,2026-09-11T19:15:39Z,2026-09,17,False,False,False,True,Shared derived-index runtime for native backends
+2565,2026-09-11T22:37:28Z,2026-09,1,False,False,False,False,"Run the Docker image smoke test on release branches, not only main"
+2563,2026-09-11T13:23:29Z,2026-09,3,False,False,False,True,"Wait for every index write a backfill checkpoint covers, so a failed write cannot be skipped"
+2561,2026-09-11T22:39:10Z,2026-09,7,False,False,False,True,Preserve same-key write order for explicit saves
+2560,2026-09-10T10:57:39Z,2026-09,2,False,False,False,True,Keep shrinkwrap guard compatible with hoisted dependencies
+2557,2026-09-10T04:09:17Z,2026-09,1,False,False,False,False,Make long-lived chain-link active reporting tests deterministic
+2556,2026-09-10T04:40:01Z,2026-09,8,False,True,True,True,Keep active RocksDB scans alive during eviction
+2555,2026-09-10T03:32:52Z,2026-09,1,False,False,False,False,Restore the RocksDB musl lockfile entry
+2552,2026-09-11T22:37:42Z,2026-09,8,False,False,False,True,Enforce cross-model review coverage on AI-authored PRs
+2549,2026-09-09T20:37:32Z,2026-09,2,False,False,False,False,chore(deps): Update rocksdb-js to 2.9.0
+2545,2026-09-11T22:13:00Z,2026-09,10,False,True,True,False,test: promote three QA regression anchors (QA-716 / QA-627 / QA-681)
+2544,2026-09-13T23:57:04Z,2026-09,3,False,True,True,False,"test(database): pin the encoder write-path contract for NaN, ±Infinity and -0 (QA-432)"
+2543,2026-09-10T02:09:12Z,2026-09,10,False,False,False,True,Stamp isIndexing on the schema load path so no thread serves a partially built index (harper#2537)
+2539,2026-09-09T22:12:11Z,2026-09,3,False,False,False,True,"Index backfills resume from their checkpoint and yield the event loop, so large tables converge (harper#2536)"
+2531,2026-09-14T13:29:14Z,2026-09,5,False,True,True,True,Bound dormant staged builds per component with deployment.stagingRetention.maxCount
+2530,2026-09-08T17:05:45Z,2026-09,1,False,False,False,False,"Give the dual-clock audit suite a monotonic allocator for fabricated origin log keys, fixing the shared-key lookup flake"
+2529,2026-09-08T17:07:55Z,2026-09,4,False,True,True,False,Guard transaction-log space reclamation after restart
+2528,2026-09-14T04:19:08Z,2026-09,10,False,False,False,True,"Rebuild withNodeAdapter's response on a real Writable so Node middleware (Next.js, compression, send) runs against it"
+2526,2026-09-08T15:44:01Z,2026-09,5,False,True,True,True,"Fix LMDB partial-record history resolution broken by #2497 (harper#2275), hold the QA-701 409 probe's window open causally, and wait for MQTT deliveries instead of sampling 200ms"
+2524,2026-09-13T23:34:48Z,2026-09,43,False,True,True,True,feat(threads): run an isolated application in a dedicated worker thread
+2523,2026-09-09T12:55:01Z,2026-09,21,False,True,True,True,"feat(branches): declare tables into a branch through @table, ensureTable and defineTable"
+2521,2026-09-08T12:32:23Z,2026-09,7,False,False,False,True,Log a stuck worker's OS thread state when an ITC broadcast times out
+2517,2026-09-07T12:59:15Z,2026-09,6,False,False,False,True,feat(branches): remove an application's branched databases on drop_component
+2516,2026-09-08T15:54:21Z,2026-09,2,False,False,False,False,fix(deps): update dependency alasql to v4.19.0
+2515,2026-09-28T12:26:21Z,2026-09,6,False,False,False,False,fix(deps): update all non-major dependencies
+2502,2026-09-04T17:02:36Z,2026-09,2,False,True,True,False,"Document why a storage-oracle test must read a RocksDB checkpoint, not the live database directory"
+2501,2026-09-04T17:21:32Z,2026-09,5,False,False,False,True,Take install_node_modules off the npm registry so the Node 22 unit job stops timing out
+2499,2026-09-07T12:35:39Z,2026-09,4,False,False,False,True,Make an audit entry's field offsets independent of its previousVersion value (harper#2247)
+2498,2026-09-14T18:57:13Z,2026-09,12,False,False,False,True,Cluster record locks: amortized per-record ownership (Phase 1 of #483)
+2497,2026-09-07T12:50:41Z,2026-09,18,False,False,False,True,Expose record version and txnLogKey as separate audit clocks
+2493,2026-09-03T22:01:20Z,2026-09,4,False,True,True,True,"Return each record once from indexed array-element scans, before paging"
+2492,2026-09-03T22:06:06Z,2026-09,2,False,False,False,True,Stop the RocksDB WriteBufferManager from stalling every writer by default
+2488,2026-09-03T22:06:22Z,2026-09,3,False,True,True,False,test(mqtt): promote QA-649 MQTT connect wedge regression anchor
+2484,2026-09-09T05:10:24Z,2026-09,17,False,False,False,True,fix(sql): wire sql.engine/allowFullScan/maxSortRows/maxHashRows to real config
+2479,2026-09-03T03:33:30Z,2026-09,2,False,False,False,True,Guard the condition estimates that a zero RocksDB entry-count estimate turns into Infinity or a negative
+2475,2026-09-11T23:18:30Z,2026-09,18,False,True,True,True,Enforce logging.rotation.maxSize on the log write path instead of only on the 60-second audit tick
+2474,2026-09-02T22:57:35Z,2026-09,11,False,True,True,False,Prove the record-caching suites reach every HTTP worker instead of assuming it
+2473,2026-09-08T21:30:35Z,2026-09,10,False,False,False,True,Report the long-lived transaction holder behind a wedged commit
+2472,2026-09-03T15:30:26Z,2026-09,5,False,False,False,True,Stop discarding log_files_deleted and scanning audit symbol keys
+2468,2026-09-02T14:33:46Z,2026-09,2,False,False,False,False,Stop the lost-watch harness aborting the Windows unit job on an 8.3 short temp path
+2467,2026-09-03T23:14:00Z,2026-09,3,False,False,False,True,fix(logging): stop the no-config window dropping every log line
+2464,2026-09-02T17:18:46Z,2026-09,1,False,False,False,False,Format query-array-scoping test so the main Format Check passes again
+2462,2026-09-04T15:19:53Z,2026-09,15,False,True,True,True,Exclusive record locks: table.lock(id) serialized across worker threads (Phase 0 of #483)
+2461,2026-09-02T02:40:24Z,2026-09,5,False,False,False,True,Register the replication blob-gap escalation config keys
+2460,2026-09-02T23:02:02Z,2026-09,8,False,False,False,True,Opt-in deflate compression for file-backed blobs (harper#2443)
+2459,2026-09-02T17:16:01Z,2026-09,6,False,False,False,True,Bound a request-path commit's conflict retries to its queue-time budget
+2458,2026-09-14T16:30:28Z,2026-09,8,False,False,False,True,"Record a write-ahead audit retention floor, raised before every prune (infrastructure for #2448)"
+2457,2026-09-02T03:04:31Z,2026-09,10,False,True,True,True,"Reject mTLS clients whose revocation status cannot be checked under fail-closed, and recover the issuer from Harper's trusted CAs when the socket chain lacks it"
+2456,2026-09-03T22:48:10Z,2026-09,2,False,False,False,False,Reproduce the cross-worker drop_table race behind the blob lifecycle CI failures as a skipped unit test (blocked on rocksdb-js#806)
+2452,2026-09-02T22:58:08Z,2026-09,2,False,True,True,False,Give the #1854 RocksDB oracle a checkpoint it cannot race
+2449,2026-09-02T04:47:25Z,2026-09,4,False,True,True,False,test(database): promote QA-597 EAV blob type-drift regression anchor
+2442,2026-09-01T21:24:57Z,2026-09,1,False,False,False,False,fix(deps): dedupe nested msgpackr instance under rocksdb-js
+2437,2026-09-01T21:25:58Z,2026-09,2,False,False,False,False,Pin element-scoping semantics of queries over array-valued properties
+2432,2026-09-01T21:11:15Z,2026-09,12,False,True,True,True,Fail an invalid GraphQL schema on its parse error instead of gating every application for 30s
+2431,2026-09-04T17:20:37Z,2026-09,6,False,True,True,False,Promote two QA anchors: TLS cert-table swap reachability and the deployment payload operations
+2430,2026-09-11T19:16:47Z,2026-09,14,False,False,False,True,Native HNSW index: file-primary mmap graph as a backend on the shared derived-index runtime
+2429,2026-09-02T04:32:42Z,2026-09,1,False,True,True,False,Deflake the #1854 RocksDB oracle: reopen when a live compaction removes an SST mid-open
+2428,2026-09-01T04:48:14Z,2026-09,1,False,False,False,False,Deflake `Caching > Can load cached data` by driving cache expiry from the source instead of a 10ms TTL
+2427,2026-09-03T22:33:46Z,2026-09,6,False,True,True,False,Pin the SSE finite-generator completion contract with an integration regression anchor
+2426,2026-09-02T21:45:17Z,2026-09,6,False,False,False,True,"Give a branched database its own blob store, cloned with hard links"
+2425,2026-09-01T04:05:50Z,2026-09,2,False,False,False,False,Add oxlint/prettier ignore for deliberately-broken integration-test fixtures
+2419,2026-09-03T22:53:40Z,2026-09,26,False,True,True,True,Defer unrecognized app-port credential rejection until route ownership is known
+2385,2026-09-02T15:38:09Z,2026-09,5,False,False,False,False,ci: adopt ai-review-prompts #91 — reusable-owned cancellation + caller permissions ceilings
+2381,2026-09-01T21:26:52Z,2026-09,7,False,False,False,True,"Keep a table being created invisible to catalog scans on other threads, so replication can never announce a partial attribute list"
+2378,2026-09-02T03:49:01Z,2026-09,4,False,True,True,False,Unpin Node 26 in integration CI now that both regressions behind the pin are fixed
+2377,2026-09-09T13:35:37Z,2026-09,11,False,False,False,True,Hot reload the models config block when the config file changes
+2373,2026-09-10T02:16:34Z,2026-09,2,False,False,False,False,Make the HNSW routing test prove the graph and the descent are worth testing
+2366,2026-09-04T04:00:42Z,2026-09,3,False,False,False,False,Stop the terminal-shutdown harness from loading the whole app graph to test worker respawn
+2365,2026-09-01T18:53:26Z,2026-09,1,False,False,False,False,Scope AGENTS.md's Resource-override guidance to core and name the dispatch path
+2364,2026-09-02T04:35:30Z,2026-09,13,False,False,False,True,Stop a deleted watched path from raising an uncaught EPERM (Windows)
+2363,2026-09-01T04:53:52Z,2026-09,1,False,False,False,True,"Count a worker as replaced when its replacement is serving, not when it exits"
+2361,2026-09-01T19:11:01Z,2026-09,3,False,False,False,False,"ci: harden the Windows unit-test gate's glob, summary check, and timeout guard"
+2345,2026-09-02T14:35:31Z,2026-09,15,False,True,True,True,fix(deploy): build the replacement aside and validate it before the swap
+2338,2026-09-02T13:57:52Z,2026-09,11,False,True,True,True,Apply audit retention continuously to RocksDB transaction logs
+2299,2026-09-03T22:34:22Z,2026-09,14,False,False,False,True,"Isolate unit-test runs from the installed Harper root (per-PID system database, config, and logs)"
+2259,2026-09-10T01:10:42Z,2026-09,9,False,True,True,True,Fix multi-worker lost counter increments and stale reads when a resequenced write reuses a version
+2217,2026-09-11T14:43:56Z,2026-09,7,False,True,True,True,fix(security): authorize the invoked operation against the authenticated principal
+2191,2026-09-14T23:11:51Z,2026-09,24,False,False,False,True,fix(config): read root config synchronously and bound rename retries by wall clock
+2187,2026-09-16T12:21:14Z,2026-09,8,False,False,False,True,Use an options object for searchByIndex and the custom-index search() contract
+2147,2026-09-01T05:04:19Z,2026-09,9,False,True,True,True,feat(rest): total-count pagination via `Prefer: count=` (Content-Range)
+2129,2026-09-01T19:12:01Z,2026-09,9,False,True,True,True,Fix HTTP startup after pre-ready worker restart
+2126,2026-09-03T15:31:37Z,2026-09,4,False,True,True,False,test(database): end-to-end regression coverage for copy-db's blob store (#2048)
+2097,2026-09-14T15:42:17Z,2026-09,8,False,True,True,True,"Fix built-in array PUT: collection semantics, element dispatch, and batch atomicity"
+2087,2026-09-03T15:30:58Z,2026-09,6,False,True,True,True,fix(replay): fail-stop at a corrupt transaction-log frame and discard the transaction it truncated
+2047,2026-09-30T01:11:21Z,2026-09,18,False,False,False,True,Abort a request-scoped transaction promptly when its client disconnects
+1880,2026-09-01T04:02:51Z,2026-09,4,False,False,False,True,fix(logging): external/component loggers inherit main rotation config

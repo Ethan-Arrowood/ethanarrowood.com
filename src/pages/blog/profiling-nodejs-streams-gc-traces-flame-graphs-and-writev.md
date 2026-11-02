@@ -483,10 +483,10 @@ _writev(chunks: Array<{ chunk: unknown }>, callback: Callback): void {
 
 I instrumented `_writev` to report what it actually saw, and the batching is real: across the 10M numbers it was called 2,442 times with an average batch of **4,094** (right at the `highWaterMark`), plus the lone single `_write` that kicks off each cycle. Here is the run on the same slice, against the single-number writer:
 
-| pipeline                                        | wall time    | GC events | time in GC |
-| ----------------------------------------------- | ------------ | --------- | ---------- |
-| new transform → single-number writer            | 80,649 ms    | 397       | 184 ms     |
-| **new transform → `_writev` writer (hwm 4096)** | **1,452 ms** | 119       | 42 ms      |
+| pipeline | wall time | GC events | time in GC |
+| --- | --- | --- | --- |
+| new transform → single-number writer | 80,649 ms | 397 | 184 ms |
+| **new transform → `_writev` writer (hwm 4096)** | **1,452 ms** | 119 | 42 ms |
 
 80.6 seconds to **1.45 seconds, about 55x faster**, and `primeGenerator` can still feed it one prime at a time. The writer can batch without changing the producer.
 
