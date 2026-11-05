@@ -17,7 +17,7 @@
     }
 
     /* Slightly smaller slide titles (dais.css sets 4.6cqi) to reclaim vertical
-       space. Doesn't touch .fit titles or section dividers — those are more
+       space. Doesn't touch .fit titles or section dividers; those are more
        specific. */
     .dais h2 { font-size: 4cqi; margin-block-end: 0.3em; }
 
@@ -46,7 +46,7 @@
       width: calc(var(--pct) * 1%);
     }
 
-    /* The measured optimum is "good" — green, not the deck's blue accent, so it
+    /* The measured optimum is "good": green, not the deck's blue accent, so it
        reads as a positive marker against the orange "too far" rows. Defined here
        with a light/print fallback since the theme has no green of its own. */
     :root { --deck-good: #5fd68a; }
@@ -259,7 +259,7 @@
 
     /* Black-box analogy: inputs you control flow into a sealed application box,
        observable outputs flow out; the internals are deliberately opaque. A
-       five-column grid — in · arrow · box · arrow · out — centered on screen. */
+       five-column grid (in · arrow · box · arrow · out) centered on screen. */
     #box-analogy .blackbox {
       display: grid;
       grid-template-columns: 1fr auto 1.15fr auto 1fr;
@@ -363,7 +363,7 @@
     }
 
     /* Four questions that each complete the slide's "How do we…" title. Not a
-       list — four large lines that reveal one after another, no number or
+       list: four large lines that reveal one after another, no number or
        bullet, each hanging off the title. The operative concept in every line
        carries the accent so the four scopes read at a glance. */
     #constraints .questions {
@@ -394,7 +394,7 @@
     #the-trick .dim { color: var(--dais-muted); }
 
     /* Closing slide: photo centered above the sign-off. The image is already
-       square, so height:auto shows it whole — no object-fit, no crop. Stacked
+       square, so height:auto shows it whole, with no object-fit, no crop. Stacked
        (not side-by-side) so the full URLs get the slide's whole width and the
        text can be large. */
     #thanks .me {
@@ -783,7 +783,7 @@
       translate: 0 0.04em;   /* optical centering against the text baseline */
     }
 
-    /* The footer is chrome, not slide content — hide it wherever the framework
+    /* The footer is chrome, not slide content. Hide it wherever the framework
        hides its own nav dots: overview mode and print. */
     body:has(.dais-overview-toggle:checked) .deck-footer {
       display: none;
@@ -796,7 +796,7 @@
     /* On screen, position is already shown three ways (top counter, nav dots,
        and the footer), so the framework's per-slide corner number is redundant
        and would collide with the footer's event label on the right. Suppress it
-       on screen only — print keeps it, since there the footer and dots are gone. */
+       on screen only. Print keeps it, since there the footer and dots are gone. */
     @media screen {
       .dais > section::after { content: none; }
     }
@@ -808,7 +808,7 @@
     <label><input type="checkbox" class="dais-overview-toggle"> Overview</label>
     <label><input type="checkbox" class="dais-notes-toggle"> Notes</label>
     <output class="dais-counter"></output>
-    <output class="dais-timer" data-dais-limit="30" title="Presenter timer — click or press T to pause"></output>
+    <output class="dais-timer" data-dais-limit="30" title="Presenter timer: click or press T to pause"></output>
   </nav>
 
   <div class="dais-progress" aria-hidden="true"></div>
@@ -943,7 +943,7 @@
       <div class="hero">
         <span class="n">7.5 min</span>
         <p>median test step</p>
-        <p class="muted">778 successful runs, May to Jun 2026</p>
+        <p class="muted">778 successful test steps, May to Jun 2026</p>
       </div>
       <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-test-step-time">Data and method</a></p>
       <aside class="notes">
@@ -956,7 +956,7 @@
       <div class="hbars">
         <b>Test step</b> <span><i style="--pct: 100"></i><em>7.5 min</em></span>
         <b>Hard-coded waits</b> <span><i class="bad" style="--pct: 86.7"></i><em>6.5 min</em></span>
-        <b>After removing sleeps</b> <span><i class="good" style="--pct: 74.7"></i><em>5.6 min</em></span>
+        <b>After replacing restart sleeps</b> <span><i class="good" style="--pct: 74.7"></i><em>5.6 min</em></span>
       </div>
       <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-test-step-time">Data and method</a></p>
       <aside class="notes">
@@ -979,7 +979,7 @@
 
     <section class="slide divider" id="part-task">
       <h2>The goal</h2>
-      <p>Every test gets its own Harper</p>
+      <p>Every test file gets its own Harper</p>
     </section>
 
     <section class="slide" id="who-for">
@@ -994,7 +994,7 @@
     </section>
 
     <section class="slide" id="test-needs">
-      <h2>Start from what one test needs</h2>
+      <h2>Start from what one test file needs</h2>
       <ul class="lines reveal">
         <li>Its own Harper process</li>
         <li>Its own data directory</li>
@@ -1150,7 +1150,7 @@
         <li>One less dependency to manage</li>
         <li>Simple concurrency model to architect around</li>
         <li>Dogfood the new API</li>
-        <li>Still planning to build agnostic API to work with other runners</li>
+        <li>Plan for a runner-agnostic API that works with other runners</li>
       </ul>
       <p class="small muted">Tradeoff: it ties the first version to one runner. A runner-agnostic lifecycle API offsets that.</p>
     </section>
@@ -1188,7 +1188,7 @@
       <h2>Node's default concurrency is built for cheap tests</h2>
       <div class="body">
         <pre><code><span>node --test --test-concurrency</span></code></pre>
-        <pre><code>os.<span class="tok-fn">availableParallelism</span>() <span class="tok-comment">// 12 on my laptop</span></code></pre>
+        <pre><code>os.<span class="tok-fn">availableParallelism</span>() - <span class="tok-number">1</span> <span class="tok-comment">// 11 on my laptop</span></code></pre>
         <p>If each test process spawns an application process, we realistically only have half the available parallelism.</p>
         <p>But computers are really good at doing multiple things at once.</p>
       </div>
@@ -1276,13 +1276,13 @@
           <tr><td>10</td><td class="num">3,534</td><td class="num">654</td><td class="num" data-hi="b1">5,339</td><td class="num">5,466</td></tr>
         </tbody>
       </table>
-      <p class="step" data-step="1">p95 at concurrency 10 (<strong>5,339</strong>) is worse than a <em>typical</em> run at 4 (<strong>3,904</strong>) <br> 2.5&times; the processes for worse overall performance.</p>
+      <p class="step" data-step="1">At 10, the median is 9.5% faster than at 4, but the p95 is 14.9% slower (<strong>5,339</strong> vs. <strong>4,648</strong>) <br> 2.5&times; the concurrency for a slower tail.</p>
       <aside class="notes"></aside>
     </section>
 
     <section class="slide" id="the-default-that-shipped">
       <h2>Calculated default</h2>
-      <p class="lead">When each test spawns its own application process, the ideal concurrency is <br><strong>half the available parallelism, plus one</strong></p>
+      <p class="lead">When each test file starts its own application process, a good default is <br><strong>half the available parallelism, plus one</strong></p>
       <pre><code>concurrency = <span class="tok-fn">floor</span>(availableParallelism / <span class="tok-number">2</span>) + <span class="tok-number">1</span>
             = <span class="tok-fn">floor</span>(<span class="tok-number">12</span> / <span class="tok-number">2</span>) + <span class="tok-number">1</span>
             = <span class="tok-number">7</span>   <span class="tok-comment">// the measured optimum</span></code></pre>
@@ -1324,7 +1324,7 @@
 
 <span class="tok-keyword">const</span> port = <span class="tok-keyword">await</span> <span class="tok-fn">getPort</span>();
 <span class="tok-keyword">const</span> harper = <span class="tok-keyword">await</span> <span class="tok-fn">createHarper</span>(port);   <span class="tok-comment">// ← nothing reserved it in between</span></code></pre>
-      <p>Between the <strong>release</strong> and the <strong>reuse</strong>, the OS can hand that port to any other process &mdash; especially with many test processes racing at once.</p>
+      <p>Between the <strong>release</strong> and the <strong>reuse</strong>, the OS can hand that port to any other process, especially with many test processes racing at once.</p>
       <aside class="notes"></aside>
     </section>
 
@@ -1360,7 +1360,7 @@ test/application 3 → <span class="tok-string">http://127.0.0.4:9925</span></co
         </tbody>
       </table>
       <aside class="notes">
-        Windows routes all of 127.0.0.0/8 to loopback already: harper's Windows CI shards run with no alias setup. The integration-testing README still says Windows needs setup; that's worth fixing upstream.
+        Windows routes all of 127.0.0.0/8 to loopback already: harper's Windows CI shards run with no alias setup. The integration-testing README still says Windows needs setup; my PR HarperFast/integration-testing #43 fixes that and is still open.
       </aside>
     </section>
 
@@ -1420,7 +1420,7 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
 
     <section class="slide" id="lock">
       <h2>Cross-process mutex to avoid conflicts</h2>
-      <pre><code><span class="tok-comment">// 'wx' fails if the file already exists — atomically</span>
+      <pre><code><span class="tok-comment">// 'wx' fails atomically if the file already exists</span>
 <span class="tok-keyword">const</span> handle = <span class="tok-keyword">await</span> <span class="tok-fn">open</span>(LOCK_PATH, <span class="tok-string">'wx'</span>);
 <span class="tok-keyword">await</span> handle.<span class="tok-fn">writeFile</span>(token);   <span class="tok-comment">// we hold the lock</span>
 <span class="tok-keyword">await</span> handle.<span class="tok-fn">close</span>();</code></pre>
@@ -1434,9 +1434,9 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
       <h2>Crashed tests would leak addresses forever</h2>
       <pre><code><span class="tok-comment">// signal 0 checks liveness without signalling</span>
 <span class="tok-keyword">try</span> {
-  process.<span class="tok-fn">kill</span>(pid, <span class="tok-number">0</span>);       <span class="tok-comment">// alive — leave it allocated</span>
+  process.<span class="tok-fn">kill</span>(pid, <span class="tok-number">0</span>);       <span class="tok-comment">// alive: leave it allocated</span>
 } <span class="tok-keyword">catch</span> {
-  loopbackPool[index] = <span class="tok-keyword">null</span>;  <span class="tok-comment">// dead — reclaim it</span>
+  loopbackPool[index] = <span class="tok-keyword">null</span>;  <span class="tok-comment">// dead: reclaim it</span>
 }</code></pre>
       <p class="small muted">A <kbd>Ctrl</kbd>+<kbd>C</kbd> mid-run doesn't break the pool</p>
       <aside class="notes">
@@ -1552,9 +1552,9 @@ strategy:
     shard: [<span class="tok-number">1</span>, <span class="tok-number">2</span>, <span class="tok-number">3</span>, <span class="tok-number">4</span>]
 steps:
   - run: node --test --test-shard=${{ matrix.shard }}/<span class="tok-number">4</span></code></pre>
-      <p class="small muted"><code>--test-shard=1/3</code> always runs the same group of tests, on any machine <br><a href="https://github.com/HarperFast/harper/blob/main/.github/workflows/integration-tests.yml">https://github.com/HarperFast/harper/blob/main/.github/workflows/integration-tests.yml</a></p>
+      <p class="small muted"><code>--test-shard=1/4</code> always runs the same group of tests, on any machine <br><a href="https://github.com/HarperFast/harper/blob/main/.github/workflows/integration-tests.yml">https://github.com/HarperFast/harper/blob/main/.github/workflows/integration-tests.yml</a></p>
       <aside class="notes">
-        node:test also exposes this programmatically: run({ shard: { index, total } }). The groupings are deterministic — shard 1/3 is the same set of files on every machine — so a flake on one shard is reproducible. Harper now runs six shards per configuration.
+        node:test also exposes this programmatically: run({ shard: { index, total } }). The groupings are deterministic (shard 1/4 is the same set of files on every machine), so a flake on one shard is reproducible. Harper now runs six shards per configuration.
       </aside>
     </section>
 
@@ -1618,7 +1618,7 @@ steps:
       </div>
       <p class="src">Found and fixed by Kris Zyp · integration-testing #21 · July 2026</p>
       <aside class="notes">
-        A /32 is a host netmask. Each alias claims one address, so the subnet claims no longer overlap. The addresses still loop back. Same number of aliases, same isolation. [Step 1] This comparison used 254 aliases on the same macOS machine in the same run. With /8, mDNSResponder measured about 65% CPU and 85 packets over eight seconds on UDP 5353. With /32, about zero CPU and five packets, the observed floor. One measurement, not a cross-machine benchmark. The setup script removes each existing alias before adding it, so re-running it converts old /8 setups to /32. Next: the addresses are configured. How do we assign them to test processes without handing out the same address twice? Source: HarperFast/integration-testing PR #21, Kris Zyp, July 2026.
+        A /32 is a host netmask. Each alias claims one address, so the subnet claims no longer overlap. The addresses still loop back. Same number of aliases, same isolation. [Step 1] This comparison used 254 aliases on the same macOS machine in the same run. With /8, mDNSResponder measured about 65% CPU and 85 packets over eight seconds on UDP 5353. With /32, about zero CPU and five packets, the observed floor. One measurement, not a cross-machine benchmark. The setup script removes each existing alias before adding it, so re-running it converts old /8 setups to /32. Source: HarperFast/integration-testing PR #21, Kris Zyp, July 2026.
       </aside>
     </section>
 
@@ -1643,7 +1643,7 @@ steps:
 <span class="tok-keyword">if</span> (port) <span class="tok-keyword">throw new</span> <span class="tok-type">ForeignListenerError</span>(address, port);</code></pre>
       <p class="src">Dawson Toth · integration-testing #40 · October 2026</p>
       <aside class="notes">
-        Added Sep 2026. The foreign process gets the node's connections whenever the node has no listener of its own: while it starts, while HTTP workers restart, and after teardown. Keep-alive connections then stay with it, so a suite fails, or passes, against the wrong server. Linux refuses the exclusive bind, so it skips this probe. Set HARPER_INTEGRATION_TEST_ALLOW_FOREIGN_LISTENERS=1 to turn the error into a warning.
+        Added Oct 2026. The foreign process gets the node's connections whenever the node has no listener of its own: while it starts, while HTTP workers restart, and after teardown. Keep-alive connections then stay with it, so a suite fails, or passes, against the wrong server. Linux refuses the exclusive bind, so it skips this probe. Set HARPER_INTEGRATION_TEST_ALLOW_FOREIGN_LISTENERS=1 to turn the error into a warning.
       </aside>
     </section>
 
@@ -1652,7 +1652,7 @@ steps:
       <pre><code><span class="tok-keyword">await</span> <span class="tok-fn">writeFile</span>(pendingPath, JSON.<span class="tok-fn">stringify</span>(pool));
 <span class="tok-keyword">await</span> <span class="tok-fn">assertLockHeld</span>(token);          <span class="tok-comment">// still ours?</span>
 <span class="tok-keyword">await</span> <span class="tok-fn">rename</span>(pendingPath, POOL_PATH);  <span class="tok-comment">// atomic publish</span></code></pre>
-      <p>If a write outlasts the stale timeout, another process takes the lock. The token check stops the old writer from overwriting the new claim.</p>
+      <p>If a write outlasts the stale timeout, another process takes the lock. The token check narrows the window where the old writer could overwrite the new claim.</p>
       <p class="src">Kris Zyp · integration-testing #32 and #33 · October 2026</p>
       <aside class="notes">
         Added Oct 2026 (integration-testing #32 and #33). Writes go to a temp file and are published by rename, so readers never see a torn file. On a lost lock the operation retries from the current pool state, up to 3 times. An unreadable pool file is quarantined for 6 minutes before it's reset, so in-flight reservations aren't wiped. The check narrows the race; it doesn't close it completely.
@@ -1742,6 +1742,7 @@ steps:
       <div class="hero">
         <span class="n">2,632 tests</span>
         <p>starting 421 Harper instances</p>
+        <p class="muted">six Linux Node.js 24 shards, Oct 21, 2026</p>
       </div>
       <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#tests-and-instances-per-run">Data and method</a></p>
       <aside class="notes">
@@ -1755,6 +1756,7 @@ steps:
         <b>Summed suite time</b> <span><i style="--pct: 100"></i><em>74.4 min</em></span>
         <b>Slowest shard</b> <span><i class="good" style="--pct: 7.3"></i><em>5.4 min</em></span>
       </div>
+      <p class="small muted">Summed while files ran concurrently, so not a serial baseline</p>
       <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#summed-suite-time-vs-slowest-shard">Data and method</a></p>
       <aside class="notes">
         A 13.8x ratio. 74.4 min is the sum of top-level suite durations on the six Linux Node.js 24 shards of that run. Those durations were measured while files ran concurrently, so they aren't a serial baseline; this shows how much work overlaps, not a measured speedup. Each shard runs three files at once (floor(4 / 2) + 1 on a 4-vCPU runner) across six shards.
@@ -1762,7 +1764,7 @@ steps:
     </section>
 
     <section class="slide" id="ci-matrix">
-      <h2>On every platform we support</h2>
+      <h2>On every platform we test in CI</h2>
       <div class="hero">
         <span class="n">36 jobs</span>
         <p>Node 22, 24, 26, Bun, Windows, and uWS</p>
@@ -1917,7 +1919,7 @@ steps:
     <section class="slide" id="ci-usage">
       <h2>And CI runs them all the time</h2>
       <p class="small muted">Runs of harper's integration test workflow, by month</p>
-      <p class="legend"><span style="--swatch: var(--dais-muted)">Before the port finished (Jun 9)</span><span style="--swatch: var(--dais-accent)">After</span></p>
+      <p class="legend"><span style="--swatch: var(--dais-muted)">Through May</span><span style="--swatch: var(--dais-accent)">From June (the port finished Jun 9)</span></p>
       <div class="colchart" style="--max: 1700" role="img" aria-label="Integration test CI runs per month: Dec 68, Jan 132, Feb 213, Mar 446, Apr 493, May 1,042, Jun 1,356, Jul 1,374, Aug 1,186, Sep 1,622">
         <div><i style="--v: 68"><span>68</span></i></div>
         <div><i style="--v: 132"><span>132</span></i></div>
