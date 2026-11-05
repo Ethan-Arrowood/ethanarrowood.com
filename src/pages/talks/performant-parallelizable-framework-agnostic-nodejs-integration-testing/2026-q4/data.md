@@ -6,7 +6,7 @@ editDate: 2026-10-22T12:00:00-06:00
 description: "How every number in the impact section of the 2026 Q4 edition of my integration testing talk was measured, with the data behind it."
 ---
 
-This page backs section 5, "Did it work?", of the 2026 Q4 edition of [Performant, Parallelizable, Framework Agnostic Node.js Integration Testing](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing) and the post [Parallel Node.js Integration Testing](/blog/parallel-nodejs-integration-testing). Each number has its own heading, so a slide or a sentence can link straight to it.
+This page backs the numbers in the [2026 Q4 edition](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/slides/) of [Performant, Parallelizable, Framework Agnostic Node.js Integration Testing](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing): the legacy suite in "The problem" and the results in "Did it work?". Each number has its own heading, so a slide can link straight to it.
 
 The data runs through **October 21, 2026** (UTC). "Last 30 days" means September 22 through October 21, 2026. Monthly series stop at September 2026, the last complete month. These are observations from one team's repositories over changing suites, not a controlled experiment.
 
@@ -139,7 +139,7 @@ This is full-matrix elapsed time. The legacy 7.5 minutes was a single test step 
 
 ### Cluster test growth
 
-harper-pro's `integrationTests/cluster/` went from **1 test file** on March 1, 2026 to **104** on October 21. All of harper-pro's integration tests went from 4 files to 123, with 295 test cases. Most cluster tests start two to four Harper nodes, each on its own loopback address: `NODE_COUNT` is 2 in 11 files, 3 in 3, and 4 in 2. Sources: `harper-pro-test-growth.csv`, `harper-pro-node-counts.csv`.
+harper-pro's `integrationTests/cluster/` went from **1 test file** on March 1, 2026 to **104** on October 21. All of harper-pro's integration tests went from 4 files to 123, with 295 test cases. Cluster tests start several Harper nodes, each on its own loopback address. Of the 16 files that set `NODE_COUNT`, it's 2 in 11, 3 in 3, and 4 in 2. Sources: `harper-pro-test-growth.csv`, `harper-pro-node-counts.csv`.
 
 harper-pro's integration workflow ran 579 times in June 2026, then 409 to 428 times a month from July through September. Source: `harper-pro-integration-runs.csv`.
 
