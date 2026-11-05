@@ -60,8 +60,11 @@ as of 2026-10-21; complete months 2025-11 to 2026-09
   main-failure-rate-last30               20%   (52 of 258 main pushes, final attempt)
   linux-failure-rate-last30              11%   (29 of 258)
   failed-without-linux-node-last30       23 of 52   (20 failed only in Windows, Bun, or uWS jobs)
+  failed-one-configuration-last30        36 of 52   (uws 13, linux-node24 8, windows 7, linux-node22 3, bun 3, linux-node26 2)
+  failed-every-linux-node-only-last30    12 of 52   (failed on Linux Node.js 22, 24, and 26, and in no other configuration)
   main-failure-rate-attempt1-last30      19%   (258 main pushes, first attempt)
   linux-failure-rate-attempt1-last30     11%   (29 of 258, first attempt)
+  pr-failure-rate-attempt1-last30        17%   (42 of 244 sampled PR runs, first attempt)
 
 ## time to a full result (first job start to last job end, first attempt)
   wall-main-last30                       median 11.9 min, p90 13.1 min, n=205   (every successful first-attempt main push in the window)

@@ -241,6 +241,9 @@ Failures include real regressions. Main runs with a failed Linux Node.js 26 job:
 - **20% of main pushes failed** on the final attempt (52 of 258), and 19% on the first attempt.
 - A Linux Node.js shard failed in 11% of main pushes (29 of 258), on both the first and final attempt.
 - 23 of the 52 failed runs had no Linux Node.js shard failure. **20** failed only in Windows, Bun, or uWS jobs.
+- **36 of the 52** failed in a single configuration: uWS 13, Linux Node.js 24 8, Windows 7, Linux Node.js 22 3, Bun 3, and Linux Node.js 26 2.
+- **12** failed on Linux Node.js 22, 24, and 26 together, and in no other configuration. That's the pattern a real regression leaves, though it doesn't prove one.
+- PR runs fail at a similar rate: 17% of a 25% sample failed on the first attempt (42 of 244). Most main failures are in configurations PRs also run.
 - The legacy suite failed on 9.3% of main pushes, but it was a different suite on a smaller matrix, so the two rates aren't comparable.
 
 ### Re-runs that then succeeded
