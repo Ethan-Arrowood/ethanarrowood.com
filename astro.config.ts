@@ -6,10 +6,19 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import standardSite from "@arrowood.dev/astro-standard-site";
 
 export default defineConfig({
 	site: "https://ethanarrowood.com",
-	integrations: [mdx()],
+	integrations: [
+		mdx(),
+		standardSite({
+			identifier: "arrowood.dev",
+			publication: {
+				name: "Ethan Arrowood",
+			},
+		}),
+	],
 	markdown: {
 		remarkPlugins: [remarkDatePlugin, remarkAlert, remarkMath],
 		rehypePlugins: [

@@ -8,6 +8,8 @@
 		"start": "astro preview"
 	},
 	"devDependencies": {
+		"@arrowood.dev/astro-standard-site": "file:../astro-standard-site",
+		"@astrojs/mdx": "5.0.4",
 		"@justinribeiro/lite-youtube": "1.8.2",
 		"astro": "6.1.9",
 		"prettier": "3.6.2",
@@ -28,8 +30,5 @@
 	},
 	"engines": {
 		"node": "24.18.0"
-	},
-	"dependencies": {
-		"@astrojs/mdx": "5.0.4"
 	}
 }
