@@ -243,11 +243,12 @@ Failures include real regressions. Main runs with a failed Linux Node.js 26 job:
 ### Last 30 days
 
 - **24% of main pushes failed** on the final attempt (86 of 353), and 23% on the first attempt.
+- **Without Bun and uWS, 13% failed** (47 of 353 on the final attempt, 12% on the first). Bun is an alternate JavaScript runtime and uWS an alternate HTTP server; the team runs both in CI as experiments. A run counts here when any other job failed, including non-test jobs such as matrix generation (3 runs).
 - A Linux Node.js shard failed in 10% of main pushes (36 of 353 on the final attempt, 35 on the first).
 - 50 of the 86 failed runs had no Linux Node.js shard failure. **46** failed only in Windows, Bun, or uWS jobs.
 - **67 of the 86** failed in a single configuration: uWS 30, Windows 10, Linux Node.js 24 9, Bun 9, Linux Node.js 26 8, and Linux Node.js 22 1.
 - **12** failed on Linux Node.js 22, 24, and 26 together, and in no other configuration. That's the pattern a real regression leaves, though it doesn't prove one.
-- PR runs fail at a similar rate: 19% of a 25% sample failed on the first attempt (56 of 290). Most main failures are in configurations PRs also run.
+- PR runs fail at a similar rate: 19% of a 25% sample failed on the first attempt (56 of 290), and 10% without Bun and uWS (29 of 290). Most main failures are in configurations PRs also run.
 - The legacy suite failed on 9.3% of main pushes, but it was a different suite on a smaller matrix, so the two rates aren't comparable.
 
 ### Re-runs that then succeeded

@@ -18,6 +18,9 @@ export default defineConfig({
 	redirects: {
 		"/harper-integration-testing-framework-development-and-impact-analysis":
 			"/harper-integration-testing-framework-development-and-impact-analysis/slides/",
+		// Temporary short link to the same deck.
+		"/nds":
+			"/harper-integration-testing-framework-development-and-impact-analysis/slides/",
 	},
 	markdown: {
 		processor: unified({
