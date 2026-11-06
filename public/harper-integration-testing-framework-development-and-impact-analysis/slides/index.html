@@ -912,6 +912,12 @@
       padding-inline-start: 1.2em;
       font-size: 2.4cqi;
     }
+    /* Short items, two per row, so Education fits above the links. */
+    #about-me .list.cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 3cqi;
+    }
     #about-me .links {
       margin: auto 0 0;
       display: flex;
@@ -1029,8 +1035,13 @@
         <li>Vercel: Senior Software Engineer, 2022 to 2024</li>
         <li>Microsoft: Software Engineer II, 2019 to 2022</li>
       </ul>
-      <h3>Open source</h3>
+      <h3>Education</h3>
       <ul class="list">
+        <li>Wentworth Institute of Technology, Boston, MA: B.S. Computer Science, 2016 to 2019</li>
+        <li>Presidential Award for Academic Excellence</li>
+      </ul>
+      <h3>Open source</h3>
+      <ul class="list cols">
         <li>Previous Fastify maintainer</li>
         <li>Node.js & Undici maintainer</li>
         <li>OpenJS Foundation</li>
