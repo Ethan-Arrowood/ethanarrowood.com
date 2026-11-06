@@ -1,40 +1,41 @@
 ---
-layout: ../../../../layouts/PostLayout.astro
-title: "Did it work? Data and method"
+layout: ../../layouts/PostLayout.astro
+title: "Harper Integration Testing Framework: Data and Method"
+noindex: true
 pubDate: 2026-10-22T12:00:00-06:00
 editDate: 2026-10-22T12:00:00-06:00
-description: "How every number in the impact section of the 2026 Q4 edition of my integration testing talk was measured, with the data behind it."
+description: "How every number in the presentation Harper Integration Testing Framework Development and Impact Analysis was measured, with the data behind it."
 ---
 
-This page backs the numbers in the [2026 Q4 edition](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/slides/) of [Performant, Parallelizable, Framework Agnostic Node.js Integration Testing](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing): the legacy suite in "The problem" and the results in "Did it work?". Each number has its own heading, so a slide can link straight to it.
+This page backs the numbers in the presentation [Harper Integration Testing Framework Development and Impact Analysis](/harper-integration-testing-framework-development-and-impact-analysis/slides/): the legacy suite in "The problem" and the results in "Did it work?". Each number has its own heading, so a slide can link straight to it.
 
 The data runs through **October 21, 2026** (UTC). "Last 30 days" means September 22 through October 21, 2026. Monthly series stop at September 2026, the last complete month. These are observations from one team's repositories over changing suites, not a controlled experiment.
 
 > [!NOTE]
-> Every number on this page is computed from the CSVs listed under [Files](#files). [`analysis.txt`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/analysis.txt) is the analysis output for exactly these files. A few fixed facts about history are listed at the end of it as static.
+> Every number on this page is computed from the CSVs listed under [Files](#files). [`analysis.txt`](/harper-integration-testing-framework-development-and-impact-analysis/data/analysis.txt) is the analysis output for exactly these files. A few fixed facts about history are listed at the end of it as static.
 
 ## Files
 
-All files sit next to this page, under `/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/`. Every file is metadata from public repositories or the npm registry. Private repositories that import the package are counted but not named.
+All files sit next to this page, under `/harper-integration-testing-framework-development-and-impact-analysis/data/`. Every file is metadata from public repositories or the npm registry. Private repositories that import the package are counted but not named.
 
 | File | What it holds |
 | --- | --- |
-| [`harper-integration-runs.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-integration-runs.csv) | Every run of harper's `integration-tests.yml` (8,896 runs, Nov 4, 2025 to Oct 21, 2026) |
-| [`harper-main-failed-runs.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-main-failed-runs.csv) | Which jobs failed on the final attempt, for every main push run that didn't succeed |
-| [`harper-window-runs.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-window-runs.csv) | Every main push run in the last 30 days, and a 25% sample of first-attempt PR runs, with first-attempt wall time and failures |
-| [`harper-timing-sample.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-timing-sample.csv) | Wall time for 30 first-attempt main push runs and 30 PR runs per month |
-| [`harper-shard-step-sample.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-shard-step-sample.csv) | Per-shard test step time for the same runs |
-| [`harper-green-run-shards.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-green-run-shards.csv) | Test counts, durations, and Harper instances for each of the 36 shards of one green main run |
-| [`harper-prs.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-prs.csv) | Every PR merged to harper's main branch, classified by the files it changed |
-| [`harper-test-growth.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-test-growth.csv) | Test files and test cases on harper's main branch over time |
-| [`harper-pro-test-growth.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-pro-test-growth.csv), [`harper-pro-node-counts.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-pro-node-counts.csv) | harper-pro integration and cluster test files, test cases, and nodes per cluster test |
-| [`harper-pro-integration-runs.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-pro-integration-runs.csv) | Every run of harper-pro's integration workflow |
-| [`harper-nextjs-downstream-runs.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-nextjs-downstream-runs.csv), [`harper-nextjs-downstream-sample.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-nextjs-downstream-sample.csv) | Every run of harper's Next.js downstream check, and a 7.5% sample with outcomes |
-| [`nextjs-suite.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/nextjs-suite.csv), [`npm.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/npm.csv), [`org-adoption.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/org-adoption.csv) | The Next.js plugin's suite size, npm versions and downloads, and repositories that import the package |
-| [`harper-legacy-api-jobs.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/harper-legacy-api-jobs.csv) | Frozen. Legacy API test jobs in harper, for 452 main push runs, 396 PR runs, and 4 manual runs |
-| [`legacy-waits.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/legacy-waits.csv) | Frozen. Every hard-coded wait in the legacy suite, at two commits |
-| [`as-of.txt`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/as-of.txt), [`collection-times.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/collection-times.csv), [`git-refs.csv`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/git-refs.csv) | The as-of date, when each collection step ran, and the commits the git history came from |
-| [`analysis.txt`](/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/analysis.txt) | The analysis output for these files |
+| [`harper-integration-runs.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/harper-integration-runs.csv) | Every run of harper's `integration-tests.yml` (8,896 runs, Nov 4, 2025 to Oct 21, 2026) |
+| [`harper-main-failed-runs.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/harper-main-failed-runs.csv) | Which jobs failed on the final attempt, for every main push run that didn't succeed |
+| [`harper-window-runs.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/harper-window-runs.csv) | Every main push run in the last 30 days, and a 25% sample of first-attempt PR runs, with first-attempt wall time and failures |
+| [`harper-timing-sample.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/harper-timing-sample.csv) | Wall time for 30 first-attempt main push runs and 30 PR runs per month |
+| [`harper-shard-step-sample.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/harper-shard-step-sample.csv) | Per-shard test step time for the same runs |
+| [`harper-green-run-shards.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/harper-green-run-shards.csv) | Test counts, durations, and Harper instances for each of the 36 shards of one green main run |
+| [`harper-prs.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/harper-prs.csv) | Every PR merged to harper's main branch, classified by the files it changed |
+| [`harper-test-growth.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/harper-test-growth.csv) | Test files and test cases on harper's main branch over time |
+| [`harper-pro-test-growth.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/harper-pro-test-growth.csv), [`harper-pro-node-counts.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/harper-pro-node-counts.csv) | harper-pro integration and cluster test files, test cases, and nodes per cluster test |
+| [`harper-pro-integration-runs.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/harper-pro-integration-runs.csv) | Every run of harper-pro's integration workflow |
+| [`harper-nextjs-downstream-runs.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/harper-nextjs-downstream-runs.csv), [`harper-nextjs-downstream-sample.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/harper-nextjs-downstream-sample.csv) | Every run of harper's Next.js downstream check, and a 7.5% sample with outcomes |
+| [`nextjs-suite.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/nextjs-suite.csv), [`npm.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/npm.csv), [`org-adoption.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/org-adoption.csv) | The Next.js plugin's suite size, npm versions and downloads, and repositories that import the package |
+| [`harper-legacy-api-jobs.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/harper-legacy-api-jobs.csv) | Frozen. Legacy API test jobs in harper, for 452 main push runs, 396 PR runs, and 4 manual runs |
+| [`legacy-waits.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/legacy-waits.csv) | Frozen. Every hard-coded wait in the legacy suite, at two commits |
+| [`as-of.txt`](/harper-integration-testing-framework-development-and-impact-analysis/data/as-of.txt), [`collection-times.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/collection-times.csv), [`git-refs.csv`](/harper-integration-testing-framework-development-and-impact-analysis/data/git-refs.csv) | The as-of date, when each collection step ran, and the commits the git history came from |
+| [`analysis.txt`](/harper-integration-testing-framework-development-and-impact-analysis/data/analysis.txt) | The analysis output for these files |
 
 ## How the data was collected
 

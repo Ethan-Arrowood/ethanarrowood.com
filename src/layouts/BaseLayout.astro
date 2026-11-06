@@ -8,9 +8,10 @@ import "../styles/themes.css";
 interface Props {
 	title?: string;
 	description?: string;
+	noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, noindex } = Astro.props;
 const pageTitle = title ? `${title} | Ethan Arrowood` : "Ethan Arrowood";
 const defaultDescription =
 	"Personal website for Ethan Arrowood. Head of Open Source Engineering at Harper. Node.js contributor. OpenJS Foundation and WinterTC collaborator. Breckenridge ski instructor.";
@@ -181,6 +182,7 @@ const pageDescription = description || defaultDescription;
 		<ThemeInit />
 		<meta name="author" content="Ethan Arrowood" />
 		<meta name="description" content={pageDescription} />
+		{noindex && <meta name="robots" content="noindex" />}
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta property="og:title" content={pageTitle} />
 		<meta property="og:description" content={pageDescription} />

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Draft edition: remove noindex once it is final. -->
   <meta name="robots" content="noindex">
-  <title>Performant, Parallelizable, Framework Agnostic Node.js Integration Testing</title>
+  <title>Harper Integration Testing Framework Development and Impact Analysis</title>
   <meta name="description" content="How the Harper integration testing framework runs integration tests in parallel across any test framework: process isolation, loopback address pooling, and a framework-agnostic API.">
   <link rel="stylesheet" href="dais/dais.css">
   <link rel="stylesheet" href="dais/themes/midnight.css">
@@ -919,24 +919,12 @@
 
   <div class="dais-progress" aria-hidden="true"></div>
 
-  <main class="dais" aria-label="Performant, Parallelizable, Framework Agnostic Node.js Integration Testing" tabindex="0">
+  <main class="dais" aria-label="Harper Integration Testing Framework Development and Impact Analysis" tabindex="0">
 
     <section class="slide title" id="intro">
-      <h1>Performant, Parallelizable, Framework&nbsp;Agnostic Node.js Integration Testing</h1>
+      <h1>Harper Integration Testing Framework Development and Impact&nbsp;Analysis</h1>
       <p>Ethan Arrowood</p>
       <aside class="notes"></aside>
-    </section>
-
-    <section class="slide" id="about-me">
-      <h2>About me</h2>
-      <ul class="lines">
-        <li>Head of Open Source Engineering at Harper, since Feb 2026</li>
-        <li>Senior Software Engineer at Harper, Aug 2024 to Feb 2026</li>
-        <li>Node.js core contributor and Undici maintainer</li>
-      </ul>
-      <aside class="notes">
-        Undici is the HTTP client behind fetch in Node.js. I built this framework as a Senior Software Engineer and kept working on it after the role change.
-      </aside>
     </section>
 
     <section class="slide" id="the-shape">
@@ -1038,7 +1026,7 @@
         <p><span class="n">7.5 min</span> median to run the suite</p>
         <p class="muted">p90 7.7 min · the CI step that runs the tests, after setup · May to Jun 2026</p>
       </div>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-test-step-time">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#legacy-test-step-time">Data and method</a></p>
       <aside class="notes">
         p90 7.7 min. GitHub had purged step timings for older runs. The whole job, including setup, took a median 8.2 min.
       </aside>
@@ -1053,7 +1041,7 @@
         </div>
         <p class="small muted">A lower bound: polling helpers aren't counted. On Jun 2, <a href="https://github.com/HarperFast/harper/commit/41c1c4fae0d0186592fb9793c99703b639806636">harper PR #1091</a> replaced the restart sleeps with polls that wait until Harper responds, and the median step fell to 5.6 min.</p>
       </div>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-test-step-time">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#legacy-test-step-time">Data and method</a></p>
       <aside class="notes">
         Test step: median of 778 successful "Run API Tests" steps on Linux, May 5 to Jun 2, 2026 (p90 7.7). GitHub had purged older step timings. Waits: 387.7 s of fixed timers and restart sleeps in the suite at that time (8780c52). It's a lower bound: polling helpers aren't counted. On Jun 2, harper PR #1091 replaced the restart sleeps with readiness polls, and the median step fell to 5.6 min (n=262).
       </aside>
@@ -1065,7 +1053,7 @@
         <p>of main pushes had the suite fail on at least one Node version</p>
         <p class="muted">Dec 2025 to Jun 2026</p>
       </div>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-main-branch-failures">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#legacy-main-branch-failures">Data and method</a></p>
       <aside class="notes">
         42 of 450 main push runs, first attempt, Linux Node.js legacy jobs. 10 more runs failed during setup, before any test ran, and aren't counted. By version: Node 20 5.5%, Node 22 4.0%, Node 24 2.7%. In 61% of failing attempts (77 of 126) another Node version passed on the same commit. A failure rate, not a measured flake rate.
       </aside>
@@ -1077,7 +1065,7 @@
         <p>of failing runs had another Node version pass on the same commit</p>
         <p class="muted">77 of 126 failing attempts, Dec 2025 to Jun 2026</p>
       </div>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#legacy-main-branch-failures">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#legacy-main-branch-failures">Data and method</a></p>
       <aside class="notes">
         Main and PR runs: in 77 of 126 failing first attempts, at least one of Node 20, 22, or 24 passed on the same commit. Same code, different result. That points to flakiness, but a real version-specific bug produces the same pattern, so it's a signal, not a measured flake rate. Every retry meant rerunning the whole suite.
       </aside>
@@ -1742,7 +1730,7 @@ steps:
           <li>19,977 lines of legacy suite and infrastructure deleted</li>
         </ul>
       </div>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#port-timeline">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#port-timeline">Data and method</a></p>
       <aside class="notes">
         The framework landed in PR #27 (opened Nov 4, merged Dec 3, 2025) and was extracted into @harperfast/integration-testing in April 2026. Port PRs: #555, #597, #627, #634, #645, #646, #647, #648, #730, #731, #732, #759, #761, #778. Cleanup: #1173 (b4f83887f) removed the legacy suite on Jun 8. Independent, hermetic files are small units an agent can port one at a time. The port PRs ran on claude/api-tests-* branches. 17 apiTests files existed when the legacy suite was removed (Jun 8); 7 more were added there later.
       </aside>
@@ -1769,7 +1757,7 @@ steps:
         <span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Now</span>
       </div>
       <p class="small muted">Harper engineers added 1,326 tests after the port finished.</p>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#test-cases-over-time">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#test-cases-over-time">Data and method</a></p>
       <aside class="notes">
         Test cases on harper's main branch, counted as it()/test() calls in integrationTests at the end of the first day of each month (Dec = Dec 4, after PR #27 merged; Now = Oct 21, 2026). Legacy suite removed Jun 8. Legacy: 985 Dec to Apr, 993 May and Jun. Framework: Dec 7, Jan 7, Feb 28, Mar 59, Apr 60, May 117, Jun 372, Jul 1,378, Aug 1,699, Sep 2,007, Oct 2,304, Now 2,422. The framework passed the legacy suite the day the port finished and has added 1,326 tests since.
       </aside>
@@ -1793,7 +1781,7 @@ steps:
       </div>
       <div class="colchart-x" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
       <p class="colchart-note">Bar height: PRs merged that month. Above each bar: PRs that touched integration tests, of all merged. On the bar: that share.</p>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#prs-touching-integration-tests">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#prs-touching-integration-tests">Data and method</a></p>
       <aside class="notes">
         Merged PRs to harper's main branch from GitHub, by merge month. "Touched" means the PR changed a file under integrationTests/ (not the legacy suite). Dec and Jan are tiny months. Feb to Apr: 10 to 17%. Jun to Sep: 25 to 32%, at three times the volume. Some of those PRs only fix or maintain tests, so the next slide looks at code changes. October is left out because the month isn't over.
       </aside>
@@ -1817,7 +1805,7 @@ steps:
       </div>
       <div class="colchart-x" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
       <p class="colchart-note">Bar height: merged PRs that changed non-test code. Above each bar: how many also changed an integration test. On the bar: that share.</p>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#code-changes-that-ship-an-integration-test">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#code-changes-that-ship-an-integration-test">Data and method</a></p>
       <aside class="notes">
         A code PR changes a .js or .ts file outside test directories. It "ships with a test" when it also adds or changes an integration test file. This replaces counting "fix" commits by subject, which depended on how people titled commits. Feb to Apr: 3 to 13%. Jun to Sep: 17 to 33%. September: 47 of 144. October is left out because the month isn't over.
       </aside>
@@ -1830,7 +1818,7 @@ steps:
         <p>starting 421 Harper instances, in 5.4 minutes</p>
         <p class="muted">six Linux Node.js 24 shards running at once, Oct 21, 2026</p>
       </div>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#tests-and-instances-per-run">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#tests-and-instances-per-run">Data and method</a></p>
       <aside class="notes">
         Run 39696281381 (main, Oct 21, 2026), summed over its six Linux Node.js 24 shards: 2,632 tests, 2,610 pass, 0 fail, 21 skipped, 1 todo. That's more than the 2,422 test() calls in source because some tests are generated in loops. The Windows shards run 871 tests.
       </aside>
@@ -1844,7 +1832,7 @@ steps:
         <div class="after"><span class="when">Wall time</span><span class="n">5.4 min</span><span class="muted">the slowest shard</span></div>
       </div>
       <p class="small muted">About 13.8&times; less. The sum was measured while files ran concurrently, so it estimates a serial run rather than measuring one.</p>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#summed-suite-time-vs-slowest-shard">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#summed-suite-time-vs-slowest-shard">Data and method</a></p>
       <aside class="notes">
         A 13.8x ratio. 74.4 min is the sum of top-level suite durations on the six Linux Node.js 24 shards of that run. Those durations were measured while files ran concurrently, so they aren't a serial baseline; this shows how much work overlaps, not a measured speedup. Each shard runs three files at once (floor(4 / 2) + 1 on a 4-vCPU runner) across six shards.
       </aside>
@@ -1857,7 +1845,7 @@ steps:
         <p>Node 22, 24, 26, Bun, Windows, and uWS</p>
         <p class="muted">six shards each</p>
       </div>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#ci-matrix">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#ci-matrix">Data and method</a></p>
       <aside class="notes">
         Main, release branches, and a nightly run all 36 shard jobs. PRs run 24: Node 24 plus Windows, Bun, and uWS. Windows and Bun were added in May 2026, Node 26 on May 29, uWS on Jul 9. Windows runs 871 tests; the rest skip on that platform.
       </aside>
@@ -1870,7 +1858,7 @@ steps:
         <p>median time to a full-matrix result</p>
         <p class="muted">205 successful first-attempt main runs, last 30 days</p>
       </div>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#time-to-a-full-result">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#time-to-a-full-result">Data and method</a></p>
       <aside class="notes">
         First job start to last job end, Sep 22 to Oct 21, 2026, every successful first-attempt main push run; p90 13.1. PRs (24 jobs): median 10.5 min from a 25% sample. Monthly medians for main runs went 8.6 (Dec), 9.0 (Feb), 10.3 (Mar), 15.9 (Jun), 9.2 (Sep) while the suite grew from 2 to about 190 test files. This is full-matrix elapsed time; the legacy 7.5 min was one test step, so they aren't a direct comparison.
       </aside>
@@ -1893,7 +1881,7 @@ steps:
         <div><i class="after" style="--v: 1622"><span>1,622</span></i></div>
       </div>
       <div class="colchart-x" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#ci-runs-per-month">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#ci-runs-per-month">Data and method</a></p>
       <aside class="notes">
         Runs of integration-tests.yml per month. Dec 2025: 68 runs from 14 PR branches, not counting Renovate. Last 30 days (to Oct 21): 1,461 runs from 355 PR branches. More runs show use; on their own they don't show faster engineering or better reliability.
       </aside>
@@ -1913,7 +1901,7 @@ steps:
         <b class="accent-2">Aug</b> <span class="hot"><i style="--pct: 62"></i></span> <b class="accent-2">62%</b>
         <b>Sep</b> <i style="--pct: 19"></i> <b>19%</b>
       </div>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#main-branch-failures-by-month">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#main-branch-failures-by-month">Data and method</a></p>
       <aside class="notes">
         Share of main push runs of integration-tests.yml whose final attempt failed. December is left out: the workflow only started running on main when PR #27 merged on Dec 3, so it had just 13 main pushes (all passed). January also had only 13 (one failed). Jan to Apr failures were almost all the legacy suite. Jun to Aug: the matrix grew (Windows, Bun, Node 26, uWS) and Windows had long tail latency. Runs where a Linux Node shard failed: Jan 0%, Feb 0%, Mar 4%, Apr 0%, May 12%, Jun 40%, Jul 30%, Aug 34%, Sep 10%. October is left out because the month isn't over.
       </aside>
@@ -1927,7 +1915,7 @@ steps:
         <li>12 failed on every Linux Node version at once: likely real regressions</li>
       </ul>
       <p class="small muted">On Linux Node versions alone, 11% of main runs failed. The legacy suite's rate was 9.3%, with about a third of the tests.</p>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#last-30-days">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#last-30-days">Data and method</a></p>
       <aside class="notes">
         Sep 22 to Oct 21, 2026: 52 of 258 main runs failed on the final attempt (19% on the first). A 25% sample of PR runs failed 17% of the time on the first attempt (42 of 244), so main isn't failing because problems slip past review. Most failures are in configurations PRs also run. 36 of the 52 failed in a single configuration: uWS 13, Linux Node 24 8, Windows 7, Node 22 3, Bun 3, Node 26 2. 12 failed on Node 22, 24, and 26 together and nowhere else, the pattern of a real regression. Node 26 failed 44, 37, 17, and 15 main runs from June to September and was pinned to 26.5.0 from Aug 3 to Sep 1. Linux Node shards failed in 11% of main runs (29 of 258), against 9.3% for the legacy suite, which ran about 930 tests to today's 2,632. Different suites and matrices, so this doesn't show CI became less or more flaky.
       </aside>
@@ -1945,7 +1933,7 @@ steps:
         <li>Start the nodes in containers; test over SSH</li>
         <li>Copy the logs back; destroy the VM</li>
       </ol>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#old-cluster-harness">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#old-cluster-harness">Data and method</a></p>
       <aside class="notes">
         The old cluster tests ran remotely: a fresh cloud VM per run, the nodes in containers, the tests over SSH, then the logs copied back and the VM destroyed. A cluster test file in harper-pro now starts its nodes locally instead.
       </aside>
@@ -2003,7 +1991,7 @@ steps:
         <p>check runs on Harper PRs since Jul 15, 2026</p>
         <p class="muted">Each run builds the PR's Harper, then runs the Next.js plugin's own test suite against it</p>
       </div>
-      <p class="src"><a href="https://github.com/HarperFast/harper/blob/b1fb0c97649ffeb4b85e349d3db7f571bb7392a8/.github/workflows/integration-tests-nextjs.yml">Workflow</a> · <a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#downstream-check">Data and method</a></p>
+      <p class="src"><a href="https://github.com/HarperFast/harper/blob/b1fb0c97649ffeb4b85e349d3db7f571bb7392a8/.github/workflows/integration-tests-nextjs.yml">Workflow</a> · <a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#downstream-check">Data and method</a></p>
       <aside class="notes">
         Workflow: "Next.js Integration Tests (downstream)" in harper, added Jul 2026, Node 20, 22, and 24. It is advisory and path-filtered, so not every run executes the suite: in a 7.5% hash sample of 254 runs, 208 (82%) did.
       </aside>
@@ -2016,7 +2004,7 @@ steps:
         <p>sampled check runs flagged a failure before merge</p>
         <p class="muted">Advisory. Some flags may come from the plugin's own main branch, not the Harper change.</p>
       </div>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#downstream-check">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#downstream-check">Data and method</a></p>
       <aside class="notes">
         Of 254 sampled runs, 208 executed the suite and 10 of those had at least one Node version fail on the final attempt. Don't apply 5% to all 3,325 runs, and don't call every failure a Harper regression: the check tracks nextjs main.
       </aside>
@@ -2029,7 +2017,7 @@ steps:
         <p>import <code>@harperfast/integration-testing</code></p>
         <p class="muted">Largest public suites: <a href="https://github.com/HarperFast/harper-pro">harper-pro</a> (126 files), <a href="https://github.com/HarperFast/oauth">oauth</a> (6), <a href="https://github.com/HarperFast/symphony">symphony</a> (4)</p>
       </div>
-      <p class="src"><a href="/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/#repos-importing-the-package">Data and method</a></p>
+      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#repos-importing-the-package">Data and method</a></p>
       <aside class="notes">
         HarperFast repos with code that imports the package (an import or require of it, not a mention in docs), excluding harper itself: 26 public and 6 private or internal. Private repos are counted, not named. Public ones after harper-pro: oauth (6), symphony (4), nextjs (3), real-time-template (3). Most templates and examples carry one smoke test. harper-pro's 126 importing files are 123 integration tests, 2 smoke tests, and a benchmark. npm: 23 versions, 49,736 downloads Sep 22 to Oct 21, 2026.
       </aside>
@@ -2084,14 +2072,13 @@ steps:
         <dt>Framework</dt><dd><a href="https://github.com/HarperFast/integration-testing">github.com/HarperFast/integration-testing</a></dd>
         <dt>Analysis</dt><dd><a href="https://github.com/Ethan-Arrowood/node-test-runner-parallelization-analysis">github.com/Ethan-Arrowood/node-test-runner-parallelization-analysis</a></dd>
         <dt>Next.js</dt><dd><a href="https://github.com/HarperFast/nextjs">github.com/HarperFast/nextjs</a></dd>
-        <dt>Slides</dt><dd><a href="https://ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/slides/">ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/slides</a></dd>
-        <dt>Data</dt><dd><a href="https://ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data/">ethanarrowood.com/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/data</a></dd>
+        <dt>Slides</dt><dd><a href="https://ethanarrowood.com/harper-integration-testing-framework-development-and-impact-analysis/slides/">ethanarrowood.com/harper-integration-testing-framework-development-and-impact-analysis/slides</a></dd>
+        <dt>Data</dt><dd><a href="https://ethanarrowood.com/harper-integration-testing-framework-development-and-impact-analysis/data/">ethanarrowood.com/harper-integration-testing-framework-development-and-impact-analysis/data</a></dd>
       </dl>
       <aside class="notes"></aside>
     </section>
 
   </main>
-
 
 </body>
 </html>

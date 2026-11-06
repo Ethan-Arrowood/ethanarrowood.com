@@ -14,6 +14,11 @@ export default defineConfig({
 	// elements written on separate lines. Keep HTML whitespace semantics.
 	compressHTML: true,
 	integrations: [mdx()],
+	// Unlisted presentation: the bare path opens its slides.
+	redirects: {
+		"/harper-integration-testing-framework-development-and-impact-analysis":
+			"/harper-integration-testing-framework-development-and-impact-analysis/slides/",
+	},
 	markdown: {
 		processor: unified({
 			remarkPlugins: [remarkDatePlugin, remarkAlert, remarkMath],
