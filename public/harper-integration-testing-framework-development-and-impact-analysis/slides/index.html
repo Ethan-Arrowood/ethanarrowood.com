@@ -639,6 +639,10 @@
        the content box and kept quiet. It points at the edition's data page. */
     .dais > section > .src { margin: auto 0 0; align-self: flex-start; font-size: 1.3cqi; }
     .dais > section > .src a { color: var(--dais-muted); }
+    /* Teammate credit lines, and source links on slides whose content sits
+       at the top, go right under the content instead of at the bottom. */
+    .dais > section > .src.credit { margin: 1.4cqi 0 0; font-size: 1.6cqi; }
+    .dais > section > .src.under { margin: 1.4cqi 0 0; }
 
     /* Monthly column chart: one bar per month, height = --v / --max. Bars
        from June on (after the legacy port) carry the accent. Value labels sit
@@ -832,6 +836,15 @@
       color: var(--dais-accent);
     }
 
+    /* Color roles for emphasis: blue for neutral key terms, orange (.bad) for
+       problems and bad numbers, green (.good, chosen table rows) for chosen
+       options and good outcomes. Dais makes every <strong> orange by
+       default, so the deck resets it to blue. */
+    .dais strong { color: var(--dais-accent); }
+    .dais strong.bad { color: var(--dais-accent-2); }
+    .dais tr.chosen strong,
+    .dais strong.good { color: var(--deck-good); }
+
     /* Harper's capabilities, as four short groups in two columns. */
     #harper-uses .cols { gap: 4cqi; margin-block-start: 0.4cqi; }
     #harper-uses h3 { margin: 1.4cqi 0 0.4cqi; font-size: 2cqi; color: var(--dais-muted); }
@@ -843,6 +856,20 @@
     #legacy-dx .lines li { transition: color 0.25s ease-out, opacity 0.25s ease-out; }
     #legacy-dx[data-dais-step]:not([data-dais-step="0"]):not([data-dais-step="6"]) .lines li:not(.step-current) { opacity: 0.4; }
     #legacy-dx .lines li.step-current { color: var(--dais-accent); }
+
+    /* Outline: one line per chapter, each linking to its divider. */
+    #outline .outline {
+      display: flex;
+      gap: 1cqi;
+      margin: 0.6cqi 0 0;
+      padding-inline-start: 1.6em;
+      font-size: 2.6cqi;
+    }
+    #outline .outline a { color: var(--dais-text); text-decoration: none; font-weight: 600; }
+    #outline .outline a:hover,
+    #outline .outline a:focus-visible { color: var(--dais-accent); text-decoration: underline; }
+    #outline .outline li::marker { color: var(--dais-accent); }
+    #outline .outline .muted { margin-inline-start: 0.6em; font-size: 0.75em; }
 
     /* About me: experience and open source as two short lists, with profile
        links pinned to the bottom. */
@@ -979,6 +1006,24 @@
       </ul>
       <p class="links"><a href="https://ethanarrowood.com/#experience">ethanarrowood.com</a><a href="https://github.com/Ethan-Arrowood">github.com/Ethan-Arrowood</a><a href="https://www.linkedin.com/in/ethan-arrowood/">linkedin.com/in/ethan-arrowood</a></p>
       <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="outline">
+      <h2>Outline</h2>
+      <ol class="outline">
+        <li><a href="#the-shape">What am I testing?</a> <span class="muted">Harper, the platform under test</span></li>
+        <li><a href="#part-problem">The problem</a> <span class="muted">Harper's legacy integration suite</span></li>
+        <li><a href="#part-task">The goal</a> <span class="muted">Every test file gets its own Harper</span></li>
+        <li><a href="#part-parallel">How much parallelism?</a> <span class="muted">Measuring instead of guessing</span></li>
+        <li><a href="#part-isolation">Networking contention</a> <span class="muted">Everything wants port 9925</span></li>
+        <li><a href="#part-agnostic">Framework agnostic</a> <span class="muted">One lifecycle, any test runner</span></li>
+        <li><a href="#part-ci">Surviving CI</a> <span class="muted">Sharding across runners</span></li>
+        <li><a href="#part-impact">Did it work?</a> <span class="muted">Harper core, harper-pro, and plugins</span></li>
+        <li><a href="#part-looking-back">Looking back</a></li>
+      </ol>
+      <aside class="notes">
+        Each entry links to the first slide of its chapter.
+      </aside>
     </section>
 
     <section class="slide" id="the-shape">
@@ -1394,14 +1439,14 @@
           <tr><td>11</td><td class="num">3,724</td><td class="num" data-hi="b2">690</td><td class="num">5,096</td><td class="num">5,717</td></tr>
         </tbody>
       </table>
-      <p class="step" data-step="2">Std&nbsp;dev jumps from <strong>294</strong> at the optimum to <strong>654</strong> and <strong>690</strong> just past it <br> The run-to-run spread more than doubles.</p>
+      <p class="step" data-step="2">Std&nbsp;dev jumps from <strong class="good">294</strong> at the optimum to <strong class="bad">654</strong> and <strong class="bad">690</strong> just past it <br> The run-to-run spread more than doubles.</p>
       <aside class="notes">
         All the data (concurrency: median, std dev, p95, worst run, in ms): 1: 9,939, 363, 10,607, 10,885. 2: 5,776, 307, 6,164, 6,876. 3: 4,582, 365, 5,252, 5,729. 4: 3,904, 368, 4,648, 5,238. 5: 3,759, 332, 4,264, 4,739. 6: 3,597, 459, 4,751, 4,874. 7: 3,468, 294, 3,990, 4,520. 8: 3,671, 472, 4,575, 5,106. 9: 3,601, 473, 4,804, 5,177. 10: 3,534, 654, 5,339, 5,466. 11: 3,724, 690, 5,096, 5,717. 12: 3,952, 488, 4,792, 5,055. The median flattens after 7. The real story is in the tail: std dev, p95, worst run. Step 2: now read the std-dev column. Over-parallelizing doesn't make the suite slower on average so much as it makes it *unpredictable*, and unpredictable is what makes people stop trusting a suite.
       </aside>
     </section>
 
     <section class="slide" id="variance-tail" data-dais-steps="1">
-      <h2>The real developer experience is in the <strong>tail</strong></h2>
+      <h2>The real developer experience is in the <strong class="bad">tail</strong></h2>
       <p class="small muted">20 test files · 25 samples per level · duration in ms · p95: 95% of runs finish faster</p>
       <table>
         <thead>
@@ -1412,13 +1457,13 @@
           <tr><td>10</td><td class="num">3,534</td><td class="num">654</td><td class="num" data-hi="b1">5,339</td><td class="num">5,466</td></tr>
         </tbody>
       </table>
-      <p class="step" data-step="1">At 10, the median is 9.5% faster than at 4, but the p95 is 14.9% slower (<strong>5,339</strong> vs. <strong>4,648</strong>). <br> 2.5&times; the concurrency for a slower tail.</p>
+      <p class="step" data-step="1">At 10, the median is 9.5% faster than at 4, but the p95 is 14.9% slower (<strong class="bad">5,339</strong> vs. <strong>4,648</strong>). <br> 2.5&times; the concurrency for a slower tail.</p>
       <aside class="notes"></aside>
     </section>
 
     <section class="slide" id="the-default-that-shipped">
       <h2>Calculated default</h2>
-      <p class="lead">When each test file starts its own application process, a good default is <br><strong>half the available parallelism, plus one</strong></p>
+      <p class="lead">When each test file starts its own application process, a good default is <br><strong class="good">half the available parallelism, plus one</strong></p>
       <pre><code>concurrency = <span class="tok-fn">floor</span>(availableParallelism / <span class="tok-number">2</span>) + <span class="tok-number">1</span>
             = <span class="tok-fn">floor</span>(<span class="tok-number">12</span> / <span class="tok-number">2</span>) + <span class="tok-number">1</span>
             = <span class="tok-number">7</span>   <span class="tok-comment">// the measured optimum</span></code></pre>
@@ -1440,8 +1485,8 @@
 });</code></pre>
       <p>But two problems:</p>
       <ul class="">
-        <li>The app has to <strong>report back</strong> which ports it received</li>
-        <li>Harper currently requires ports to be <strong>configured</strong></li>
+        <li>The app has to <strong class="bad">report back</strong> which ports it received</li>
+        <li>Harper currently requires ports to be <strong class="bad">configured</strong></li>
       </ul>
       <p class="small muted step">How can we solve this without modifying core?</p>
       <aside class="notes"></aside>
@@ -1460,7 +1505,7 @@
 
 <span class="tok-keyword">const</span> port = <span class="tok-keyword">await</span> <span class="tok-fn">getPort</span>();
 <span class="tok-keyword">const</span> harper = <span class="tok-keyword">await</span> <span class="tok-fn">createHarper</span>(port);   <span class="tok-comment">// ← nothing reserved it in between</span></code></pre>
-      <p>Between the <strong>release</strong> and the <strong>reuse</strong>, the OS can hand that port to any other process, especially with many test processes racing at once.</p>
+      <p>Between the <strong class="bad">release</strong> and the <strong class="bad">reuse</strong>, the OS can hand that port to any other process, especially with many test processes racing at once.</p>
       <aside class="notes"></aside>
     </section>
 
@@ -1519,7 +1564,7 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
         <tbody>
           <tr><td>Dynamic ports</td><td>Changes to Harper core</td></tr>
           <tr><td><code>get-port</code></td><td>A race between checking a port and using it</td></tr>
-          <tr><td><strong>An address per instance</strong></td><td><strong>One-time setup on macOS</strong></td></tr>
+          <tr class="chosen"><td><strong>An address per instance</strong></td><td><strong>One-time setup on macOS</strong></td></tr>
         </tbody>
       </table>
       <aside class="notes"></aside>
@@ -1559,7 +1604,7 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
           </tbody>
         </table>
       </div>
-      <p class="src">Found and fixed by Kris Zyp · integration-testing #21 · July 2026</p>
+      <p class="src credit">Found and fixed by Kris Zyp · integration-testing <a href="https://github.com/HarperFast/integration-testing/pull/21">#21</a> · July 2026</p>
       <aside class="notes">
         A /32 is a host netmask. Each alias claims one address, so the subnet claims no longer overlap. The addresses still loop back. Same number of aliases, same isolation. [Step 1] This comparison used 254 aliases on the same macOS machine in the same run. With /8, mDNSResponder measured about 65% CPU and 85 packets over eight seconds on UDP 5353. With /32, about zero CPU and five packets, the observed floor. One measurement, not a cross-machine benchmark. The setup script removes each existing alias before adding it, so re-running it converts old /8 setups to /32. Source: HarperFast/integration-testing PR #21, Kris Zyp, July 2026.
       </aside>
@@ -1586,7 +1631,7 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
         <tbody>
           <tr><td>A coordinator daemon</td><td>Another process to start and keep alive</td></tr>
           <tr><td>Shared memory (<code>Atomics</code>)</td><td>Only works between threads in one process</td></tr>
-          <tr><td><strong>A file lock</strong></td><td><strong>Has to handle holders that crash</strong></td></tr>
+          <tr class="chosen"><td><strong>A file lock</strong></td><td><strong>Has to handle holders that crash</strong></td></tr>
         </tbody>
       </table>
       <aside class="notes">
@@ -1612,7 +1657,7 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
 <span class="tok-keyword">await</span> <span class="tok-fn">assertLockHeld</span>(token);          <span class="tok-comment">// still ours?</span>
 <span class="tok-keyword">await</span> <span class="tok-fn">rename</span>(pendingPath, POOL_PATH);  <span class="tok-comment">// atomic publish</span></code></pre>
       <p>If a write outlasts the stale timeout, another process takes the lock. The token check narrows the window where the old writer could overwrite the new claim.</p>
-      <p class="src">Kris Zyp · integration-testing #32 and #33 · October 2026</p>
+      <p class="src credit">Kris Zyp · integration-testing <a href="https://github.com/HarperFast/integration-testing/pull/32">#32</a> and <a href="https://github.com/HarperFast/integration-testing/pull/33">#33</a> · October 2026</p>
       <aside class="notes">
         Added Oct 2026 (integration-testing #32 and #33). Writes go to a temp file and are published by rename, so readers never see a torn file. On a lost lock the operation retries from the current pool state, up to 3 times. An unreadable pool file is quarantined for 6 minutes before it's reset, so in-flight reservations aren't wiped. The check narrows the race; it doesn't close it completely.
       </aside>
@@ -1639,7 +1684,7 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
         <li>A shared monitor reaps groups whose runner died</li>
         <li>macOS and Linux only; Windows relies on runner cleanup</li>
       </ul>
-      <p class="src">Kris Zyp · integration-testing #30 · September 2026</p>
+      <p class="src credit">Kris Zyp · integration-testing <a href="https://github.com/HarperFast/integration-testing/pull/30">#30</a> · September 2026</p>
       <aside class="notes">
         A SIGKILL'd runner or a cancelled CI job used to leave Harper alive, holding its fixed ports. Since Sep 2026 (integration-testing #30) every instance registers in a cross-process registry, and one monitor per user reaps orphaned or overdue process groups with kill(-pgid).
       </aside>
@@ -1663,7 +1708,7 @@ server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loo
 <span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> port <span class="tok-keyword">of</span> [<span class="tok-number">9925</span>, <span class="tok-number">9926</span>]) {
   <span class="tok-keyword">if</span> (<span class="tok-keyword">await</span> <span class="tok-fn">isPortInUseOnAddress</span>(port, address)) skip(address);
 }</code></pre>
-      <p class="src">Kris Zyp · integration-testing #17 and #20 · June 2026</p>
+      <p class="src credit">Kris Zyp · integration-testing <a href="https://github.com/HarperFast/integration-testing/pull/17">#17</a> and <a href="https://github.com/HarperFast/integration-testing/pull/20">#20</a> · June 2026</p>
       <aside class="notes">
         The conflict canary, added Jun 2026. The common shape: after a kill, Harper's main thread has exited (freeing 9925) but its HTTP workers still hold 9926. The pool releases the poisoned address, skips it for this attempt, and re-probes it later. This detection is Linux-effective; macOS SO_REUSEPORT semantics differ, but macOS doesn't show the silent co-bind, and CI runs on Linux. Teardown also waits up to 5 s for all ports to free before releasing an address.
       </aside>
@@ -1675,7 +1720,7 @@ server.<span class="tok-fn">listen</span>(<span class="tok-number">0</span>, loo
       <pre><code><span class="tok-comment">// an exclusive bind succeeds beside it there, so connect instead</span>
 <span class="tok-keyword">const</span> port = <span class="tok-keyword">await</span> <span class="tok-fn">findAcceptingPort</span>(address, [<span class="tok-number">9925</span>, <span class="tok-number">9926</span>]);
 <span class="tok-keyword">if</span> (port) <span class="tok-keyword">throw new</span> <span class="tok-type">ForeignListenerError</span>(address, port);</code></pre>
-      <p class="src">Dawson Toth · integration-testing #40 · October 2026</p>
+      <p class="src credit">Dawson Toth · integration-testing <a href="https://github.com/HarperFast/integration-testing/pull/40">#40</a> · October 2026</p>
       <aside class="notes">
         Added Oct 2026. The foreign process gets the node's connections whenever the node has no listener of its own: while it starts, while HTTP workers restart, and after teardown. Keep-alive connections then stay with it, so a suite fails, or passes, against the wrong server. Linux refuses the exclusive bind, so it skips this probe. Set HARPER_INTEGRATION_TEST_ALLOW_FOREIGN_LISTENERS=1 to turn the error into a warning.
       </aside>
@@ -1976,7 +2021,7 @@ steps:
         <div><i class="after" style="--v: 1622"><span>1,622</span></i></div>
       </div>
       <div class="colchart-x" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
-      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#ci-runs-per-month">Data and method</a></p>
+      <p class="src under"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#ci-runs-per-month">Data and method</a></p>
       <aside class="notes">
         Runs of integration-tests.yml per month. Dec 2025: 68 runs from 14 PR branches, not counting Renovate. Last 30 days (to Oct 21): 1,461 runs from 355 PR branches. More runs show use; on their own they don't show faster engineering or better reliability.
       </aside>
@@ -1996,7 +2041,7 @@ steps:
         <b class="accent-2">Aug</b> <span class="hot"><i style="--pct: 62"></i></span> <b class="accent-2">62%</b>
         <b>Sep</b> <i style="--pct: 19"></i> <b>19%</b>
       </div>
-      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#main-branch-failures-by-month">Data and method</a></p>
+      <p class="src under"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#main-branch-failures-by-month">Data and method</a></p>
       <aside class="notes">
         Share of main push runs of integration-tests.yml whose final attempt failed. December is left out: the workflow only started running on main when PR #27 merged on Dec 3, so it had just 13 main pushes (all passed). January also had only 13 (one failed). Jan to Apr failures were almost all the legacy suite. Jun to Aug: the matrix grew (Windows, Bun, Node 26, uWS) and Windows had long tail latency. Runs where a Linux Node shard failed: Jan 0%, Feb 0%, Mar 4%, Apr 0%, May 12%, Jun 40%, Jul 30%, Aug 34%, Sep 10%. October is left out because the month isn't over.
       </aside>
@@ -2010,7 +2055,7 @@ steps:
         <li>12 failed on every Linux Node version at once: likely real regressions</li>
       </ul>
       <p class="small muted">On Linux Node versions alone, 11% of main runs failed. The legacy suite's rate was 9.3%, with about a third of the tests.</p>
-      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#last-30-days">Data and method</a></p>
+      <p class="src under"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#last-30-days">Data and method</a></p>
       <aside class="notes">
         Sep 22 to Oct 21, 2026: 52 of 258 main runs failed on the final attempt (19% on the first). A 25% sample of PR runs failed 17% of the time on the first attempt (42 of 244), so main isn't failing because problems slip past review. Most failures are in configurations PRs also run. 36 of the 52 failed in a single configuration: uWS 13, Linux Node 24 8, Windows 7, Node 22 3, Bun 3, Node 26 2. 12 failed on Node 22, 24, and 26 together and nowhere else, the pattern of a real regression. Node 26 failed 44, 37, 17, and 15 main runs from June to September and was pinned to 26.5.0 from Aug 3 to Sep 1. Linux Node shards failed in 11% of main runs (29 of 258), against 9.3% for the legacy suite, which ran about 930 tests to today's 2,632. Different suites and matrices, so this doesn't show CI became less or more flaky.
       </aside>
@@ -2028,7 +2073,7 @@ steps:
         <li>Start the nodes in containers; test over SSH</li>
         <li>Copy the logs back; destroy the VM</li>
       </ol>
-      <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#old-cluster-harness">Data and method</a></p>
+      <p class="src under"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#old-cluster-harness">Data and method</a></p>
       <aside class="notes">
         The old cluster tests ran remotely: a fresh cloud VM per run, the nodes in containers, the tests over SSH, then the logs copied back and the VM destroyed. A cluster test file in harper-pro now starts its nodes locally instead.
       </aside>
