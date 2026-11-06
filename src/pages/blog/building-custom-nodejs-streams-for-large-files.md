@@ -159,9 +159,7 @@ So in order to solve problem 10, I only had to generate roughly 50,000 more prim
 
 Fast-forward to problem 41, [Pandigital Prime](https://projecteuler.net/problem=41):
 
-> We shall say that an $n$-digit number is pandigital if it makes use of all the
-> digits $1$ to $n$ exactly once. For example, $2143$ is a $4$-digit pandigital
-> and is also prime.
+> We shall say that an $n$-digit number is pandigital if it makes use of all the digits $1$ to $n$ exactly once. For example, $2143$ is a $4$-digit pandigital and is also prime.
 >
 > What is the largest $n$-digit pandigital prime that exists?
 

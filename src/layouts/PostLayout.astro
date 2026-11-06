@@ -42,6 +42,7 @@ const { frontmatter, headings } = Astro.props;
 <BaseLayout
 	title={stripCode(frontmatter.title)}
 	description={frontmatter.description}
+	noindex={frontmatter.noindex}
 >
 	<section class="post-container">
 		<div class="post-header">

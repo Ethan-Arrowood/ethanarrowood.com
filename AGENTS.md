@@ -116,6 +116,14 @@ That deck used to live at `.../performant-parallelizable-framework-agnostic-node
 
 An edition's deck lives beside the event folders, in a folder named by its edition slug: `public/talks/<talk-slug>/<edition-slug>/slides/`. For example, a "2027 edition" lives in `public/talks/<talk-slug>/2027/slides/`. A draft deck's `index.html` carries `<meta name="robots" content="noindex">`; remove it once the edition is final. When an edition is presented at an event, copy its folder into that event's folder and point the event's `slidesUrl` at the copy. The event keeps the deck as presented while the edition keeps changing.
 
+A deck that presents measured data keeps that data beside it in a `data/` folder, with a rendered method page (`data.md`) that has one heading per number, so slides can link to `<deck path>/data/#<heading>`.
+
+The presentation "Harper Integration Testing Framework Development and Impact Analysis" works this way. It's unlisted: it has no talk page, nothing links to it, and its slides and data page are `noindex`. Its slides are in `public/harper-integration-testing-framework-development-and-impact-analysis/slides/`, its data in `.../data/`, and its method page in `src/pages/harper-integration-testing-framework-development-and-impact-analysis/data.md`. The bare path redirects to the slides (`redirects` in `astro.config.ts`). Its collection scripts and full data live in a separate private repository, whose runbook covers refreshing the numbers; a publish script there writes an anonymized copy, which gets copied into this `data/` folder. Don't hand-edit those files or add collection scripts here. Monthly series include only complete months.
+
+To keep any Markdown page out of search engines, set `noindex: true` in its frontmatter (`PostLayout` passes it to `BaseLayout`, which adds `<meta name="robots" content="noindex">`).
+
+This site is public. Never publish data from private repositories: no private repository names, CI history, infrastructure details, or code. Aggregate counts are fine, such as "6 private repositories".
+
 Slides exported as a PDF go in the same event folder as `slides.pdf`, for example `public/talks/nodejs-code-and-learn/nodejs-interactive-render-atl-2026/slides.pdf`, with the event's `slidesUrl` pointing at it.
 
 These slide decks may use Ethan's personal HTML+CSS based presentation framework, Dais. The framework is individually vendored into each slide directory in order to avoid existing/past presentations breaking whenever the framework is updated.
@@ -127,7 +135,7 @@ These slide decks may use Ethan's personal HTML+CSS based presentation framework
 - **Markdown plugins**: remark (dates, math, GitHub alerts) + rehype (KaTeX, slug, autolink headings, Shiki syntax highlighting with `github-light`).
 - **Code blocks**: Copy-to-clipboard buttons injected client-side in `PostLayout.astro`; excluded for `plain-text`, `bash`, and `terminal` blocks.
 - **Table of contents**: `TableOfContents.astro` auto-generates from h2/h3 headings.
-- **Formatting**: [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) with tabs and 80 columns (`.oxfmtrc.json`). `npm run format` to fix, `npm run format:check` to verify (CI runs this on pull requests). `public/` is ignored so vendored slide decks are never touched.
+- **Formatting**: [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) with tabs and 80 columns for code (`.oxfmtrc.json`). Markdown and MDX use `proseWrap: "never"`, so each paragraph stays on one line. `npm run format` to fix, `npm run format:check` to verify (CI runs this on pull requests). `public/` is ignored so vendored slide decks are never touched.
 
 ## Themes
 
@@ -169,6 +177,7 @@ These apply to all site content (blog posts, talk descriptions, page copy):
 - No bold overuse. No sycophantic openers. No generic conclusions.
 - State facts plainly. Surface constraints and trade-offs early.
 - Keep language tight and direct.
+- Don't hard-wrap prose. In Markdown and HTML, write each paragraph or sentence block on a single line and let the editor or browser soft wrap. The 80-column limit applies to code, not prose.
 
 ## Accessibility
 

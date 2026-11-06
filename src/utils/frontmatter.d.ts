@@ -3,4 +3,5 @@ export interface Frontmatter {
 	pubDate: string;
 	editDate: string;
 	description: string;
+	noindex?: boolean;
 }
