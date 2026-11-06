@@ -462,7 +462,7 @@
 
     .dais .hero .n.bad { color: var(--dais-accent-2); }
     .dais .hero p { margin: 0; font-size: 3cqi; }
-    .dais .hero p.muted { font-size: 2.2cqi; }
+    .dais .hero p.muted { font-size: 2.2cqi; text-wrap: pretty; }
 
     /* Short lines right under the title, like the big-list slides, at a
        readable size. */
@@ -789,7 +789,7 @@
       font-weight: 700;
       white-space: nowrap;
     }
-    #legacy-runtime .runbar-wrap .small { margin: 0; max-width: 72cqi; }
+    #legacy-runtime .runbar-wrap .small { margin: 0; text-wrap: pretty; }
 
     /* The constraint behind a question, under it. */
     #constraints .questions small {
@@ -831,6 +831,40 @@
       font-weight: 700;
       color: var(--dais-accent);
     }
+
+    /* Harper's capabilities, as four short groups in two columns. */
+    #harper-uses .cols { gap: 4cqi; margin-block-start: 0.4cqi; }
+    #harper-uses h3 { margin: 1.4cqi 0 0.4cqi; font-size: 2cqi; color: var(--dais-muted); }
+    #harper-uses .cols > div > h3:first-child { margin-block-start: 0; }
+    #harper-uses ul { margin: 0; gap: 0.4cqi; padding-inline-start: 1.1em; font-size: 2cqi; }
+
+    /* Fixing one bug: every step is visible; each click highlights one and
+       dims the rest, then the kicker appears and the list returns to full. */
+    #legacy-dx .lines li { transition: color 0.25s ease-out, opacity 0.25s ease-out; }
+    #legacy-dx[data-dais-step]:not([data-dais-step="0"]):not([data-dais-step="6"]) .lines li:not(.step-current) { opacity: 0.4; }
+    #legacy-dx .lines li.step-current { color: var(--dais-accent); }
+
+    /* About me: experience and open source as two short lists, with profile
+       links pinned to the bottom. */
+    #about-me h3 { margin: 1.6cqi 0 0; font-size: 2.2cqi; color: var(--dais-muted); }
+    #about-me .list {
+      display: flex;
+      gap: 0.5cqi;
+      margin: 0;
+      padding-inline-start: 1.2em;
+      font-size: 2.4cqi;
+    }
+    #about-me .links {
+      margin: auto 0 0;
+      display: flex;
+      gap: 3cqi;
+      font-size: 1.7cqi;
+    }
+    #about-me .links a { color: var(--dais-accent); }
+
+    /* Where the panel can open the deck themselves. */
+    #intro .url { font-size: 2cqi; }
+    #intro .url a { color: var(--dais-accent); }
 
     /* Persistent deck footer: GitHub handle on the left, talk title and
        edition on the right, with the framework's nav dots centered between
@@ -922,8 +956,28 @@
   <main class="dais" aria-label="Harper Integration Testing Framework Development and Impact Analysis" tabindex="0">
 
     <section class="slide title" id="intro">
-      <h1>Harper Integration Testing Framework Development and Impact&nbsp;Analysis</h1>
-      <p>Ethan Arrowood</p>
+      <h1>Harper Integration Testing Framework Development and Impact Analysis</h1>
+      <p>Ethan Arrowood, Head of Open Source Engineering @ Harper</p>
+      <p class="url"><a href="https://ethanarrowood.com/harper-integration-testing-framework-development-and-impact-analysis">https://ethanarrowood.com/<wbr>harper-integration-testing-framework-development-and-impact-analysis</a></p>
+      <aside class="notes"></aside>
+    </section>
+
+    <section class="slide" id="about-me">
+      <h2>About me</h2>
+      <h3>Experience</h3>
+      <ul class="list">
+        <li>Harper: Head of Open Source Engineering, 2024 to present</li>
+        <li>Vercel: Senior Software Engineer, 2022 to 2024</li>
+        <li>Microsoft: Software Engineer II, 2019 to 2022</li>
+      </ul>
+      <h3>Open source</h3>
+      <ul class="list">
+        <li>Previous Fastify maintainer</li>
+        <li>Node.js & Undici maintainer</li>
+        <li>OpenJS Foundation</li>
+        <li>Ecma TC39 and TC55</li>
+      </ul>
+      <p class="links"><a href="https://ethanarrowood.com/#experience">ethanarrowood.com</a><a href="https://github.com/Ethan-Arrowood">github.com/Ethan-Arrowood</a><a href="https://www.linkedin.com/in/ethan-arrowood/">linkedin.com/in/ethan-arrowood</a></p>
       <aside class="notes"></aside>
     </section>
 
@@ -944,13 +998,39 @@
     <section class="slide" id="harper-uses">
       <h2>Harper is an application platform</h2>
       <p class="lead">Harper can run all sorts of applications</p>
-      <ul class="reveal">
-        <li>Web apps: Vite, React, Astro</li>
-        <li>Backend APIs: REST, MQTT, GraphQL, MCP</li>
-        <li>Data stores: Blob, LMDB, RocksDB</li>
-        <li>Multi-instance replication</li>
-        <li>GPU access for LLMs</li>
-      </ul>
+      <div class="cols">
+        <div>
+          <h3>Applications</h3>
+          <ul>
+            <li>Web apps: Vite, React, Astro, Next.js</li>
+            <li>APIs: REST, GraphQL, MQTT, MCP</li>
+            <li>Each app in its own isolated JavaScript context</li>
+          </ul>
+          <h3>AI</h3>
+          <ul>
+            <li>Models: Anthropic, Bedrock, OpenAI, Ollama</li>
+            <li>Built-in MCP server for LLM clients</li>
+            <li>GPU access for LLMs</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Data</h3>
+          <ul>
+            <li>Storage: RocksDB (v5 default), LMDB, blobs</li>
+            <li>HNSW vector search with automatic embeddings</li>
+            <li>BM25 full-text search</li>
+            <li>Branched databases: a private data fork per app</li>
+          </ul>
+          <h3>Clusters</h3>
+          <ul>
+            <li>Multi-instance replication</li>
+            <li>Sharding by primary key</li>
+          </ul>
+        </div>
+      </div>
+      <aside class="notes">
+        From the v5 (Lincoln) release notes. 5.0: RocksDB replaces LMDB as the default storage engine, each application runs in its own JavaScript context, and transitive replication lets nodes replicate through intermediaries. 5.1: a built-in models layer (scope.models) for embeddings and text generation, the @embed schema directive, an agent loop, a built-in MCP server, and int8-quantized HNSW. 5.2: filtered vector search evaluates the filter during HNSW traversal. 5.3: BM25 full-text search (Tantivy), a native memory-mapped HNSW index, branched databases, and isolated applications on their own worker thread. 5.4: sharding with @sharded. Replication ships in the Pro edition. HNSW: Hierarchical Navigable Small World, a graph index for nearest-neighbor search. BM25: a standard relevance ranking for text search.
+      </aside>
     </section>
 
     <!-- Removed timeline slide because it felt out of place. They have very little context at this point in the presentation. Any details in the timeline will just be forgotten about. If any of that is relevant, lets present it in specific slides and maybe summarize later if it makes sense. -->
@@ -1009,7 +1089,7 @@
 
     <section class="slide" id="legacy-coupled">
       <h2>Shared state meant</h2>
-      <ul class="lines reveal">
+      <ul class="lines">
         <li>No running one file on its own</li>
         <li>No sharding across machines</li>
         <li>No parallelism</li>
@@ -1024,7 +1104,7 @@
     <section class="slide" id="legacy-step">
       <div class="hero">
         <p><span class="n">7.5 min</span> median to run the suite</p>
-        <p class="muted">p90 7.7 min · the CI step that runs the tests, after setup · May to Jun 2026</p>
+        <p class="muted">p90 7.7 min · (May to Jun 2026)</p>
       </div>
       <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#legacy-test-step-time">Data and method</a></p>
       <aside class="notes">
@@ -1068,6 +1148,21 @@
       <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#legacy-main-branch-failures">Data and method</a></p>
       <aside class="notes">
         Main and PR runs: in 77 of 126 failing first attempts, at least one of Node 20, 22, or 24 passed on the same commit. Same code, different result. That points to flakiness, but a real version-specific bug produces the same pattern, so it's a signal, not a measured flake rate. Every retry meant rerunning the whole suite.
+      </aside>
+    </section>
+
+    <section class="slide" id="legacy-dx">
+      <h2>Fixing one bug, the old way</h2>
+      <ol class="lines">
+        <li data-step="1">Make a one-line change</li>
+        <li data-step="2">Push it, then wait about 8 minutes for CI</li>
+        <li data-step="3">A test in a file you never touched fails</li>
+        <li data-step="4">Your change? State from an earlier file? Just flaky?</li>
+        <li data-step="5">Rerun the whole suite and hope</li>
+      </ol>
+      <p class="kicker step" data-step="6">Every failure was a wild goose chase.</p>
+      <aside class="notes">
+        Not measured: this is what working in the suite was like. The facts behind it: the test step took a median 7.5 minutes and the whole CI job 8.2; files ran in a fixed order and depended on state left by earlier files, so one file couldn't run on its own; and in 61% of failing runs another Node version passed on the same commit.
       </aside>
     </section>
 
@@ -1145,7 +1240,7 @@
 
     <section class="slide" id="process-lifecycle">
       <h2>Manage the lifecycle</h2>
-      <ul class="reveal big-list">
+      <ul class="big-list">
         <li>Start it</li>
         <li>Wait for it to be ready</li>
         <li>Restart it</li>
@@ -1157,7 +1252,7 @@
 
     <section class="slide" id="process-io">
       <h2>Interact with the process</h2>
-      <ul class="reveal big-list">
+      <ul class="big-list">
         <li>Send signals to it</li>
         <li>Write to stdin</li>
         <li>Stream and read stdout and stderr</li>
@@ -1169,7 +1264,7 @@
 
     <section class="slide" id="test-needs">
       <h2>What does one test need to be independent?</h2>
-      <ul class="lines reveal">
+      <ul class="lines">
         <li>Isolated Harper process, data directory, and network address</li>
         <li>Hooks for Harper application lifecycle</li>
         <li>Log retainment for debugging</li>
@@ -1182,11 +1277,11 @@
 
     <section class="slide" id="constraints">
       <h2>How do we&hellip;</h2>
-      <div class="reveal questions">
-        <p><span class="k">isolate</span> each test file in its own process?<small>without changing Harper core</small></p>
-        <p>make the suite <span class="k">run everywhere</span>?<small>any OS, any test runner, locally and in CI</small></p>
-        <p>test <span class="k">every kind</span> of application?</p>
-        <p>do it all <span class="k">performantly</span>?</p>
+      <div class="questions">
+        <p class="step"><span class="k">isolate</span> each test file in its own process?<small>without changing Harper core</small></p>
+        <p class="step">make the suite <span class="k">run everywhere</span>?<small>any OS, any test runner, locally and in CI</small></p>
+        <p class="step">test <span class="k">every kind</span> of application?</p>
+        <p class="step">do it all <span class="k">performantly</span>?</p>
       </div>
       <aside class="notes"></aside>
     </section>
@@ -1344,11 +1439,11 @@
   <span class="tok-keyword">const</span> { port } = server.<span class="tok-fn">address</span>();   <span class="tok-comment">// the OS picked a free one</span>
 });</code></pre>
       <p>But two problems:</p>
-      <ul class="reveal">
+      <ul class="">
         <li>The app has to <strong>report back</strong> which ports it received</li>
         <li>Harper currently requires ports to be <strong>configured</strong></li>
       </ul>
-      <p class="small muted">How can we solve this without modifying core?</p>
+      <p class="small muted step">How can we solve this without modifying core?</p>
       <aside class="notes"></aside>
     </section>
 
@@ -1539,7 +1634,7 @@ sudo ifconfig lo0 alias 127.0.0.2 netmask 255.255.255.255 up</code></pre>
 
     <section class="slide" id="orphans">
       <h2>Crashed runners left Harper running</h2>
-      <ul class="lines reveal">
+      <ul class="lines">
         <li>Each Harper starts in its own process group</li>
         <li>A shared monitor reaps groups whose runner died</li>
         <li>macOS and Linux only; Windows relies on runner cleanup</li>
@@ -1701,7 +1796,7 @@ steps:
       <div class="cols">
         <div>
           <h3>Initially</h3>
-          <ul class="lines reveal">
+          <ul class="lines">
             <li>Harper engineers changing core</li>
             <li>The harper-pro team testing clusters</li>
             <li>Plugin and template authors, like Next.js</li>
@@ -1909,7 +2004,7 @@ steps:
 
     <section class="slide" id="failure-scope">
       <h2>CI isn't reliable yet</h2>
-      <ul class="lines reveal">
+      <ul class="lines">
         <li>20% of main runs failed (52 of 258); PR runs fail at a similar rate (17%)</li>
         <li>36 of the 52 failed in one configuration, most often uWS</li>
         <li>12 failed on every Linux Node version at once: likely real regressions</li>
@@ -1928,7 +2023,7 @@ steps:
 
     <section class="slide" id="harper-pro">
       <h2>Cluster tests used to need a cloud VM</h2>
-      <ol class="lines reveal">
+      <ol class="lines">
         <li>Provision a VM for every run</li>
         <li>Start the nodes in containers; test over SSH</li>
         <li>Copy the logs back; destroy the VM</li>
