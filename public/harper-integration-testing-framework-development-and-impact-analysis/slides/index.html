@@ -605,7 +605,7 @@
     #growth .chart i {
       position: relative;
       flex: 1;
-      height: calc(var(--v) / 2435 * 100%);
+      height: calc(var(--v) / 2790 * 100%);
       border-radius: 0.2cqi 0.2cqi 0 0;
       background: var(--dais-muted);
     }
@@ -1215,7 +1215,7 @@
       <h2>The goal</h2>
       <p>Every test file gets its own Harper</p>
       <aside class="notes">
-        What I owned: the design and first version, the concurrency experiment and default, the loopback address pool, its lock, the macOS setup script, the runner-agnostic lifecycle API, and extracting it into @harperfast/integration-testing. harper PR #27 (Nov to Dec 2025) added the lifecycle, the loopback pool, the runner, and the macOS setup script. harper PR #334 (Apr 2026) extracted them into the package. In the package repo: #2 (Bun support and MQTT port configuration), #3, and #4. Teammates: Kris: the port (14 harper PRs) and integration-testing #6, #7, #17, #20, #21, #22, #30 to #36, #41. Nathan: #9, #12, #24, and the package's releases. Dawson: #18, #40. Test growth: 1,096 test calls after the port, 2,422 on Oct 21.
+        What I owned: the design and first version, the concurrency experiment and default, the loopback address pool, its lock, the macOS setup script, the runner-agnostic lifecycle API, and extracting it into @harperfast/integration-testing. harper PR #27 (Nov to Dec 2025) added the lifecycle, the loopback pool, the runner, and the macOS setup script. harper PR #334 (Apr 2026) extracted them into the package. In the package repo: #2 (Bun support and MQTT port configuration), #3, and #4. Teammates: Kris: the port (14 harper PRs) and integration-testing #6, #7, #17, #20, #21, #22, #30 to #36, #41. Nathan: #9, #12, #24, and the package's releases. Dawson: #18, #40. Test growth: 1,096 test calls after the port, 2,777 on Oct 31.
       </aside>
     </section>
 
@@ -1830,9 +1830,9 @@ steps:
 
     <section class="slide divider" id="part-impact">
       <h2>Did it work?</h2>
-      <p>Eleven months of Harper CI data</p>
+      <p>Twelve months of Harper CI data</p>
       <aside class="notes">
-        This section combines source counts, merged PRs, and CI runs with different windows. They are observations, not a controlled experiment. Data covers HarperFast/harper from Nov 2025 through Oct 21, 2026, plus harper-pro and the Next.js plugin. Monthly series stop at September, the last complete month.
+        This section combines source counts, merged PRs, and CI runs with different windows. They are observations, not a controlled experiment. Data covers HarperFast/harper from Nov 2025 through Oct 31, 2026, plus harper-pro and the Next.js plugin. Monthly series run through October.
       </aside>
     </section>
 
@@ -1879,7 +1879,7 @@ steps:
     <section class="slide" id="growth">
       <h2>The legacy suite stayed flat. The new one grew.</h2>
       <p class="legend"><span style="--swatch: var(--dais-muted)">Legacy suite</span><span style="--swatch: var(--dais-accent)">Framework tests</span></p>
-      <div class="chart" role="img" aria-label="Test cases on main by month. The legacy suite stays near 990 from December to June, then is removed. Framework tests grow from 7 in December to 117 in May, 1,378 in July, and 2,422 on October 21.">
+      <div class="chart" role="img" aria-label="Test cases on main by month. The legacy suite stays near 990 from December to June, then is removed. Framework tests grow from 7 in December to 117 in May, 1,378 in July, and 2,777 on October 31.">
         <div><i style="--v: 985"><span>985</span></i><i class="new" style="--v: 7"></i></div>
         <div><i style="--v: 985"></i><i class="new" style="--v: 7"></i></div>
         <div><i style="--v: 985"></i><i class="new" style="--v: 28"></i></div>
@@ -1891,15 +1891,15 @@ steps:
         <div><i style="--v: 0"></i><i class="new" style="--v: 1699"></i></div>
         <div><i style="--v: 0"></i><i class="new" style="--v: 2007"></i></div>
         <div><i style="--v: 0"></i><i class="new" style="--v: 2304"></i></div>
-        <div><i style="--v: 0"></i><i class="new" style="--v: 2422"><span>2,422</span></i></div>
+        <div><i style="--v: 0"></i><i class="new" style="--v: 2777"><span>2,777</span></i></div>
       </div>
       <div class="months" aria-hidden="true">
-        <span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Now</span>
+        <span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Oct 31</span>
       </div>
-      <p class="small muted">Harper engineers added 1,326 tests after the port finished.</p>
+      <p class="small muted">Harper engineers added 1,681 tests after the port finished.</p>
       <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#test-cases-over-time">Data and method</a></p>
       <aside class="notes">
-        Test cases on harper's main branch, counted as it()/test() calls in integrationTests at the end of the first day of each month (Dec = Dec 4, after PR #27 merged; Now = Oct 21, 2026). Legacy suite removed Jun 8. Legacy: 985 Dec to Apr, 993 May and Jun. Framework: Dec 7, Jan 7, Feb 28, Mar 59, Apr 60, May 117, Jun 372, Jul 1,378, Aug 1,699, Sep 2,007, Oct 2,304, Now 2,422. The framework passed the legacy suite the day the port finished and has added 1,326 tests since.
+        Test cases on harper's main branch, counted as it()/test() calls in integrationTests at the end of the first day of each month (Dec = Dec 4, after PR #27 merged; the last column is Oct 31, 2026). Legacy suite removed Jun 8. Legacy: 985 Dec to Apr, 993 May and Jun. Framework: Dec 7, Jan 7, Feb 28, Mar 59, Apr 60, May 117, Jun 372, Jul 1,378, Aug 1,699, Sep 2,007, Oct 2,304, Oct 31 2,777. The framework passed the legacy suite the day the port finished and has added 1,681 tests since.
       </aside>
     </section>
 
@@ -1907,23 +1907,24 @@ steps:
       <h2>More PRs come with integration tests</h2>
       <p class="small muted">Merged harper pull requests (PRs) by month, and how many touched integration tests</p>
       <p class="legend"><span style="--swatch: var(--dais-accent)">Touched integration tests</span><span style="--swatch: var(--dais-muted)">Other merged PRs</span></p>
-      <div class="colchart stacked" style="--max: 250" role="img" aria-label="Merged PRs that touch integration tests by month: Dec 3 of 14 (21%), Jan 3 of 13 (23%), Feb 5 of 30 (17%), Mar 10 of 96 (10%), Apr 8 of 67 (12%), May 29 of 151 (19%), Jun 59 of 229 (26%), Jul 54 of 215 (25%), Aug 48 of 148 (32%), Sep 74 of 238 (31%).">
+      <div class="colchart stacked" style="--max: 380" role="img" aria-label="Merged PRs that touch integration tests by month: Dec 3 of 14 (21%), Jan 3 of 13 (23%), Feb 5 of 30 (17%), Mar 10 of 96 (10%), Apr 8 of 67 (12%), May 29 of 151 (19%), Jun 59 of 229 (26%), Jul 54 of 215 (25%), Aug 48 of 148 (32%), Sep 74 of 238 (31%), Oct 128 of 359 (36%).">
         <div><i class="share-top" style="--v: 14"><b style="--part: 21.4"></b><span><em>21%</em>3 of 14</span></i></div>
         <div><i class="share-top" style="--v: 13"><b style="--part: 23.1"></b><span><em>23%</em>3 of 13</span></i></div>
         <div><i class="share-top" style="--v: 30"><b style="--part: 16.7"></b><span><em>17%</em>5 of 30</span></i></div>
         <div><i class="share-above" style="--v: 96"><b style="--part: 10.4"><em>10%</em></b><span>10 of 96</span></i></div>
         <div><i class="share-above" style="--v: 67"><b style="--part: 11.9"><em>12%</em></b><span>8 of 67</span></i></div>
-        <div><i style="--v: 151"><b style="--part: 19.2"><em>19%</em></b><span>29 of 151</span></i></div>
+        <div><i class="share-above" style="--v: 151"><b style="--part: 19.2"><em>19%</em></b><span>29 of 151</span></i></div>
         <div><i style="--v: 229"><b style="--part: 25.8"><em>26%</em></b><span>59 of 229</span></i></div>
         <div><i style="--v: 215"><b style="--part: 25.1"><em>25%</em></b><span>54 of 215</span></i></div>
         <div><i style="--v: 148"><b style="--part: 32.4"><em>32%</em></b><span>48 of 148</span></i></div>
         <div><i style="--v: 238"><b style="--part: 31.1"><em>31%</em></b><span>74 of 238</span></i></div>
+        <div><i style="--v: 359"><b style="--part: 35.7"><em>36%</em></b><span>128 of 359</span></i></div>
       </div>
-      <div class="colchart-x" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
+      <div class="colchart-x" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span></div>
       <p class="colchart-note">Bar height: PRs merged that month. Above each bar: PRs that touched integration tests, of all merged. On the bar: that share.</p>
       <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#prs-touching-integration-tests">Data and method</a></p>
       <aside class="notes">
-        Merged PRs to harper's main branch from GitHub, by merge month. "Touched" means the PR changed a file under integrationTests/ (not the legacy suite). Dec and Jan are tiny months. Feb to Apr: 10 to 17%. Jun to Sep: 25 to 32%, at three times the volume. Some of those PRs only fix or maintain tests, so the next slide looks at code changes. October is left out because the month isn't over.
+        Merged PRs to harper's main branch from GitHub, by merge month. "Touched" means the PR changed a file under integrationTests/ (not the legacy suite). Dec and Jan are tiny months. Feb to Apr: 10 to 17%. Jun to Oct: 25 to 36%, at three to five times the volume. October: 128 of 359. Some of those PRs only fix or maintain tests, so the next slide looks at code changes.
       </aside>
     </section>
 
@@ -1931,76 +1932,77 @@ steps:
       <h2>More code changes ship with a test</h2>
       <p class="small muted">PRs that change non-test code, and how many also change an integration test</p>
       <p class="legend"><span style="--swatch: var(--dais-accent)">Also changed an integration test</span><span style="--swatch: var(--dais-muted)">Code only</span></p>
-      <div class="colchart stacked" style="--max: 170" role="img" aria-label="Code PRs that also change an integration test by month: Dec 1 of 7 (14%), Jan 2 of 8 (25%), Feb 3 of 23 (13%), Mar 2 of 60 (3%), Apr 2 of 42 (5%), May 15 of 97 (15%), Jun 26 of 151 (17%), Jul 35 of 161 (22%), Aug 33 of 102 (32%), Sep 47 of 144 (33%).">
+      <div class="colchart stacked" style="--max: 290" role="img" aria-label="Code PRs that also change an integration test by month: Dec 1 of 7 (14%), Jan 2 of 8 (25%), Feb 3 of 23 (13%), Mar 2 of 60 (3%), Apr 2 of 42 (5%), May 15 of 97 (15%), Jun 26 of 151 (17%), Jul 35 of 161 (22%), Aug 33 of 102 (32%), Sep 47 of 144 (33%), Oct 108 of 272 (40%).">
         <div><i class="share-top" style="--v: 7"><b style="--part: 14.3"></b><span><em>14%</em>1 of 7</span></i></div>
         <div><i class="share-top" style="--v: 8"><b style="--part: 25.0"></b><span><em>25%</em>2 of 8</span></i></div>
-        <div><i class="share-above" style="--v: 23"><b style="--part: 13.0"><em>13%</em></b><span>3 of 23</span></i></div>
+        <div><i class="share-top" style="--v: 23"><b style="--part: 13.0"></b><span><em>13%</em>3 of 23</span></i></div>
         <div><i class="share-above" style="--v: 60"><b style="--part: 3.3"><em>3%</em></b><span>2 of 60</span></i></div>
         <div><i class="share-above" style="--v: 42"><b style="--part: 4.8"><em>5%</em></b><span>2 of 42</span></i></div>
         <div><i class="share-above" style="--v: 97"><b style="--part: 15.5"><em>15%</em></b><span>15 of 97</span></i></div>
-        <div><i style="--v: 151"><b style="--part: 17.2"><em>17%</em></b><span>26 of 151</span></i></div>
+        <div><i class="share-above" style="--v: 151"><b style="--part: 17.2"><em>17%</em></b><span>26 of 151</span></i></div>
         <div><i style="--v: 161"><b style="--part: 21.7"><em>22%</em></b><span>35 of 161</span></i></div>
         <div><i style="--v: 102"><b style="--part: 32.4"><em>32%</em></b><span>33 of 102</span></i></div>
         <div><i style="--v: 144"><b style="--part: 32.6"><em>33%</em></b><span>47 of 144</span></i></div>
+        <div><i style="--v: 272"><b style="--part: 39.7"><em>40%</em></b><span>108 of 272</span></i></div>
       </div>
-      <div class="colchart-x" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
+      <div class="colchart-x" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span></div>
       <p class="colchart-note">Bar height: merged PRs that changed non-test code. Above each bar: how many also changed an integration test. On the bar: that share.</p>
       <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#code-changes-that-ship-an-integration-test">Data and method</a></p>
       <aside class="notes">
-        A code PR changes a .js or .ts file outside test directories. It "ships with a test" when it also adds or changes an integration test file. This replaces counting "fix" commits by subject, which depended on how people titled commits. Feb to Apr: 3 to 13%. Jun to Sep: 17 to 33%. September: 47 of 144. October is left out because the month isn't over.
+        A code PR changes a .js or .ts file outside test directories. It "ships with a test" when it also adds or changes an integration test file. This replaces counting "fix" commits by subject, which depended on how people titled commits. Feb to Apr: 3 to 13%. Jun to Oct: 17 to 40%. October: 108 of 272.
       </aside>
     </section>
 
-    <section class="slide" id="today">
+        <section class="slide" id="today">
       <h2>Today, one CI run executes</h2>
       <div class="hero">
-        <span class="n">2,632 tests</span>
-        <p>starting 421 Harper instances, in 5.4 minutes</p>
-        <p class="muted">six Linux Node.js 24 shards running at once, Oct 21, 2026</p>
+        <span class="n">3,237 tests</span>
+        <p>starting 539 Harper instances, in 7.0 minutes</p>
+        <p class="muted">six Linux Node.js 24 shards running at once, Oct 31, 2026</p>
       </div>
       <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#tests-and-instances-per-run">Data and method</a></p>
       <aside class="notes">
-        Run 39696281381 (main, Oct 21, 2026), summed over its six Linux Node.js 24 shards: 2,632 tests, 2,610 pass, 0 fail, 21 skipped, 1 todo. That's more than the 2,422 test() calls in source because some tests are generated in loops. The Windows shards run 871 tests.
+        Run 41250415997 (main, Oct 31, 2026), summed over its six Linux Node.js 24 shards: 3,237 tests, 3,217 pass, 0 fail, 18 skipped, 2 todo. That's more than the 2,777 test() calls in source because some tests are generated in loops. The Windows shards run 1,079 tests.
       </aside>
     </section>
 
     <section class="slide" id="parallel-time">
-      <h2>74 minutes of tests, finished in 5.4</h2>
+      <h2>95 minutes of tests, finished in 7</h2>
       <div class="compare">
-        <div><span class="when">Summed suite time</span><span class="n">74.4 min</span><span class="muted">all six shards, added up</span></div>
+        <div><span class="when">Summed suite time</span><span class="n">95.2 min</span><span class="muted">all six shards, added up</span></div>
         <span class="arrow" aria-hidden="true">&rarr;</span>
-        <div class="after"><span class="when">Wall time</span><span class="n">5.4 min</span><span class="muted">the slowest shard</span></div>
+        <div class="after"><span class="when">Wall time</span><span class="n">7.0 min</span><span class="muted">the slowest shard</span></div>
       </div>
-      <p class="small muted">About 13.8&times; less. The sum was measured while files ran concurrently, so it estimates a serial run rather than measuring one.</p>
+      <p class="small muted">About 13.7&times; less. The sum was measured while files ran concurrently, so it estimates a serial run rather than measuring one.</p>
       <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#summed-suite-time-vs-slowest-shard">Data and method</a></p>
       <aside class="notes">
-        A 13.8x ratio. 74.4 min is the sum of top-level suite durations on the six Linux Node.js 24 shards of that run. Those durations were measured while files ran concurrently, so they aren't a serial baseline; this shows how much work overlaps, not a measured speedup. Each shard runs three files at once (floor(4 / 2) + 1 on a 4-vCPU runner) across six shards.
+        A 13.7x ratio. 95.2 min is the sum of top-level suite durations on the six Linux Node.js 24 shards of that run. Those durations were measured while files ran concurrently, so they aren't a serial baseline; this shows how much work overlaps, not a measured speedup. Each shard runs three files at once (floor(4 / 2) + 1 on a 4-vCPU runner) across six shards.
       </aside>
     </section>
 
-    <section class="slide" id="ci-matrix">
+        <section class="slide" id="ci-matrix">
       <h2>On every platform we test in CI</h2>
       <div class="hero">
-        <span class="n">36 jobs</span>
-        <p>Node 22, 24, 26, Bun, Windows, and uWS</p>
-        <p class="muted">six shards each</p>
+        <span class="n">30 jobs</span>
+        <p>on every push to main: Node 24 and 26, Windows, Bun, and uWS</p>
+        <p class="muted">six shards each · nightly and release branches add Node 22, for 36</p>
       </div>
       <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#ci-matrix">Data and method</a></p>
       <aside class="notes">
-        Main, release branches, and a nightly run all 36 shard jobs. PRs run 24: Node 24 plus Windows, Bun, and uWS. Windows and Bun were added in May 2026, Node 26 on May 29, uWS on Jul 9. Windows runs 871 tests; the rest skip on that platform.
+        As of Oct 31, 2026: pushes to main run 30 shard jobs (Linux Node 24 and 26, Windows on Node 26, Bun, and uWS). Release branches and the nightly run add Linux Node 22, for 36. PRs run 24: Node 26 plus Windows, Bun, and uWS. Windows and Bun were added in May 2026, Node 26 on May 29, uWS on Jul 9. In late October, PRs moved to Node 26 and main pushes dropped Node 22. Windows runs 1,079 tests; the rest skip on that platform.
       </aside>
     </section>
 
     <section class="slide" id="result-time">
       <h2>And returns a result in about 12 minutes</h2>
       <div class="hero">
-        <span class="n">11.9 min</span>
+        <span class="n">12.3 min</span>
         <p>median time to a full-matrix result</p>
-        <p class="muted">205 successful first-attempt main runs, last 30 days</p>
+        <p class="muted">267 successful first-attempt main runs, Oct 2 to 31</p>
       </div>
       <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#time-to-a-full-result">Data and method</a></p>
       <aside class="notes">
-        First job start to last job end, Sep 22 to Oct 21, 2026, every successful first-attempt main push run; p90 13.1. PRs (24 jobs): median 10.5 min from a 25% sample. Monthly medians for main runs went 8.6 (Dec), 9.0 (Feb), 10.3 (Mar), 15.9 (Jun), 9.2 (Sep) while the suite grew from 2 to about 190 test files. This is full-matrix elapsed time; the legacy 7.5 min was one test step, so they aren't a direct comparison.
+        First job start to last job end, Oct 2 to 31, 2026, every successful first-attempt main push run; p90 13.4. PRs (24 jobs): median 11.9 min from a 25% sample. Monthly medians for main runs went 8.6 (Dec), 9.0 (Feb), 10.3 (Mar), 15.9 (Jun), 9.2 (Sep), 12.1 (Oct) while the suite grew from 2 to about 300 test files. This is full-matrix elapsed time; the legacy 7.5 min was one test step, so they aren't a direct comparison.
       </aside>
     </section>
 
@@ -2008,7 +2010,7 @@ steps:
       <h2>And CI runs them all the time</h2>
       <p class="small muted">Runs of harper's integration test workflow, by month</p>
       <p class="legend"><span style="--swatch: var(--dais-muted)">Through May</span><span style="--swatch: var(--dais-accent)">From June (the port finished Jun 9)</span></p>
-      <div class="colchart" style="--max: 1700" role="img" aria-label="Integration test CI runs per month: Dec 68, Jan 132, Feb 213, Mar 446, Apr 493, May 1,042, Jun 1,356, Jul 1,374, Aug 1,186, Sep 1,622">
+      <div class="colchart" style="--max: 2100" role="img" aria-label="Integration test CI runs per month: Dec 68, Jan 132, Feb 213, Mar 446, Apr 493, May 1,042, Jun 1,356, Jul 1,374, Aug 1,186, Sep 1,622, Oct 1,936">
         <div><i style="--v: 68"><span>68</span></i></div>
         <div><i style="--v: 132"><span>132</span></i></div>
         <div><i style="--v: 213"><span>213</span></i></div>
@@ -2019,18 +2021,19 @@ steps:
         <div><i class="after" style="--v: 1374"><span>1,374</span></i></div>
         <div><i class="after" style="--v: 1186"><span>1,186</span></i></div>
         <div><i class="after" style="--v: 1622"><span>1,622</span></i></div>
+        <div><i class="after" style="--v: 1936"><span>1,936</span></i></div>
       </div>
-      <div class="colchart-x" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
+      <div class="colchart-x" aria-hidden="true"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span></div>
       <p class="src under"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#ci-runs-per-month">Data and method</a></p>
       <aside class="notes">
-        Runs of integration-tests.yml per month. Dec 2025: 68 runs from 14 PR branches, not counting Renovate. Last 30 days (to Oct 21): 1,461 runs from 355 PR branches. More runs show use; on their own they don't show faster engineering or better reliability.
+        Runs of integration-tests.yml per month. Dec 2025: 68 runs from 14 PR branches, not counting Renovate. October 2026: 1,936 runs from 433 PR branches. More runs show use; on their own they don't show faster engineering or better reliability.
       </aside>
     </section>
 
     <section class="slide" id="failure-history">
       <h2>CI is not always green</h2>
       <p class="small muted">Main pushes with a failed job, by month. Failure rate, not flake rate.</p>
-      <div class="bars" role="img" aria-label="Share of main branch CI runs that failed, by month. January 8%, February 7%, March 16%, April 19%, May 41%, June 66%, July 52%, August 62%, September 19%.">
+      <div class="bars" role="img" aria-label="Share of main branch CI runs that failed, by month. January 8%, February 7%, March 16%, April 19%, May 41%, June 66%, July 52%, August 62%, September 19%, October 25%.">
         <b>Jan</b> <i style="--pct: 8"></i> <b>8%</b>
         <b>Feb</b> <i style="--pct: 7"></i> <b>7%</b>
         <b>Mar</b> <i style="--pct: 16"></i> <b>16%</b>
@@ -2040,24 +2043,25 @@ steps:
         <b class="accent-2">Jul</b> <span class="hot"><i style="--pct: 52"></i></span> <b class="accent-2">52%</b>
         <b class="accent-2">Aug</b> <span class="hot"><i style="--pct: 62"></i></span> <b class="accent-2">62%</b>
         <b>Sep</b> <i style="--pct: 19"></i> <b>19%</b>
+        <b>Oct</b> <i style="--pct: 25"></i> <b>25%</b>
       </div>
       <p class="src under"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#main-branch-failures-by-month">Data and method</a></p>
       <aside class="notes">
-        Share of main push runs of integration-tests.yml whose final attempt failed. December is left out: the workflow only started running on main when PR #27 merged on Dec 3, so it had just 13 main pushes (all passed). January also had only 13 (one failed). Jan to Apr failures were almost all the legacy suite. Jun to Aug: the matrix grew (Windows, Bun, Node 26, uWS) and Windows had long tail latency. Runs where a Linux Node shard failed: Jan 0%, Feb 0%, Mar 4%, Apr 0%, May 12%, Jun 40%, Jul 30%, Aug 34%, Sep 10%. October is left out because the month isn't over.
+        Share of main push runs of integration-tests.yml whose final attempt failed. December is left out: the workflow only started running on main when PR #27 merged on Dec 3, so it had just 13 main pushes (all passed). January also had only 13 (one failed). Jan to Apr failures were almost all the legacy suite. Jun to Aug: the matrix grew (Windows, Bun, Node 26, uWS) and Windows had long tail latency. Runs where a Linux Node shard failed: Jan 0%, Feb 0%, Mar 4%, Apr 0%, May 12%, Jun 40%, Jul 30%, Aug 34%, Sep 10%, Oct 10%.
       </aside>
     </section>
 
-    <section class="slide" id="failure-scope">
+        <section class="slide" id="failure-scope">
       <h2>CI isn't reliable yet</h2>
       <ul class="lines">
-        <li>20% of main runs failed (52 of 258); PR runs fail at a similar rate (17%)</li>
-        <li>36 of the 52 failed in one configuration, most often uWS</li>
+        <li>24% of main runs failed (86 of 353); PR runs fail at a similar rate (19%)</li>
+        <li>67 of the 86 failed in one configuration, most often uWS</li>
         <li>12 failed on every Linux Node version at once: likely real regressions</li>
       </ul>
-      <p class="small muted">On Linux Node versions alone, 11% of main runs failed. The legacy suite's rate was 9.3%, with about a third of the tests.</p>
+      <p class="small muted">On Linux Node versions alone, 10% of main runs failed. The legacy suite's rate was 9.3%, with under a third of the tests.</p>
       <p class="src under"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#last-30-days">Data and method</a></p>
       <aside class="notes">
-        Sep 22 to Oct 21, 2026: 52 of 258 main runs failed on the final attempt (19% on the first). A 25% sample of PR runs failed 17% of the time on the first attempt (42 of 244), so main isn't failing because problems slip past review. Most failures are in configurations PRs also run. 36 of the 52 failed in a single configuration: uWS 13, Linux Node 24 8, Windows 7, Node 22 3, Bun 3, Node 26 2. 12 failed on Node 22, 24, and 26 together and nowhere else, the pattern of a real regression. Node 26 failed 44, 37, 17, and 15 main runs from June to September and was pinned to 26.5.0 from Aug 3 to Sep 1. Linux Node shards failed in 11% of main runs (29 of 258), against 9.3% for the legacy suite, which ran about 930 tests to today's 2,632. Different suites and matrices, so this doesn't show CI became less or more flaky.
+        Oct 2 to 31, 2026: 86 of 353 main runs failed on the final attempt (23% on the first). A 25% sample of PR runs failed 19% of the time on the first attempt (56 of 290), so main isn't failing because problems slip past review. Most failures are in configurations PRs also run. 67 of the 86 failed in a single configuration: uWS 30, Windows 10, Linux Node 24 9, Bun 9, Node 26 8, Node 22 1. 12 failed on Node 22, 24, and 26 together and nowhere else, the pattern of a real regression. Node 26 failed 44, 37, 17, 15, and 24 main runs from June to October and was pinned to 26.5.0 from Aug 3 to Sep 1. Linux Node shards failed in 10% of main runs (36 of 353), against 9.3% for the legacy suite, which ran about 930 tests to today's 3,237. Different suites and matrices, so this doesn't show CI became less or more flaky.
       </aside>
     </section>
 
@@ -2094,15 +2098,15 @@ steps:
     </section>
 
     <section class="slide" id="cluster-growth">
-      <h2>harper-pro cluster tests: 1 to 104 files</h2>
+      <h2>harper-pro cluster tests: 1 to 118 files</h2>
       <div class="compare">
         <div><span class="when">Mar 2026</span><span class="n">1</span><span class="muted">cluster test file</span></div>
         <span class="arrow" aria-hidden="true">&rarr;</span>
-        <div class="after"><span class="when">Today</span><span class="n">104</span><span class="muted">cluster test files</span></div>
+        <div class="after"><span class="when">Today</span><span class="n">118</span><span class="muted">cluster test files</span></div>
       </div>
-      <p class="src">Source: <a href="https://github.com/HarperFast/harper-pro/tree/ae54741a9c467926c9bec4771871013f07c84fcd/integrationTests/cluster">Mar 1</a> · <a href="https://github.com/HarperFast/harper-pro/tree/3dc5419336044ebfeb88febd21e10d693b0e2d1f/integrationTests/cluster">Oct 21</a></p>
+      <p class="src">Source: <a href="https://github.com/HarperFast/harper-pro/tree/ae54741a9c467926c9bec4771871013f07c84fcd/integrationTests/cluster">Mar 1</a> · <a href="https://github.com/HarperFast/harper-pro/tree/b876d49d1f855e5ad6e4a8cf1d2e08dfaefed5ea/integrationTests/cluster">Oct 31</a></p>
       <aside class="notes">
-        harper-pro on Oct 21, 2026: 123 integration test files (4 on Mar 1) with 295 test cases; 104 of the files are in integrationTests/cluster. Its integration workflow ran 579 times in June 2026, then 409 to 428 times a month from July to September.
+        harper-pro on Oct 31, 2026: 137 integration test files (4 on Mar 1) with 346 test cases; 118 of the files are in integrationTests/cluster. Its integration workflow ran 579 times in June 2026, then 409 to 524 times a month from July to October.
       </aside>
     </section>
 
@@ -2118,7 +2122,7 @@ steps:
         <p>Next.js 14, 15, and 16</p>
         <p class="muted">webpack, Turbopack, ISR, <code>use cache</code>, cluster</p>
       </div>
-      <p class="src">Source: <a href="https://github.com/HarperFast/nextjs/tree/593a8bf4d95bb92bf1fa64cbf335ace0bb28d2d4/integrationTests">HarperFast/nextjs integrationTests</a></p>
+      <p class="src">Source: <a href="https://github.com/HarperFast/nextjs/tree/561530a8a91d335779b042a421cb8f905689497a/integrationTests">HarperFast/nextjs integrationTests</a></p>
       <aside class="notes">
         @harperfast/nextjs: 53 Playwright tests in 12 spec files, each fixture on its own Harper and loopback address. v2 (Apr 2026) moved to makeHarperFixture, a worker-scoped Playwright fixture. Before (Dec 2024): a Playwright global setup ran one shared `npx harperdb start`, then setTimeout(2000).
       </aside>
@@ -2127,39 +2131,39 @@ steps:
     <section class="slide" id="downstream-checks">
       <h2>Harper tests itself against the Next.js plugin</h2>
       <div class="hero">
-        <span class="n">3,325</span>
+        <span class="n">4,073</span>
         <p>check runs on Harper PRs since Jul 15, 2026</p>
         <p class="muted">Each run builds the PR's Harper, then runs the Next.js plugin's own test suite against it</p>
       </div>
-      <p class="src"><a href="https://github.com/HarperFast/harper/blob/b1fb0c97649ffeb4b85e349d3db7f571bb7392a8/.github/workflows/integration-tests-nextjs.yml">Workflow</a> · <a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#downstream-check">Data and method</a></p>
+      <p class="src"><a href="https://github.com/HarperFast/harper/blob/ddb4f64e88b7fb522e5fa9084d9a2ebf2c04048f/.github/workflows/integration-tests-nextjs.yml">Workflow</a> · <a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#downstream-check">Data and method</a></p>
       <aside class="notes">
-        Workflow: "Next.js Integration Tests (downstream)" in harper, added Jul 2026, Node 20, 22, and 24. It is advisory and path-filtered, so not every run executes the suite: in a 7.5% hash sample of 254 runs, 208 (82%) did.
+        Workflow: "Next.js Integration Tests (downstream)" in harper, added Jul 2026, Node 20, 22, and 24. It is advisory and path-filtered, so not every run executes the suite: in a 7.5% hash sample of 309 runs, 257 (83%) did.
       </aside>
     </section>
 
     <section class="slide" id="downstream-failures">
       <h2>Plugin breakage shows up in Harper's PR</h2>
       <div class="hero">
-        <span class="n">10 of 208</span>
+        <span class="n">12 of 257</span>
         <p>sampled check runs flagged a failure before merge</p>
         <p class="muted">Advisory. Some flags may come from the plugin's own main branch, not the Harper change.</p>
       </div>
       <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#downstream-check">Data and method</a></p>
       <aside class="notes">
-        Of 254 sampled runs, 208 executed the suite and 10 of those had at least one Node version fail on the final attempt. Don't apply 5% to all 3,325 runs, and don't call every failure a Harper regression: the check tracks nextjs main.
+        Of 309 sampled runs, 257 executed the suite and 12 of those had at least one Node version fail on the final attempt. Don't apply 5% to all 4,073 runs, and don't call every failure a Harper regression: the check tracks nextjs main.
       </aside>
     </section>
 
     <section class="slide" id="package-adoption">
       <h2>Adopted across HarperFast</h2>
       <div class="hero">
-        <span class="n">32 repos</span>
+        <span class="n">34 repos</span>
         <p>import <code>@harperfast/integration-testing</code></p>
-        <p class="muted">Largest public suites: <a href="https://github.com/HarperFast/harper-pro">harper-pro</a> (126 files), <a href="https://github.com/HarperFast/oauth">oauth</a> (6), <a href="https://github.com/HarperFast/symphony">symphony</a> (4)</p>
+        <p class="muted">Largest public suites: <a href="https://github.com/HarperFast/harper-pro">harper-pro</a> (146 files), <a href="https://github.com/HarperFast/oauth">oauth</a> (6), <a href="https://github.com/HarperFast/agent-memory">agent-memory</a> (5)</p>
       </div>
       <p class="src"><a href="/harper-integration-testing-framework-development-and-impact-analysis/data/#repos-importing-the-package">Data and method</a></p>
       <aside class="notes">
-        HarperFast repos with code that imports the package (an import or require of it, not a mention in docs), excluding harper itself: 26 public and 6 private or internal. Private repos are counted, not named. Public ones after harper-pro: oauth (6), symphony (4), nextjs (3), real-time-template (3). Most templates and examples carry one smoke test. harper-pro's 126 importing files are 123 integration tests, 2 smoke tests, and a benchmark. npm: 23 versions, 49,736 downloads Sep 22 to Oct 21, 2026.
+        HarperFast repos with code that imports the package (an import or require of it, not a mention in docs), excluding harper itself: 29 public and 5 private or internal. Private repos are counted, not named. Public ones after harper-pro: oauth (6), agent-memory (5), letsencrypt-cert-generator-fabric (4). Most templates and examples carry one smoke test. harper-pro's 146 importing files include its 137 integration test files. npm: 23 versions, 78,614 downloads Oct 2 to 31, 2026.
       </aside>
     </section>
 
@@ -2191,21 +2195,21 @@ steps:
     <section class="slide" id="isolation">
       <h2>What it changed</h2>
       <ul class="lines">
-        <li>~1,000 order-dependent tests became 2,632 tests in isolated files</li>
-        <li>A full 36-job CI result in about 12 minutes</li>
-        <li>Cluster tests on one machine: 1 file became 104</li>
-        <li>About a third of code PRs ship an integration test</li>
-        <li>32 HarperFast repos import the package</li>
+        <li>~1,000 order-dependent tests became 3,237 tests in isolated files</li>
+        <li>A full CI result in about 12 minutes</li>
+        <li>Cluster tests on one machine: 1 file became 118</li>
+        <li>40% of code PRs ship an integration test</li>
+        <li>34 HarperFast repos import the package</li>
       </ul>
       <p class="kicker">Next: making CI reliable</p>
       <aside class="notes">
-        Tests: about 930 active legacy tests in one ordered suite; 2,632 tests in the Oct 21 green run's six Linux Node 24 shards. CI: 11.9 min median for every successful first-attempt main run, Sep 22 to Oct 21. Cluster: harper-pro integrationTests/cluster, Mar 1 to Oct 21, 2026. Code PRs: 32% in August, 33% in September. Adoption: 26 public and 6 private repos, excluding harper. Next is reliability: failures still hit 20% of main runs.
+        Tests: about 930 active legacy tests in one ordered suite; 3,237 tests in the Oct 31 green run's six Linux Node 24 shards. CI: 12.3 min median for every successful first-attempt main run, Oct 2 to 31. Cluster: harper-pro integrationTests/cluster, Mar 1 to Oct 31, 2026. Code PRs: 33% in September, 40% in October (108 of 272). Adoption: 29 public and 5 private repos, excluding harper. Next is reliability: failures still hit 24% of main runs.
       </aside>
     </section>
 
     <section class="slide title no-number" id="thanks">
       <!-- I want to give you a different image to use here. -->
-      <img class="me" src="ethan.jpg" alt="Ethan Arrowood on a ski slope" width="2800" height="2800">
+      <img class="me" src="ethan-ski.jpg" alt="Ethan Arrowood climbing a steep snow couloir with skis strapped to a pack and an ice axe in hand" width="1200" height="1200">
       <h2>Thank you</h2>
       <p class="muted">Ethan Arrowood · Head of Open Source Engineering, Harper · ethanarrowood.com</p>
       <dl class="links">

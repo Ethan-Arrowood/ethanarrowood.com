@@ -1212,3 +1212,362 @@ number,merged_at,month,files,files_truncated,touches_integration_tests,changes_i
 2087,2026-09-03T15:30:58Z,2026-09,6,False,True,True,True,fix(replay): fail-stop at a corrupt transaction-log frame and discard the transaction it truncated
 2047,2026-09-30T01:11:21Z,2026-09,18,False,False,False,True,Abort a request-scoped transaction promptly when its client disconnects
 1880,2026-09-01T04:02:51Z,2026-09,4,False,False,False,True,fix(logging): external/component loggers inherit main rotation config
+3849,2026-10-31T22:57:00Z,2026-10,2,False,False,False,False,Bump weak-lru-cache to 1.2.3 so records >= 1 KiB promote in the record cache
+3834,2026-10-31T13:32:35Z,2026-10,6,False,False,False,True,"Release the relationship-permissions fixture’s tables after its file, and stop an analytics reset from delivering the window being flushed"
+3826,2026-10-30T22:24:22Z,2026-10,3,False,False,False,True,chore(deps): Update rocksdb-js to 2.13.0
+3824,2026-10-31T04:49:24Z,2026-10,39,False,True,True,True,Adopt fulltext 0.8 with host query policy and fuzzy controls
+3823,2026-10-30T20:29:32Z,2026-10,6,False,False,False,True,"Writes on a locked record keep the lock's guarantees whichever resource instance stages them, and held locks keep addTo() deferred"
+3822,2026-10-30T22:10:29Z,2026-10,6,False,True,True,True,"CBOR, msgpack and CSV responses open their read source only when read, and msgpack streams rows that are still loading"
+3821,2026-10-30T19:41:30Z,2026-10,3,False,False,False,True,Cluster record locks no longer wedge a key when a delegate abandons a renewal or an older request arrives late
+3820,2026-10-30T21:27:00Z,2026-10,5,False,False,False,True,"Tracked records' own properties and pending changes agree on every read, merge and save"
+3808,2026-10-30T16:47:49Z,2026-10,7,False,True,True,False,Add integration anchors for sealed re-declaration and local-principal isolation
+3802,2026-10-30T21:40:04Z,2026-10,1,False,False,False,False,Bring resources/DESIGN.md back under its line budget by reflowing one hard-wrapped note
+3794,2026-10-30T16:45:41Z,2026-10,1,False,False,False,True,Document the timer a worker-release wake-up of a branch removal relies on
+3793,2026-10-30T19:26:33Z,2026-10,3,False,False,False,True,"Bound the multipart reused-connection test by the discard grace, not the route's sleep"
+3792,2026-10-30T14:12:00Z,2026-10,2,False,False,False,False,Bring DESIGN.md and resources/DESIGN.md back under their line budgets
+3791,2026-10-30T13:36:03Z,2026-10,10,False,False,False,False,"Publish from the latest Node 26 instead of latest, and move .node-version to 26"
+3789,2026-10-30T12:10:10Z,2026-10,7,False,False,False,True,"Keep cluster record locks available across a node restart: retire the dead delegate epoch, wait out short refusals, settle duplicated and stale requests"
+3778,2026-10-30T12:44:43Z,2026-10,5,False,False,False,True,Durable MQTT sessions no longer resend acknowledged messages or freeze their position once the storage engine issues checkpoints
+3776,2026-10-30T12:56:16Z,2026-10,5,False,False,False,True,"Match composite primary-key query conditions on the whole key, whichever condition leads"
+3775,2026-10-30T12:57:37Z,2026-10,5,False,False,False,True,"Fix wrong rows, unfiltered selects and ignored sorts in relationship queries"
+3774,2026-10-30T21:01:00Z,2026-10,6,False,False,False,True,Keep a newer record's expiry when an older write merges under it
+3772,2026-10-30T21:05:57Z,2026-10,11,False,True,True,True,"Fix sorted id=in/id=ne queries, and reload invalidated cache rows in primary-key filtered and sorted reads"
+3771,2026-10-29T19:31:17Z,2026-10,12,False,True,True,True,"Answer Prefer: count and explain behind an async allowRead, and close the search behind every discarded read"
+3764,2026-10-29T19:34:15Z,2026-10,4,False,False,False,True,Keep an invalidated record's stub when an older full PUT arrives after patches
+3763,2026-10-30T13:25:01Z,2026-10,7,False,True,True,True,"Keep branch removals from deleting a fork the main thread serves, and retry them when a worker lets go"
+3761,2026-10-30T19:27:53Z,2026-10,3,False,False,False,True,Fix derived-index coverage publish order and HNSW barrier flag reset
+3760,2026-10-30T13:54:40Z,2026-10,13,False,True,True,True,"Cut off a collection response when its read snapshot expires inside a row, instead of ending it as a complete array with an error item"
+3756,2026-10-30T13:57:54Z,2026-10,3,False,False,False,True,Read the certificate table as the system when a request starts a TLS selector
+3755,2026-10-30T00:52:52Z,2026-10,18,False,True,True,True,Run local-trust requests as a fixed `local` principal instead of re-reading a stored super user per request
+3754,2026-10-30T13:18:27Z,2026-10,6,False,True,True,True,fix(mcp): collect iterable and async-iterable operation results
+3751,2026-10-30T13:58:08Z,2026-10,3,False,False,False,True,Refuse durable MQTT SUBSCRIBE and UNSUBSCRIBE after session end
+3745,2026-10-30T13:19:38Z,2026-10,6,False,True,True,True,Honor an .optional request-contract body in MCP application tools
+3744,2026-10-29T17:01:24Z,2026-10,3,False,False,False,True,Stop requiring unused full-text candidate capabilities
+3742,2026-10-30T13:58:41Z,2026-10,2,False,True,True,False,Pin the deploy-only role's secret delivery through deploy_component credentials
+3741,2026-10-29T15:37:50Z,2026-10,7,False,True,True,False,"Pin what a restart-free redeploy shows for static, jsResource and graphqlSchema"
+3740,2026-10-29T14:44:37Z,2026-10,2,False,False,False,True,"Stop adding a WeakMap entry per read transaction (REST reads 3–5% less CPU, 29% less GC time)"
+3737,2026-10-29T12:36:06Z,2026-10,6,False,True,True,True,Retry a peer's deploy payload read that stalls before any content arrives
+3736,2026-10-30T00:14:03Z,2026-10,16,False,False,False,True,"Compare Harper and Fastify+Postgres+Redis at an equal 4-core budget, with the cache state set"
+3735,2026-10-29T12:29:36Z,2026-10,4,False,True,True,False,Pin full-text source authorization in the export job and search validation statuses
+3734,2026-10-29T12:31:50Z,2026-10,3,False,True,True,False,Keep full-text upgrade polling within one readiness deadline
+3732,2026-10-29T12:27:24Z,2026-10,5,False,False,False,True,"Check conditional writes where a custom verb writes through the table, and pass them through otherwise, as on 5.3"
+3729,2026-10-30T13:12:25Z,2026-10,2,False,False,False,False,Match cherry-pick integration Node version to release branch build artifact
+3727,2026-10-29T12:40:48Z,2026-10,3,False,False,False,True,Keep @computed attributes on every row of an LMDB collection read
+3721,2026-10-28T23:29:56Z,2026-10,10,False,True,True,True,Answer a durable MQTT SUBSCRIBE and UNSUBSCRIBE from their own save while acknowledgements keep the session saving
+3720,2026-10-30T13:25:55Z,2026-10,5,False,True,True,True,"Answer a rejected Operations API body once, before authentication runs"
+3715,2026-10-30T13:12:36Z,2026-10,1,False,False,False,False,"Bring resources/indexes/DESIGN.md back under the 1,000-line design-doc budget so lint passes again"
+3714,2026-10-28T16:49:26Z,2026-10,10,False,True,True,False,Harden full-text upgrade crash and readiness tests
+3712,2026-10-30T21:45:14Z,2026-10,7,False,False,False,True,Add storage.rocks.arenaBlockSize and storage.rocks.writeBufferManagerFlushPolicy config options
+3708,2026-10-28T11:15:44Z,2026-10,5,False,False,False,True,"Answer a derived-index coverage wait from the owning worker, so a commit to another table no longer delays it by up to a second"
+3707,2026-10-28T14:50:31Z,2026-10,1,False,True,True,False,Correct the idle-anchor integration suite's stale idle-release comment
+3706,2026-10-28T11:19:44Z,2026-10,19,False,False,False,True,Let models.embed() cut each input at the model's context window with truncate: true
+3686,2026-10-28T03:55:00Z,2026-10,12,False,False,False,True,"Keep a replica only of a resident's full-write head, and skip writes older than such a head without reading the audit log"
+3685,2026-10-30T19:17:04Z,2026-10,7,False,False,False,True,"Checkpoint admission orders conflicting generations only by the origin's direct route, and core owns the copy-bound writer"
+3683,2026-10-28T15:15:03Z,2026-10,4,False,True,True,False,Test live sourcedFrom commit identities and native index availability
+3680,2026-10-28T04:00:10Z,2026-10,18,False,True,True,False,Upgrade full-text search to Tantivy 0.27
+3678,2026-10-30T13:12:56Z,2026-10,3,False,False,False,True,"Keep a replayed vector's native HNSW node while its mapping is pending, so a rebuild cannot cut the graph"
+3675,2026-10-28T04:50:43Z,2026-10,15,False,True,True,True,Resume a derived index without a rebuild when retention purges an idle log's anchor
+3671,2026-10-30T14:51:15Z,2026-10,8,False,False,False,True,"Publishing a message no longer rewrites the record's data, expiration, residency or cache-stub state"
+3668,2026-10-27T20:18:41Z,2026-10,6,False,False,False,True,"Check the resources unit-shard partition in CI, and run the lmdb shard on Node 26 alone for PRs"
+3664,2026-10-28T11:49:36Z,2026-10,15,False,True,True,True,Cut off a JSON response that fails mid-stream instead of ending it as a complete array
+3659,2026-10-27T19:17:53Z,2026-10,12,False,False,False,False,"Run unit tests as parallel shard jobs, and move PR runs to Node 24/26"
+3657,2026-10-29T19:06:11Z,2026-10,11,False,True,True,True,"Give every thread one shared transaction clock, so concurrent LMDB writes are no longer dropped as duplicates"
+3655,2026-10-30T13:47:25Z,2026-10,7,False,True,True,True,Keep every row readable and deleted rows deleted when drop_attribute strips a dynamic table
+3654,2026-10-28T20:53:52Z,2026-10,5,False,True,True,True,Return 400 ClientError on search_by_value/search_by_hash validation failure and handle null search_value
+3653,2026-10-30T21:01:56Z,2026-10,4,False,False,False,True,"Writes over an invalidated never-stored id, and patches that recreate a deleted record, now store a created time and primary key"
+3649,2026-10-28T15:06:32Z,2026-10,8,False,False,False,True,"Checkpoint admission applies copy bounds, so each seq row keeps one writer"
+3643,2026-10-27T23:38:57Z,2026-10,5,False,False,False,True,"Start a new LMDB durable MQTT topic at the newest committed log key, so a reconnect neither resends nor skips a write"
+3638,2026-10-28T16:49:44Z,2026-10,1,False,True,True,False,Wait for the QA-769 spec's index rebuild before reading or restarting
+3635,2026-10-30T02:45:07Z,2026-10,12,False,False,False,True,Hold a durable subscription's position below every local write still in flight
+3629,2026-10-27T11:45:34Z,2026-10,7,False,False,False,True,"Start a new durable topic below a write still mid-reservation, never at the JS clock"
+3623,2026-10-27T14:52:30Z,2026-10,8,False,True,True,True,Treat expired records on tables without a source as uncached under only-if-cached
+3619,2026-10-29T19:19:23Z,2026-10,10,False,True,True,True,"Fix collection, filter and GraphQL reads of a @relationship into another database"
+3617,2026-10-30T14:50:19Z,2026-10,30,False,True,True,True,"Enable PR previews from the cluster: enable_previews and disable_previews, per-app preview limits, and harper preview setup"
+3615,2026-10-28T04:36:30Z,2026-10,6,False,False,False,True,"Read related records in the background when a query selects, filters, joins or sorts on a relationship"
+3611,2026-10-29T18:56:38Z,2026-10,4,False,False,False,True,Reset read-transaction reference counts on detach and clamp LMDB disregardReadTxn
+3610,2026-10-27T14:51:21Z,2026-10,13,False,True,True,True,"Source fills index the record they store, residency stubs keep their primary key, and writes over a stub no longer fail on computed indexes"
+3607,2026-10-27T02:16:59Z,2026-10,10,False,True,True,True,Stop a failed-closed isolated release from using up a threads.maxIsolated slot
+3605,2026-10-27T01:04:07Z,2026-10,10,False,True,True,True,"Cut per-row work on RocksDB indexed range queries, especially with a select"
+3604,2026-10-27T15:06:22Z,2026-10,3,False,False,False,True,Retry an LMDB root's close after a failed attempt instead of caching the rejection
+3602,2026-10-27T02:11:03Z,2026-10,6,False,False,False,True,"Start a new durable topic below every in-flight local write, and hold below early deliveries"
+3601,2026-10-28T11:46:56Z,2026-10,12,False,True,True,True,"Return the same rows for SQL and REST queries whichever condition leads, when attributes are null or missing"
+3600,2026-10-29T13:56:54Z,2026-10,8,False,True,True,True,"Retry a branched database removal that drop_component could not finish, instead of only logging the failure"
+3594,2026-10-30T13:46:55Z,2026-10,7,False,False,False,True,Fix Date chaining and preserve validation across table re-declarations
+3591,2026-10-29T17:25:11Z,2026-10,4,False,False,False,True,fix(status): aggregate scoped component names and label zero-worker main thread as main
+3589,2026-10-30T14:05:43Z,2026-10,5,False,False,False,True,Schedule a trailing verify-read in RootConfigWatcher so sub-50ms config writes are not lost
+3586,2026-10-30T03:10:41Z,2026-10,6,False,False,False,True,"Tracked updates no longer write fields that were only read, and addTo composes within a transaction"
+3582,2026-10-30T13:49:28Z,2026-10,7,False,True,True,True,Data loader keeps user edits on tables with a custom primary key and loads into the named database
+3581,2026-10-30T14:45:43Z,2026-10,5,False,True,True,True,Conditional REST writes through a tracked record keep their edits on RocksDB
+3579,2026-10-27T01:00:33Z,2026-10,11,False,True,True,True,"Validate table-projected contract bodies like Table.validate, and honor .optional request bodies"
+3578,2026-10-27T14:02:35Z,2026-10,5,False,False,False,True,Record history no longer shows a field before the patch that first wrote it
+3577,2026-10-27T14:44:38Z,2026-10,4,False,False,False,True,"Patch add operations on BigInt attributes add instead of overwriting, and object sub-types validate the sub-object"
+3576,2026-10-27T13:49:47Z,2026-10,7,False,False,False,True,"Order equal-version writes from unnamed origins, and keep the out-of-order walk from rewriting the head comparison"
+3575,2026-10-27T14:55:18Z,2026-10,4,False,False,False,True,"Stop RocksDB eviction from deleting records renewed under the same version, or the blobs of records an abandoned batch keeps"
+3574,2026-10-30T13:49:51Z,2026-10,7,False,True,True,True,drop_attribute rejects a table's primary key instead of stripping it from stored records
+3572,2026-10-28T12:39:36Z,2026-10,3,False,False,False,True,Keep a record-lock write at its transaction's version when an explicit transaction retries or replays
+3571,2026-10-27T03:01:52Z,2026-10,3,False,False,False,True,Skip incomplete local-only collection records after lazy loading
+3562,2026-10-26T21:45:08Z,2026-10,1,False,False,False,False,Give the read-gate WebSocket test's fake socket the off() REST calls on close
+3561,2026-10-26T15:37:15Z,2026-10,3,False,False,False,False,"Fix main's three red checks: LMDB confirmation test import, alterRole test stub, DESIGN.md index budget"
+3560,2026-10-26T15:36:50Z,2026-10,2,False,False,False,False,Stop serverGlobalCallerImpact.test.js handing static.test.js its TLS servers
+3558,2026-10-27T02:14:46Z,2026-10,13,False,True,True,True,"Legacy Fastify routes honor a rejected credential instead of re-checking it, and every authentication 401 carries a challenge"
+3557,2026-10-26T19:59:05Z,2026-10,1,False,False,False,False,Pin the agent's credential masking on the reads its end-to-end test does not drive
+3552,2026-10-27T14:50:07Z,2026-10,17,False,True,True,True,Seal JavaScript intrinsics by default instead of freezing them (applications.lockdown: seal-after-load)
+3551,2026-10-30T22:50:08Z,2026-10,8,False,False,False,False,fix(deps): update all non-major dependencies
+3549,2026-10-29T16:58:30Z,2026-10,6,False,False,False,True,Cut the per-read cost of Table.get(id) for string and number ids
+3548,2026-10-30T13:17:49Z,2026-10,2,False,False,False,True,MCP: error on a prompt render that returns the wrong shape
+3547,2026-10-30T13:16:34Z,2026-10,6,False,False,False,True,"MCP: build harper+rest:// URIs from the request host, not the server hostname"
+3539,2026-10-30T13:17:02Z,2026-10,6,False,False,False,True,MCP: honor mcp.<profile>.enabled so env-var config can turn profiles on and off
+3538,2026-10-30T13:17:32Z,2026-10,6,False,False,False,True,"Fix three MCP error paths: denied subscribe, CLI fallback, doctor 405"
+3534,2026-10-30T17:06:42Z,2026-10,16,False,True,True,True,Enable Node's compile cache by default on Node releases that free accepted cache entries
+3530,2026-10-28T20:51:35Z,2026-10,5,False,False,False,True,Add a hot-key commit benchmark; rocksdb-js#936 costs hot 4-record transactions 72–84%
+3529,2026-10-27T14:03:17Z,2026-10,5,False,False,False,True,Keep LMDB source fills from dropping their transaction-log entry or overwriting the source's own write
+3528,2026-10-26T12:12:52Z,2026-10,3,False,False,False,True,Skip a subscription notify pass whose audit store is closing or closed
+3527,2026-10-28T11:32:37Z,2026-10,57,False,False,False,True,Add schema-defined sharding with database-wide slots
+3523,2026-10-24T04:20:39Z,2026-10,1,False,False,False,False,Bring the DESIGN.md index back under its line budget
+3510,2026-10-24T04:16:32Z,2026-10,20,False,False,False,True,Mint every local transaction-log key; an explicit timestamp is only the record version
+3506,2026-10-28T14:51:52Z,2026-10,3,False,False,False,True,Stop out-of-order patches on audit:false tables from resurrecting deleted records or applying increments twice
+3505,2026-10-26T20:11:51Z,2026-10,62,False,True,True,True,"Support PR preview deployments: payload routing, scoped deploy grants, preview expiry and harper preview"
+3503,2026-10-26T13:10:10Z,2026-10,6,False,False,False,True,"Refuse or re-snapshot a subscription replay that crosses a table reload marker, instead of losing back-filled rows or throwing on a prefix scope"
+3502,2026-10-26T15:40:53Z,2026-10,62,False,True,True,True,"Track rolling deploys per node, report releases and deploy provenance, and expire failed payloads"
+3499,2026-10-23T20:32:48Z,2026-10,4,False,False,False,True,Keep a replicated put that shares its transaction with a same-key publish or relocate from being skipped as a duplicate
+3498,2026-10-26T12:41:43Z,2026-10,11,False,False,False,True,Fail a rolling restart job that did not restart every node
+3497,2026-10-27T02:13:48Z,2026-10,11,False,True,True,True,"HEAD answers like GET for streamed reads: same validators, same startup errors, and 403 when an async allowRead denies a delegated get"
+3495,2026-10-26T03:46:16Z,2026-10,7,False,True,True,True,Make read-only servers treat expired records as absent instead of evicting them
+3493,2026-10-26T13:14:24Z,2026-10,4,False,False,False,True,Keep LMDB durable subscriptions' retained-record deliveries out of the resume position
+3492,2026-10-26T13:07:41Z,2026-10,5,False,True,True,True,Resolve import-only package exports the way native Node import does
+3490,2026-10-29T22:07:03Z,2026-10,4,False,False,False,True,Settle cache-fill record locks and waiting requests when a database closes mid-fill
+3483,2026-10-27T02:20:41Z,2026-10,5,False,True,True,True,Stop package_component packing the Harper install through a legacy node_modules/harperdb link
+3482,2026-10-26T13:16:57Z,2026-10,10,False,True,True,True,Stop records with contentType and object or number data from aborting durable MQTT subscribers
+3480,2026-10-26T13:17:30Z,2026-10,4,False,True,True,True,Durable MQTT sessions accept a PUBREC for a restored QoS 2 delivery before it is re-sent
+3479,2026-10-27T02:12:29Z,2026-10,6,False,True,True,True,Re-subscribing a restored durable MQTT topic now takes the new QoS
+3477,2026-10-27T01:28:48Z,2026-10,4,False,False,False,True,Fail a ready PR whose Review-Coverage footer still shows a late review leg pending
+3476,2026-10-23T14:32:35Z,2026-10,3,False,False,False,True,Skip relayed duplicates of a record's committed head without reading the transaction log
+3475,2026-10-23T16:03:12Z,2026-10,1,False,False,False,False,Clarify residency copy compatibility and versioned read answers
+3471,2026-10-23T14:03:38Z,2026-10,1,False,False,False,False,Fix main's red eviction test: build its version-reusing write from an absent-key merge
+3469,2026-10-28T15:58:04Z,2026-10,9,False,True,True,True,Preserve full PUT replacement semantics when writes arrive out of order
+3456,2026-10-28T11:36:44Z,2026-10,5,False,True,True,True,Search select() returns stored nested JSON instead of running the outer table's resolvers on it
+3450,2026-10-22T23:43:46Z,2026-10,9,False,True,True,True,Honor configured task prefixes for OpenAI embeddings
+3449,2026-10-22T23:58:03Z,2026-10,4,False,False,False,True,"Expose the RocksDB record cache as primaryStore.cache, keeping RocksDB read scheduling unchanged"
+3446,2026-10-23T02:46:15Z,2026-10,11,False,True,True,True,"Keep MQTT subscribers on other worker threads receiving non-JSON payloads, and close the connection when a delivery fails"
+3444,2026-10-30T17:12:40Z,2026-10,2,False,False,False,True,fix(logging): config reload rebinds every component logger
+3440,2026-10-23T02:46:49Z,2026-10,4,False,True,True,True,Durable MQTT single-record subscriptions no longer resend the current record on resume
+3439,2026-10-30T17:12:17Z,2026-10,7,False,False,False,True,fix(components): report warning/unknown in get_components and keep plugin-set status after load
+3437,2026-10-23T04:35:00Z,2026-10,4,False,False,False,True,fix(static): answer 404 instead of a path-leaking 500 when an indexed file is missing
+3436,2026-10-26T13:22:58Z,2026-10,2,False,False,False,True,alter_role keeps the 4xx status from a failed role update
+3435,2026-10-30T17:13:36Z,2026-10,2,False,False,False,True,fix(analytics): drop pending actions when analytics is disabled
+3433,2026-10-22T23:54:06Z,2026-10,4,False,False,False,True,Keep root-config hot reload working on Bun after the first config write
+3429,2026-10-23T05:18:01Z,2026-10,17,False,False,False,True,Adopt rocksdb-js getRegistryStatus() in place of the deprecated registryStatus() alias
+3427,2026-10-23T00:01:07Z,2026-10,11,False,True,True,True,Refuse writes with a 405 in read-only mode on both engines
+3426,2026-10-26T19:52:50Z,2026-10,4,False,False,False,True,"Fix composite-key identity in search id filters and OR unions, and the '...' range alias"
+3423,2026-10-27T01:46:55Z,2026-10,7,False,False,False,True,"Stop waiting for replication confirmation on writes that replicate nothing (audit: false, localOnly, copy-apply)"
+3418,2026-10-26T19:51:54Z,2026-10,6,False,False,False,True,"Include boolean false rows in secondary-index range, sort and membership scans"
+3417,2026-10-27T03:09:29Z,2026-10,8,False,True,True,True,Make concurrent sourcedFrom misses share one source call when nothing gets cached
+3415,2026-10-27T02:49:32Z,2026-10,7,False,True,True,True,"Fix REST query parsing of list values, (...) groups, range values and chained conditions"
+3414,2026-10-23T00:05:41Z,2026-10,5,False,False,False,True,Fix record history showing a later put's data for a patch it overwrote
+3413,2026-10-23T00:02:56Z,2026-10,3,False,False,False,True,Stop RocksDB eviction from deleting renewed records or the blobs of records that survive
+3412,2026-10-26T12:48:01Z,2026-10,11,False,True,True,True,Mask credential values in the agent's config and log reads and in its read_log results
+3411,2026-10-23T00:59:45Z,2026-10,5,False,False,False,True,Stop an out-of-order patch from overwriting newer values on audit:false tables
+3410,2026-10-23T15:28:07Z,2026-10,3,False,False,False,True,Make TLS certificate record ciphers and uses follow tls[] config edits
+3402,2026-10-26T13:15:21Z,2026-10,5,False,True,True,True,MQTT: send each client the CONNACK refusal code of its own protocol version
+3401,2026-10-23T01:01:19Z,2026-10,3,False,False,False,True,Apply both writes when an out-of-order transaction writes one key twice (RocksDB)
+3398,2026-10-26T02:03:45Z,2026-10,5,False,True,True,True,Enforce http.maxRequestBodySize on the MCP application endpoint
+3392,2026-10-26T11:50:33Z,2026-10,6,False,False,False,True,Make replicatedConfirmation wait for peers on LMDB
+3381,2026-10-23T04:26:09Z,2026-10,2,False,False,False,True,Redact URL credentials that contain / ? or # in component status messages
+3375,2026-10-24T14:33:08Z,2026-10,12,False,False,False,True,Keep a record fetched from a resident as a local replica instead of relocating it
+3366,2026-10-21T13:00:46Z,2026-10,4,False,False,False,True,Fix replicated duplicate retries entering the audit walk
+3356,2026-10-26T11:46:06Z,2026-10,13,False,False,False,True,Per-origin subscription checkpoints that resume on any node
+3339,2026-10-24T01:52:39Z,2026-10,18,False,True,True,True,Start and stop one isolated application without restarting the shared workers
+3337,2026-10-22T16:53:13Z,2026-10,6,False,False,False,True,Stop transaction abort() from spinning forever on read references taken after commit
+3336,2026-10-20T21:42:13Z,2026-10,2,False,False,False,False,Update extended-iterable to 1.0.5 so search iterables no longer keep their iterators alive
+3323,2026-10-21T04:56:30Z,2026-10,4,False,False,False,True,Stop a RocksDB eviction from leaving a phantom open transaction behind
+3322,2026-10-21T23:53:15Z,2026-10,4,False,False,False,True,fix: propagate residency read failures and refresh stub indexes
+3321,2026-10-23T21:12:47Z,2026-10,4,False,False,False,True,Remove a dropped LMDB database's file only after its environment has closed
+3320,2026-10-22T15:20:42Z,2026-10,4,False,True,True,True,"Backup CLI: refuse restore, delete and purge offline when a saved login targets a loopback address"
+3319,2026-10-21T04:57:10Z,2026-10,1,False,False,False,False,test: pin that a purge waits for create_backup to publish its backup
+3316,2026-10-30T22:11:14Z,2026-10,14,False,True,True,True,"Apply related-table role permissions to @relationship reads in REST, GraphQL and NoSQL operations"
+3313,2026-10-21T14:00:01Z,2026-10,17,False,True,True,True,Let components authenticate their own Bearer tokens as Harper users (server.registerBearerValidator)
+3303,2026-10-20T00:42:23Z,2026-10,5,False,True,True,True,"MQTT v5: report a request with no user as Not authorized (0x87), and name the topic when a delivery meets a closed session"
+3302,2026-10-20T00:44:37Z,2026-10,6,False,True,True,True,Publish MQTT last wills for non-super users
+3301,2026-10-26T19:38:49Z,2026-10,29,False,True,True,True,Fill full-text and autocomplete pages using Harper's existing paging
+3289,2026-10-22T12:31:20Z,2026-10,5,False,True,True,True,fix(security): renew-certs no longer empties the certificate table when tls has no privateKey
+3287,2026-10-26T14:19:35Z,2026-10,11,False,True,True,True,"Store first-boot passwords with the configured hash function, and read token timeouts per mint"
+3286,2026-10-22T11:55:23Z,2026-10,5,False,True,True,True,Let COUNT(*) run for roles with attribute permissions
+3283,2026-10-20T16:45:05Z,2026-10,2,False,False,False,False,fix(deps): update dependency alasql to v4.20.0
+3282,2026-10-19T11:52:58Z,2026-10,19,False,False,False,False,chore(deps): update all non-major dependencies
+3279,2026-10-27T16:39:09Z,2026-10,18,False,True,True,True,Honor nested relationship filters and pagination
+3270,2026-10-23T01:36:03Z,2026-10,1,False,False,False,False,Add tests that HARPER_DEFAULT_CONFIG values survive the built-in config backfill
+3269,2026-10-20T02:21:58Z,2026-10,3,False,False,False,True,Serve a stopped delegate's keys at once after a fenced record-lock home-map change
+3266,2026-10-20T02:19:54Z,2026-10,10,False,False,False,True,Never abort a transaction once its entry is written to the transaction log
+3265,2026-10-19T00:07:10Z,2026-10,7,False,True,True,True,Adopt rocksdb-js 2.12's transaction-log retention: pin the txn.state witness in QA-822 and anchor emptied logs by floor in derived indexes
+3264,2026-10-23T01:34:10Z,2026-10,5,False,False,False,True,Keep PrimaryRocksDatabase on structon 0xdf record encoding while routing saveStructures via rocksStore
+3263,2026-10-19T01:31:32Z,2026-10,4,False,False,False,True,Support MQTT QoS 2 exactly-once delivery
+3259,2026-10-18T03:15:21Z,2026-10,3,False,False,False,True,Let a restarted record-lock home end its quarantine by a ring-wide recall
+3249,2026-10-17T02:43:39Z,2026-10,1,False,False,False,False,Document storage.writeAsync in config-root.schema.json as LMDB-only
+3248,2026-10-30T00:57:32Z,2026-10,30,False,False,False,True,"Stamp a record lock's writes above the version it was admitted on, even when that version is ahead of the clock"
+3244,2026-10-17T03:09:02Z,2026-10,11,False,True,True,True,"Fix startup failing on a table with no primary key, and keep a key declared on one from failing the app schema"
+3239,2026-10-17T03:16:02Z,2026-10,9,False,False,False,True,"Rebind captured component, conditional, and tagged loggers on initLogSettings(true)"
+3237,2026-10-26T14:20:14Z,2026-10,3,False,True,True,True,fix(security): skip flat tls config writes when tls is an array
+3234,2026-10-30T13:24:02Z,2026-10,13,False,True,True,True,"Apply HTTP request queue limits to GET, HEAD and OPTIONS"
+3232,2026-10-23T15:51:28Z,2026-10,6,False,True,True,True,feat(threads): default replication.threads to floor(threads.count / 2) for multi-worker nodes
+3229,2026-10-23T04:37:32Z,2026-10,14,False,True,True,True,HTTP preconditions with optional locks
+3227,2026-10-19T04:56:42Z,2026-10,11,False,True,True,True,Serve static files under dot-directory app paths and answer pre-header stream errors with a status
+3221,2026-10-27T12:34:09Z,2026-10,9,False,False,False,True,Fix REST and operations API select projection defects
+3217,2026-10-19T17:12:50Z,2026-10,5,False,False,False,True,Accept the native Muse leg and Gemini authors in review-coverage footers
+3216,2026-10-21T12:59:28Z,2026-10,8,False,True,True,True,Stop package_component packing the Harper install once per npm sub-component
+3215,2026-10-19T04:54:52Z,2026-10,2,False,False,False,True,Fix Blob MessagePack serialization corrupting frames with a stale prefix
+3214,2026-10-19T13:40:56Z,2026-10,5,False,False,False,True,fix(resources): reconstruct record history after eviction
+3213,2026-10-19T15:01:24Z,2026-10,8,False,True,True,True,Fix SQL engine v2 normalizer to accept parenthesized expressions and NOT (...)
+3211,2026-10-19T04:59:25Z,2026-10,10,False,False,False,True,fix(status): serialize component status errors and abnormalities for wire transport
+3209,2026-10-20T22:15:11Z,2026-10,3,False,False,False,True,Skip expired records in Table.subscribe() current-value delivery
+3205,2026-10-22T11:56:53Z,2026-10,10,False,True,True,True,Configure model backends through set_configuration
+3202,2026-10-14T20:13:41Z,2026-10,7,False,True,True,True,"Fix SQL `WHERE NOT (...)` selecting, deleting or updating the wrong rows"
+3201,2026-10-19T13:21:51Z,2026-10,16,False,True,True,True,"Close the RocksDB handles a table redeclare replaces, so online restore is no longer refused"
+3200,2026-10-14T19:22:31Z,2026-10,5,False,True,True,True,Stop the HTTP request queue from shedding a burst with 503 on an earlier slow cycle
+3193,2026-10-13T18:31:58Z,2026-10,2,False,False,False,False,chore(deps): Update rocksdb-js to 2.12.0
+3192,2026-10-13T15:58:54Z,2026-10,2,False,False,False,True,Dedupe the unknown-attribute list in search validation
+3191,2026-10-13T18:32:35Z,2026-10,2,False,False,False,False,Pin the stored record header byte layout that rocksdb-js's VerificationTable reads
+3190,2026-10-25T03:18:04Z,2026-10,3,False,True,True,False,"Cover MQTT shared encoding across protocol versions, codecs and QoS levels"
+3188,2026-10-23T01:38:15Z,2026-10,3,False,True,True,False,Check minor-upgrade JSON record fidelity across mixed generations
+3187,2026-10-20T22:02:56Z,2026-10,14,False,False,False,True,Distinguish replication confirmation failure from a local write failure
+3185,2026-10-30T14:02:00Z,2026-10,5,False,False,False,True,Block agent http_fetch from operations API ports
+3183,2026-10-19T00:09:44Z,2026-10,3,False,False,False,True,"Confirm a transaction whose only write is a losing relocation on the stored entry, not an unwritten log key"
+3180,2026-10-12T23:53:21Z,2026-10,1,False,False,False,False,"Make the user-change re-subscribe test wait for the reopen's gap notification, not the close's"
+3178,2026-10-23T01:37:45Z,2026-10,28,False,True,True,True,"Integration tests assert what they observe instead of ok(true), and a lint rule keeps it that way"
+3177,2026-10-20T20:43:06Z,2026-10,28,False,True,True,True,"Cap the agent's spend per session by tokens or priced cost, record its model usage, and make a cancel final"
+3175,2026-10-12T17:05:16Z,2026-10,4,False,True,True,False,Fix phantom/dangling secondary-index test oracles to read raw storage
+3174,2026-10-26T12:34:01Z,2026-10,3,False,False,False,False,Pin every Table.getRecordCount caller shape against its estimate-vs-exact contract
+3173,2026-10-26T12:34:48Z,2026-10,1,False,False,False,False,test(logging): pin the caller-impact rule for the rotation-inheritance fix (#1877/#1880)
+3172,2026-10-19T13:47:33Z,2026-10,1,False,True,True,False,Make a short QA-431 convergence window print its audit evidence and classify a TTL-recreated window from the audit log
+3171,2026-10-12T14:37:09Z,2026-10,6,False,True,True,True,Fix nested Resource projection for missing relationships and JSON values
+3170,2026-10-26T12:34:26Z,2026-10,1,False,False,False,False,Pin @updatedTime/@createdTime caller shapes for the v5.2.0 upgrade-impact rule
+3169,2026-10-26T12:35:19Z,2026-10,3,False,False,False,False,Pin which server-global caller shapes observe the UDS-mirror upgrade dispatch (v5.1.26) and TLS listener properties (v5.2.0)
+3167,2026-10-26T12:36:40Z,2026-10,1,False,False,False,False,Pin which Resource and table subclass shapes the v5.2.0 bare-POST gate and OpenAPI contract emitter change
+3166,2026-10-26T12:40:56Z,2026-10,2,False,False,False,False,Pin every server.http caller shape against the v5.2.0 application-mount change
+3165,2026-10-19T13:58:23Z,2026-10,1,False,False,False,False,Pin the stream()-vs-bytes() caller-impact rule for blob reclamation (#2134)
+3162,2026-10-20T02:15:30Z,2026-10,6,False,False,False,True,fix(deps): update dependency chokidar to v5
+3160,2026-10-12T10:02:44Z,2026-10,2,False,False,False,False,fix(deps): update dependency @fastify/static to v10
+3159,2026-10-12T17:06:49Z,2026-10,1,False,False,False,False,"Assert replayed deletes classify as 'delete', not 'put', across every subscription replay variant"
+3158,2026-10-12T08:55:57Z,2026-10,2,False,False,False,False,fix(deps): update dependency @fastify/compress to v9
+3157,2026-10-12T05:05:24Z,2026-10,2,False,False,False,False,fix(deps): update all non-major dependencies
+3151,2026-10-12T11:21:03Z,2026-10,2,False,False,False,False,Pin every array PUT caller shape against the v5.2.15 behavior #2097 changed
+3148,2026-10-11T22:04:50Z,2026-10,5,False,False,False,True,"Count only a record's residents toward replicatedConfirmation, and refuse a count they cannot meet before writing"
+3147,2026-10-26T12:40:14Z,2026-10,1,False,False,False,False,"Pin which subscribe callers the read gate refuses, for every caller shape and protocol"
+3146,2026-10-13T00:09:55Z,2026-10,2,False,False,False,False,Pin every Resource-API delete caller shape against the v5.2.0 null-id guard
+3145,2026-10-26T12:40:28Z,2026-10,3,False,False,False,True,Pin what application code observes on context.transaction after its transaction completes
+3144,2026-10-12T17:36:29Z,2026-10,1,False,False,False,False,Make the caching invalidation unit test wait on commits and events instead of fixed sleeps
+3141,2026-10-11T01:33:41Z,2026-10,17,False,True,True,True,"Recheck live subscriptions by principal and expire tokens on a timer, so re-authorization scales to 100k+ subscriptions"
+3140,2026-10-13T13:37:58Z,2026-10,14,False,False,False,True,"Refuse native addons built for the standard V8 ABI on pointer-compression Node runtimes, instead of crashing on first use"
+3139,2026-10-12T14:46:47Z,2026-10,4,False,False,False,True,Keep NaN out of analytics aggregates when a measure is missing from some samples
+3138,2026-10-13T15:20:49Z,2026-10,12,False,False,False,True,Add threads.v8Flags to apply V8 flags such as --optimize-for-size to every worker thread
+3132,2026-10-09T21:20:12Z,2026-10,4,False,False,False,True,fix: preserve record-lock incarnation before home-map agreement
+3131,2026-10-28T20:52:16Z,2026-10,1,False,False,False,False,Cover ingestPayload's streaming branch: extended ingest budget and transaction isolation under the blob-durability gate
+3130,2026-10-12T03:11:16Z,2026-10,8,False,False,False,True,Preserve exports/imports condition order when digesting package.json for restart decisions
+3129,2026-10-12T17:37:18Z,2026-10,7,False,False,False,False,"Keep unit runs off ambient HARPER_*CONFIG overlays, and make two test failures report themselves"
+3128,2026-10-10T04:15:25Z,2026-10,4,False,False,False,True,"Keep the writing node's full record under record-based residency, and never store a patch over a residency stub as a complete row"
+3127,2026-10-13T20:46:01Z,2026-10,8,False,True,True,True,Set up GitHub Actions deploys with `harper deploy setup=true provider=github-actions`
+3126,2026-10-23T15:52:07Z,2026-10,27,False,True,True,True,Decode multipart forms for REST resources and stream uploaded Blobs
+3121,2026-10-19T20:28:40Z,2026-10,8,False,True,True,True,Verify a backup can be read before restore_backup replaces the database
+3119,2026-10-09T04:25:38Z,2026-10,11,False,False,False,True,"Refuse a peer's retired table generation, and keep newer or node-local tables when a peer drops one"
+3118,2026-10-08T19:05:13Z,2026-10,6,False,True,True,True,Preserve 5.2 rollback compatibility for first-time table creates
+3117,2026-10-18T02:21:59Z,2026-10,25,False,False,False,True,"Cap the agent's tool results and page its file reads, so one large read no longer ends the session"
+3116,2026-10-08T19:10:17Z,2026-10,6,False,True,True,True,"Stop line breaks in SSE event, id and retry values from injecting fields or events"
+3115,2026-10-08T19:06:18Z,2026-10,3,False,False,False,False,"Make three unit tests independent of the runner's git environment, monitor timing, and the installed argon2 build"
+3113,2026-10-08T19:08:02Z,2026-10,1,False,False,False,True,"Let env vars, CLI flags and set_configuration reach 41 config params that were never registered"
+3111,2026-10-08T15:48:12Z,2026-10,3,False,True,True,True,fix(security): validate project name in get_component_file
+3110,2026-10-21T15:40:05Z,2026-10,13,False,False,False,True,"Record per-worker event loop delay, per-thread duration and whole-request time in analytics"
+3109,2026-10-09T12:05:54Z,2026-10,3,False,False,False,True,"Merge certified origin floors into a replication source's seq row, apart from its applied cursors"
+3108,2026-10-09T00:26:08Z,2026-10,6,False,False,False,True,"Fix corrupt gzip from withNodeAdapter middleware on Node 26.11+, and return install_node_modules' npm report as an object on every npm"
+3107,2026-10-08T16:07:59Z,2026-10,2,False,False,False,True,Point the pin-ownership gap at its own issue
+3104,2026-10-13T00:07:32Z,2026-10,7,False,True,True,False,Run minor-version upgrade and rollback tests in CI against 5.2.15 and 5.3.1
+3103,2026-10-08T04:34:40Z,2026-10,5,False,False,False,True,Redeliver an unacknowledged durable MQTT message after a reconnect when its transaction committed after one with a higher key
+3098,2026-10-08T15:47:49Z,2026-10,12,False,False,False,True,Limit the agent's config scope to the config file and refuse key material in every filesystem scope (agent.configScope)
+3094,2026-10-07T17:29:12Z,2026-10,2,False,False,False,False,chore(deps): Update rocksdb-js to 2.11.0
+3093,2026-10-13T00:13:45Z,2026-10,5,False,True,True,True,"Load pure-ESM dependencies under the compartment module loader, on Node and Bun"
+3092,2026-10-12T02:55:10Z,2026-10,3,False,False,False,True,Remove a cached record and its index entries in one commit when its source reports it missing
+3089,2026-10-12T03:18:25Z,2026-10,2,False,False,False,True,"Remove JSONStream's failed iterator from cleanup tracking by reference, not list position"
+3088,2026-10-07T17:58:49Z,2026-10,1,False,False,False,False,Stop the tokenAuthentication cache-hit test from flaking on unrelated path.join calls
+3087,2026-10-07T17:58:19Z,2026-10,14,False,True,True,True,Clear the 13 pre-existing oxlint warnings so npm run lint (--deny-warnings) passes
+3086,2026-10-12T17:39:44Z,2026-10,3,False,False,False,False,Keep the calibration unit suite from spending the LMDB unit step on one durable commit per row
+3085,2026-10-07T12:48:07Z,2026-10,15,False,False,False,True,"Certify an origin-closed timestamp floor for the local transaction log, so no transaction can commit below it"
+3084,2026-10-22T11:45:50Z,2026-10,9,False,False,False,True,Require a super user for X-Replicate-To and the operations API replicateTo/replicatedConfirmation fields
+3083,2026-10-08T19:03:38Z,2026-10,5,False,True,True,True,Honor branchedDatabases for package-deployed applications
+3080,2026-10-07T03:18:51Z,2026-10,5,False,False,False,True,"Record per-origin resume cursors in a replication source's seq row, and re-admit a log live with addLog"
+3078,2026-10-18T22:36:22Z,2026-10,20,False,False,False,True,"Name the running product in local CLI, installer, and lifecycle messages from package.json productName"
+3072,2026-10-12T14:38:02Z,2026-10,50,False,False,False,True,Reduce each thread's base JavaScript heap by about 40%
+3070,2026-10-19T00:15:45Z,2026-10,5,False,False,False,False,Skip a release cherry-pick whose change is already on the release branch
+3069,2026-10-07T17:57:04Z,2026-10,7,False,True,True,True,"Discard the rest of a multipart upload the operations API answers without reading, so the client no longer stalls"
+3066,2026-10-12T23:55:33Z,2026-10,4,False,True,True,True,"Refuse `branchedDatabases` on a payload deploy, which used to succeed and leave the application on its base databases"
+3065,2026-10-06T16:54:01Z,2026-10,3,False,False,False,False,"Keep copyDbIntegrity's non-database fixture out of the storage path, so a rescan cannot segfault the LMDB unit run"
+3064,2026-10-13T00:16:04Z,2026-10,15,False,False,False,True,"End agent runs cut off by the output-token limit as errors, and add agent.maxTokens"
+3063,2026-10-06T19:25:14Z,2026-10,1,False,False,False,False,Test that a terminal commit failure with no open iterator releases the context
+3057,2026-10-07T11:43:44Z,2026-10,5,False,False,False,False,Publish the release Docker image only after it passes the smoke checks
+3056,2026-10-06T19:00:08Z,2026-10,2,False,False,False,True,"Fail the compression benchmark when Harper exits mid-run, and count every gated error in errors="
+3038,2026-10-06T19:21:24Z,2026-10,4,False,False,False,True,"Relay a record lock release that reaches a thread which does not coordinate the database, instead of dropping it"
+3037,2026-10-06T18:59:07Z,2026-10,1,False,False,False,False,Skip the Bun and uWS integration jobs on dispatches that omit Node 24
+3036,2026-10-06T12:47:02Z,2026-10,10,False,False,False,True,"Compare log-file identities as BigInt, so Windows file IDs past 2^53 stop matching neighbouring files"
+3035,2026-10-07T00:53:49Z,2026-10,22,False,True,True,True,Run replication on dedicated worker threads that load no application code (replication.threads)
+3030,2026-10-07T01:44:39Z,2026-10,18,False,False,False,True,Publish a portable locked JavaScript dependency bundle
+3029,2026-10-06T23:51:33Z,2026-10,11,False,True,True,True,Deliver subscription events for commits that finish out of timestamp order
+3021,2026-10-08T22:13:17Z,2026-10,4,False,False,False,True,Fix concurrent auto-increment id-range allocation on RocksDB overwriting a sibling thread's range
+3019,2026-10-08T19:03:09Z,2026-10,5,False,True,True,True,Restrict the UDS mirror sockets directory to its owner and publish mirror metadata atomically
+3017,2026-10-05T19:35:01Z,2026-10,2,False,False,False,True,fix(analytics): report aggregate maxDepth as the sum of per-thread peaks
+3016,2026-10-05T19:36:03Z,2026-10,3,False,True,True,True,Reword the write-queue 503 message and keep API-test exports out of the repo root
+3015,2026-10-05T17:07:06Z,2026-10,9,False,False,False,True,Remove unused utf-8-validate from production installs
+3014,2026-10-05T19:27:12Z,2026-10,3,False,False,False,False,ci: add npm 10/11 lockfile compatibility check
+3011,2026-10-05T20:05:00Z,2026-10,12,False,False,False,True,Let operators turn off or host-limit the agent's http_fetch (agent.httpFetch)
+3010,2026-10-05T19:37:51Z,2026-10,5,False,True,True,True,Keep detecting TLS certificate renewals after a quickly cancelled renewal
+3009,2026-10-05T13:30:24Z,2026-10,2,False,False,False,False,Make the removed-rotation-directory log test append before waiting for its notice
+3008,2026-10-05T12:28:01Z,2026-10,18,False,False,False,False,chore(deps): update pin digests (major)
+3007,2026-10-05T12:04:07Z,2026-10,1,False,False,False,False,Make the uWS paused-body upload test buffer before its over-limit read
+3006,2026-10-05T11:51:52Z,2026-10,2,False,False,False,False,chore(deps): update dependency utf-8-validate to v6
+3005,2026-10-05T11:34:47Z,2026-10,3,False,False,False,False,Fix Windows named-child exit checks and size the main test deadline
+3004,2026-10-05T04:33:47Z,2026-10,2,False,False,False,False,chore(deps): update dependency undici to v8
+3003,2026-10-05T13:51:03Z,2026-10,2,False,False,False,False,fix(deps): update all non-major dependencies
+3002,2026-10-05T04:51:49Z,2026-10,6,False,False,False,False,"Drop the databases each unit-test file creates, so test:unit:resources no longer grows to 12 GB"
+3000,2026-10-05T01:50:45Z,2026-10,15,False,True,True,True,Verify named child lifetimes before reusing or signaling PIDs
+2998,2026-10-05T01:15:13Z,2026-10,6,False,False,False,True,Make replay-abort recovery advice preserve local data
+2997,2026-10-04T19:57:21Z,2026-10,7,False,False,False,True,Accept the new PR description shape in the review-coverage action
+2996,2026-10-04T03:09:29Z,2026-10,8,False,False,False,True,Accept the Review-Attention footer and declare harper's review surfaces
+2993,2026-10-04T03:09:59Z,2026-10,1,False,True,True,False,Fix intermittent startup-install-timeout test failure: keep the short install deadline off the baseline boot
+2989,2026-10-02T23:28:51Z,2026-10,8,False,True,True,True,Coordinate TLS certificate and key renewals across workers
+2988,2026-10-02T23:16:10Z,2026-10,5,False,False,False,True,Prevent heap exhaustion when boot replay scans already-durable records
+2986,2026-10-13T15:24:40Z,2026-10,6,False,False,False,True,Reject malformed Harper configuration YAML
+2985,2026-10-02T18:58:05Z,2026-10,5,False,False,False,True,Send the coarse uWS 413 before closing an oversized upload
+2981,2026-10-06T01:31:04Z,2026-10,47,False,True,True,True,Certify a restarting deploy in a canary worker before it rolls out
+2979,2026-10-03T14:34:40Z,2026-10,7,False,True,True,True,Skip incomplete built-in component registrations
+2976,2026-10-05T12:07:14Z,2026-10,2,False,True,True,False,Make the QA-577 restart assertion non-vacuous
+2967,2026-10-02T13:44:24Z,2026-10,5,False,False,False,False,ci: bump ai-review-prompts pin to 1ca6d1f
+2964,2026-10-01T19:29:21Z,2026-10,5,False,True,True,True,Keep per-worker UDS mirror sockets alive across an overlapping HTTP worker restart
+2962,2026-10-05T23:25:10Z,2026-10,7,False,False,False,True,Stamp table generations and keep a durable drop marker so a peer that missed a replicated drop_table cannot bring the table back
+2960,2026-10-02T01:10:22Z,2026-10,13,False,False,False,False,"Prune the design notes for 2026 Q4, and correct the claims the code has moved past"
+2959,2026-10-02T18:59:33Z,2026-10,1,False,False,False,False,test: add property-style hostile-input fuzzing for inspectForLog/errorForLog
+2958,2026-10-09T12:26:49Z,2026-10,4,False,True,True,True,Name the long-transaction monitor's abort log with database/table/txn identity
+2957,2026-10-01T21:22:35Z,2026-10,3,False,False,False,True,Keep every value of a repeated form-urlencoded field
+2955,2026-10-09T23:56:26Z,2026-10,1,False,False,False,False,"Enforce the dropTable cross-worker-write reproducer; close #1381, #2496"
+2954,2026-10-02T13:18:44Z,2026-10,4,False,False,False,True,"Record a local file: source as unidentified, so a peer never matches on no evidence"
+2949,2026-10-12T14:20:31Z,2026-10,6,False,False,False,True,Add a churn scenario to the WebSocket scale benchmark that checks disconnects release connection memory
+2948,2026-10-01T12:28:33Z,2026-10,7,False,False,False,True,Finish closing a subscription even when a listener throws on its final message
+2946,2026-10-05T23:24:13Z,2026-10,16,False,True,True,True,"Check subscription resume positions against retained history, and reset durable MQTT sessions that can no longer catch up"
+2944,2026-10-06T12:57:35Z,2026-10,7,False,False,False,True,"Add a WebSocket scale benchmark that measures per-connection, per-subscription and per-message costs"
+2939,2026-10-12T17:57:08Z,2026-10,7,False,False,False,True,Cap logged structured error details at 256K characters and mask credential-shaped fields in them
+2938,2026-10-02T17:27:19Z,2026-10,3,False,False,False,True,Reuse a write's snapshot pre-load as its commit base on RocksDB
+2936,2026-10-01T00:00:41Z,2026-10,2,False,False,False,True,Skip the discarded pre-read of a write target on RocksDB
+2934,2026-10-05T12:07:48Z,2026-10,1,False,False,False,False,Exclude components fixtures from mocha spec loading
+2932,2026-10-05T04:16:20Z,2026-10,1,False,False,False,False,"Keep derivedIndexCoverage's table runtime detached while its tests run their own runtimes, so a catalog reload cannot orphan a rival runner"
+2930,2026-10-12T14:20:12Z,2026-10,4,False,False,False,True,Stop re-reading the node-id mapping record on every audited write
+2929,2026-10-01T13:21:29Z,2026-10,12,False,True,True,True,Report when a replicated deploy's peers install from a different source or lockfile
+2926,2026-10-02T23:07:50Z,2026-10,19,False,True,True,True,Adopt Fulltext 0.5.0 with Harper-owned filtered-search optimization
+2920,2026-10-01T00:50:46Z,2026-10,4,False,False,False,True,Fail review coverage when the Harper adjudicator was blocked in every round
+2903,2026-10-01T05:13:01Z,2026-10,8,False,False,False,True,"Resolve a defaulted lock() scope from the table's replicate declaration, so enabling cluster record locks cannot re-scope a plugin's node-local lock"
+2902,2026-10-01T21:12:39Z,2026-10,8,False,False,False,True,Preserve a write's local-only marking on every mutation and recovery path
+2901,2026-10-20T14:59:58Z,2026-10,3,False,True,True,False,Add a restart regression test: dropped tables stay dropped and same-name recreates start empty
+2885,2026-10-01T21:20:09Z,2026-10,25,False,True,True,True,Calibrate decision probabilities from recorded outcomes
+2743,2026-10-13T00:05:42Z,2026-10,4,False,True,True,False,Promote the QA-822 transaction-log purge invariants into the integration suite
+2718,2026-10-05T17:08:38Z,2026-10,1,False,False,False,False,Collapse default PR reviewer assignment to kriszyp only
+2674,2026-10-26T12:32:10Z,2026-10,4,False,True,True,False,Promote the QA-769 declared-attribute type-widening spec into the integration suite
+2649,2026-10-08T06:50:04Z,2026-10,8,False,False,False,True,"Make the restoring marker an exclusion around database opens, not a check before one"
+2648,2026-10-06T04:02:02Z,2026-10,10,False,False,False,True,Identify a get_backup archive with a capability manifest as its first entry
+2647,2026-10-01T15:25:55Z,2026-10,10,False,False,False,True,"Manage a backup repository without a loaded database, under one lock, with pins"
+2622,2026-10-13T01:31:31Z,2026-10,2,False,False,False,False,Document the thread-global absolute-count test antipattern
+562,2026-10-24T16:53:48Z,2026-10,100,True,True,True,True,Add type-strip mode: run Harper directly from .ts sources
+372,2026-10-23T22:00:43Z,2026-10,52,False,True,True,True,"Add integrated logger-status system with .status() API, health checks and hierarchical view"
