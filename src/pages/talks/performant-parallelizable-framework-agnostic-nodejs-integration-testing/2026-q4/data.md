@@ -1,7 +1,6 @@
 ---
 layout: ../../../../layouts/PostLayout.astro
 title: "Harper Integration Testing Framework: Data and Method"
-noindex: true
 pubDate: 2026-10-22T12:00:00-06:00
 editDate: 2026-11-05T12:00:00-07:00
 description: "How every number in the presentation Harper Integration Testing Framework Development and Impact Analysis was measured, with the data behind it."
