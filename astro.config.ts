@@ -14,13 +14,11 @@ export default defineConfig({
 	// elements written on separate lines. Keep HTML whitespace semantics.
 	compressHTML: true,
 	integrations: [mdx()],
-	// Unlisted presentation: the bare path opens its slides.
+	// The Harper integration testing presentation moved into the testing talk
+	// as its 2026-q4 edition. Its old bare path was shared; send it to the deck.
 	redirects: {
 		"/harper-integration-testing-framework-development-and-impact-analysis":
-			"/harper-integration-testing-framework-development-and-impact-analysis/slides/",
-		// Temporary short link to the same deck.
-		"/nds":
-			"/harper-integration-testing-framework-development-and-impact-analysis/slides/",
+			"/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/slides/",
 	},
 	markdown: {
 		processor: unified({
