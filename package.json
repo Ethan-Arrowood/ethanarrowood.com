@@ -4,7 +4,8 @@
 	"type": "module",
 	"scripts": {
 		"dev": "astro dev",
-		"dev:slides": "node scripts/dev-slides.mjs",
+		"media:add": "node scripts/media-add.mjs",
+		"media:check": "node scripts/media-check.mjs",
 		"build": "astro build",
 		"start": "astro preview",
 		"format": "oxfmt",

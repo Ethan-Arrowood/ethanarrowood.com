@@ -1,5 +1,6 @@
 ---
-import ogImage from "../images/mountain-landscape.jpg";
+import { getImage } from "astro:assets";
+import mountainLandscape from "../images/mountain-landscape.jpg";
 import BackgroundAnimation from "../components/BackgroundAnimation.astro";
 import ThemeInit from "../components/ThemeInit.astro";
 import ThemePicker from "../components/ThemePicker.astro";
@@ -16,6 +17,15 @@ const pageTitle = title ? `${title} | Ethan Arrowood` : "Ethan Arrowood";
 const defaultDescription =
 	"Personal website for Ethan Arrowood. Head of Open Source Engineering at Harper. Node.js contributor. OpenJS Foundation and WinterTC collaborator. Breckenridge ski instructor.";
 const pageDescription = description || defaultDescription;
+// Social cards display at 1.91:1. Crop and resize the original (5712x4284,
+// 5 MB) so link previews don't fetch a full-size photo.
+const ogImage = await getImage({
+	src: mountainLandscape,
+	width: 1200,
+	height: 630,
+	fit: "cover",
+	format: "jpg",
+});
 ---
 
 <style is:global>
@@ -190,6 +200,8 @@ const pageDescription = description || defaultDescription;
 		<meta property="og:url" content={Astro.url.href} />
 		<meta property="og:locale" content="en_US" />
 		<meta property="og:image" content={new URL(ogImage.src, Astro.site)} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={pageTitle} />
 		<meta name="twitter:description" content={pageDescription} />

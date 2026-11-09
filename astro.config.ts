@@ -1,5 +1,6 @@
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
+import deckLiveReload from "./src/integrations/deckLiveReload.mjs";
 import { unified } from "@astrojs/markdown-remark";
 import { remarkDatePlugin } from "./src/utils/remarkDatePlugin.js";
 import { remarkAlert } from "remark-github-blockquote-alert";
@@ -13,7 +14,12 @@ export default defineConfig({
 	// Astro 7 defaults to JSX whitespace rules, which drop spaces between inline
 	// elements written on separate lines. Keep HTML whitespace semantics.
 	compressHTML: true,
-	integrations: [mdx()],
+	integrations: [mdx(), deckLiveReload()],
+	// Give every optimized image (including Markdown images) a srcset, so
+	// browsers fetch a size that fits the layout instead of the original.
+	image: {
+		layout: "constrained",
+	},
 	// The Harper integration testing presentation moved into the testing talk
 	// as its 2026-q4 edition. Its old bare path was shared; send it to the deck.
 	redirects: {

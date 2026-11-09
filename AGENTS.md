@@ -2,6 +2,10 @@
 
 Agent guide for [ethanarrowood.com](https://ethanarrowood.com), a personal website built with Astro.
 
+## Posting exception
+
+This is an exception to the Human Voice default in the [Posting rules](https://github.com/Ethan-Arrowood/agentic/blob/main/rules/posting.md#exceptions). It's my personal site and I don't expect other contributors, so you may write commit messages and PR descriptions here yourself. Use the exception footer. [Permission](https://github.com/Ethan-Arrowood/agentic/blob/main/rules/posting.md#permission) still applies: never commit, push, or open a PR without my go-ahead.
+
 ## Project Overview
 
 Static site deployed to GitHub Pages via GitHub Actions. No CMS; all content is Markdown files with frontmatter.
@@ -14,10 +18,12 @@ Static site deployed to GitHub Pages via GitHub Actions. No CMS; all content is 
 ## Commands
 
 ```sh
-npm run dev    # local dev server
+npm run dev    # local dev server (also live-reloads slide decks in public/)
 npm run build  # production build to ./dist
 npm run start  # preview production build
 npm run format # format with oxfmt
+npm run media:add -- <file...> # optimize images into public/media/ for decks
+npm run media:check            # verify public/media/ is append-only
 ```
 
 ## Directory Structure
@@ -25,7 +31,8 @@ npm run format # format with oxfmt
 ```
 src/
 ├── components/       # Reusable Astro components
-├── images/           # Static images
+├── images/           # Original images (site and decks)
+├── integrations/     # Local Astro integrations (deck live reload)
 ├── layouts/          # Page templates (Base, Post, Talk)
 ├── pages/
 │   ├── index.astro   # Homepage
@@ -127,6 +134,17 @@ This site is public. Never publish data from private repositories: no private re
 Slides exported as a PDF go in the same event folder as `slides.pdf`, for example `public/talks/nodejs-code-and-learn/nodejs-interactive-render-atl-2026/slides.pdf`, with the event's `slidesUrl` pointing at it.
 
 These slide decks may use Ethan's personal HTML+CSS based presentation framework, Dais. The framework is individually vendored into each slide directory in order to avoid existing/past presentations breaking whenever the framework is updated.
+
+To work on a deck, run `npm run dev` and open its URL. The `deckLiveReload` integration (`src/integrations/deckLiveReload.mjs`) injects a reload client into HTML served from `public/` in dev only. Editing a deck's `index.html` swaps the changed slides in place; any other change reloads the page at the same slide. Builds copy decks unchanged.
+
+### Images
+
+Keep original images in `src/images/`.
+
+- **Site pages**: use `<Image>` or `<Picture>` from `astro:assets`, or a relative path in Markdown (`![alt](../../images/foo.png)`). Astro resizes them, converts them to WebP, and adds a `srcset` (`image.layout: "constrained"` in `astro.config.ts`). Don't put site images in `public/`; they ship unoptimized.
+- **Slide decks**: decks are frozen static files and can't use `astro:assets` (its `/_astro/` names change with Astro versions). Run `npm run media:add -- src/images/foo.jpg`. It resizes the image to fit 1920px (`--max` to change), converts it to WebP (SVGs are copied as-is), writes it to `public/media/<name>.<hash>.<ext>`, and prints the URL. Reference that URL (`/media/...`) from the deck. Decks that use the same image share one file and one cached download.
+- `public/media/` is append-only. Never edit, rename, or delete a file there, since a published deck may use it. A changed image gets a new hash and a new file. `npm run media:check` (run in CI on pull requests) fails if a file's contents don't match its hash or a file was deleted or renamed.
+- Older decks keep their images in their own `slides/` folder. Leave them as presented.
 
 ## Key Patterns
 
