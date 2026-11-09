@@ -52,15 +52,6 @@ function slug(file) {
 		.replace(/^-|-$/g, "");
 }
 
-async function exists(path) {
-	try {
-		await access(path);
-		return true;
-	} catch {
-		return false;
-	}
-}
-
 await mkdir(MEDIA_DIR, { recursive: true });
 
 for (const file of positionals) {
@@ -90,7 +81,10 @@ for (const file of positionals) {
 
 	const name = hashName(slug(file), output, ext);
 	const target = join(MEDIA_DIR, name);
-	const existed = await exists(target);
+	const existed = await access(target).then(
+		() => true,
+		() => false,
+	);
 	if (!existed) await writeFile(target, output);
 
 	const kb = Math.round(output.length / 1024);
