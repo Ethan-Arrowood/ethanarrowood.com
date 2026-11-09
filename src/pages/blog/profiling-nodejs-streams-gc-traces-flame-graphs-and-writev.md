@@ -311,7 +311,7 @@ Optimizing for the GC was great. It made a significant improvement already, but 
 
 Here's the flamegraph of the pipeline:
 
-![Flame graph of the LineToNumber to NumberWriter pipeline: a single dominant red tower of file-write machinery spanning nearly the whole width of the graph](/images/flamegraph-before.png)
+![Flame graph of the LineToNumber to NumberWriter pipeline: a single dominant red tower of file-write machinery spanning nearly the whole width of the graph](../../images/flamegraph-before.png)
 
 > [!TIP]
 > **How to read a flame graph**
@@ -492,7 +492,7 @@ I instrumented `_writev` to report what it actually saw, and the batching is rea
 
 And the flame graph makes the win impossible to mistake. Here's the same pipeline profiled the same way, now with the `_writev` writer:
 
-![Flame graph of the optimized pipeline: the single write tower is gone, replaced by two shorter towers — reading and parsing on one side, the batched _writev write on the other — with application code dominating](/images/flamegraph-after.png)
+![Flame graph of the optimized pipeline: the single write tower is gone, replaced by two shorter towers — reading and parsing on one side, the batched _writev write on the other — with application code dominating](../../images/flamegraph-after.png)
 
 The giant write tower is _gone_; `writeBuffer` doesn't even appear in the top ten anymore. What remains splits into two shorter stacks, reading-and-parsing on one side and the batched write on the other, and the hotspot report shows the bottleneck didn't just shrink, it _moved_:
 
