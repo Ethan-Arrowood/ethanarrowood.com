@@ -2,6 +2,10 @@
 
 Agent guide for [ethanarrowood.com](https://ethanarrowood.com), a personal website built with Astro.
 
+## Posting exception
+
+This is an exception to the Human Voice default in the [Posting rules](https://github.com/Ethan-Arrowood/agentic/blob/main/rules/posting.md#exceptions). It's my personal site and I don't expect other contributors, so you may write commit messages and PR descriptions here yourself. Use the exception footer. [Permission](https://github.com/Ethan-Arrowood/agentic/blob/main/rules/posting.md#permission) still applies: never commit, push, or open a PR without my go-ahead.
+
 ## Project Overview
 
 Static site deployed to GitHub Pages via GitHub Actions. No CMS; all content is Markdown files with frontmatter.
