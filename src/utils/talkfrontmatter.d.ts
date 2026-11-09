@@ -18,6 +18,7 @@ export interface TalkEdition {
 export interface TalkFrontmatter {
 	title: string;
 	description: string;
+	noindex?: boolean;
 	audienceLevel?: string;
 	sessionFormat?: string;
 	events?: TalkEvent[];

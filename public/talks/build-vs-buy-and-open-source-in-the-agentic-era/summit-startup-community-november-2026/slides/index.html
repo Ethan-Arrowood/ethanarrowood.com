@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="robots" content="noindex" />
+		<title>Build vs Buy and Open Source in the Agentic Era</title>
+		<meta name="description" content="Slides for Build vs Buy and Open Source in the Agentic Era at Summit Startup Community, November 2026: how startups can weigh open source against buying or building the tools they run on." />
+		<link rel="stylesheet" href="dais/dais.css" />
+		<link rel="stylesheet" href="theme.css" />
+		<script src="dais/dais.js" defer></script>
+		<style>
+			/* This deck only. Theme tokens and backgrounds live in theme.css. */
+
+			/* --- Title ------------------------------------------------------- */
+
+			#intro {
+				justify-content: flex-start;
+				align-items: flex-start;
+				text-align: start;
+				gap: 0;
+				padding-block-start: 7%;
+			}
+
+			#intro .eyebrow {
+				font-size: 1.8cqi;
+				font-weight: 600;
+				letter-spacing: 0.14em;
+				text-transform: uppercase;
+				color: var(--dais-accent-2);
+				margin-block-end: 1cqi;
+			}
+
+			#intro h1 {
+				font-size: 6.4cqi;
+				margin-block-end: 1.6cqi;
+			}
+
+			#intro .byline {
+				font-size: 2.2cqi;
+				color: var(--dais-text);
+			}
+
+			#intro .byline span {
+				color: var(--dais-muted);
+			}
+
+			/* --- Trail ratings ----------------------------------------------- */
+
+			.dais .trail {
+				display: inline-block;
+				inline-size: 1.1em;
+				block-size: 1.1em;
+				vertical-align: -0.15em;
+				margin-inline-end: 0.5em;
+			}
+
+			.dais .trail.green {
+				background: var(--trail-green);
+				border-radius: 50%;
+			}
+
+			.dais .trail.blue {
+				background: var(--trail-blue);
+			}
+
+			.dais .trail.black,
+			.dais .trail.double::before,
+			.dais .trail.double::after {
+				background: var(--trail-black);
+				clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+			}
+
+			.dais .trail.double {
+				inline-size: 2em;
+				position: relative;
+			}
+
+			.dais .trail.double::before,
+			.dais .trail.double::after {
+				content: "";
+				position: absolute;
+				inset-block: 0;
+				inline-size: 1.1em;
+			}
+
+			.dais .trail.double::before {
+				inset-inline-start: 0;
+			}
+
+			.dais .trail.double::after {
+				inset-inline-end: 0;
+			}
+
+			/* --- The tool stack ---------------------------------------------- */
+
+			#paths .tools {
+				display: flex;
+				flex-flow: row wrap;
+				gap: 1cqi;
+				list-style: none;
+				padding: 0;
+				margin-block-end: 1.5cqi;
+			}
+
+			#paths .tools li {
+				font-size: 1.8cqi;
+				background: var(--dais-surface);
+				border: 1px solid #d5e3f4;
+				border-radius: var(--dais-radius);
+				padding: 0.4cqi 1.4cqi;
+			}
+
+			#paths .tools li::marker {
+				content: none;
+			}
+
+			/* --- Free as in a puppy ------------------------------------------ */
+
+			#puppy .big {
+				font-size: 3.4cqi;
+				font-weight: 600;
+				color: var(--dais-text);
+				margin-block: 1cqi;
+				line-height: 1.15;
+			}
+
+			/* --- Trail ratings, defined -------------------------------------- */
+
+			/* A list of runs, one trail marker per item. */
+			.dais ul.runs {
+				list-style: none;
+				padding: 0;
+				display: grid;
+				gap: 1.4cqi;
+			}
+
+			.dais ul.runs li {
+				display: grid;
+				grid-template-columns: 5cqi 1fr;
+				align-items: center;
+			}
+
+			.dais ul.runs li .trail {
+				justify-self: center;
+			}
+
+			/* --- Decision matrix --------------------------------------------- */
+
+			#matrix table {
+				border-collapse: separate;
+				border-spacing: 1cqi;
+				font-size: 2cqi;
+				margin-block-start: -1cqi;
+			}
+
+			#matrix caption {
+				caption-side: bottom;
+				font-size: 1.6cqi;
+				color: var(--dais-muted);
+				text-align: start;
+				padding-inline-start: 1cqi;
+			}
+
+			#matrix th {
+				font-weight: 600;
+				color: var(--dais-muted);
+				font-size: 1.8cqi;
+				text-align: start;
+			}
+
+			#matrix thead th {
+				text-align: center;
+			}
+
+			#matrix td {
+				background: var(--dais-surface);
+				border: 1px solid #d5e3f4;
+				border-radius: var(--dais-radius);
+				padding: 1.2cqi 1.6cqi;
+				inline-size: 36cqi;
+			}
+
+			/* --- Options table ------------------------------------------------ */
+
+			#options table {
+				font-size: 2.2cqi;
+				inline-size: 100%;
+			}
+
+			#options caption {
+				caption-side: bottom;
+				font-size: 1.6cqi;
+				color: var(--dais-muted);
+				text-align: start;
+				padding-block-start: 1cqi;
+			}
+
+			#options :is(th, td) {
+				padding: 0.9cqi 1.4cqi;
+				text-align: start;
+			}
+
+			#options tbody th {
+				color: var(--dais-accent);
+				font-weight: 700;
+			}
+
+			#options thead .trail {
+				margin-inline-end: 0.3em;
+			}
+
+			#options thead .trail + .trail {
+				margin-inline-start: 0;
+			}
+
+			/* --- Examples ---------------------------------------------------- */
+
+			.dais .verdict {
+				font-size: 2.2cqi;
+				font-weight: 600;
+				padding: 1.2cqi 1.8cqi;
+				margin-block-start: 1cqi;
+			}
+
+			#matrix thead td {
+				background: none;
+				border: none;
+			}
+
+			#matrix td .trail {
+				margin-inline-end: 0.3em;
+			}
+
+			#matrix td .trail + .trail {
+				margin-inline-start: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<nav class="dais-controls" aria-label="Presentation controls">
+			<label><input type="checkbox" class="dais-overview-toggle" /> Overview</label>
+			<label><input type="checkbox" class="dais-notes-toggle" /> Notes</label>
+			<output class="dais-counter"></output>
+			<output class="dais-timer" data-dais-limit="15"></output>
+		</nav>
+		<div class="dais-progress" aria-hidden="true"></div>
+
+		<main class="dais dais-dots" aria-label="Build vs Buy and Open Source in the Agentic Era" tabindex="0">
+			<section class="slide title" id="intro">
+				<p class="eyebrow">Startup tools from the mountains</p>
+				<h1>Build vs Buy and Open Source in the Agentic Era</h1>
+				<p class="byline">Ethan Arrowood <span>· Head of Open Source Engineering, Harper</span></p>
+				<aside class="notes">
+					<ul>
+						<li>0:30</li>
+						<li>Title and eyebrow are working drafts.</li>
+					</ul>
+				</aside>
+			</section>
+
+			<section class="slide no-number" id="about">
+				<h2>About me</h2>
+				<ul>
+					<li>Ski instructor at Breckenridge</li>
+					<li>Head of Open Source Engineering at Harper</li>
+					<li>Node.js contributor</li>
+				</ul>
+				<aside class="notes">
+					<ul>
+						<li>1:00</li>
+						<li>Both halves matter: the ski runs later, open source all day.</li>
+					</ul>
+				</aside>
+			</section>
+
+			<section class="slide no-number" id="paths">
+				<h2>Every tool is a decision</h2>
+				<ul class="tools">
+					<li>CRM</li>
+					<li>Email marketing</li>
+					<li>Support</li>
+					<li>Sign-in</li>
+					<li>Passwords</li>
+					<li>Databases</li>
+					<li>Chat</li>
+					<li>Design</li>
+				</ul>
+				<div class="cols" style="--cols: 3">
+					<div class="card">
+						<h3>Buy</h3>
+						<p>Pay a vendor to run it</p>
+					</div>
+					<div class="card">
+						<h3>Build</h3>
+						<p>Make your own</p>
+					</div>
+					<div class="card">
+						<h3>Open source</h3>
+						<p>Use free code someone else wrote</p>
+					</div>
+				</div>
+				<aside class="notes">
+					<ul>
+						<li>1:30</li>
+						<li>The stack every startup pays for. Chat and design set up the two examples later.</li>
+						<li>Three paths, each with a different upfront and ongoing cost.</li>
+					</ul>
+				</aside>
+			</section>
+
+			<section class="slide no-number" id="puppy">
+				<h2>Open source is free as in a puppy</h2>
+				<p class="big">The puppy is free.<br />Feeding, vet visits, and walks are not.</p>
+				<ul>
+					<li>No license fee</li>
+					<li>You pay in hosting, updates, security, and time</li>
+				</ul>
+				<aside class="notes">
+					<ul>
+						<li>2:00. Core idea of the talk; take your time.</li>
+						<li>What open source is: code anyone can read, run, and change.</li>
+						<li>Many projects also sell a hosted version. That is the middle path.</li>
+						<li>The bill does not disappear; it moves from a subscription to your team.</li>
+					</ul>
+				</aside>
+			</section>
+
+			<section class="slide no-number" id="then-now">
+				<h2>AI changed the math</h2>
+				<div class="cols" style="--cols: 2">
+					<div class="card">
+						<h3>A year ago</h3>
+						<p>No expertise to run it yourself? Buy the SaaS. That support is what you paid for.</p>
+					</div>
+					<div class="card">
+						<h3>Now</h3>
+						<p>AI can help build apps for your business, and help run them.</p>
+					</div>
+				</div>
+				<p class="lede">So it is time to reconsider the decision. How do you evaluate it?</p>
+				<aside class="notes">
+					<ul>
+						<li>1:30</li>
+						<li>The old rule was easy: no in-house expertise meant SaaS.</li>
+						<li>The puppy got cheaper to feed. It did not become free.</li>
+					</ul>
+				</aside>
+			</section>
+
+			<section class="slide no-number" id="artcraft">
+				<h2>Someone rebuilt a creative suite as open source</h2>
+				<p class="lede">ArtCraft · github.com/storytold</p>
+				<div class="cols" style="--cols: 3">
+					<div class="card">
+						<h3>Photos</h3>
+						<p>PhotoCraft</p>
+					</div>
+					<div class="card">
+						<h3>Vectors</h3>
+						<p>VectorCraft</p>
+					</div>
+					<div class="card">
+						<h3>Layout</h3>
+						<p>DesignCraft</p>
+					</div>
+					<div class="card">
+						<h3>Motion</h3>
+						<p>EffectCraft</p>
+					</div>
+					<div class="card">
+						<h3>PDFs</h3>
+						<p>PDFCraft</p>
+					</div>
+					<div class="card">
+						<h3>Documents</h3>
+						<p>WordCraft</p>
+					</div>
+				</div>
+				<aside class="notes">
+					<ul>
+						<li>1:30</li>
+						<li>The story: what was rebuilt, by whom, how fast, and AI's role. TODO: your words, facts to verify.</li>
+						<li>All Apache-2.0 per the GitHub org page (checked 2026-11-09).</li>
+						<li>Hook for the creative suite example later.</li>
+					</ul>
+				</aside>
+			</section>
+
+			<section class="slide no-number" id="ratings">
+				<h2>Rate it like a ski run</h2>
+				<ul class="plain runs">
+					<li><span class="trail green" role="img" aria-label="Green circle"></span><span><strong>Buy it.</strong> Someone else runs it and supports it.</span></li>
+					<li><span class="trail blue" role="img" aria-label="Blue square"></span><span><strong>Hosted open source.</strong> Pay for hosting, keep the exit door.</span></li>
+					<li><span class="trail black" role="img" aria-label="Black diamond"></span><span><strong>Run open source yourself,</strong> with AI help.</span></li>
+					<li><span class="trail double" role="img" aria-label="Double black diamond"></span><span><strong>Build it yourself.</strong></span></li>
+				</ul>
+				<aside class="notes">
+					<ul>
+						<li>3:00</li>
+						<li>Harder runs cost less money and more skill. Same as the mountain.</li>
+						<li>Pick the run that matches your skill and what happens if you fall.</li>
+					</ul>
+				</aside>
+			</section>
+
+			<section class="slide no-number" id="example-website">
+				<h2>Example: your website</h2>
+				<ul class="plain runs">
+					<li><span class="trail green" role="img" aria-label="Green circle"></span><span><strong>Squarespace or Wix.</strong> Pick a template, they run everything.</span></li>
+					<li><span class="trail blue" role="img" aria-label="Blue square"></span><span><strong>WordPress.com.</strong> Open source, hosted for you.</span></li>
+					<li><span class="trail black" role="img" aria-label="Black diamond"></span><span><strong>WordPress on your own server.</strong> Same software, you run it.</span></li>
+					<li><span class="trail double" role="img" aria-label="Double black diamond"></span><span><strong>Do it all yourself.</strong> Write the site, run the server.</span></li>
+				</ul>
+				<aside class="notes">
+					<ul>
+						<li>1:00</li>
+						<li>Every run on one familiar tool.</li>
+						<li>Blue and black are the same software. You can move between them; that's the exit door.</li>
+					</ul>
+				</aside>
+			</section>
+
+			<section class="slide no-number" id="options">
+				<h2>Open source options are everywhere</h2>
+				<table>
+					<caption>Open source: pay for hosting, or run it yourself.</caption>
+					<thead>
+						<tr>
+							<th scope="col">Tool</th>
+							<th scope="col"><span class="trail green" role="img" aria-label="Green circle"></span>Buy</th>
+							<th scope="col"><span class="trail blue" role="img" aria-label="Blue square"></span><span class="trail black" role="img" aria-label="Black diamond"></span>Open source</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row">Websites</th>
+							<td>Squarespace, Wix</td>
+							<td>WordPress</td>
+						</tr>
+						<tr>
+							<th scope="row">CRM</th>
+							<td>HubSpot, Salesforce</td>
+							<td>Twenty</td>
+						</tr>
+						<tr>
+							<th scope="row">Chat</th>
+							<td>Slack</td>
+							<td>Zulip, Rocket.Chat</td>
+						</tr>
+						<tr>
+							<th scope="row">Scheduling</th>
+							<td>Calendly</td>
+							<td>Cal.com</td>
+						</tr>
+					</tbody>
+				</table>
+				<aside class="notes">
+					<ul>
+						<li>1:00</li>
+						<li>Each open source pick has a hosted version and can be run yourself. TODO: verify current hosted plans and licenses.</li>
+					</ul>
+				</aside>
+			</section>
+
+			<section class="slide no-number" id="matrix">
+				<h2>Pick your run</h2>
+				<table>
+					<caption>How critical the tool is, against your backup plan if it goes down.</caption>
+					<thead>
+						<tr>
+							<td></td>
+							<th scope="col">Weak backup plan</th>
+							<th scope="col">Solid backup plan</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row">Core to the business</th>
+							<td><span class="trail green" role="img" aria-label="Green circle"></span>Pay for support</td>
+							<td><span class="trail blue" role="img" aria-label="Blue square"></span>Hosted open source</td>
+						</tr>
+						<tr>
+							<th scope="row">Nice to have</th>
+							<td><span class="trail blue" role="img" aria-label="Blue square"></span>Hosted open source</td>
+							<td><span class="trail black" role="img" aria-label="Black diamond"></span><span class="trail double" role="img" aria-label="Double black diamond"></span>Run it or build it</td>
+						</tr>
+					</tbody>
+				</table>
+				<aside class="notes">
+					<ul>
+						<li>2:00</li>
+						<li>Two questions: how critical is it to how you work, and what is the backup plan?</li>
+						<li>The quadrant picks are a draft. Adjust to taste.</li>
+					</ul>
+				</aside>
+			</section>
+
+			<section class="slide no-number" id="example-chat">
+				<h2>Example: team chat</h2>
+				<ul>
+					<li>Is your team mostly in person?</li>
+					<li>If chat goes down, can you use email, phones, or a meeting?</li>
+					<li>Can you manage it yourself, with AI help?</li>
+				</ul>
+				<p class="verdict card"><span class="trail black" role="img" aria-label="Black diamond"></span>Then a big Slack bill may be worth running yourself.</p>
+				<aside class="notes">
+					<ul>
+						<li>1:00</li>
+						<li>Nice to have, solid backup plan: bottom right of the matrix.</li>
+					</ul>
+				</aside>
+			</section>
+
+			<section class="slide no-number" id="example-design">
+				<h2>Example: design tools</h2>
+				<div class="cols" style="--cols: 2">
+					<div class="card">
+						<h3><span class="trail green" role="img" aria-label="Green circle"></span>Marketing agency</h3>
+						<p>Assets are the business. Keep the support.</p>
+					</div>
+					<div class="card">
+						<h3><span class="trail black" role="img" aria-label="Black diamond"></span>Marketing is a small part</h3>
+						<p>A few extra hours or days is fine. Open source alternatives can replace a big Adobe bill.</p>
+					</div>
+				</div>
+				<aside class="notes">
+					<ul>
+						<li>1:00</li>
+						<li>Same tool, different answer depending on the business.</li>
+						<li>Callback to ArtCraft.</li>
+					</ul>
+				</aside>
+			</section>
+
+			<section class="slide no-number" id="example-platform">
+				<h2>Example: if you are a tech company</h2>
+				<p class="lede">Building the tech is the job. The question moves down a layer: who runs the platform under it?</p>
+				<ul class="plain runs">
+					<li><span class="trail green" role="img" aria-label="Green circle"></span><span><strong>Harper Fabric with support.</strong> Build on our platform, we run it.</span></li>
+					<li><span class="trail blue" role="img" aria-label="Blue square"></span><span><strong>Harper Fabric without a support contract.</strong></span></li>
+					<li><span class="trail black" role="img" aria-label="Black diamond"></span><span><strong>Run Harper yourself.</strong> It's open source.</span></li>
+					<li><span class="trail double" role="img" aria-label="Double black diamond"></span><span><strong>No platform.</strong> Build and run your whole stack yourself.</span></li>
+				</ul>
+				<aside class="notes">
+					<ul>
+						<li>1:30</li>
+						<li>Not a pitch: the same ladder applies at every layer.</li>
+						<li>Only for tech companies. A business that needs one app built is back on the earlier slides.</li>
+					</ul>
+				</aside>
+			</section>
+
+			<section class="slide no-number" id="takeaways">
+				<h2>Takeaways</h2>
+				<ul>
+					<li>Open source is free as in a puppy</li>
+					<li>AI makes harder runs more reachable</li>
+					<li>Match the run to how critical the tool is and your backup plan</li>
+				</ul>
+				<aside class="notes">
+					<ul>
+						<li>1:00</li>
+						<li>Draft. Replace with the one action you want people to take.</li>
+					</ul>
+				</aside>
+			</section>
+
+			<section class="slide title" id="thanks">
+				<h2>Thank you</h2>
+				<p class="byline">Ethan Arrowood <span>· ethanarrowood.com</span></p>
+			</section>
+		</main>
+	</body>
+</html>

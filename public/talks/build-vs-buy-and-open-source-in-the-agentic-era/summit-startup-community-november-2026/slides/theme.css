@@ -1,0 +1,118 @@
+/*!
+ * Deck theme: low-poly mountains.
+ *
+ * White slides with light blue and navy, and low-poly mountain ranges drawn
+ * as SVG backgrounds: a full range on the title slide, a low ridge along the
+ * foot of content slides, and a navy ridge on dividers. mountains.py writes
+ * the SVGs (`python3 mountains.py .`); regenerate rather than hand-edit.
+ *
+ * Link AFTER dais/dais.css. Poppins is self-hosted (fonts/, SIL OFL) so the
+ * deck works with no network. Ratios next to each token are against
+ * --dais-bg (#ffffff).
+ */
+
+@font-face {
+	font-family: "Poppins";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url("fonts/poppins-400.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Poppins";
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url("fonts/poppins-600.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Poppins";
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url("fonts/poppins-700.woff2") format("woff2");
+}
+
+:root {
+	--dais-stage: #0d1b33;
+	--dais-bg: #ffffff;
+	--dais-surface: #eef4fb; /* light blue panels */
+	--dais-text: #0f1f3d; /* deep navy, 16.5:1 */
+	--dais-muted: #4a5f80; /* 6.5:1 */
+	--dais-accent: #1f3a6b; /* navy, 11.2:1; dividers invert to it */
+	--dais-accent-2: #2563b8; /* blue for <strong>, 5.9:1 */
+	--dais-code-bg: #0f1f3d;
+	--dais-code-text: #eef4fb;
+
+	--dais-font: "Poppins", system-ui, "Segoe UI", Roboto, sans-serif;
+	--dais-font-display: "Poppins", system-ui, "Segoe UI", Roboto, sans-serif;
+	--dais-radius: 0.8cqi;
+
+	/* Extra room at the foot for the ridge. */
+	--dais-slide-padding: 6% 7% 13%;
+
+	/* Ski trail ratings, used as difficulty markers. */
+	--trail-green: #1f8a4c;
+	--trail-blue: #1f5fbf;
+	--trail-black: #0f1f3d;
+}
+
+/* --- Backgrounds --------------------------------------------------------- */
+
+.dais > section {
+	background:
+		url("mountains-ridge.svg") center bottom / 100% auto no-repeat,
+		var(--dais-bg);
+}
+
+.dais > section.title {
+	background:
+		url("mountains-title.svg") center bottom / 100% auto no-repeat,
+		/* Sky deepens toward the horizon so the white summits stand out. */
+		linear-gradient(to bottom, #ffffff 0% 30%, #dbe7f6 60%, #cddef2 100%);
+}
+
+.dais > section.divider {
+	background:
+		url("mountains-divider.svg") center bottom / 100% auto no-repeat,
+		var(--dais-accent);
+}
+
+/* --- Type ---------------------------------------------------------------- */
+
+.dais :is(h1, h2) {
+	font-weight: 700;
+	letter-spacing: -0.01em;
+	color: var(--dais-accent);
+}
+
+.dais strong {
+	color: var(--dais-accent-2);
+}
+
+.dais ul:not(.plain) > li::marker {
+	content: "▲  " / "";
+	color: #7fa6d6;
+	font-size: 0.7em;
+}
+
+.dais .card {
+	background: var(--dais-surface);
+	border: 1px solid #d5e3f4;
+}
+
+/* --- Print --------------------------------------------------------------- */
+
+@media print {
+	.dais > section.divider {
+		background:
+			url("mountains-ridge.svg") center bottom / 100% auto no-repeat,
+			#ffffff;
+	}
+
+	.dais > section.divider :is(h2, h3, p) {
+		color: var(--dais-accent);
+	}
+}

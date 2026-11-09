@@ -20,7 +20,11 @@ const events = ((frontmatter.events ?? []) as TalkEvent[])
 const editions = (frontmatter.editions ?? []) as TalkEdition[];
 ---
 
-<BaseLayout title={frontmatter.title} description={frontmatter.description}>
+<BaseLayout
+	title={frontmatter.title}
+	description={frontmatter.description}
+	noindex={frontmatter.noindex}
+>
 	<section class="talk-container">
 		<div class="talk-header">
 			<h1 class="talk-title">{frontmatter.title}</h1>
