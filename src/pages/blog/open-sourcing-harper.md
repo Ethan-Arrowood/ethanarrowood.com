@@ -4,6 +4,7 @@ title: "Open Sourcing Harper"
 pubDate: 2026-04-15T12:00:00-06:00
 editDate: 2026-04-15T12:00:00-06:00
 description: "How Harper went from a decade of closed-source development to an open source core and source-available pro tier — the decisions, the dual-license model, and what open source means in the agentic era."
+standardSiteRkey: "3mjkhy23m22vu"
 ---
 
 ## Before Harper

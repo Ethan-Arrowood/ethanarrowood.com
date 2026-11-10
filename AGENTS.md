@@ -71,6 +71,7 @@ Content here.
 - Dates are auto-formatted to "Month Day, Year" (America/Denver) by the remark plugin.
 - `editDate` is only shown in the UI if it differs from `pubDate`.
 - Posts are sorted newest-first on the listing page.
+- Run `npm run standard-site:keys` after creating a post. It adds a `standardSiteRkey` to the frontmatter: the record key of the post's `site.standard.document` record on Bluesky, which also feeds the post's `<link rel="site.standard.document">`. Commit it, and never change or reuse it once published.
 
 ### Talk
 

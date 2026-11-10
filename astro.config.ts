@@ -8,13 +8,29 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import standardSite from "@arrowood.dev/astro-standard-site";
 
 export default defineConfig({
 	site: "https://ethanarrowood.com",
 	// Astro 7 defaults to JSX whitespace rules, which drop spaces between inline
 	// elements written on separate lines. Keep HTML whitespace semantics.
 	compressHTML: true,
-	integrations: [mdx(), deckLiveReload()],
+	integrations: [
+		mdx(),
+		deckLiveReload(),
+		standardSite({
+			identifier: "arrowood.dev",
+			publication: {
+				// Generated once with TID.nextStr(). Changing it creates a new
+				// publication record instead of updating this one.
+				rkey: "3mzwlxfeuv2kt",
+				name: "Ethan Arrowood",
+			},
+			documents: {
+				pattern: "src/pages/blog/*.{md,mdx}",
+			},
+		}),
+	],
 	// Give every optimized image (including Markdown images) a srcset, so
 	// browsers fetch a size that fits the layout instead of the original.
 	image: {

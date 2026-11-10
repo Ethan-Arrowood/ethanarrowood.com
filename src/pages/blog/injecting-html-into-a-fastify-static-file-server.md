@@ -4,6 +4,7 @@ title: "Injecting HTML into a Fastify Static File Server"
 pubDate: 2024-06-03T12:00:00-06:00
 editDate: 2025-05-06T12:00:00-06:00
 description: "Learn how to use a Node.js Buffers and Transform stream to automatically inject HTML content into a Fastify static file server responses."
+standardSiteRkey: "3ku22h36u22uc"
 ---
 
 Recently, I've been exploring how to build a live reload server from scratch. During this exploration, I had to figure out how to inject HTML into the payload of a [fastify](https://fastify.dev) static file server ([@fastify/static](https://github.com/fastify/fastify-static)) response. My solution utilizes the Node.js [Buffer](https://nodejs.org/api/buffer.html) API and a custom Node.js [Transform](https://nodejs.org/api/stream.html#class-streamtransform) stream. Let's dive in!
