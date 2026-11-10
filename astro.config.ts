@@ -21,7 +21,7 @@ export default defineConfig({
 		standardSite({
 			identifier: "arrowood.dev",
 			publication: {
-				// Generated once with generateTid(). Changing it creates a new
+				// Generated once with TID.nextStr(). Changing it creates a new
 				// publication record instead of updating this one.
 				rkey: "3mzwlxfeuv2kt",
 				name: "Ethan Arrowood",
