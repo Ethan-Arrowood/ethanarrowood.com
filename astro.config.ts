@@ -38,9 +38,12 @@ export default defineConfig({
 	},
 	// The Harper integration testing presentation moved into the testing talk
 	// as its 2026-q4 edition. Its old bare path was shared; send it to the deck.
+	// /build-buy-open-source-2026 is the short link on the Build vs Buy deck's closing slide.
 	redirects: {
 		"/harper-integration-testing-framework-development-and-impact-analysis":
 			"/talks/performant-parallelizable-framework-agnostic-nodejs-integration-testing/2026-q4/slides/",
+		"/build-buy-open-source-2026":
+			"/talks/build-vs-buy-and-open-source-in-the-agentic-era/summit-startup-community-november-2026/slides/",
 	},
 	markdown: {
 		processor: unified({
