@@ -4,7 +4,9 @@ import TableOfContents from "../components/TableOfContents.astro";
 import "remark-github-blockquote-alert/alert.css";
 import "../styles/post.css";
 import { renderInlineCode, stripCode } from "../utils/title";
+import { documentUri } from "virtual:astro-standard-site";
 const { frontmatter, headings } = Astro.props;
+const standardSiteDocument = documentUri(frontmatter.standardSiteRkey);
 ---
 
 <style>
@@ -44,6 +46,13 @@ const { frontmatter, headings } = Astro.props;
 	description={frontmatter.description}
 	noindex={frontmatter.noindex}
 >
+	{standardSiteDocument && (
+		<link
+			slot="head"
+			rel="site.standard.document"
+			href={standardSiteDocument}
+		/>
+	)}
 	<section class="post-container">
 		<div class="post-header">
 			<h1 class="post-title" set:html={renderInlineCode(frontmatter.title)} />

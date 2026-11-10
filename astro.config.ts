@@ -26,6 +26,9 @@ export default defineConfig({
 				rkey: "3mzwlxfeuv2kt",
 				name: "Ethan Arrowood",
 			},
+			documents: {
+				pattern: "src/pages/blog/*.{md,mdx}",
+			},
 		}),
 	],
 	// Give every optimized image (including Markdown images) a srcset, so

@@ -9,7 +9,8 @@
 		"build": "astro build",
 		"start": "astro preview",
 		"format": "oxfmt",
-		"format:check": "oxfmt --check"
+		"format:check": "oxfmt --check",
+		"standard-site:keys": "astro-standard-site-keys \"src/pages/blog/*.{md,mdx}\""
 	},
 	"devDependencies": {
 		"@arrowood.dev/astro-standard-site": "file:../astro-standard-site",

@@ -4,6 +4,7 @@ title: "Building Custom Node.js Streams: Splitting a 1GB File Without Running Ou
 pubDate: 2026-01-13T12:00:00-06:00
 editDate: 2026-06-02T12:00:00-06:00
 description: "What started as generating prime numbers for Project Euler problems evolved into a ~1GB file that broke my development tools. Follow along as I build custom Node.js Writable and Transform streams to efficiently split large files, learning about backpressure, memory management, and the pitfalls of garbage collection along the way."
+standardSiteRkey: "3mcd53dom22rz"
 ---
 
 ## Prime Number Curiosity
