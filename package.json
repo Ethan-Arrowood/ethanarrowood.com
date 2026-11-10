@@ -13,7 +13,7 @@
 		"standard-site:keys": "astro-standard-site-keys \"src/pages/blog/*.{md,mdx}\""
 	},
 	"devDependencies": {
-		"@arrowood.dev/astro-standard-site": "file:../astro-standard-site",
+		"@arrowood.dev/astro-standard-site": "0.0.0",
 		"@astrojs/compiler-rs": "0.5.2",
 		"@astrojs/markdown-remark": "7.3.3",
 		"@justinribeiro/lite-youtube": "1.9.0",
