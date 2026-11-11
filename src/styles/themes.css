@@ -52,6 +52,25 @@
 	--shadow: rgba(0, 0, 0, 0.6);
 }
 
+:root[data-theme="winter"] {
+	color-scheme: dark;
+	--background: #0b1220;
+	--background-image: radial-gradient(
+		ellipse at top,
+		rgba(140, 203, 242, 0.12),
+		transparent 60%
+	);
+	--surface: #121c2e;
+	--card-bg: var(--surface);
+	--accent: #8ccbf2;
+	--text-body: #e6eef7;
+	--text-primary: #e6eef7;
+	--text-secondary: #9fb2c8;
+	--divider: rgba(230, 238, 247, 0.14);
+	--code-bg: #1f2c42;
+	--shadow: rgba(0, 0, 0, 0.6);
+}
+
 /*
  * Syntax highlighting. Shiki emits light colors inline and dark colors as
  * `--shiki-dark*` variables (see `shikiConfig.themes` in astro.config.ts).

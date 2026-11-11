@@ -1,0 +1,93 @@
+---
+// Canvas snowflakes that drift into a snowbank along the bottom of the
+// viewport, and a snowman peeking from the left edge who shovels it away when
+// clicked or when the snow gets too deep. Runs only while
+// <html data-animation="snow-pile">. See snow-pile.ts.
+import AnimationTip from "./AnimationTip.astro";
+---
+
+<canvas class="snow-pile snow-pile-back" aria-hidden="true"></canvas>
+<canvas class="snow-pile snow-pile-front" aria-hidden="true"></canvas>
+<AnimationTip animation="snow-pile" subject="Snow" />
+<!-- Sits over the peeking snowman drawn on the front canvas. -->
+<button
+	class="snow-pile-snowman"
+	type="button"
+	aria-label="Ask the snowman to shovel the snow"
+	title="Shovel the snow"
+	hidden
+></button>
+
+<style>
+	.snow-pile {
+		display: none;
+		position: fixed;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+
+	/* Falling snow passes behind the content. */
+	.snow-pile-back {
+		z-index: -1;
+	}
+
+	/* The snowbank and the snowman sit in front, along the bottom edge. */
+	.snow-pile-front {
+		z-index: 1;
+	}
+
+	:global(:root[data-animation="snow-pile"]) .snow-pile {
+		display: block;
+	}
+
+	.snow-pile-snowman {
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		z-index: 2;
+		width: 36px;
+		height: 72px;
+		padding: 0;
+		border: none;
+		border-radius: 0 18px 4px 0;
+		background: none;
+		cursor: pointer;
+		/* Focus is shown on the snowman itself: it leans out and glows. */
+		outline: none;
+	}
+
+	@media print {
+		.snow-pile,
+		.snow-pile-snowman {
+			display: none !important;
+		}
+	}
+</style>
+
+<script>
+	import { setupAnimationTip } from "./animation-tip";
+	import { SnowPile } from "./snow-pile";
+
+	const snowman =
+		document.querySelector<HTMLButtonElement>(".snow-pile-snowman")!;
+
+	const pile = new SnowPile(
+		document.querySelector<HTMLCanvasElement>(".snow-pile-back")!,
+		document.querySelector<HTMLCanvasElement>(".snow-pile-front")!,
+		snowman,
+		setupAnimationTip("snow-pile", snowman),
+	);
+
+	function sync() {
+		if (document.documentElement.dataset.animation === "snow-pile") {
+			pile.start();
+		} else {
+			pile.stop();
+		}
+	}
+
+	document.addEventListener("site-theme-change", sync);
+	sync();
+</script>

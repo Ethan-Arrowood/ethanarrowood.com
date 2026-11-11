@@ -1,0 +1,127 @@
+---
+// A speech bubble from an animation's mascot pointing to the animation switch
+// in the theme menu. Hidden until the animation's script calls the function
+// returned by `setupAnimationTip` (see animation-tip.ts). Put it before the
+// mascot's button so it comes first in tab order.
+interface Props {
+	/** The animation it belongs to; scripts find it by this name. */
+	animation: string;
+	/** What gets in the way, such as "Leaves". */
+	subject: string;
+}
+
+const { animation, subject } = Astro.props;
+---
+
+<aside
+	class="animation-tip"
+	data-animation-tip={animation}
+	aria-label="Animation tip"
+	hidden
+>
+	<p>
+		{subject} in the way? Turn off animations in the
+		<button type="button" class="animation-tip-open">theme menu</button>.
+	</p>
+	<button type="button" class="animation-tip-close" aria-label="Dismiss tip">
+		<svg viewBox="0 0 16 16" aria-hidden="true">
+			<path d="M4 4l8 8M12 4l-8 8"></path>
+		</svg>
+	</button>
+</aside>
+
+<style>
+	.animation-tip {
+		position: fixed;
+		left: 44px;
+		bottom: 84px;
+		z-index: 2;
+		display: flex;
+		align-items: flex-start;
+		gap: 0.25rem;
+		max-width: min(16rem, calc(100vw - 60px));
+		padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+		border: 2px solid var(--accent);
+		border-radius: 0.75rem 0.75rem 0.75rem 0.25rem;
+		background-color: var(--surface);
+		color: var(--text-primary);
+		box-shadow: 0 4px 12px var(--shadow);
+		font-size: 0.875rem;
+		line-height: 1.4;
+	}
+
+	.animation-tip[hidden] {
+		display: none;
+	}
+
+	/* Tail pointing down at the mascot. */
+	.animation-tip::after {
+		content: "";
+		position: absolute;
+		left: 6px;
+		bottom: -12px;
+		border: 6px solid transparent;
+		border-top-color: var(--accent);
+		border-left-color: var(--accent);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.animation-tip {
+			animation: animation-tip-in 0.3s ease-out;
+		}
+	}
+
+	@keyframes animation-tip-in {
+		from {
+			opacity: 0;
+			transform: translateY(6px);
+		}
+	}
+
+	.animation-tip p {
+		margin: 0;
+	}
+
+	.animation-tip button {
+		padding: 0;
+		border: none;
+		background: none;
+		font: inherit;
+		color: inherit;
+		cursor: pointer;
+	}
+
+	.animation-tip-open {
+		color: var(--accent) !important;
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+
+	.animation-tip-close {
+		flex-shrink: 0;
+		display: grid;
+		place-items: center;
+		width: 1.5rem;
+		height: 1.5rem;
+		border-radius: 50%;
+		color: var(--text-secondary) !important;
+	}
+
+	.animation-tip-close:hover {
+		color: var(--accent) !important;
+	}
+
+	.animation-tip-close svg {
+		width: 0.875rem;
+		height: 0.875rem;
+		stroke: currentColor;
+		stroke-width: 2;
+		stroke-linecap: round;
+	}
+
+	@media print {
+		.animation-tip {
+			display: none !important;
+		}
+	}
+</style>

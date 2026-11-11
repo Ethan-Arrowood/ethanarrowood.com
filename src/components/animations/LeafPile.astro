@@ -3,26 +3,12 @@
 // ghost peeking from the left edge who rakes them away when clicked or when
 // the pile gets too tall. Runs only while <html data-animation="leaf-pile">.
 // See leaf-pile.ts.
+import AnimationTip from "./AnimationTip.astro";
 ---
 
 <canvas class="leaf-pile leaf-pile-back" aria-hidden="true"></canvas>
 <canvas class="leaf-pile leaf-pile-front" aria-hidden="true"></canvas>
-<!--
-	A speech bubble from the ghost pointing to the animation switch. Shows while
-	the ghost peeks until the visitor dismisses it or opens the theme menu, then
-	never again. Comes before the ghost in tab order.
--->
-<aside class="leaf-pile-tip" aria-label="Animation tip" hidden>
-	<p>
-		Leaves in the way? Turn off animations in the
-		<button type="button" class="leaf-pile-tip-open">theme menu</button>.
-	</p>
-	<button type="button" class="leaf-pile-tip-close" aria-label="Dismiss tip">
-		<svg viewBox="0 0 16 16" aria-hidden="true">
-			<path d="M4 4l8 8M12 4l-8 8"></path>
-		</svg>
-	</button>
-</aside>
+<AnimationTip animation="leaf-pile" subject="Leaves" />
 <!-- Sits over the peeking ghost drawn on the front canvas. -->
 <button
 	class="leaf-pile-ghost"
@@ -72,97 +58,8 @@
 		outline: none;
 	}
 
-	.leaf-pile-tip {
-		position: fixed;
-		left: 44px;
-		bottom: 84px;
-		z-index: 2;
-		display: flex;
-		align-items: flex-start;
-		gap: 0.25rem;
-		max-width: min(16rem, calc(100vw - 60px));
-		padding: 0.5rem 0.5rem 0.5rem 0.75rem;
-		border: 2px solid var(--accent);
-		border-radius: 0.75rem 0.75rem 0.75rem 0.25rem;
-		background-color: var(--surface);
-		color: var(--text-primary);
-		box-shadow: 0 4px 12px var(--shadow);
-		font-size: 0.875rem;
-		line-height: 1.4;
-	}
-
-	.leaf-pile-tip[hidden] {
-		display: none;
-	}
-
-	/* Tail pointing down at the ghost. */
-	.leaf-pile-tip::after {
-		content: "";
-		position: absolute;
-		left: 6px;
-		bottom: -12px;
-		border: 6px solid transparent;
-		border-top-color: var(--accent);
-		border-left-color: var(--accent);
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.leaf-pile-tip {
-			animation: leaf-pile-tip-in 0.3s ease-out;
-		}
-	}
-
-	@keyframes leaf-pile-tip-in {
-		from {
-			opacity: 0;
-			transform: translateY(6px);
-		}
-	}
-
-	.leaf-pile-tip p {
-		margin: 0;
-	}
-
-	.leaf-pile-tip button {
-		padding: 0;
-		border: none;
-		background: none;
-		font: inherit;
-		color: inherit;
-		cursor: pointer;
-	}
-
-	.leaf-pile-tip-open {
-		color: var(--accent) !important;
-		text-decoration: underline;
-		text-underline-offset: 2px;
-	}
-
-	.leaf-pile-tip-close {
-		flex-shrink: 0;
-		display: grid;
-		place-items: center;
-		width: 1.5rem;
-		height: 1.5rem;
-		border-radius: 50%;
-		color: var(--text-secondary) !important;
-	}
-
-	.leaf-pile-tip-close:hover {
-		color: var(--accent) !important;
-	}
-
-	.leaf-pile-tip-close svg {
-		width: 0.875rem;
-		height: 0.875rem;
-		stroke: currentColor;
-		stroke-width: 2;
-		stroke-linecap: round;
-	}
-
 	@media print {
 		.leaf-pile,
-		.leaf-pile-tip,
 		.leaf-pile-ghost {
 			display: none !important;
 		}
@@ -170,62 +67,16 @@
 </style>
 
 <script>
+	import { setupAnimationTip } from "./animation-tip";
 	import { LeafPile } from "./leaf-pile";
 
-	const TIP_STORAGE_KEY = "animation-tip";
-	const tip = document.querySelector<HTMLElement>(".leaf-pile-tip")!;
 	const ghost = document.querySelector<HTMLButtonElement>(".leaf-pile-ghost")!;
-	const menu = document.getElementById("theme-menu");
-	let tipDismissed = readTipDismissed();
-
-	function readTipDismissed() {
-		try {
-			return localStorage.getItem(TIP_STORAGE_KEY) === "dismissed";
-		} catch {
-			return false;
-		}
-	}
-
-	function dismissTip() {
-		if (tipDismissed) return;
-		tipDismissed = true;
-		// Don't strand keyboard focus on a hidden element.
-		const hadFocus = tip.contains(document.activeElement);
-		tip.hidden = true;
-		if (hadFocus && !ghost.hidden) ghost.focus();
-		try {
-			localStorage.setItem(TIP_STORAGE_KEY, "dismissed");
-		} catch {
-			// Storage blocked; the tip stays hidden for this page view.
-		}
-	}
-
-	tip
-		.querySelector(".leaf-pile-tip-close")!
-		.addEventListener("click", dismissTip);
-	tip.addEventListener("keydown", (event) => {
-		if (event.key === "Escape") dismissTip();
-	});
-	tip.querySelector(".leaf-pile-tip-open")!.addEventListener("click", () => {
-		// A closing popover returns focus to whatever had it before it opened, and
-		// the tip is hidden by then. Focus the theme button first so focus lands
-		// there, then put it on the animation switch.
-		const themeButton =
-			document.querySelector<HTMLButtonElement>(".theme-button");
-		themeButton?.focus();
-		themeButton?.click();
-		menu?.querySelector<HTMLInputElement>('input[name="animations"]')?.focus();
-	});
-	// Finding the menu any other way also counts as having seen the tip.
-	menu?.addEventListener("toggle", (event) => {
-		if ((event as ToggleEvent).newState === "open") dismissTip();
-	});
 
 	const pile = new LeafPile(
 		document.querySelector<HTMLCanvasElement>(".leaf-pile-back")!,
 		document.querySelector<HTMLCanvasElement>(".leaf-pile-front")!,
 		ghost,
-		(peeking) => (tip.hidden = tipDismissed || !peeking),
+		setupAnimationTip("leaf-pile", ghost),
 	);
 
 	function sync() {

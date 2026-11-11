@@ -1,6 +1,6 @@
 export type ColorScheme = "light" | "dark";
 
-export type BackgroundAnimation = "falling-leaves" | "leaf-pile";
+export type BackgroundAnimation = "falling-leaves" | "leaf-pile" | "snow-pile";
 
 export interface Theme {
 	id: string;
@@ -23,12 +23,19 @@ export const themes: Theme[] = [
 		scheme: "dark",
 		animation: "leaf-pile",
 	},
+	{
+		id: "winter",
+		label: "Winter",
+		group: "special",
+		scheme: "dark",
+		animation: "snow-pile",
+	},
 ];
 
 /** Stored preferences. `system` follows `prefers-color-scheme`. */
 export const THEME_STORAGE_KEY = "theme";
 /** Used until the visitor picks a theme. */
-export const DEFAULT_THEME: ThemePreferences["theme"] = "spooky";
+export const DEFAULT_THEME: ThemePreferences["theme"] = "winter";
 export const ANIMATIONS_STORAGE_KEY = "animations";
 
 export interface ThemePreferences {
