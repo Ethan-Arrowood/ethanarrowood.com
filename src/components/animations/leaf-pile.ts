@@ -130,15 +130,23 @@ export class LeafPile {
 	#frame = 0;
 	#lastTime = 0;
 	#dirty = false;
+	#onPeek: (peeking: boolean) => void;
 
+	/**
+	 * `onPeek` is called with `true` when the ghost settles into its peeking
+	 * spot, and `false` when it leaves (to rake, or because the animation
+	 * stopped).
+	 */
 	constructor(
 		back: HTMLCanvasElement,
 		front: HTMLCanvasElement,
 		button: HTMLButtonElement,
+		onPeek: (peeking: boolean) => void = () => {},
 	) {
 		this.#back = back.getContext("2d")!;
 		this.#front = front.getContext("2d")!;
 		this.#button = button;
+		this.#onPeek = onPeek;
 		this.#settled = load();
 
 		button.addEventListener("click", () => this.rake());
@@ -183,7 +191,7 @@ export class LeafPile {
 		removeEventListener("resize", this.#resize);
 		removeEventListener("pagehide", this.#save);
 		this.#save();
-		this.#button.hidden = true;
+		this.#setPeeking(false);
 		for (const ctx of [this.#back, this.#front]) {
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -361,7 +369,13 @@ export class LeafPile {
 		// Only hand focus back to keyboard users; a mouse click shouldn't leave
 		// the ghost focused.
 		this.#refocus = this.#focusVisible;
-		this.#button.hidden = true;
+		this.#setPeeking(false);
+	}
+
+	/** Show or hide the ghost button and tell the listener. */
+	#setPeeking(peeking: boolean) {
+		this.#button.hidden = !peeking;
+		this.#onPeek(peeking);
 	}
 
 	/** Move the ghost and sweep up every leaf behind the rake. */
@@ -410,7 +424,7 @@ export class LeafPile {
 		if (this.#peek < 1) {
 			this.#peek = Math.min(1, this.#peek + dt / RETURN_SECONDS);
 			if (this.#peek === 1) {
-				this.#button.hidden = false;
+				this.#setPeeking(true);
 				if (this.#refocus) this.#button.focus({ preventScroll: true });
 				this.#refocus = false;
 			}
